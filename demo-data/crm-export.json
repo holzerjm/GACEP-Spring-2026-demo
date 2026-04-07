@@ -1,0 +1,96 @@
+{
+  "_synthetic_data_notice": "All names, companies, and details in this file are entirely fictional. Created for the BriefingOps demo at GACEP Spring 2026. Not real customer data.",
+  "accounts": [
+    {
+      "account_id": "ACC-2847",
+      "company": "Meridian Health Systems",
+      "industry": "Healthcare",
+      "segment": "Enterprise",
+      "tier": "Strategic",
+      "annual_revenue": "$4.2B",
+      "employees": 28000,
+      "headquarters": "Minneapolis, MN",
+      "account_health_score": 87,
+      "account_health_trend": "improving",
+      "contract_value": "$3.8M ARR",
+      "contract_renewal_date": "2026-09-15",
+      "products_deployed": [
+        "OpenShift Container Platform",
+        "Red Hat Enterprise Linux",
+        "Ansible Automation Platform",
+        "OpenShift AI (pilot)"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-19283",
+          "name": "Meridian AI Platform Expansion",
+          "stage": "Proposal",
+          "value": "$1.2M",
+          "close_date": "2026-06-30",
+          "notes": "Expanding OpenShift AI from pilot to production. Decision expected Q2."
+        },
+        {
+          "opp_id": "OPP-20114",
+          "name": "Meridian Edge Computing — Remote Patient Monitoring",
+          "stage": "Discovery",
+          "value": "$800K",
+          "close_date": "2026-Q4",
+          "notes": "Edge deployment for 12 regional clinics. Tied to Sarah Chen's edge computing advocacy at CAB."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4421",
+          "date": "2026-02-28",
+          "severity": "P2",
+          "summary": "OpenShift upgrade path compatibility issue — resolved in 3 days",
+          "status": "Closed",
+          "satisfaction": "Positive — customer praised response time"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-8834",
+          "name": "Sarah Chen",
+          "title": "Chief Information Officer",
+          "email": "sarah.chen@meridianhealth.com",
+          "phone": "+1-612-555-0142",
+          "role_type": "Economic Buyer",
+          "engagement_score": 92,
+          "cab_member": true,
+          "executive_sponsor": "Maria Torres, VP Engineering",
+          "last_activity": "2026-02-12",
+          "last_activity_type": "CAB Meeting",
+          "preferred_communication": "Email, then in-person",
+          "notes": "Strong advocate. Technical background (former developer). Values transparency and open source. Direct communicator — appreciates candor over polish."
+        },
+        {
+          "contact_id": "CON-8835",
+          "name": "Tom Richards",
+          "title": "VP Infrastructure",
+          "email": "tom.richards@meridianhealth.com",
+          "role_type": "Technical Decision Maker",
+          "engagement_score": 74,
+          "cab_member": false,
+          "last_activity": "2026-01-15",
+          "last_activity_type": "Technical Workshop"
+        },
+        {
+          "contact_id": "CON-8836",
+          "name": "Dr. Priya Kapoor",
+          "title": "Chief Medical Information Officer",
+          "email": "priya.kapoor@meridianhealth.com",
+          "role_type": "Influencer",
+          "engagement_score": 45,
+          "cab_member": false,
+          "notes": "Key stakeholder for AI in clinical settings. Has not been engaged directly — opportunity."
+        }
+      ]
+    }
+  ],
+  "export_metadata": {
+    "exported_at": "2026-03-28T14:30:00Z",
+    "source": "Salesforce CRM",
+    "exported_by": "BriefingOps Integration"
+  }
+}

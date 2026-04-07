@@ -1,0 +1,103 @@
+# BriefingOps Multi-Agent Stack — Podman Compose
+# Run with: podman-compose up -d (from this directory)
+# Requires: Podman Desktop with AI Lab extension installed
+#
+# NOTE ON PATHS: Volume mounts below use relative paths (./agents, ./demo-data)
+# which resolve relative to this file's directory. Either:
+#   1. Run podman-compose from the config/ directory, OR
+#   2. Use `briefingops.sh start` which handles paths automatically
+# If you move this file, update the volume mount paths accordingly.
+
+version: "3.8"
+
+services:
+  # ═══════════════════════════════════════════════════════════
+  # MODEL SERVICE — Granite 8B via Podman AI Lab
+  # ═══════════════════════════════════════════════════════════
+  # NOTE: The model service is managed by Podman AI Lab, not this compose file.
+  # Start it first via: Podman Desktop → AI Lab → Models → Granite 8B → Start
+  # It will be available at http://host.containers.internal:8001/v1
+  # Verify: curl http://127.0.0.1:8001/v1/models
+
+  # ═══════════════════════════════════════════════════════════
+  # OPENCLAW — Gateway + Oprah-tor + Déjà View + Draft Punk + Alfred Bitworth
+  # ═══════════════════════════════════════════════════════════
+  openclaw:
+    image: openclaw/openclaw:latest
+    container_name: briefingops-openclaw
+    ports:
+      - "18789:18789"    # OpenClaw Gateway UI
+    environment:
+      # Model Configuration — pointing to Podman AI Lab
+      - CUSTOM_BASE_URL=http://host.containers.internal:8001/v1
+      - CUSTOM_MODEL_ID=granite-8b
+      - CUSTOM_API_KEY=not-needed
+      - CUSTOM_COMPATIBILITY=openai
+      
+      # Gateway Configuration
+      - GATEWAY_ENABLED=true
+      - GATEWAY_PORT=18789
+      
+      # Agent Identity
+      - AGENT_NAME=Oprah-tor
+      - AGENT_DESCRIPTION=BriefingOps Orchestrator — coordinates executive briefing preparation
+      
+      # Heartbeat (proactive check-ins)
+      - HEARTBEAT_ENABLED=false  # Disable for demo — we trigger manually
+      
+      # Memory persistence
+      - MEMORY_DIR=/data/memory
+      
+    volumes:
+      # Skill files — mounted read-only
+      - ./agents/orchestrator/SKILL.md:/app/skills/orchestrator/SKILL.md:ro
+      - ./agents/cab-historian/SKILL.md:/app/skills/cab-historian/SKILL.md:ro
+      - ./agents/briefing-architect/SKILL.md:/app/skills/briefing-architect/SKILL.md:ro
+      - ./agents/vvip-protocol/SKILL.md:/app/skills/vvip-protocol/SKILL.md:ro
+      
+      # Demo data — the workspace files agents reference
+      - ./demo-data:/app/workspace:ro
+      
+      # Persistent memory (survives container restarts)
+      - openclaw-memory:/data/memory
+      
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:18789/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ═══════════════════════════════════════════════════════════
+# ZEROCLAW INSTANCES — Sherlock Ohms + Bloom-borg (run natively)
+# ═══════════════════════════════════════════════════════════
+# ZeroClaw runs as a native binary, not in containers.
+# The two instances are configured via zeroclaw-config.toml
+# and launched from the terminal:
+#
+#   ZEROCLAW_PROFILE=sherlock zeroclaw agent
+#   ZEROCLAW_PROFILE=sentinel zeroclaw agent
+#
+# See config/zeroclaw-config.toml for profile definitions.
+
+volumes:
+  openclaw-memory:
+    driver: local
+
+# ═══════════════════════════════════════════════════════════
+# NETWORK NOTES
+# ═══════════════════════════════════════════════════════════
+# All agents communicate with the Granite model via:
+#   OpenClaw (container): http://host.containers.internal:8001/v1
+#   ZeroClaw (native):    http://127.0.0.1:8001/v1
+#
+# The OpenClaw Gateway UI is accessible at:
+#   http://127.0.0.1:18789
+#
+# For the GACEP demo:
+#   1. Start Podman AI Lab model service (Granite 8B)
+#   2. Run: podman-compose up -d
+#   3. Open two terminal tabs for Sherlock Ohms and Bloom-borg
+#   4. Open browser to http://127.0.0.1:18789
+#   5. Type the briefing request into the OpenClaw UI

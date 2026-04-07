@@ -1,0 +1,101 @@
+{
+  "_synthetic_data_notice": "All names, companies, and details in this file are entirely fictional. Created for the BriefingOps demo at GACEP Spring 2026. Not real customer data.",
+  "vvip_roster": [
+    {
+      "name": "Sarah Chen",
+      "title": "Chief Information Officer",
+      "company": "Meridian Health Systems",
+      "tier": "Gold",
+      "tier_reason": "Active CAB Member, C-level, Strategic Account",
+      "member_since": "2024-06-15",
+      "cab_board": "Strategic Technology Advisory Board",
+      "executive_sponsor": {
+        "name": "Maria Torres",
+        "title": "VP Engineering",
+        "email": "mtorres@redhat.com",
+        "sponsor_since": "2024-07-01",
+        "last_touchpoint": "2025-12-10",
+        "last_touchpoint_type": "Dinner at Red Hat Summit",
+        "engagement_level": "Active"
+      },
+      "protocol_requirements": {
+        "room": "Executive Suite or Premier Boardroom",
+        "greeting": "EBC Manager meets at lobby",
+        "catering": "Executive level",
+        "sponsor_dropin": "Required — coffee format preferred",
+        "ceo_dropin": "Optional — request if schedule permits",
+        "gift": "Yes — tier-appropriate",
+        "welcome_display": "Yes — personalized",
+        "thank_you_note": "From Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "Vegetarian",
+        "beverages": "Green tea, sparkling water",
+        "communication_style": "Direct, data-driven, appreciates technical depth",
+        "scheduling": "Prefers morning briefings (8:30-9:00 AM start)",
+        "notes": "Arrives early. Values punctuality. Appreciates printed materials in addition to digital."
+      }
+    },
+    {
+      "name": "David Park",
+      "title": "SVP Technology",
+      "company": "Apex Financial Group",
+      "tier": "Gold",
+      "tier_reason": "Active CAB Member, SVP level, Strategic Account",
+      "member_since": "2023-03-01",
+      "cab_board": "Strategic Technology Advisory Board",
+      "executive_sponsor": {
+        "name": "James Kim",
+        "title": "VP Financial Services",
+        "email": "jkim@redhat.com",
+        "sponsor_since": "2023-04-15",
+        "last_touchpoint": "2026-01-22",
+        "last_touchpoint_type": "QBR attendance",
+        "engagement_level": "Active"
+      },
+      "protocol_requirements": {
+        "room": "Executive Suite",
+        "greeting": "EBC Manager meets at lobby",
+        "catering": "Executive level",
+        "sponsor_dropin": "Required",
+        "gift": "Yes"
+      }
+    },
+    {
+      "name": "Rachel Morrison",
+      "title": "CTO",
+      "company": "TerraScale Energy",
+      "tier": "Platinum",
+      "tier_reason": "CAB Co-Chair, C-level, Board-level relationship",
+      "member_since": "2024-09-01",
+      "cab_board": "Strategic Technology Advisory Board",
+      "executive_sponsor": {
+        "name": "Elena Vasquez",
+        "title": "SVP Global Industries",
+        "email": "evasquez@redhat.com",
+        "sponsor_since": "2024-09-15",
+        "last_touchpoint": "2026-02-12",
+        "last_touchpoint_type": "CAB meeting co-facilitation",
+        "engagement_level": "Highly Active"
+      },
+      "protocol_requirements": {
+        "room": "Premier Boardroom — mandatory",
+        "greeting": "Sponsor + EBC Manager meet at lobby",
+        "catering": "Executive level — plated",
+        "sponsor_dropin": "Full session participation",
+        "ceo_dropin": "Required — 15 min minimum",
+        "gift": "Yes — premium personalized",
+        "welcome_display": "Yes — personalized",
+        "car_service": "Offered",
+        "thank_you_note": "From CEO + Sponsor + EBC Manager"
+      }
+    }
+  ],
+  "tier_definitions": {
+    "Platinum": "CAB Chair/Co-Chair, Board-level relationship. Full VVIP protocol.",
+    "Gold": "Active CAB Member, VP+ level, strategic account. Enhanced protocol.",
+    "Silver": "CAB Alumni, Director+ level, growth account. Standard-plus protocol.",
+    "Standard": "No advisory program membership. Standard EBC protocol."
+  },
+  "last_updated": "2026-03-15T09:00:00Z"
+}

@@ -1,0 +1,38 @@
+# Environment files (contain API keys)
+config/.env
+.env
+*.env
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Thumbnails
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Output directories
+output/
+*.mp4
+
+# Podman / Container artifacts
+openclaw-memory/
+
+# ZeroClaw runtime
+.zeroclaw/
+
+# Node (if OpenClaw is built locally)
+node_modules/
+
+# Logs
+*.log

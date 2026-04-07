@@ -1,0 +1,165 @@
+# BriefingOps — OpenClaw Gateway Configuration
+#
+# HYBRID MODEL ROUTING:
+#   Oprah-tor (orchestrator) → Frontier model (complex multi-agent coordination)
+#   Déjà View, Draft Punk, Alfred Bitworth → Local Granite (private data, structured tasks)
+#
+# The orchestrator needs frontier-class reasoning to decompose requests,
+# validate cross-agent outputs, and synthesize final packages.
+# The data agents work with YOUR files and never send data off-device.
+
+# ═══════════════════════════════════════════════════════════
+# AGENT IDENTITY
+# ═══════════════════════════════════════════════════════════
+agent:
+  name: "Oprah-tor"
+  description: >
+    BriefingOps Orchestrator — "You get a task! YOU get a task!"
+    Coordinates executive briefing preparation across six specialized agents.
+
+# ═══════════════════════════════════════════════════════════
+# MODEL PROVIDERS
+# ═══════════════════════════════════════════════════════════
+
+# Frontier model — used by Oprah-tor for orchestration
+models:
+  frontier:
+    # Option A: Anthropic Claude (recommended)
+    provider: "anthropic"
+    api_key: "${ANTHROPIC_API_KEY}"
+    model_id: "claude-sonnet-4-20250514"
+    temperature: 0.3
+    max_tokens: 4096
+    
+    # Option B: OpenAI — uncomment to switch
+    # provider: "openai"
+    # api_key: "${OPENAI_API_KEY}"
+    # model_id: "gpt-4o"
+    
+    # Option C: Google Gemini — uncomment to switch
+    # provider: "google"
+    # api_key: "${GOOGLE_API_KEY}"
+    # model_id: "gemini-2.0-flash"
+
+  # Local model — used by Déjà View, Draft Punk, Alfred Bitworth
+  local:
+    provider: "custom"
+    base_url: "http://host.containers.internal:8001/v1"  # Podman AI Lab
+    model_id: "granite-8b"
+    api_key: ""
+    compatibility: "openai"
+    temperature: 0.3
+    max_tokens: 4096
+
+# ═══════════════════════════════════════════════════════════
+# MODEL ROUTING — which agent uses which model
+# ═══════════════════════════════════════════════════════════
+routing:
+  # Oprah-tor itself uses the frontier model for orchestration
+  default: "frontier"
+  
+  # Per-skill overrides: data agents use local model
+  overrides:
+    cab-historian: "local"        # Déjà View — reads local CAB files
+    briefing-architect: "local"   # Draft Punk — assembles from existing intel
+    vvip-protocol: "local"        # Alfred Bitworth — checklist from local roster
+
+# ═══════════════════════════════════════════════════════════
+# GATEWAY (Web UI)
+# ═══════════════════════════════════════════════════════════
+gateway:
+  enabled: true
+  port: 18789
+  host: "0.0.0.0"
+  title: "BriefingOps — Executive Engagement Intelligence"
+  description: "Multi-agent briefing preparation system"
+
+# ═══════════════════════════════════════════════════════════
+# SKILLS CONFIGURATION
+# ═══════════════════════════════════════════════════════════
+skills:
+  directory: "/app/skills"
+  active:
+    - name: "orchestrator"
+      file: "orchestrator.md"
+      priority: 1
+      model: "frontier"        # Complex orchestration logic
+    
+    - name: "cab-historian"
+      file: "cab-historian.md"
+      priority: 2
+      model: "local"           # Private data — stays on device
+      triggers: ["CAB", "advisory board", "engagement history", "past briefing"]
+    
+    - name: "briefing-architect"
+      file: "briefing-architect.md"
+      priority: 3
+      model: "local"           # Document assembly from existing intel
+      triggers: ["dossier", "backgrounder", "talking points", "agenda"]
+    
+    - name: "vvip-protocol"
+      file: "vvip-protocol.md"
+      priority: 4
+      model: "local"           # VVIP roster is private data
+      triggers: ["VVIP", "protocol", "checklist", "sponsor alert"]
+
+# ═══════════════════════════════════════════════════════════
+# WORKSPACE (Demo Data — local files only)
+# ═══════════════════════════════════════════════════════════
+workspace:
+  directory: "/app/workspace"
+  files:
+    - path: "cab-meeting-notes.md"
+      description: "CAB meeting records and themes"
+    - path: "crm-export.json"
+      description: "CRM account data, contacts, opportunities"
+    - path: "vvip-roster.json"
+      description: "VVIP membership list with tiers and sponsors"
+    - path: "engagement-history.md"
+      description: "Past briefing records and relationship timeline"
+
+# ═══════════════════════════════════════════════════════════
+# EXTERNAL AGENTS (ZeroClaw — also use frontier models)
+# ═══════════════════════════════════════════════════════════
+external_agents:
+  sherlock-ohms:
+    type: "command"
+    command: "zeroclaw agent -p sherlock-ohms -m '{{input}}'"
+    description: "Executive research — uses frontier model for web research"
+    timeout: 120
+    model: "frontier"          # Configured in zeroclaw-config.toml
+  
+  bloom-borg:
+    type: "command"
+    command: "zeroclaw agent -p bloom-borg -m '{{input}}'"
+    description: "Account intelligence — uses frontier model for web research"
+    timeout: 120
+    model: "frontier"          # Configured in zeroclaw-config.toml
+
+# ═══════════════════════════════════════════════════════════
+# TOOLS
+# ═══════════════════════════════════════════════════════════
+tools:
+  web_search:
+    enabled: true
+    provider: "tavily"
+  web_fetch:
+    enabled: true
+    timeout: 15
+  file_read:
+    enabled: true
+    allowed_paths: ["/app/workspace"]
+  file_write:
+    enabled: true
+    allowed_paths: ["/data/output"]
+
+# ═══════════════════════════════════════════════════════════
+# MEMORY & HEARTBEAT
+# ═══════════════════════════════════════════════════════════
+memory:
+  enabled: true
+  directory: "/data/memory"
+  format: "markdown"
+
+heartbeat:
+  enabled: false   # Manual trigger for demo

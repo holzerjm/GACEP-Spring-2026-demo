@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingOps Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #06070A;
+    --bg-card: #0F1117;
+    --bg-card-hover: #161820;
+    --border: #1E2030;
+    --border-glow: #2A2E42;
+    --gold: #FFC600;
+    --gold-dim: #B8900A;
+    --gold-glow: rgba(255,198,0,0.15);
+    --frontier: #6E9BFF;
+    --frontier-bg: rgba(110,155,255,0.08);
+    --frontier-border: rgba(110,155,255,0.25);
+    --local: #4ADE80;
+    --local-bg: rgba(74,222,128,0.08);
+    --local-border: rgba(74,222,128,0.25);
+    --text: #E8E8EC;
+    --text-dim: #8B8FA3;
+    --text-muted: #5A5E72;
+    --red: #EE0000;
+  }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .canvas {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px 64px;
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .header .logo-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .header .logo-dot {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--gold-glow);
+  }
+  .header .logo-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 42px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .header .subtitle {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .legend-dot.frontier { background: var(--frontier); box-shadow: 0 0 8px rgba(110,155,255,0.4); }
+  .legend-dot.local { background: var(--local); box-shadow: 0 0 8px rgba(74,222,128,0.4); }
+
+  /* Flow sections */
+  .flow-section {
+    position: relative;
+    margin-bottom: 32px;
+  }
+  .phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  /* Trigger card */
+  .trigger-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #12141E 100%);
+    border: 1px solid var(--border-glow);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .trigger-card .icon { font-size: 20px; margin-bottom: 6px; }
+  .trigger-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .trigger-card .text {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Connector arrows */
+  .connector {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+  }
+  .connector .arrow {
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(to bottom, var(--border-glow), var(--gold-dim));
+    position: relative;
+  }
+  .connector .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--gold-dim);
+  }
+  .connector-wide {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 8px 0;
+    position: relative;
+  }
+  .connector-wide .line {
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    background: var(--border-glow);
+  }
+
+  /* Agent cards */
+  .agent-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .agent-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+  }
+  .agent-card.frontier {
+    border-color: var(--frontier-border);
+    background: linear-gradient(180deg, var(--frontier-bg) 0%, var(--bg-card) 100%);
+  }
+  .agent-card.frontier:hover { border-color: var(--frontier); }
+  .agent-card.local {
+    border-color: var(--local-border);
+    background: linear-gradient(180deg, var(--local-bg) 0%, var(--bg-card) 100%);
+  }
+  .agent-card.local:hover { border-color: var(--local); }
+
+  .agent-card .model-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .agent-card.frontier .model-badge {
+    background: var(--frontier-bg);
+    color: var(--frontier);
+    border: 1px solid var(--frontier-border);
+  }
+  .agent-card.local .model-badge {
+    background: var(--local-bg);
+    color: var(--local);
+    border: 1px solid var(--local-border);
+  }
+
+  .agent-emoji { font-size: 24px; margin-bottom: 8px; }
+  .agent-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .agent-role {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .agent-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .agent-framework {
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .agent-framework .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  /* Grid layouts */
+  .orchestrator-row { margin-bottom: 8px; }
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 760px;
+    margin: 0 auto 8px;
+  }
+  .single-col {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* Output section */
+  .output-card {
+    background: linear-gradient(135deg, #1A1510 0%, var(--bg-card) 100%);
+    border: 1px solid var(--gold-dim);
+    border-radius: 14px;
+    padding: 24px 28px;
+    text-align: center;
+  }
+  .output-card .output-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .output-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .output-item {
+    font-size: 12px;
+    color: var(--text-dim);
+    background: rgba(255,198,0,0.06);
+    border: 1px solid rgba(255,198,0,0.15);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  /* Infrastructure footer */
+  .infra-footer {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .infra-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .infra-box .infra-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .infra-box .infra-item {
+    font-size: 12px;
+    color: var(--text-dim);
+    padding: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .infra-box .infra-item .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .tag.frontier-tag { background: var(--frontier-bg); color: var(--frontier); border: 1px solid var(--frontier-border); }
+  .tag.local-tag { background: var(--local-bg); color: var(--local); border: 1px solid var(--local-border); }
+  .tag.gold-tag { background: rgba(255,198,0,0.08); color: var(--gold); border: 1px solid rgba(255,198,0,0.2); }
+
+  /* Watermark */
+  .watermark {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .watermark span { color: var(--red); }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-line">
+      <div class="logo-dot"></div>
+      <div class="logo-text">BriefingOps</div>
+      <div class="logo-dot"></div>
+    </div>
+    <h1>Multi-Agent Architecture</h1>
+    <p class="subtitle">Six specialized AI agents orchestrate executive briefing preparation — frontier models for research, local models for private data.</p>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot frontier"></div> Frontier Model (Claude / GPT / Gemini)</div>
+    <div class="legend-item"><div class="legend-dot local"></div> Local Model (Granite 8B via Podman AI Lab)</div>
+  </div>
+
+  <!-- PHASE 0: Trigger -->
+  <div class="flow-section">
+    <div class="phase-label">Trigger</div>
+    <div class="trigger-card">
+      <div class="icon">💬</div>
+      <div class="label">Briefing Request</div>
+      <div class="text">"Prepare a briefing package for Sarah Chen, CIO of Meridian Health Systems. CAB member. Sponsor: Maria Torres."</div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 1: Orchestrator -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 1 — Decomposition</div>
+    <div class="orchestrator-row">
+      <div class="agent-card frontier">
+        <div class="model-badge">☁️ Frontier</div>
+        <div class="agent-emoji">🎯</div>
+        <div class="agent-name">Oprah-tor</div>
+        <div class="agent-role">Orchestrator</div>
+        <div class="agent-desc">Decomposes the request into parallel tasks. Dispatches to specialist agents. Validates results and synthesizes the final briefing package. "You get a task! YOU get a task!"</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Gateway · Podman Container</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 2: Intelligence Gathering (parallel) -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 2 — Intelligence Gathering (parallel)</div>
+    <div class="three-col">
+      <div class="agent-card frontier">
+        <div class="model-badge">☁️ Frontier</div>
+        <div class="agent-emoji">🔍</div>
+        <div class="agent-name">Sherlock Ohms</div>
+        <div class="agent-role">Executive Research</div>
+        <div class="agent-desc">Deep person-level intelligence. Career arc, recent news, conference appearances, communication style, technology priorities.</div>
+        <div class="agent-framework"><div class="dot"></div>ZeroClaw CLI · Native Binary · 3.4 MB</div>
+      </div>
+      <div class="agent-card frontier">
+        <div class="model-badge">☁️ Frontier</div>
+        <div class="agent-emoji">🏢</div>
+        <div class="agent-name">Bloom-borg</div>
+        <div class="agent-role">Account Intelligence</div>
+        <div class="agent-desc">Company-level analysis. Revenue, tech stack, competitive dynamics, job posting signals, strategic priorities.</div>
+        <div class="agent-framework"><div class="dot"></div>ZeroClaw CLI · Native Binary · 3.4 MB</div>
+      </div>
+      <div class="agent-card local">
+        <div class="model-badge">💻 Local</div>
+        <div class="agent-emoji">📋</div>
+        <div class="agent-name">Déjà View</div>
+        <div class="agent-role">CAB Historian</div>
+        <div class="agent-desc">Cross-program memory. CAB themes, past briefings, engagement stage, executive sponsor history, open follow-ups.</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Podman Container</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 3: Assembly + Protocol -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 3 — Assembly & Protocol (parallel)</div>
+    <div class="two-col">
+      <div class="agent-card local">
+        <div class="model-badge">💻 Local</div>
+        <div class="agent-emoji">📄</div>
+        <div class="agent-name">Draft Punk</div>
+        <div class="agent-role">Briefing Architect</div>
+        <div class="agent-desc">Synthesizes all intelligence into polished deliverables: executive dossier, backgrounder, sponsor talking points, recommended agenda.</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Podman Container</div>
+      </div>
+      <div class="agent-card local">
+        <div class="model-badge">💻 Local</div>
+        <div class="agent-emoji">⭐</div>
+        <div class="agent-name">Alfred Bitworth</div>
+        <div class="agent-role">VVIP Protocol</div>
+        <div class="agent-desc">Checks VVIP tier, generates protocol checklist, drafts sponsor alert email, flags scheduling conflicts, logs the engagement.</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Podman Container</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- Output -->
+  <div class="flow-section">
+    <div class="phase-label">Output — Complete Briefing Package</div>
+    <div class="output-card">
+      <div class="output-title">📦 Deliverables (assembled in ~90 seconds)</div>
+      <div class="output-items">
+        <div class="output-item">Executive Dossier</div>
+        <div class="output-item">Briefing Backgrounder</div>
+        <div class="output-item">Sponsor Talking Points</div>
+        <div class="output-item">Recommended Agenda</div>
+        <div class="output-item">Conversation Starters</div>
+        <div class="output-item">VVIP Protocol Checklist</div>
+        <div class="output-item">Sponsor Alert Email</div>
+        <div class="output-item">Engagement Log Entry</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infrastructure -->
+  <div class="infra-footer">
+    <div class="infra-box">
+      <div class="infra-title">🖥️ Infrastructure Stack</div>
+      <div class="infra-item"><span class="tag gold-tag">Runtime</span> Podman Desktop + Podman AI Lab</div>
+      <div class="infra-item"><span class="tag local-tag">Model</span> IBM Granite 8B (local, air-gapped)</div>
+      <div class="infra-item"><span class="tag frontier-tag">Model</span> Claude / GPT / Gemini (cloud API)</div>
+      <div class="infra-item"><span class="tag gold-tag">Agents</span> OpenClaw (container) + ZeroClaw (native)</div>
+      <div class="infra-item"><span class="tag gold-tag">Scale</span> Red Hat OpenShift AI (enterprise)</div>
+    </div>
+    <div class="infra-box">
+      <div class="infra-title">🔐 Model Routing Philosophy</div>
+      <div class="infra-item"><span class="tag frontier-tag">Cloud</span> Research agents — public web data, complex reasoning</div>
+      <div class="infra-item"><span class="tag local-tag">Local</span> Data agents — private CAB/CRM/VVIP data stays on device</div>
+      <div class="infra-item" style="margin-top:8px; font-style:italic; color:var(--text-muted);">Power where you need it. Privacy where it matters.</div>
+    </div>
+  </div>
+
+  <div class="watermark">Built with open source · Runs on your laptop · <span>Red Hat</span> CTO Office · GACEP Spring 2026</div>
+
+</div>
+</body>
+</html>
