@@ -158,7 +158,7 @@ ACE assembles the complete briefing package:
 
 ```
 briefingclaw/
-├── briefingclaw-dashboard.html    # Live demo dashboard (animated simulation)
+├── briefingclaw-dashboard.html    # Live demo dashboard (3 contact scenarios, modal viewer)
 ├── briefingclaw-architecture.html # Static architecture diagram
 ├── briefingclaw.sh                # Interactive CLI for demo management
 ├── agents/
@@ -178,11 +178,15 @@ briefingclaw/
 │   ├── podman-compose.yml     # Container orchestration
 │   ├── openclaw-config.yml    # OpenClaw gateway config
 │   └── zeroclaw-config.toml   # ZeroClaw native config
-├── demo-data/
-│   ├── cab-meeting-notes.md   # Simulated CAB data
-│   ├── crm-export.json        # Simulated CRM data
-│   ├── vvip-roster.json       # VVIP membership list
-│   └── engagement-history.md  # Past briefing records
+├── demo-data/                     # 3 accounts, 3 contacts, cross-program data
+│   ├── cab-meeting-notes.md   # CAB meetings (Q1 2026, Q4 2025, 3 contacts)
+│   ├── crm-export.json        # CRM data (3 accounts, 9 contacts)
+│   ├── vvip-roster.json       # VVIP tiers & preferences (3 profiles)
+│   └── engagement-history.md  # Engagement timelines (3 narratives)
+├── demo-deliverables/             # Pre-generated sample deliverables
+│   ├── sarah-chen/            # Dossier, agenda, VVIP checklist
+│   ├── david-park/            # Dossier, agenda
+│   └── rachel-morrison/       # Dossier, agenda
 └── docs/
     ├── ARCHITECTURE.md        # This file
     ├── DEMO-SCRIPT.md         # Step-by-step demo script

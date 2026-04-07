@@ -307,12 +307,17 @@ open briefingclaw-dashboard.html
 open "briefingclaw-dashboard.html?autostart"
 ```
 
-Verify that:
+Test all three contact scenarios (use the dropdown in the control bar):
+
+**For each contact (Sarah Chen, David Park, Rachel Morrison):**
 - [ ] The dashboard loads with the dark theme and pipeline visualization
-- [ ] Clicking "Start Demo" runs the full 42-second simulation
+- [ ] Contact dropdown switches between the three scenarios
+- [ ] Clicking "Start Demo" runs the full 42-second simulation for that contact
 - [ ] All 6 agent nodes animate through idle/working/complete states
 - [ ] Deliverables count reaches 8/8
-- [ ] Critical flags appear (overdue action item at ~15 seconds)
+- [ ] Critical flags appear specific to the selected contact (~15 seconds)
+- [ ] Completed deliverable cards are clickable — modal viewer opens with formatted content
+- [ ] Modal closes via X button, clicking overlay, or Escape key
 - [ ] "Reset" button returns everything to initial state
 - [ ] Pressing F toggles fullscreen mode
 

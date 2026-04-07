@@ -283,13 +283,31 @@ The dashboard polls `http://127.0.0.1:8001` (Granite model) and `http://127.0.0.
 
 The animated simulation runs identically in both modes. It is a scripted 42-second sequence sourced from the real demo data files, designed to match the timing of the live demo script.
 
+### Contact Dropdown
+
+The dashboard includes a dropdown selector to switch between three demo scenarios:
+
+| Contact | Company | Tier | Scenario |
+|---------|---------|------|----------|
+| Sarah Chen | Meridian Health Systems | Gold | Overdue commitments, approaching champion |
+| David Park | Apex Financial Group | Gold | Retention crisis, Azure competitor, failed migration |
+| Rachel Morrison | TerraScale Energy | Platinum | P1 outage, champion under stress, board presentation |
+
+Select a contact from the dropdown, then click "Start Demo". Each scenario has its own timeline with distinct activity feed messages, critical flags, and narrative arc.
+
+### Clickable Deliverables
+
+After the simulation completes (or while running), completed deliverable cards are clickable. Clicking opens a formatted modal viewer showing sample content for that deliverable (executive dossier, recommended agenda, or VVIP checklist). Close the modal with the X button, clicking the overlay, or pressing Escape.
+
 ### Key Moments in the Simulation
+
+All three scenarios follow the same phase structure but surface different intelligence:
 
 | Time | Event |
 |------|-------|
 | 0-7s | Oprah-tor parses the request and dispatches Phase 1 agents |
 | 7-20s | Sherlock, Bloom-borg, and Deja View work in parallel |
-| ~15s | Deja View flags the **overdue action item** (the dramatic moment) |
+| ~15s | Deja View flags the **critical issue** (varies by contact) |
 | 21-37s | Draft Punk and Alfred Bitworth produce deliverables progressively |
 | 38-42s | Oprah-tor synthesizes the final package (8/8 deliverables) |
 
@@ -410,31 +428,35 @@ The system surfaces flags that require immediate attention:
 
 ## 10. Demo Data Reference
 
-The repository includes simulated data for the Sarah Chen / Meridian Health Systems scenario.
+The repository includes simulated data for three distinct demo scenarios, each with complete cross-program records.
 
-### cab-meeting-notes.md
-- Q1 2026 Strategic Technology Advisory Board (Feb 12, 2026)
-  - Sarah Chen led the AI Governance in Regulated Industries discussion
-  - Action item assigned: AI governance reference architecture (due March 1 — **overdue**)
-- Q4 2025 Board meeting (Nov 8, 2025)
-  - Sarah participated in Container Security and Edge Computing discussions
+### Three Contact Scenarios
 
-### crm-export.json
-- Meridian Health Systems: Healthcare, Enterprise, $4.2B revenue, 28,000 employees
-- Sarah Chen: CIO, Economic Buyer, engagement score 92/100, CAB member
-- Open opportunities: AI Platform Expansion ($1.2M), Edge Computing ($800K)
-- Dr. Priya Kapoor: CMIO, not yet engaged (opportunity flag)
+| Contact | Company | Industry | Health | Tier | Engagement | Key Tension |
+|---------|---------|----------|--------|------|------------|-------------|
+| Sarah Chen | Meridian Health | Healthcare | 87/100 | Gold | 92/100 | Overdue AI governance commitment |
+| David Park | Apex Financial | Financial Services | 62/100 | Gold | 68/100 | Failed migration, Azure threat, renewal at risk |
+| Rachel Morrison | TerraScale Energy | Energy/Utilities | 78/100 | Platinum | 96/100 | P1 outage, champion credibility at stake |
 
-### vvip-roster.json
-- Sarah Chen: **Gold tier** — executive suite, sponsor drop-in recommended, personalized welcome
-- Preferences: vegetarian, green tea/sparkling water, morning briefings (8:30-9:00 AM), prefers printed materials
-- Executive sponsor: Maria Torres (VP Engineering), last touchpoint Dec 10, 2025
+### Data Files
 
-### engagement-history.md
-- Relationship stage: Trusted (approaching Champion)
-- Last EBC briefing: Sept 22, 2025 (NPS 9/10, led to OpenShift AI pilot approval)
-- Open follow-ups: healthcare customer reference connection (promised Sept 2025, still open)
-- CAB member since June 15, 2024
+**cab-meeting-notes.md** — Q1 2026 and Q4 2025 board meetings with all three contacts participating. Sarah led AI Governance, David led Hybrid Cloud, Rachel co-chairs and contributed across topics.
+
+**crm-export.json** — Three full account records (Meridian Health $4.2B, Apex Financial $11.6B, TerraScale Energy $8.7B) with 9 contacts total, open opportunities, and support escalations including David's P2 migration failure and Rachel's P1 production outage.
+
+**vvip-roster.json** — Full VVIP profiles for all three contacts with comprehensive preferences (dietary, beverages, scheduling, communication style, room preferences) and protocol requirements per tier.
+
+**engagement-history.md** — Three complete engagement timelines with relationship stage progression, open items, and flags. Sarah's timeline shows 8 touchpoints over 2 years. David's shows declining trust after the migration failure. Rachel's shows champion-level engagement threatened by the P1 outage.
+
+### Demo Deliverables
+
+Pre-generated sample deliverables in `demo-deliverables/` (clickable in the dashboard):
+
+| Contact | Files |
+|---------|-------|
+| sarah-chen/ | executive-dossier.md, recommended-agenda.md, vvip-checklist.md |
+| david-park/ | executive-dossier.md, recommended-agenda.md |
+| rachel-morrison/ | executive-dossier.md, recommended-agenda.md |
 
 ### Customizing demo data
 
@@ -444,7 +466,8 @@ Key consistency rules:
 - Names and companies must match across all four data files
 - CAB meeting dates in `cab-meeting-notes.md` should align with entries in `engagement-history.md`
 - VVIP roster entries should reference contacts that exist in `crm-export.json`
-- Overdue action items and open follow-ups are the "dramatic tension" — include at least one
+- Each contact should have distinct relationship challenges and engagement history
+- Overdue action items, open follow-ups, and escalations provide the "dramatic tension"
 
 ---
 

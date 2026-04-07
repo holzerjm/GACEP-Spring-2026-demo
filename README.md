@@ -211,11 +211,16 @@ gacep-demo/
 |   +-- zeroclaw-config.toml               ZeroClaw agent profiles
 |   +-- podman-compose.yml                 Container orchestration manifest
 |
-+-- demo-data/                             Simulated data for the demo scenario
-|   +-- cab-meeting-notes.md               CAB meeting records (Q1 2026, Q4 2025)
-|   +-- crm-export.json                    CRM account & contact records
-|   +-- vvip-roster.json                   VVIP tier assignments & preferences
-|   +-- engagement-history.md              Past briefing & engagement timeline
++-- demo-data/                             Simulated data for three contact scenarios
+|   +-- cab-meeting-notes.md               CAB meeting records (Q1 2026, Q4 2025, 3 contacts)
+|   +-- crm-export.json                    CRM records (3 accounts, 9 contacts)
+|   +-- vvip-roster.json                   VVIP tiers & full preferences (3 contacts)
+|   +-- engagement-history.md              Engagement timelines (3 complete narratives)
+|
++-- demo-deliverables/                     Pre-generated sample deliverables
+|   +-- sarah-chen/                        Executive dossier, agenda, VVIP checklist
+|   +-- david-park/                        Executive dossier, agenda
+|   +-- rachel-morrison/                   Executive dossier, agenda
 |
 +-- docs/                                  Extended documentation
     +-- ARCHITECTURE.md                    System design document
@@ -227,7 +232,7 @@ gacep-demo/
 
 **`briefingclaw.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
 
-**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization. Shows all six agents working through the briefing preparation flow with particle animations, real-time activity feed, deliverable tracking, and critical flag alerts. Polls live infrastructure when services are running, falls back to a polished animated simulation. Open in a browser and click "Start Demo", or append `?autostart` to the URL. Keyboard shortcuts: Space/Enter to start, Escape to reset, F for fullscreen.
+**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization. Features a contact dropdown selector (Sarah Chen, David Park, Rachel Morrison) with unique simulation timelines for each scenario. Shows all six agents working through the briefing preparation flow with particle animations, real-time activity feed, deliverable tracking, and critical flag alerts. Completed deliverables are clickable, opening a formatted modal viewer with sample content. Polls live infrastructure when services are running, falls back to a polished animated simulation. Open in a browser and click "Start Demo", or append `?autostart` to the URL. Keyboard shortcuts: Space/Enter to start, Escape to reset, F for fullscreen.
 
 **`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
 
@@ -241,19 +246,17 @@ gacep-demo/
 
 ---
 
-## Demo Scenario
+## Demo Scenarios
 
-The built-in demo scenario centers on a briefing request for **Sarah Chen**, CIO of **Meridian Health Systems**, with executive sponsor **Maria Torres** (VP Engineering).
+The system includes three distinct demo scenarios, each showcasing different relationship challenges and cross-program intelligence patterns:
 
-The demo data is crafted to showcase the system's cross-program intelligence capabilities:
+| Scenario | Contact | Company | Tier | Challenge | Key Drama |
+|----------|---------|---------|------|-----------|-----------|
+| **Overdue Commitments** | Sarah Chen, CIO | Meridian Health Systems | Gold | AI governance architecture overdue from Feb CAB | Trust-critical miss before briefing |
+| **Retention Crisis** | David Park, SVP Technology | Apex Financial Group | Gold | Failed migration, Azure pitching, 3-month renewal | Account at risk of competitive displacement |
+| **Champion Under Stress** | Rachel Morrison, CTO | TerraScale Energy | Platinum | P1 outage damaged trust, board presentation in 30 days | Highest-value relationship under threat |
 
-- **Sarah is a Gold-tier VVIP** and active CAB member who led the AI Governance discussion at the most recent board meeting
-- **An action item from that CAB meeting is overdue** (AI governance reference architecture, due March 1) — Deja View catches this before anyone walks into the room
-- **An open follow-up from a past briefing is still unresolved** (healthcare customer reference connection, promised September 2025)
-- **A new stakeholder opportunity exists** — Dr. Priya Kapoor (CMIO) has not yet been engaged despite clinical AI use case potential
-- **Sarah's relationship stage is "Trusted, approaching Champion"** with an NPS score of 9/10 from her last briefing
-
-This scenario demonstrates the core value proposition: it is not the speed that matters — it is that the system connected dots across CAB records, EBC history, CRM data, and VVIP protocol that no single person would have assembled.
+Each scenario demonstrates that the system connects dots across CAB records, EBC history, CRM data, support escalations, and VVIP protocol that no single person would consistently assemble. The dashboard includes a contact dropdown to switch between scenarios during a live demo.
 
 ---
 
