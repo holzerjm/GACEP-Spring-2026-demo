@@ -1,4 +1,4 @@
-# BriefingOps Demo Script — GACEP Spring 2026
+# BriefingClaw Demo Script — GACEP Spring 2026
 
 ## Session: "One Customer, Many Doors"
 ## Presenter: Jan Mark Holzer
@@ -23,7 +23,7 @@
 - [ ] Podman Desktop running with AI Lab
 - [ ] Granite 8B model loaded and serving on port 8001
 - [ ] Verify model: `curl -s http://127.0.0.1:8001/v1/models | jq .`
-- [ ] OpenClaw container running: `podman ps | grep briefingops`
+- [ ] OpenClaw container running: `podman ps | grep briefingclaw`
 - [ ] OpenClaw UI accessible: `open http://127.0.0.1:18789`
 - [ ] ZeroClaw installed: `zeroclaw --version`
 - [ ] Demo data files in workspace: `ls ~/.openclaw/workspace/`
@@ -66,7 +66,7 @@
 ### BEAT 2: Meet the Agents (2 minutes)
 **[Switch to slide showing the multi-agent architecture diagram]**
 
-> "I want to introduce you to BriefingOps — a multi-agent system we built using open-source AI tools. It's six specialized agents, each with a specific job:
+> "I want to introduce you to BriefingClaw — a multi-agent system we built using open-source AI tools. It's six specialized agents, each with a specific job:
 >
 > **Oprah-tor** is the orchestrator — the air traffic controller. You give it a briefing request, and it coordinates everything else.
 >

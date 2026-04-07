@@ -1,12 +1,12 @@
-# BriefingOps — Makefile
-# Convenience targets wrapping briefingops.sh and common operations.
+# BriefingClaw — Makefile
+# Convenience targets wrapping briefingclaw.sh and common operations.
 
 .PHONY: setup start stop status demo preflight record sherlock bloomborg clean help
 
 # Default target
 help: ## Show available targets
 	@echo ""
-	@echo "  BriefingOps — Make Targets"
+	@echo "  BriefingClaw — Make Targets"
 	@echo "  =========================="
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -14,31 +14,31 @@ help: ## Show available targets
 	@echo ""
 
 setup: ## First-time setup (create config, copy files, prompt for API keys)
-	@./briefingops.sh setup
+	@./briefingclaw.sh setup
 
 start: ## Start all services (Podman, model server, OpenClaw container)
-	@./briefingops.sh start
+	@./briefingclaw.sh start
 
 stop: ## Stop the OpenClaw container
-	@./briefingops.sh stop
+	@./briefingclaw.sh stop
 
 status: ## Show system health and agent readiness
-	@./briefingops.sh status
+	@./briefingclaw.sh status
 
 demo: ## Launch the full demo environment (browser + terminal tabs)
-	@./briefingops.sh demo
+	@./briefingclaw.sh demo
 
 preflight: ## Conference-day checklist (run 30 min before session)
-	@./briefingops.sh preflight
+	@./briefingclaw.sh preflight
 
 record: ## Guide for recording a backup demo video
-	@./briefingops.sh record
+	@./briefingclaw.sh record
 
 sherlock: ## Run Sherlock Ohms standalone (usage: make sherlock Q="Name, Title, Company")
-	@./briefingops.sh sherlock "$(Q)"
+	@./briefingclaw.sh sherlock "$(Q)"
 
 bloomborg: ## Run Bloom-borg standalone (usage: make bloomborg Q="Company Name")
-	@./briefingops.sh bloomborg "$(Q)"
+	@./briefingclaw.sh bloomborg "$(Q)"
 
 clean: ## Remove output files and OpenClaw memory volume
 	@echo "Removing output directory..."

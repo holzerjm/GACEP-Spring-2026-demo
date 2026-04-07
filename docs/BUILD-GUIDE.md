@@ -1,8 +1,8 @@
-# BriefingOps Build Guide
+# BriefingClaw Build Guide
 
 ## How to Set Up the Multi-Agent Demo for GACEP Spring 2026
 
-This guide walks you through building and configuring the entire BriefingOps multi-agent system on a MacBook Pro. Estimated setup time: 2-3 hours (most of which is model download time).
+This guide walks you through building and configuring the entire BriefingClaw multi-agent system on a MacBook Pro. Estimated setup time: 2-3 hours (most of which is model download time).
 
 > **See also:** [`USER-GUIDE.md`](../USER-GUIDE.md) for day-to-day operation, troubleshooting, and customization.
 
@@ -96,7 +96,7 @@ You should see a response from the model. If not, check that the Podman machine 
 cd ~/openclaw
 
 # Build the container image
-podman build -t openclaw:briefingops -f Dockerfile .
+podman build -t openclaw:briefingclaw -f Dockerfile .
 ```
 
 ### Copy Demo Data to OpenClaw Workspace
@@ -105,7 +105,7 @@ podman build -t openclaw:briefingops -f Dockerfile .
 mkdir -p ~/.openclaw/workspace
 
 # Copy demo data files
-cp ~/briefingops/demo-data/* ~/.openclaw/workspace/
+cp ~/briefingclaw/demo-data/* ~/.openclaw/workspace/
 ```
 
 ### Copy Skill Files
@@ -114,27 +114,27 @@ cp ~/briefingops/demo-data/* ~/.openclaw/workspace/
 mkdir -p ~/.openclaw/skills
 
 # Copy all agent skills
-cp ~/briefingops/agents/orchestrator/SKILL.md ~/.openclaw/skills/orchestrator.md
-cp ~/briefingops/agents/cab-historian/SKILL.md ~/.openclaw/skills/cab-historian.md
-cp ~/briefingops/agents/briefing-architect/SKILL.md ~/.openclaw/skills/briefing-architect.md
-cp ~/briefingops/agents/vvip-protocol/SKILL.md ~/.openclaw/skills/vvip-protocol.md
+cp ~/briefingclaw/agents/orchestrator/SKILL.md ~/.openclaw/skills/orchestrator.md
+cp ~/briefingclaw/agents/cab-historian/SKILL.md ~/.openclaw/skills/cab-historian.md
+cp ~/briefingclaw/agents/briefing-architect/SKILL.md ~/.openclaw/skills/briefing-architect.md
+cp ~/briefingclaw/agents/vvip-protocol/SKILL.md ~/.openclaw/skills/vvip-protocol.md
 ```
 
 ### Run the Onboarding Wizard
 ```bash
 # Start OpenClaw container with workspace and skills mounted
 podman run -d \
-  --name briefingops-openclaw \
+  --name briefingclaw-openclaw \
   -p 18789:18789 \
   -v ~/.openclaw/workspace:/app/workspace:ro \
   -v ~/.openclaw/skills:/app/skills:ro \
   -v openclaw-memory:/data/memory \
   -e GATEWAY_ENABLED=true \
   -e GATEWAY_PORT=18789 \
-  openclaw:briefingops
+  openclaw:briefingclaw
 
 # Run onboarding to connect to local model
-podman exec -it briefingops-openclaw \
+podman exec -it briefingclaw-openclaw \
   node dist/index.js onboard \
   --non-interactive \
   --custom-base-url "http://host.containers.internal:8001/v1" \
@@ -143,14 +143,14 @@ podman exec -it briefingops-openclaw \
   --custom-compatibility openai
 
 # Set agent name
-podman exec -it briefingops-openclaw \
+podman exec -it briefingclaw-openclaw \
   node dist/index.js config set agent.name "Oprah-tor"
 ```
 
 ### Verify OpenClaw
 ```bash
 # Check container is running
-podman ps | grep briefingops
+podman ps | grep briefingclaw
 
 # Open the Gateway UI
 open http://127.0.0.1:18789
@@ -169,7 +169,7 @@ open http://127.0.0.1:18789
 mkdir -p ~/.zeroclaw
 
 # Copy the config file
-cp ~/briefingops/config/zeroclaw-config.toml ~/.zeroclaw/config.toml
+cp ~/briefingclaw/config/zeroclaw-config.toml ~/.zeroclaw/config.toml
 
 # Create output directories
 mkdir -p ~/.zeroclaw/output/sherlock
@@ -177,7 +177,7 @@ mkdir -p ~/.zeroclaw/output/sentinel
 mkdir -p ~/.zeroclaw/workspace
 
 # Copy demo data to ZeroClaw workspace
-cp ~/briefingops/demo-data/* ~/.zeroclaw/workspace/
+cp ~/briefingclaw/demo-data/* ~/.zeroclaw/workspace/
 ```
 
 ### Set Up Search API Key
@@ -225,14 +225,14 @@ For a more sophisticated setup, configure OpenClaw's Agent-to-Agent messaging:
 
 ```bash
 # In OpenClaw, register ZeroClaw agents as external tools
-podman exec -it briefingops-openclaw \
+podman exec -it briefingclaw-openclaw \
   node dist/index.js tools register \
   --name "sherlock" \
   --type "command" \
   --command "zeroclaw agent -p sherlock -m '{{input}}'" \
   --description "Executive research agent — researches a specific person"
 
-podman exec -it briefingops-openclaw \
+podman exec -it briefingclaw-openclaw \
   node dist/index.js tools register \
   --name "sentinel" \
   --type "command" \
@@ -249,9 +249,9 @@ ZEROCLAW_PROFILE=sherlock zeroclaw mcp-server --port 3001
 ZEROCLAW_PROFILE=sentinel zeroclaw mcp-server --port 3002
 
 # Register MCP servers with OpenClaw
-podman exec -it briefingops-openclaw \
+podman exec -it briefingclaw-openclaw \
   node dist/index.js config set mcp.servers.sherlock "http://host.containers.internal:3001"
-podman exec -it briefingops-openclaw \
+podman exec -it briefingclaw-openclaw \
   node dist/index.js config set mcp.servers.sentinel "http://host.containers.internal:3002"
 ```
 
@@ -302,7 +302,7 @@ The night before the session (at the hotel):
 1. Connect to a reliable network
 2. Open QuickTime Player → File → New Screen Recording
 3. Run the full demo from Beat 3 through Beat 6
-4. Save as `briefingops-demo-backup.mp4`
+4. Save as `briefingclaw-demo-backup.mp4`
 5. Test playback at presentation resolution
 6. Keep the video file accessible — NOT buried in folders
 
@@ -315,7 +315,7 @@ The night before the session (at the hotel):
 - [ ] Start Podman machine
 - [ ] Start model service (Podman AI Lab → Granite → Start)
 - [ ] Verify model endpoint: `curl http://127.0.0.1:8001/v1/models`
-- [ ] Start OpenClaw container: `podman start briefingops-openclaw`
+- [ ] Start OpenClaw container: `podman start briefingclaw-openclaw`
 - [ ] Verify OpenClaw UI: `open http://127.0.0.1:18789`
 - [ ] Warm up model with a test query (gets it into memory)
 - [ ] Set terminal font size to 18pt+

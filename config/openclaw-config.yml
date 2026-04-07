@@ -1,4 +1,4 @@
-# BriefingOps — OpenClaw Gateway Configuration
+# BriefingClaw — OpenClaw Gateway Configuration
 #
 # HYBRID MODEL ROUTING:
 #   Oprah-tor (orchestrator) → Frontier model (complex multi-agent coordination)
@@ -14,7 +14,7 @@
 agent:
   name: "Oprah-tor"
   description: >
-    BriefingOps Orchestrator — "You get a task! YOU get a task!"
+    BriefingClaw Orchestrator — "You get a task! YOU get a task!"
     Coordinates executive briefing preparation across six specialized agents.
 
 # ═══════════════════════════════════════════════════════════
@@ -71,7 +71,7 @@ gateway:
   enabled: true
   port: 18789
   host: "0.0.0.0"
-  title: "BriefingOps — Executive Engagement Intelligence"
+  title: "BriefingClaw — Executive Engagement Intelligence"
   description: "Multi-agent briefing preparation system"
 
 # ═══════════════════════════════════════════════════════════

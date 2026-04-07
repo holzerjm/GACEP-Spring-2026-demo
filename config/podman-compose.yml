@@ -1,11 +1,11 @@
-# BriefingOps Multi-Agent Stack — Podman Compose
+# BriefingClaw Multi-Agent Stack — Podman Compose
 # Run with: podman-compose up -d (from this directory)
 # Requires: Podman Desktop with AI Lab extension installed
 #
 # NOTE ON PATHS: Volume mounts below use relative paths (./agents, ./demo-data)
 # which resolve relative to this file's directory. Either:
 #   1. Run podman-compose from the config/ directory, OR
-#   2. Use `briefingops.sh start` which handles paths automatically
+#   2. Use `briefingclaw.sh start` which handles paths automatically
 # If you move this file, update the volume mount paths accordingly.
 
 version: "3.8"
@@ -24,7 +24,7 @@ services:
   # ═══════════════════════════════════════════════════════════
   openclaw:
     image: openclaw/openclaw:latest
-    container_name: briefingops-openclaw
+    container_name: briefingclaw-openclaw
     ports:
       - "18789:18789"    # OpenClaw Gateway UI
     environment:
@@ -40,7 +40,7 @@ services:
       
       # Agent Identity
       - AGENT_NAME=Oprah-tor
-      - AGENT_DESCRIPTION=BriefingOps Orchestrator — coordinates executive briefing preparation
+      - AGENT_DESCRIPTION=BriefingClaw Orchestrator — coordinates executive briefing preparation
       
       # Heartbeat (proactive check-ins)
       - HEARTBEAT_ENABLED=false  # Disable for demo — we trigger manually

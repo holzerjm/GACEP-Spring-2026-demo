@@ -1,6 +1,6 @@
 <!-- SYNTHETIC DATA NOTICE -->
 <!-- All names, companies, events, and details in this file are entirely fictional. -->
-<!-- Created for the BriefingOps demo at GACEP Spring 2026. Not real customer data. -->
+<!-- Created for the BriefingClaw demo at GACEP Spring 2026. Not real customer data. -->
 
 # Engagement History — Meridian Health Systems
 

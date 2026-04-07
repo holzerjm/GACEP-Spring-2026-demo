@@ -1,8 +1,8 @@
-# BriefingOps — Multi-Agent Executive Briefing Intelligence
+# BriefingClaw — Multi-Agent Executive Briefing Intelligence
 
 > *"The connective tissue between your programs — automated."*
 
-BriefingOps is a multi-agent AI system that automates executive briefing preparation. Six specialized agents orchestrate in parallel to transform a single briefing request into a complete intelligence package — executive dossier, company brief, sponsor talking points, recommended agenda, VVIP protocol checklist, and engagement log — in approximately 90 seconds.
+BriefingClaw is a multi-agent AI system that automates executive briefing preparation. Six specialized agents orchestrate in parallel to transform a single briefing request into a complete intelligence package — executive dossier, company brief, sponsor talking points, recommended agenda, VVIP protocol checklist, and engagement log — in approximately 90 seconds.
 
 Built for the **GACEP Spring 2026 Conference** session: *"One Customer, Many Doors: Aligning EBC, Advisory & Executive Programs for Maximum Impact"*
 
@@ -12,7 +12,7 @@ Built for the **GACEP Spring 2026 Conference** session: *"One Customer, Many Doo
 
 ## Table of Contents
 
-- [Why BriefingOps](#why-briefingops)
+- [Why BriefingClaw](#why-briefingclaw)
 - [Architecture Overview](#architecture-overview)
 - [The Six Agents](#the-six-agents)
 - [Execution Flow](#execution-flow)
@@ -26,11 +26,11 @@ Built for the **GACEP Spring 2026 Conference** session: *"One Customer, Many Doo
 
 ---
 
-## Why BriefingOps
+## Why BriefingClaw
 
 Executive briefing preparation typically requires 4-6 hours of manual work per visitor: researching the executive, analyzing the company, reviewing past engagement history across disconnected systems (CRM, CAB records, EBC logs, ESP tracking), assembling documents, and coordinating VVIP protocol. Information silos between programs mean critical context gets lost — overdue commitments, unmet promises, relationship history.
 
-BriefingOps demonstrates that agentic AI can:
+BriefingClaw demonstrates that agentic AI can:
 
 - **Collapse that 4-6 hour workflow into ~90 seconds**
 - **Connect the dots across programs** that humans routinely miss (the "connective tissue")
@@ -43,11 +43,11 @@ The system is not just about speed — it is about cross-program awareness that 
 
 ## Architecture Overview
 
-BriefingOps uses a hub-and-spoke multi-agent architecture. A central orchestrator decomposes requests and dispatches work to five specialized agents across three execution phases.
+BriefingClaw uses a hub-and-spoke multi-agent architecture. A central orchestrator decomposes requests and dispatches work to five specialized agents across three execution phases.
 
-> **Interactive diagram:** Open [`briefingops-architecture.html`](briefingops-architecture.html) in a browser for a detailed, interactive visualization of the architecture, execution flow, and infrastructure stack.
+> **Interactive diagram:** Open [`briefingclaw-architecture.html`](briefingclaw-architecture.html) in a browser for a detailed, interactive visualization of the architecture, execution flow, and infrastructure stack.
 
-![BriefingOps Multi-Agent Architecture](docs/images/architecture-diagram.png)
+![BriefingClaw Multi-Agent Architecture](docs/images/architecture-diagram.png)
 
 ```
                           +-----------------+
@@ -157,7 +157,7 @@ She is a CAB member. Her sponsor is Maria Torres.
 
 ## Model Routing
 
-BriefingOps uses a dual-model strategy that balances capability with data privacy:
+BriefingClaw uses a dual-model strategy that balances capability with data privacy:
 
 | Tier | Model | Agents | Rationale |
 |------|-------|--------|-----------|
@@ -192,8 +192,8 @@ This split ensures that sensitive customer data (CAB records, CRM exports, VVIP 
 ```
 gacep-demo/
 |
-+-- briefingops.sh                         Interactive CLI for demo management
-+-- briefingops-architecture.html          Visual architecture diagram (HTML)
++-- briefingclaw.sh                         Interactive CLI for demo management
++-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
 +-- README.md                              This file
 |
 +-- agents/                                Agent skill definitions
@@ -224,9 +224,9 @@ gacep-demo/
 
 ### Key Files Explained
 
-**`briefingops.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
+**`briefingclaw.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
 
-**`briefingops-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
+**`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
 
 **`config/env.example`** — Template for API keys. Supports multiple frontier providers (Anthropic, OpenAI, Google) and the Tavily web search API. The local Granite model requires no API key. Copy to `.env` and fill in your keys.
 
@@ -280,18 +280,18 @@ cp config/env.example config/.env
 # Edit config/.env with your API keys
 
 # 5. Start infrastructure
-./briefingops.sh start
+./briefingclaw.sh start
 
 # 6. Run the demo
-./briefingops.sh demo
+./briefingclaw.sh demo
 # Or open http://127.0.0.1:18789 and type your briefing request
 ```
 
 Alternatively, use the automated setup:
 ```bash
-./briefingops.sh setup    # First-time configuration wizard
-./briefingops.sh start    # Launch all infrastructure
-./briefingops.sh demo     # Set up the demo environment
+./briefingclaw.sh setup    # First-time configuration wizard
+./briefingclaw.sh start    # Launch all infrastructure
+./briefingclaw.sh demo     # Set up the demo environment
 ```
 
 ---
@@ -303,7 +303,7 @@ Alternatively, use the automated setup:
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Multi-agent system design, agent roster, execution flow, infrastructure stack |
 | [`docs/BUILD-GUIDE.md`](docs/BUILD-GUIDE.md) | Complete setup instructions from prerequisites through conference-day checklist |
 | [`docs/DEMO-SCRIPT.md`](docs/DEMO-SCRIPT.md) | Beat-by-beat presentation script with timing, narrative cues, and contingency plans |
-| [`USER-GUIDE.md`](USER-GUIDE.md) | Practical guide for operating BriefingOps: installation, configuration, running demos, troubleshooting |
+| [`USER-GUIDE.md`](USER-GUIDE.md) | Practical guide for operating BriefingClaw: installation, configuration, running demos, troubleshooting |
 
 ---
 

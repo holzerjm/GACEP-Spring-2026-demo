@@ -1,6 +1,6 @@
-# BriefingOps User Guide
+# BriefingClaw User Guide
 
-A practical guide for installing, configuring, and operating the BriefingOps multi-agent executive briefing system.
+A practical guide for installing, configuring, and operating the BriefingClaw multi-agent executive briefing system.
 
 ---
 
@@ -11,7 +11,7 @@ A practical guide for installing, configuring, and operating the BriefingOps mul
 3. [Configuration](#3-configuration)
 4. [Starting the System](#4-starting-the-system)
 5. [Running a Briefing Request](#5-running-a-briefing-request)
-6. [Using the CLI (briefingops.sh)](#6-using-the-cli-briefingopssh)
+6. [Using the CLI (briefingclaw.sh)](#6-using-the-cli-briefingclawsh)
 7. [Running Individual Agents](#7-running-individual-agents)
 8. [Understanding the Output](#8-understanding-the-output)
 9. [Demo Data Reference](#9-demo-data-reference)
@@ -143,14 +143,14 @@ Both profiles point to their respective `SKILL.md` files and use the Tavily API 
 Create the workspace directory structure that OpenClaw expects:
 
 ```bash
-mkdir -p ~/briefingops/agents
-mkdir -p ~/briefingops/workspace
+mkdir -p ~/briefingclaw/agents
+mkdir -p ~/briefingclaw/workspace
 
 # Copy agent skill files
-cp -r agents/* ~/briefingops/agents/
+cp -r agents/* ~/briefingclaw/agents/
 
 # Copy demo data to workspace
-cp demo-data/* ~/briefingops/workspace/
+cp demo-data/* ~/briefingclaw/workspace/
 ```
 
 ### Step 3.4 — Verify configuration
@@ -167,13 +167,13 @@ Check that the OpenClaw config references are correct:
 
 ```bash
 # First-time setup (interactive wizard)
-./briefingops.sh setup
+./briefingclaw.sh setup
 
 # Start all infrastructure
-./briefingops.sh start
+./briefingclaw.sh start
 
 # Check system health
-./briefingops.sh status
+./briefingclaw.sh status
 ```
 
 ### Option B — Manual startup
@@ -201,7 +201,7 @@ curl -s http://127.0.0.1:18789/health | jq .
 | Granite 8B | `curl -s http://127.0.0.1:8001/v1/models` | Model ID returned |
 | OpenClaw | `curl -s http://127.0.0.1:18789/health` | `{"status": "healthy"}` |
 | ZeroClaw | `zeroclaw --version` | Version string |
-| API keys | `./briefingops.sh status` | Keys configured |
+| API keys | `./briefingclaw.sh status` | Keys configured |
 
 ---
 
@@ -231,47 +231,47 @@ She is a CAB member. Her executive sponsor is Maria Torres.
 
 ```bash
 # Full demo environment (opens terminal tabs + browser)
-./briefingops.sh demo
+./briefingclaw.sh demo
 
 # Or run a quick request directly through the CLI
-./briefingops.sh sherlock "Sarah Chen CIO Meridian Health Systems"
-./briefingops.sh bloomborg "Meridian Health Systems"
+./briefingclaw.sh sherlock "Sarah Chen CIO Meridian Health Systems"
+./briefingclaw.sh bloomborg "Meridian Health Systems"
 ```
 
 ---
 
-## 6. Using the CLI (briefingops.sh)
+## 6. Using the CLI (briefingclaw.sh)
 
-The `briefingops.sh` script provides an interactive menu for managing the entire demo lifecycle.
+The `briefingclaw.sh` script provides an interactive menu for managing the entire demo lifecycle.
 
 ### Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `./briefingops.sh setup` | First-time configuration wizard. Creates directories, copies files, prompts for API keys. |
-| `./briefingops.sh start` | Launches Podman machine, AI Lab model server, and OpenClaw container. |
-| `./briefingops.sh stop` | Stops the OpenClaw container and optionally the model server. |
-| `./briefingops.sh status` | Displays system health: Podman status, model serving, API key configuration, container state. |
-| `./briefingops.sh demo` | Sets up the full demo environment with pre-configured terminal tabs and browser window. |
-| `./briefingops.sh preflight` | Conference-day checklist. Run 30 minutes before your session. Validates all components. |
-| `./briefingops.sh sherlock "<query>"` | Run Sherlock Ohms standalone for executive research. |
-| `./briefingops.sh bloomborg "<query>"` | Run Bloom-borg standalone for company research. |
-| `./briefingops.sh record` | Guides recording a backup demo video (fallback if live demo fails). |
+| `./briefingclaw.sh setup` | First-time configuration wizard. Creates directories, copies files, prompts for API keys. |
+| `./briefingclaw.sh start` | Launches Podman machine, AI Lab model server, and OpenClaw container. |
+| `./briefingclaw.sh stop` | Stops the OpenClaw container and optionally the model server. |
+| `./briefingclaw.sh status` | Displays system health: Podman status, model serving, API key configuration, container state. |
+| `./briefingclaw.sh demo` | Sets up the full demo environment with pre-configured terminal tabs and browser window. |
+| `./briefingclaw.sh preflight` | Conference-day checklist. Run 30 minutes before your session. Validates all components. |
+| `./briefingclaw.sh sherlock "<query>"` | Run Sherlock Ohms standalone for executive research. |
+| `./briefingclaw.sh bloomborg "<query>"` | Run Bloom-borg standalone for company research. |
+| `./briefingclaw.sh record` | Guides recording a backup demo video (fallback if live demo fails). |
 
 ### Typical workflow
 
 ```bash
 # Day before the conference
-./briefingops.sh setup          # Configure if not done yet
-./briefingops.sh start          # Start everything
-./briefingops.sh status         # Verify all green
-./briefingops.sh record         # Record backup video
+./briefingclaw.sh setup          # Configure if not done yet
+./briefingclaw.sh start          # Start everything
+./briefingclaw.sh status         # Verify all green
+./briefingclaw.sh record         # Record backup video
 
 # 30 minutes before your session
-./briefingops.sh preflight      # Run the full checklist
+./briefingclaw.sh preflight      # Run the full checklist
 
 # Showtime
-./briefingops.sh demo           # Launch the demo environment
+./briefingclaw.sh demo           # Launch the demo environment
 ```
 
 ---
@@ -398,7 +398,7 @@ Key consistency rules:
 ### 30 minutes before your session
 
 ```bash
-./briefingops.sh preflight
+./briefingclaw.sh preflight
 ```
 
 This checks:
@@ -414,7 +414,7 @@ This checks:
 
 ### 5 minutes before demo
 
-- [ ] Terminal tabs are arranged (use `./briefingops.sh demo`)
+- [ ] Terminal tabs are arranged (use `./briefingclaw.sh demo`)
 - [ ] Browser is open to the gateway UI
 - [ ] Font size is large enough for projection
 - [ ] Briefing request text is ready to paste
@@ -476,7 +476,7 @@ zeroclaw agent -p bloom-borg --dry-run
 
 **"Agents return empty or incomplete results"**
 - Check that workspace files are mounted: verify volume mounts in `podman-compose.yml`
-- Confirm demo data files exist in `~/briefingops/workspace/`
+- Confirm demo data files exist in `~/briefingclaw/workspace/`
 - Review agent logs in the OpenClaw gateway for error messages
 
 ### System Resource Issues
@@ -488,7 +488,7 @@ zeroclaw agent -p bloom-borg --dry-run
 
 **Slow model responses:**
 - First request after model startup is slower (cold start)
-- Run a warmup request before the demo: `./briefingops.sh preflight`
+- Run a warmup request before the demo: `./briefingclaw.sh preflight`
 - Apple Silicon Macs will run significantly faster than Intel
 
 ---

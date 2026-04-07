@@ -1,8 +1,8 @@
-# BriefingOps: Multi-Agent Executive Engagement Intelligence System
+# BriefingClaw: Multi-Agent Executive Engagement Intelligence System
 
 ## Architecture Overview
 
-BriefingOps is a multi-agent system built on OpenClaw and ZeroClaw that automates executive briefing preparation by orchestrating six specialized agents. Each agent handles a distinct domain of the briefing preparation workflow, coordinated by a central Orchestrator.
+BriefingClaw is a multi-agent system built on OpenClaw and ZeroClaw that automates executive briefing preparation by orchestrating six specialized agents. Each agent handles a distinct domain of the briefing preparation workflow, coordinated by a central Orchestrator.
 
 ```
                     ┌─────────────────────────────┐
@@ -157,7 +157,7 @@ ACE assembles the complete briefing package:
 ## File Structure
 
 ```
-briefingops/
+briefingclaw/
 ├── agents/
 │   ├── orchestrator/          # Oprah-tor — the coordinator
 │   │   └── SKILL.md

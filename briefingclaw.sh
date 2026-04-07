@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════
-#  BriefingOps — Demo Management Script
+#  BriefingClaw — Demo Management Script
 #  "You get a task! YOU get a task! EVERYBODY gets a task!"
 # ═══════════════════════════════════════════════════════════════════
 #
-#  Usage:  ./briefingops.sh [command]
+#  Usage:  ./briefingclaw.sh [command]
 #
 #  If no command is given, shows an interactive menu.
 #  Designed so a non-technical presenter can run the demo
@@ -52,7 +52,7 @@ OUTPUT_DIR="${SCRIPT_DIR}/output"
 BACKUP_VIDEO="${SCRIPT_DIR}/demo-backup.mp4"
 LOCAL_MODEL_URL="http://127.0.0.1:8001/v1"
 OPENCLAW_URL="http://127.0.0.1:18789"
-CONTAINER_NAME="briefingops-openclaw"
+CONTAINER_NAME="briefingclaw-openclaw"
 
 # ── Helpers ──────────────────────────────────────────────────────
 
@@ -201,7 +201,7 @@ cmd_setup() {
   echo -e "  ${BOLD}Next steps:${NC}"
   echo -e "    1. Open Podman Desktop → AI Lab → Download Granite 8B"
   echo -e "    2. Start the model server in AI Lab"
-  echo -e "    3. Run: ${CYAN}./briefingops.sh start${NC}"
+  echo -e "    3. Run: ${CYAN}./briefingclaw.sh start${NC}"
   echo ""
 }
 
@@ -252,14 +252,14 @@ cmd_status() {
 # ── 3. START ─────────────────────────────────────────────────────
 cmd_start() {
   banner
-  step "Starting BriefingOps"
+  step "Starting BriefingClaw"
 
   # Load environment
   if has_env_file; then
     source "${ENV_FILE}"
     success "Environment loaded"
   else
-    error "No .env file found. Run './briefingops.sh setup' first."
+    error "No .env file found. Run './briefingclaw.sh setup' first."
     exit 1
   fi
 
@@ -332,7 +332,7 @@ cmd_start() {
       -e CUSTOM_API_KEY="not-needed" \
       -e CUSTOM_COMPATIBILITY=openai \
       ${ENV_ARGS} \
-      openclaw:briefingops 2>/dev/null || {
+      openclaw:briefingclaw 2>/dev/null || {
         # Container might exist but be stopped
         podman start "${CONTAINER_NAME}" 2>/dev/null || {
           error "Failed to start OpenClaw container."
@@ -352,20 +352,20 @@ cmd_start() {
     > /dev/null 2>&1 && success "Local model warm" || warn "Local model did not respond (may still be loading)"
 
   echo ""
-  success "BriefingOps is ready!"
+  success "BriefingClaw is ready!"
   echo ""
   echo -e "  ${BOLD}Open the dashboard:${NC}"
   echo -e "    ${CYAN}${OPENCLAW_URL}${NC}"
   echo ""
   echo -e "  ${BOLD}Or run the demo:${NC}"
-  echo -e "    ${CYAN}./briefingops.sh demo${NC}"
+  echo -e "    ${CYAN}./briefingclaw.sh demo${NC}"
   echo ""
 }
 
 # ── 4. STOP ──────────────────────────────────────────────────────
 cmd_stop() {
   banner
-  step "Stopping BriefingOps"
+  step "Stopping BriefingClaw"
 
   if is_openclaw_running; then
     podman stop "${CONTAINER_NAME}" 2>/dev/null
@@ -402,7 +402,7 @@ cmd_demo() {
   if is_openclaw_running; then
     success "OpenClaw gateway running"
   else
-    error "OpenClaw not running — run './briefingops.sh start' first"
+    error "OpenClaw not running — run './briefingclaw.sh start' first"
     ALL_GOOD=false
   fi
 
@@ -421,7 +421,7 @@ cmd_demo() {
   if [[ -f "${BACKUP_VIDEO}" ]]; then
     success "Backup video found"
   else
-    warn "No backup video — record one with './briefingops.sh record'"
+    warn "No backup video — record one with './briefingclaw.sh record'"
   fi
 
   echo ""
@@ -540,7 +540,7 @@ cmd_record() {
   echo -e "  This will guide you through recording the demo as a backup."
   echo ""
   echo -e "  ${BOLD}Before recording:${NC}"
-  echo -e "    1. Run ${CYAN}./briefingops.sh start${NC} and verify everything works"
+  echo -e "    1. Run ${CYAN}./briefingclaw.sh start${NC} and verify everything works"
   echo -e "    2. Set your terminal font to ${CYAN}18pt+${NC}"
   echo -e "    3. Set browser zoom to ${CYAN}125-150%${NC}"
   echo -e "    4. Close all other apps and notifications"
@@ -580,7 +580,7 @@ cmd_preflight() {
   if is_model_serving; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → AI Lab → Models → Start Granite 8B"; fi
   
   echo -ne "  ├─ OpenClaw gateway ........ "
-  if is_openclaw_running; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingops.sh start"; fi
+  if is_openclaw_running; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingclaw.sh start"; fi
   
   echo -ne "  └─ ZeroClaw binary ......... "
   if is_zeroclaw_installed; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: brew install zeroclaw"; fi
@@ -598,13 +598,13 @@ cmd_preflight() {
   echo -e "  ${BOLD}Demo Assets${NC}"
   
   echo -ne "  ├─ Demo data in workspace .. "
-  if [[ -f "${WORKSPACE_DIR}/cab-meeting-notes.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingops.sh setup"; fi
+  if [[ -f "${WORKSPACE_DIR}/cab-meeting-notes.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingclaw.sh setup"; fi
   
   echo -ne "  ├─ Skill files installed ... "
-  if [[ -f "${SKILLS_DIR}/orchestrator.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingops.sh setup"; fi
+  if [[ -f "${SKILLS_DIR}/orchestrator.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingclaw.sh setup"; fi
   
   echo -ne "  └─ Backup video ............ "
-  if [[ -f "${BACKUP_VIDEO}" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${YELLOW}WARN${NC} → Record with: ./briefingops.sh record"; fi
+  if [[ -f "${BACKUP_VIDEO}" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${YELLOW}WARN${NC} → Record with: ./briefingclaw.sh record"; fi
 
   echo ""
   echo -e "  ${BOLD}Presenter Setup${NC}"
@@ -650,16 +650,16 @@ cmd_help() {
   echo -e "  ${BOLD}Examples:${NC}"
   echo ""
   echo -e "    ${DIM}# First time:${NC}"
-  echo -e "    ./briefingops.sh setup"
-  echo -e "    ./briefingops.sh start"
+  echo -e "    ./briefingclaw.sh setup"
+  echo -e "    ./briefingclaw.sh start"
   echo ""
   echo -e "    ${DIM}# Conference day:${NC}"
-  echo -e "    ./briefingops.sh preflight"
-  echo -e "    ./briefingops.sh demo"
+  echo -e "    ./briefingclaw.sh preflight"
+  echo -e "    ./briefingclaw.sh demo"
   echo ""
   echo -e "    ${DIM}# Quick research:${NC}"
-  echo -e "    ./briefingops.sh sherlock \"Jane Smith, CTO of Acme Corp\""
-  echo -e "    ./briefingops.sh bloomborg \"Acme Corp\""
+  echo -e "    ./briefingclaw.sh sherlock \"Jane Smith, CTO of Acme Corp\""
+  echo -e "    ./briefingclaw.sh bloomborg \"Acme Corp\""
   echo ""
 }
 
@@ -670,14 +670,14 @@ cmd_menu() {
     echo -e "  ${BOLD}What would you like to do?${NC}"
     echo ""
     echo -e "    ${CYAN}1${NC}  🛠️   First-time setup"
-    echo -e "    ${CYAN}2${NC}  🚀  Start BriefingOps"
+    echo -e "    ${CYAN}2${NC}  🚀  Start BriefingClaw"
     echo -e "    ${CYAN}3${NC}  📊  Check status"
     echo -e "    ${CYAN}4${NC}  🎬  Launch demo"
     echo -e "    ${CYAN}5${NC}  ✈️   Pre-flight check (conference day)"
     echo -e "    ${CYAN}6${NC}  🔍  Research a person (Sherlock Ohms)"
     echo -e "    ${CYAN}7${NC}  🏢  Research a company (Bloom-borg)"
     echo -e "    ${CYAN}8${NC}  📹  Record backup video"
-    echo -e "    ${CYAN}9${NC}  🛑  Stop BriefingOps"
+    echo -e "    ${CYAN}9${NC}  🛑  Stop BriefingClaw"
     echo -e "    ${CYAN}0${NC}  👋  Exit"
     echo ""
     echo -ne "  Choose (0-9): "

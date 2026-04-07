@@ -1,4 +1,4 @@
-# BriefingOps — ZeroClaw Configuration
+# BriefingClaw — ZeroClaw Configuration
 # Location: ~/.zeroclaw/config.toml
 #
 # HYBRID MODEL ROUTING:
@@ -90,7 +90,7 @@ allowed_paths = ["~/.zeroclaw/output"]
 [profiles.sherlock-ohms]
 name = "Sherlock Ohms"
 description = "Executive research — deep person-level intelligence"
-skill_file = "~/briefingops/agents/executive-research/SKILL.md"
+skill_file = "~/briefingclaw/agents/executive-research/SKILL.md"
 provider = "anthropic"       # ← Frontier model
 
 system_prompt_prefix = """
@@ -117,7 +117,7 @@ max_results = 8
 [profiles.bloom-borg]
 name = "Bloom-borg"
 description = "Account intelligence — company-level analysis"
-skill_file = "~/briefingops/agents/account-intelligence/SKILL.md"
+skill_file = "~/briefingclaw/agents/account-intelligence/SKILL.md"
 provider = "anthropic"       # ← Frontier model
 
 system_prompt_prefix = """

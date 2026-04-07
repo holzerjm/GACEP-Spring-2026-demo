@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the BriefingOps project will be documented in this file.
+All notable changes to the BriefingClaw project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Configuration for OpenClaw gateway and ZeroClaw CLI agents
 - Podman Compose manifest for container orchestration
 - Simulated demo data (CAB meeting notes, CRM export, VVIP roster, engagement history)
-- Interactive CLI wrapper (`briefingops.sh`) for demo management
+- Interactive CLI wrapper (`briefingclaw.sh`) for demo management
 - Interactive HTML architecture visualization
 - Complete documentation: architecture guide, build guide, demo script, user guide
 - Initial release for GACEP Spring 2026 Conference
