@@ -193,6 +193,7 @@ This split ensures that sensitive customer data (CAB records, CRM exports, VVIP 
 gacep-demo/
 |
 +-- briefingclaw.sh                         Interactive CLI for demo management
++-- briefingclaw-dashboard.html            Live demo dashboard with animated simulation
 +-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
 +-- README.md                              This file
 |
@@ -225,6 +226,8 @@ gacep-demo/
 ### Key Files Explained
 
 **`briefingclaw.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
+
+**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization. Shows all six agents working through the briefing preparation flow with particle animations, real-time activity feed, deliverable tracking, and critical flag alerts. Polls live infrastructure when services are running, falls back to a polished animated simulation. Open in a browser and click "Start Demo", or append `?autostart` to the URL. Keyboard shortcuts: Space/Enter to start, Escape to reset, F for fullscreen.
 
 **`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
 

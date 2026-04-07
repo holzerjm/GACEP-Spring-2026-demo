@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Live Demo Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   Matched from briefingclaw-architecture.html
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --bg: #06070A;
+  --bg-card: #0F1117;
+  --bg-card-hover: #161820;
+  --gold: #FFC600;
+  --gold-dim: #B8900A;
+  --gold-glow: rgba(255,198,0,0.15);
+  --frontier: #6E9BFF;
+  --frontier-border: rgba(110,155,255,0.25);
+  --frontier-bg: rgba(110,155,255,0.08);
+  --local: #4ADE80;
+  --local-border: rgba(74,222,128,0.25);
+  --local-bg: rgba(74,222,128,0.08);
+  --red: #EE0000;
+  --text: #E8E8EC;
+  --text-dim: #8B8FA3;
+  --text-muted: #5A5E72;
+  --border: #1E2030;
+  --border-glow: #2A2E42;
+  --status-green: #4ADE80;
+  --status-red: #EF4444;
+  --status-amber: #F59E0B;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD LAYOUT
+   ═══════════════════════════════════════════════════════════ */
+.dashboard {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 56px minmax(280px, 340px) 52px 1fr auto;
+  padding: 0 24px;
+  gap: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════════ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.header-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.mode-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+}
+
+.mode-badge.live {
+  background: rgba(74,222,128,0.12);
+  color: var(--status-green);
+  border: 1px solid rgba(74,222,128,0.3);
+}
+
+.mode-badge.simulated {
+  background: rgba(255,198,0,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(255,198,0,0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PIPELINE VISUALIZATION
+   ═══════════════════════════════════════════════════════════ */
+.pipeline-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.pipeline-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.pipeline-overlay {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 12px;
+}
+
+.pipeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.pipeline-row.phase-label-row {
+  gap: 4px;
+}
+
+.phase-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  padding: 2px 0;
+}
+
+/* ── Agent Nodes ──────────────────────────────────────── */
+.agent-node {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  min-width: 150px;
+  max-width: 190px;
+  text-align: center;
+  transition: all 0.4s ease;
+  opacity: 0.45;
+}
+
+.agent-node.frontier {
+  background: linear-gradient(180deg, var(--frontier-bg) 0%, var(--bg-card) 100%);
+  border-color: var(--frontier-border);
+}
+
+.agent-node.local {
+  background: linear-gradient(180deg, var(--local-bg) 0%, var(--bg-card) 100%);
+  border-color: var(--local-border);
+}
+
+.agent-node.orchestrator {
+  background: linear-gradient(180deg, var(--gold-glow) 0%, var(--bg-card) 100%);
+  border-color: rgba(255,198,0,0.2);
+  min-width: 170px;
+}
+
+.agent-node .agent-emoji {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.agent-node .agent-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 1px;
+}
+
+.agent-node .agent-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.agent-node .model-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.agent-node.frontier .model-badge {
+  background: rgba(110,155,255,0.12);
+  color: var(--frontier);
+  border: 1px solid rgba(110,155,255,0.2);
+}
+
+.agent-node.local .model-badge {
+  background: rgba(74,222,128,0.12);
+  color: var(--local);
+  border: 1px solid rgba(74,222,128,0.2);
+}
+
+.agent-node.orchestrator .model-badge {
+  background: rgba(255,198,0,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(255,198,0,0.2);
+}
+
+/* Agent node progress bar */
+.agent-node .progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 0 0 12px 12px;
+  width: 0%;
+  transition: width 0.3s linear;
+}
+
+.agent-node.frontier .progress-bar { background: var(--frontier); }
+.agent-node.local .progress-bar { background: var(--local); }
+.agent-node.orchestrator .progress-bar { background: var(--gold); }
+
+/* ── Agent States ─────────────────────────────────────── */
+.agent-node[data-status="idle"] {
+  opacity: 0.45;
+}
+
+.agent-node[data-status="working"] {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.agent-node.frontier[data-status="working"] {
+  border-color: rgba(110,155,255,0.5);
+  box-shadow: 0 0 16px rgba(110,155,255,0.15), 0 0 32px rgba(110,155,255,0.05);
+  animation: pulse-frontier 2s ease-in-out infinite;
+}
+
+.agent-node.local[data-status="working"] {
+  border-color: rgba(74,222,128,0.5);
+  box-shadow: 0 0 16px rgba(74,222,128,0.15), 0 0 32px rgba(74,222,128,0.05);
+  animation: pulse-local 2s ease-in-out infinite;
+}
+
+.agent-node.orchestrator[data-status="working"] {
+  border-color: rgba(255,198,0,0.45);
+  box-shadow: 0 0 16px rgba(255,198,0,0.12), 0 0 32px rgba(255,198,0,0.05);
+  animation: pulse-gold 2s ease-in-out infinite;
+}
+
+.agent-node[data-status="complete"] {
+  opacity: 1;
+}
+
+.agent-node[data-status="complete"]::after {
+  content: '\2713';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--status-green);
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.agent-node[data-status="error"] {
+  opacity: 1;
+  border-color: var(--status-red) !important;
+}
+
+/* ── Trigger & Output Nodes ───────────────────────────── */
+.trigger-node, .output-node {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 18px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.trigger-node {
+  border-color: var(--border-glow);
+  opacity: 0.5;
+}
+
+.trigger-node[data-status="active"] {
+  opacity: 1;
+  border-color: var(--gold-dim);
+}
+
+.trigger-node .node-label,
+.output-node .node-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.trigger-node .node-text,
+.output-node .node-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.output-node {
+  border-color: var(--border);
+  opacity: 0.4;
+}
+
+.output-node[data-status="complete"] {
+  opacity: 1;
+  border-color: var(--gold-dim);
+  background: linear-gradient(135deg, rgba(26,21,16,0.8) 0%, var(--bg-card) 100%);
+}
+
+.output-node .deliverable-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gold);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTROL BAR
+   ═══════════════════════════════════════════════════════════ */
+.control-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.request-input {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.request-input:focus {
+  border-color: var(--border-glow);
+}
+
+.request-input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #000;
+}
+
+.btn-primary:hover {
+  background: #FFD23F;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(255,198,0,0.25);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  color: var(--text);
+}
+
+.elapsed-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--gold);
+  min-width: 60px;
+  text-align: right;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.elapsed-display.active {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD PANELS
+   ═══════════════════════════════════════════════════════════ */
+.panels-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  overflow: hidden;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.panel-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background: var(--border-glow);
+  border-radius: 2px;
+}
+
+/* ── Infrastructure Status Panel ──────────────────────── */
+.infra-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(30,32,48,0.5);
+}
+
+.infra-row:last-child {
+  border-bottom: none;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.4s ease;
+}
+
+.status-dot.connected {
+  background: var(--status-green);
+  box-shadow: 0 0 8px rgba(74,222,128,0.4);
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+.status-dot.disconnected {
+  background: var(--status-red);
+  box-shadow: 0 0 6px rgba(239,68,68,0.3);
+}
+
+.status-dot.checking {
+  background: var(--status-amber);
+  animation: status-pulse 1s ease-in-out infinite;
+}
+
+.status-dot.static {
+  background: var(--status-green);
+  opacity: 0.6;
+}
+
+.infra-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1;
+}
+
+.infra-detail {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* ── Activity Feed Panel ──────────────────────────────── */
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-entry {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  animation: fade-in 0.3s ease;
+  align-items: flex-start;
+}
+
+.activity-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 36px;
+  padding-top: 1px;
+}
+
+.activity-agent {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  flex-shrink: 0;
+  min-width: 90px;
+  padding-top: 1px;
+}
+
+.activity-agent.frontier-text { color: var(--frontier); }
+.activity-agent.local-text { color: var(--local); }
+.activity-agent.orchestrator-text { color: var(--gold); }
+
+.activity-message {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.activity-message .cursor {
+  animation: blink-cursor 600ms step-end infinite;
+  color: var(--gold);
+}
+
+/* ── Deliverables Panel ───────────────────────────────── */
+.deliverables-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.deliverable-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(30,32,48,0.5);
+  border-radius: 8px;
+  padding: 8px 10px;
+  opacity: 0.35;
+  transition: all 0.4s ease;
+}
+
+.deliverable-card.completed {
+  opacity: 1;
+  background: rgba(255,198,0,0.06);
+  border-color: rgba(255,198,0,0.2);
+  animation: deliverable-complete 0.6s ease-out;
+}
+
+.deliverable-card .del-icon {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.deliverable-card .del-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.deliverable-card .del-agent {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.deliverable-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+}
+
+/* ── Flags Panel ──────────────────────────────────────── */
+.flags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flag-entry {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(30,32,48,0.5);
+  animation: slide-in-flag 0.5s ease-out;
+}
+
+.flag-entry.danger {
+  border-color: rgba(239,68,68,0.25);
+  background: rgba(239,68,68,0.05);
+}
+
+.flag-entry.warning {
+  border-color: rgba(245,158,11,0.25);
+  background: rgba(245,158,11,0.05);
+}
+
+.flag-entry.positive {
+  border-color: rgba(74,222,128,0.25);
+  background: rgba(74,222,128,0.05);
+}
+
+.flag-entry.opportunity {
+  border-color: rgba(110,155,255,0.25);
+  background: rgba(110,155,255,0.05);
+}
+
+.flag-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.flag-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.flag-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.flag-entry.danger .flag-label { color: var(--status-red); }
+.flag-entry.warning .flag-label { color: var(--status-amber); }
+.flag-entry.positive .flag-label { color: var(--status-green); }
+.flag-entry.opportunity .flag-label { color: var(--frontier); }
+
+.flags-empty {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════ */
+.footer {
+  padding: 10px 4px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.footer-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.footer-text .red { color: var(--red); }
+
+/* ═══════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+@keyframes pulse-frontier {
+  0%, 100% { box-shadow: 0 0 12px rgba(110,155,255,0.15); }
+  50% { box-shadow: 0 0 24px rgba(110,155,255,0.3), 0 0 48px rgba(110,155,255,0.1); }
+}
+
+@keyframes pulse-local {
+  0%, 100% { box-shadow: 0 0 12px rgba(74,222,128,0.15); }
+  50% { box-shadow: 0 0 24px rgba(74,222,128,0.3), 0 0 48px rgba(74,222,128,0.1); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 12px rgba(255,198,0,0.1); }
+  50% { box-shadow: 0 0 24px rgba(255,198,0,0.25), 0 0 48px rgba(255,198,0,0.08); }
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+@keyframes deliverable-complete {
+  0% { transform: scale(1); background: rgba(255,198,0,0.2); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); background: rgba(255,198,0,0.06); }
+}
+
+@keyframes slide-in-flag {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-dot"></span>
+        <span class="logo-dot"></span>
+        <span class="logo-text">BriefingClaw</span>
+      </div>
+      <span class="header-title">Live Demo Dashboard</span>
+    </div>
+    <div id="modeBadge" class="mode-badge simulated">SIMULATED</div>
+  </header>
+
+  <!-- ═══════════════════ PIPELINE VIZ ════════════════════ -->
+  <section class="pipeline-section">
+    <canvas class="pipeline-canvas" id="pipelineCanvas"></canvas>
+    <div class="pipeline-overlay">
+
+      <!-- Row 1: Trigger -->
+      <div class="pipeline-row">
+        <div class="trigger-node" id="triggerNode" data-status="idle">
+          <div class="node-label">Briefing Request</div>
+          <div class="node-text">Awaiting input...</div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 0 &middot; Decomposition</span>
+      </div>
+
+      <!-- Row 2: Orchestrator -->
+      <div class="pipeline-row">
+        <div class="agent-node orchestrator" id="node-oprah-tor" data-agent="oprah-tor" data-status="idle">
+          <span class="model-badge">Frontier</span>
+          <span class="agent-emoji">&#127919;</span>
+          <div class="agent-name">Oprah-tor</div>
+          <div class="agent-role">Orchestrator</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 1 &middot; Intelligence Gathering (parallel)</span>
+      </div>
+
+      <!-- Row 3: Phase 1 agents -->
+      <div class="pipeline-row">
+        <div class="agent-node frontier" id="node-sherlock-ohms" data-agent="sherlock-ohms" data-status="idle">
+          <span class="model-badge">Frontier</span>
+          <span class="agent-emoji">&#128269;</span>
+          <div class="agent-name">Sherlock Ohms</div>
+          <div class="agent-role">Executive Research</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node frontier" id="node-bloom-borg" data-agent="bloom-borg" data-status="idle">
+          <span class="model-badge">Frontier</span>
+          <span class="agent-emoji">&#127970;</span>
+          <div class="agent-name">Bloom-borg</div>
+          <div class="agent-role">Account Intelligence</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node local" id="node-deja-view" data-agent="deja-view" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#128203;</span>
+          <div class="agent-name">D&eacute;j&agrave; View</div>
+          <div class="agent-role">CAB Historian</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 2 &middot; Assembly &amp; Protocol (parallel)</span>
+      </div>
+
+      <!-- Row 4: Phase 2 agents -->
+      <div class="pipeline-row">
+        <div class="agent-node local" id="node-draft-punk" data-agent="draft-punk" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#128196;</span>
+          <div class="agent-name">Draft Punk</div>
+          <div class="agent-role">Briefing Architect</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node local" id="node-alfred-bitworth" data-agent="alfred-bitworth" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#11088;</span>
+          <div class="agent-name">Alfred Bitworth</div>
+          <div class="agent-role">VVIP Protocol</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Row 5: Output -->
+      <div class="pipeline-row">
+        <div class="output-node" id="outputNode" data-status="idle">
+          <div class="node-label">Briefing Package</div>
+          <div class="deliverable-count" id="deliverableCount">0 / 8</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTROL BAR ═════════════════════ -->
+  <div class="control-bar">
+    <input type="text" class="request-input" id="requestInput"
+      value="Briefing tomorrow: Sarah Chen, CIO, Meridian Health Systems. CAB member. Sponsor: Maria Torres, VP Engineering."
+      placeholder="Enter briefing request...">
+    <button class="btn btn-primary" id="btnStart">Start Demo</button>
+    <button class="btn btn-secondary" id="btnReset">Reset</button>
+    <div class="elapsed-display" id="elapsedDisplay">00:00</div>
+  </div>
+
+  <!-- ═══════════════════ PANELS ══════════════════════════ -->
+  <div class="panels-section">
+
+    <!-- Infrastructure Status -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Infrastructure Status</span>
+        <span class="panel-badge">System</span>
+      </div>
+      <div class="panel-content">
+        <div class="infra-row" data-infra="podman">
+          <span class="status-dot checking" id="dot-podman"></span>
+          <span class="infra-name">Podman Desktop</span>
+          <span class="infra-detail">Container runtime</span>
+        </div>
+        <div class="infra-row" data-infra="granite">
+          <span class="status-dot checking" id="dot-granite"></span>
+          <span class="infra-name">Granite 8B</span>
+          <span class="infra-detail">:8001</span>
+        </div>
+        <div class="infra-row" data-infra="openclaw">
+          <span class="status-dot checking" id="dot-openclaw"></span>
+          <span class="infra-name">OpenClaw Gateway</span>
+          <span class="infra-detail">:18789</span>
+        </div>
+        <div class="infra-row" data-infra="zeroclaw">
+          <span class="status-dot static" id="dot-zeroclaw"></span>
+          <span class="infra-name">ZeroClaw</span>
+          <span class="infra-detail">Native binary</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Agent Activity</span>
+        <span class="panel-badge">Live Feed</span>
+      </div>
+      <div class="panel-content" id="activityFeed">
+        <div class="activity-feed" id="activityList"></div>
+      </div>
+    </div>
+
+    <!-- Deliverables -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Deliverables</span>
+        <span class="panel-badge deliverable-counter" id="delCounter">0 / 8</span>
+      </div>
+      <div class="panel-content">
+        <div class="deliverables-grid" id="delGrid">
+          <div class="deliverable-card" data-deliverable="exec-dossier">
+            <div class="del-icon">&#128203;</div>
+            <div class="del-name">Executive Dossier</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="backgrounder">
+            <div class="del-icon">&#128209;</div>
+            <div class="del-name">Briefing Backgrounder</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="talking-points">
+            <div class="del-icon">&#128172;</div>
+            <div class="del-name">Sponsor Talking Points</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="agenda">
+            <div class="del-icon">&#128197;</div>
+            <div class="del-name">Recommended Agenda</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="convo-starters">
+            <div class="del-icon">&#128161;</div>
+            <div class="del-name">Conversation Starters</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="vvip-checklist">
+            <div class="del-icon">&#9989;</div>
+            <div class="del-name">VVIP Protocol Checklist</div>
+            <div class="del-agent">Alfred Bitworth</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="sponsor-alert">
+            <div class="del-icon">&#128231;</div>
+            <div class="del-name">Sponsor Alert Email</div>
+            <div class="del-agent">Alfred Bitworth</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="engagement-log">
+            <div class="del-icon">&#128221;</div>
+            <div class="del-name">Engagement Log Entry</div>
+            <div class="del-agent">Alfred Bitworth</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Flags -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Critical Flags</span>
+        <span class="panel-badge" id="flagCounter">0 alerts</span>
+      </div>
+      <div class="panel-content" id="flagsPanel">
+        <div class="flags-list" id="flagsList">
+          <div class="flags-empty">No flags yet. Waiting for agent analysis...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════ FOOTER ══════════════════════════ -->
+  <footer class="footer">
+    <span class="footer-text">Built with open source &middot; Runs on your laptop &middot; <span class="red">Red Hat</span> CTO Office &middot; GACEP Spring 2026</span>
+  </footer>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURATION
+   ═══════════════════════════════════════════════════════════ */
+const CONFIG = {
+  endpoints: {
+    granite: 'http://127.0.0.1:8001/v1/models',
+    openclaw: 'http://127.0.0.1:18789/health'
+  },
+  pollInterval: 5000,
+  speedFactor: 1.0,
+  agents: {
+    'oprah-tor':       { name: 'Oprah-tor',       emoji: '\u{1F3AF}', type: 'orchestrator', phase: 0 },
+    'sherlock-ohms':   { name: 'Sherlock Ohms',    emoji: '\u{1F50D}', type: 'frontier',     phase: 1 },
+    'bloom-borg':      { name: 'Bloom-borg',       emoji: '\u{1F3E2}', type: 'frontier',     phase: 1 },
+    'deja-view':       { name: 'D\u00e9j\u00e0 View', emoji: '\u{1F4CB}', type: 'local',    phase: 1 },
+    'draft-punk':      { name: 'Draft Punk',       emoji: '\u{1F4C4}', type: 'local',        phase: 2 },
+    'alfred-bitworth': { name: 'Alfred Bitworth',  emoji: '\u2B50',    type: 'local',        phase: 2 }
+  },
+  connections: [
+    { from: 'triggerNode',     to: 'node-oprah-tor',       color: 'gold' },
+    { from: 'node-oprah-tor',  to: 'node-sherlock-ohms',   color: 'frontier' },
+    { from: 'node-oprah-tor',  to: 'node-bloom-borg',      color: 'frontier' },
+    { from: 'node-oprah-tor',  to: 'node-deja-view',       color: 'local' },
+    { from: 'node-sherlock-ohms', to: 'node-draft-punk',    color: 'frontier' },
+    { from: 'node-bloom-borg',    to: 'node-draft-punk',    color: 'frontier' },
+    { from: 'node-deja-view',     to: 'node-draft-punk',    color: 'local' },
+    { from: 'node-sherlock-ohms', to: 'node-alfred-bitworth', color: 'frontier' },
+    { from: 'node-bloom-borg',    to: 'node-alfred-bitworth', color: 'frontier' },
+    { from: 'node-deja-view',     to: 'node-alfred-bitworth', color: 'local' },
+    { from: 'node-draft-punk',    to: 'outputNode',         color: 'gold' },
+    { from: 'node-alfred-bitworth', to: 'outputNode',       color: 'gold' }
+  ]
+};
+
+const COLORS = {
+  frontier: { line: 'rgba(110,155,255,0.18)', active: 'rgba(110,155,255,0.5)', particle: 'rgba(110,155,255,0.9)' },
+  local:    { line: 'rgba(74,222,128,0.18)',  active: 'rgba(74,222,128,0.5)',  particle: 'rgba(74,222,128,0.9)' },
+  gold:     { line: 'rgba(255,198,0,0.12)',   active: 'rgba(255,198,0,0.4)',   particle: 'rgba(255,198,0,0.85)' }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATION TIMELINE
+   Events sourced from demo-data files
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Sarah Chen, CIO, Meridian Health Systems' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Maria Torres, VP Engineering' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Sarah Chen, CIO Meridian Health...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Meridian Health Systems financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... found 2 board meetings' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found 4 recent news articles, 2 conference talks' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... found 8 touchpoints' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $4.2B, 28K employees, Healthcare/Enterprise' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... engagement score 92/100' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Building career arc: former developer, CIO since 2021' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Open opps: $1.2M AI expansion, $800K edge computing' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'Checking vvip-roster.json ... GOLD TIER confirmed' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Deja View critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: Overdue action item found from Feb CAB meeting!' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'OVERDUE', text: 'AI governance reference architecture promised at Feb 2026 CAB \u2014 due March 1, still undelivered. Trust-critical.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Open follow-up from Sept 2025 briefing still unresolved' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'OPEN', text: 'Healthcare customer reference for edge computing \u2014 promised Sept 2025, not yet delivered.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Relationship stage: Trusted (approaching Champion). NPS 9/10' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 17500, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Engagement score 92/100 and improving. Sarah is becoming a champion.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'Dr. Priya Kapoor (CMIO) not yet engaged \u2014 clinical AI opportunity' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Dr. Priya Kapoor, CMIO, has not been engaged \u2014 potential clinical AI use case expansion.' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Analyzing communication style: direct, data-driven' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Tech stack: OpenShift, RHEL, Ansible, OpenShift AI (pilot)' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent priority: AI governance in regulated healthcare' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: 'Contract renewal Sept 2026. Competitive pressure from Azure AI' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: HIGH' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. 6 briefing-relevant insights.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents...' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier lookup: GOLD. Loading protocol requirements...' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  // Deliverables light up progressively
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier (1-page quick reference)...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Vegetarian catering, green tea, morning briefing 8:30 AM' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Weaving CAB themes into Briefing Backgrounder...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating VVIP Protocol Checklist with assignees...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Maria Torres...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Maria Torres...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Recommended Agenda with AI Governance + Edge focus...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting 3 personalized conversation starters...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry for future reference' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Phase 3: Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════ */
+const state = {
+  running: false,
+  startTime: null,
+  timerInterval: null,
+  timeouts: [],
+  deliverablesDone: 0,
+  flagCount: 0,
+  infraStatus: { podman: 'checking', granite: 'checking', openclaw: 'checking', zeroclaw: 'static' },
+  isLive: false,
+  activeConnections: new Set()
+};
+
+/* ═══════════════════════════════════════════════════════════
+   INFRASTRUCTURE POLLING
+   ═══════════════════════════════════════════════════════════ */
+async function checkEndpoint(url) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const resp = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    return resp.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function pollInfrastructure() {
+  const [graniteOk, openclawOk] = await Promise.all([
+    checkEndpoint(CONFIG.endpoints.granite),
+    checkEndpoint(CONFIG.endpoints.openclaw)
+  ]);
+
+  state.infraStatus.granite = graniteOk ? 'connected' : 'disconnected';
+  state.infraStatus.openclaw = openclawOk ? 'connected' : 'disconnected';
+  state.infraStatus.podman = graniteOk ? 'connected' : 'disconnected';
+  state.isLive = graniteOk && openclawOk;
+
+  updateInfraUI();
+  updateModeBadge();
+}
+
+function updateInfraUI() {
+  for (const [key, status] of Object.entries(state.infraStatus)) {
+    const dot = document.getElementById(`dot-${key}`);
+    if (dot) {
+      dot.className = `status-dot ${status}`;
+    }
+  }
+}
+
+function updateModeBadge() {
+  const badge = document.getElementById('modeBadge');
+  if (state.isLive) {
+    badge.className = 'mode-badge live';
+    badge.textContent = 'LIVE';
+  } else {
+    badge.className = 'mode-badge simulated';
+    badge.textContent = 'SIMULATED';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PIPELINE CANVAS - PARTICLES & CONNECTIONS
+   ═══════════════════════════════════════════════════════════ */
+class PipelineCanvas {
+  constructor(canvasEl) {
+    this.canvas = canvasEl;
+    this.ctx = canvasEl.getContext('2d');
+    this.particles = [];
+    this.resolvedConnections = [];
+    this.animFrameId = null;
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  }
+
+  resize() {
+    const section = this.canvas.parentElement;
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = section.offsetWidth * dpr;
+    this.canvas.height = section.offsetHeight * dpr;
+    this.canvas.style.width = section.offsetWidth + 'px';
+    this.canvas.style.height = section.offsetHeight + 'px';
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.resolveConnections();
+  }
+
+  resolveConnections() {
+    const section = this.canvas.parentElement;
+    const rect = section.getBoundingClientRect();
+    this.resolvedConnections = CONFIG.connections.map(conn => {
+      const fromEl = document.getElementById(conn.from);
+      const toEl = document.getElementById(conn.to);
+      if (!fromEl || !toEl) return null;
+      const fromRect = fromEl.getBoundingClientRect();
+      const toRect = toEl.getBoundingClientRect();
+      return {
+        fromX: fromRect.left + fromRect.width / 2 - rect.left,
+        fromY: fromRect.top + fromRect.height - rect.top,
+        toX: toRect.left + toRect.width / 2 - rect.left,
+        toY: toRect.top - rect.top,
+        color: conn.color,
+        active: false,
+        key: `${conn.from}-${conn.to}`
+      };
+    }).filter(Boolean);
+  }
+
+  setConnectionActive(fromId, toId, active) {
+    const key = `${fromId}-${toId}`;
+    for (const c of this.resolvedConnections) {
+      if (c.key === key) c.active = active;
+    }
+    if (active) state.activeConnections.add(key);
+    else state.activeConnections.delete(key);
+  }
+
+  spawnParticle(conn) {
+    this.particles.push({
+      x: conn.fromX,
+      y: conn.fromY,
+      targetX: conn.toX,
+      targetY: conn.toY,
+      progress: 0,
+      speed: 0.008 + Math.random() * 0.012,
+      color: COLORS[conn.color]?.particle || COLORS.gold.particle,
+      size: 2 + Math.random() * 2,
+      opacity: 0.6 + Math.random() * 0.4
+    });
+  }
+
+  start() {
+    const loop = () => {
+      this.render();
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  stop() {
+    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+  }
+
+  render() {
+    const { ctx, canvas } = this;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw connection lines
+    for (const conn of this.resolvedConnections) {
+      const colors = COLORS[conn.color] || COLORS.gold;
+      ctx.beginPath();
+      ctx.moveTo(conn.fromX, conn.fromY);
+      // Bezier curve for smooth paths
+      const midY = (conn.fromY + conn.toY) / 2;
+      ctx.bezierCurveTo(conn.fromX, midY, conn.toX, midY, conn.toX, conn.toY);
+      ctx.strokeStyle = conn.active ? colors.active : colors.line;
+      ctx.lineWidth = conn.active ? 1.5 : 0.8;
+      ctx.stroke();
+
+      // Spawn particles on active connections
+      if (conn.active && Math.random() < 0.06) {
+        this.spawnParticle(conn);
+      }
+    }
+
+    // Update and draw particles
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.progress += p.speed;
+      if (p.progress >= 1) {
+        this.particles.splice(i, 1);
+        continue;
+      }
+      const t = p.progress;
+      const midY = (p.y + p.targetY) / 2;
+      // Bezier interpolation
+      const u = 1 - t;
+      const px = u*u*u * p.x + 3*u*u*t * p.x + 3*u*t*t * p.targetX + t*t*t * p.targetX;
+      const py = u*u*u * p.y + 3*u*u*t * midY  + 3*u*t*t * midY     + t*t*t * p.targetY;
+
+      const alpha = p.opacity * (t < 0.1 ? t / 0.1 : t > 0.85 ? (1 - t) / 0.15 : 1);
+      ctx.beginPath();
+      ctx.arc(px, py, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color.replace(/[\d.]+\)$/, `${alpha})`);
+      ctx.fill();
+    }
+  }
+
+  clearParticles() {
+    this.particles = [];
+    for (const c of this.resolvedConnections) c.active = false;
+    state.activeConnections.clear();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DOM UPDATE FUNCTIONS
+   ═══════════════════════════════════════════════════════════ */
+function setAgentStatus(agentId, status, progress) {
+  const node = document.getElementById(`node-${agentId}`);
+  if (!node) return;
+  if (status) node.setAttribute('data-status', status);
+  if (progress !== undefined) {
+    const bar = node.querySelector('.progress-bar');
+    if (bar) bar.style.width = status === 'complete' ? '100%' : progress + '%';
+  }
+}
+
+function addActivityEntry(agentId, text) {
+  const agent = CONFIG.agents[agentId];
+  if (!agent) return;
+
+  const list = document.getElementById('activityList');
+  const entry = document.createElement('div');
+  entry.className = 'activity-entry';
+
+  const elapsed = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+
+  const typeClass = agent.type === 'orchestrator' ? 'orchestrator-text' :
+                    agent.type === 'frontier' ? 'frontier-text' : 'local-text';
+
+  entry.innerHTML = `
+    <span class="activity-time">${mm}:${ss}</span>
+    <span class="activity-agent ${typeClass}">${agent.emoji} ${agent.name}</span>
+    <span class="activity-message"></span>
+  `;
+
+  list.insertBefore(entry, list.firstChild);
+
+  // Typewriter effect
+  const msgEl = entry.querySelector('.activity-message');
+  let i = 0;
+  const typeTimer = setInterval(() => {
+    i++;
+    msgEl.textContent = text.slice(0, i);
+    if (i >= text.length) {
+      clearInterval(typeTimer);
+    }
+  }, 12);
+
+  // Keep feed scrolled
+  const feedContainer = document.getElementById('activityFeed');
+  feedContainer.scrollTop = 0;
+}
+
+function completeDeliverable(delId) {
+  const card = document.querySelector(`[data-deliverable="${delId}"]`);
+  if (card && !card.classList.contains('completed')) {
+    card.classList.add('completed');
+    state.deliverablesDone++;
+    updateDeliverableCount();
+  }
+}
+
+function updateDeliverableCount() {
+  const text = `${state.deliverablesDone} / 8`;
+  document.getElementById('deliverableCount').textContent = text;
+  document.getElementById('delCounter').textContent = text;
+}
+
+function addFlag(type, icon, label, text) {
+  const list = document.getElementById('flagsList');
+
+  // Remove empty message
+  const empty = list.querySelector('.flags-empty');
+  if (empty) empty.remove();
+
+  const entry = document.createElement('div');
+  entry.className = `flag-entry ${type}`;
+  entry.innerHTML = `
+    <span class="flag-icon">${icon}</span>
+    <div>
+      <div class="flag-text">${text}</div>
+      <div class="flag-label">${label}</div>
+    </div>
+  `;
+  list.appendChild(entry);
+  state.flagCount++;
+  document.getElementById('flagCounter').textContent = `${state.flagCount} alert${state.flagCount !== 1 ? 's' : ''}`;
+}
+
+function updateElapsed() {
+  if (!state.startTime) return;
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('elapsedDisplay').textContent = `${mm}:${ss}`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATION ENGINE
+   ═══════════════════════════════════════════════════════════ */
+function activateConnectionsForAgent(agentId, activate) {
+  const nodeId = `node-${agentId}`;
+  for (const conn of CONFIG.connections) {
+    if (conn.to === nodeId) {
+      pipelineCanvas.setConnectionActive(conn.from, conn.to, activate);
+    }
+    if (conn.from === nodeId) {
+      // Activate downstream when agent is complete
+    }
+  }
+}
+
+function activateDownstream(agentId) {
+  const nodeId = `node-${agentId}`;
+  for (const conn of CONFIG.connections) {
+    if (conn.from === nodeId) {
+      pipelineCanvas.setConnectionActive(conn.from, conn.to, true);
+    }
+  }
+}
+
+function executeEvent(event) {
+  switch (event.action) {
+    case 'trigger':
+      document.getElementById('triggerNode').setAttribute('data-status', 'active');
+      document.querySelector('#triggerNode .node-text').textContent = document.getElementById('requestInput').value;
+      break;
+
+    case 'setAgent':
+      setAgentStatus(event.data.id, event.data.status, event.data.progress);
+      if (event.data.status === 'working') {
+        activateConnectionsForAgent(event.data.id, true);
+      }
+      if (event.data.status === 'complete') {
+        activateConnectionsForAgent(event.data.id, false);
+        activateDownstream(event.data.id);
+        setTimeout(() => {
+          // Deactivate downstream after a beat
+          const nodeId = `node-${event.data.id}`;
+          for (const conn of CONFIG.connections) {
+            if (conn.from === nodeId) {
+              // Keep active if target is working
+              const targetAgent = conn.to.replace('node-', '');
+              const targetNode = document.getElementById(conn.to);
+              if (targetNode && targetNode.getAttribute('data-status') !== 'working') {
+                pipelineCanvas.setConnectionActive(conn.from, conn.to, false);
+              }
+            }
+          }
+        }, 2000);
+      }
+      break;
+
+    case 'log':
+      addActivityEntry(event.data.agent, event.data.text);
+      break;
+
+    case 'deliverable':
+      completeDeliverable(event.data.id);
+      break;
+
+    case 'addFlag':
+      addFlag(event.data.type, event.data.icon, event.data.label, event.data.text);
+      break;
+
+    case 'output':
+      const outputNode = document.getElementById('outputNode');
+      outputNode.setAttribute('data-status', 'complete');
+      break;
+  }
+}
+
+function startDemo() {
+  if (state.running) return;
+  resetDemo();
+  state.running = true;
+  state.startTime = Date.now();
+
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('elapsedDisplay').classList.add('active');
+
+  state.timerInterval = setInterval(updateElapsed, 100);
+
+  for (const event of TIMELINE) {
+    const id = setTimeout(() => executeEvent(event), event.t * CONFIG.speedFactor);
+    state.timeouts.push(id);
+  }
+
+  // Mark demo complete after last event
+  const lastT = Math.max(...TIMELINE.map(e => e.t));
+  const doneId = setTimeout(() => {
+    state.running = false;
+    document.getElementById('btnStart').disabled = false;
+    clearInterval(state.timerInterval);
+  }, (lastT + 2000) * CONFIG.speedFactor);
+  state.timeouts.push(doneId);
+}
+
+function resetDemo() {
+  state.running = false;
+  state.startTime = null;
+  state.deliverablesDone = 0;
+  state.flagCount = 0;
+
+  for (const id of state.timeouts) clearTimeout(id);
+  state.timeouts = [];
+  if (state.timerInterval) clearInterval(state.timerInterval);
+
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('elapsedDisplay').textContent = '00:00';
+  document.getElementById('elapsedDisplay').classList.remove('active');
+
+  // Reset agents
+  for (const agentId of Object.keys(CONFIG.agents)) {
+    setAgentStatus(agentId, 'idle', 0);
+  }
+
+  // Reset trigger and output
+  document.getElementById('triggerNode').setAttribute('data-status', 'idle');
+  document.querySelector('#triggerNode .node-text').textContent = 'Awaiting input...';
+  document.getElementById('outputNode').setAttribute('data-status', 'idle');
+
+  updateDeliverableCount();
+
+  // Clear deliverables
+  document.querySelectorAll('.deliverable-card').forEach(c => c.classList.remove('completed'));
+
+  // Clear activity feed
+  document.getElementById('activityList').innerHTML = '';
+
+  // Clear flags
+  document.getElementById('flagsList').innerHTML = '<div class="flags-empty">No flags yet. Waiting for agent analysis...</div>';
+  document.getElementById('flagCounter').textContent = '0 alerts';
+
+  // Clear canvas
+  if (typeof pipelineCanvas !== 'undefined') {
+    pipelineCanvas.clearParticles();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INITIALIZATION
+   ═══════════════════════════════════════════════════════════ */
+let pipelineCanvas;
+
+document.addEventListener('DOMContentLoaded', () => {
+  pipelineCanvas = new PipelineCanvas(document.getElementById('pipelineCanvas'));
+
+  // Small delay to let layout settle before resolving connections
+  setTimeout(() => {
+    pipelineCanvas.resolveConnections();
+    pipelineCanvas.start();
+  }, 200);
+
+  // Buttons
+  document.getElementById('btnStart').addEventListener('click', startDemo);
+  document.getElementById('btnReset').addEventListener('click', resetDemo);
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      if (!state.running) startDemo();
+    }
+    if (e.code === 'Escape') {
+      e.preventDefault();
+      resetDemo();
+    }
+    if (e.code === 'KeyF') {
+      e.preventDefault();
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+
+  // Infrastructure polling
+  pollInfrastructure();
+  setInterval(pollInfrastructure, CONFIG.pollInterval);
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    setTimeout(() => pipelineCanvas.resolveConnections(), 100);
+  });
+
+  // Autostart via URL parameter: ?autostart or #autostart
+  if (location.search.includes('autostart') || location.hash.includes('autostart')) {
+    setTimeout(startDemo, 1000);
+  }
+});
+</script>
+
+</body>
+</html>
