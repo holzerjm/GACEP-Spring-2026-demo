@@ -186,13 +186,13 @@ Please prepare a full briefing package:
 Switch to the interactive dashboard immediately. Don't wait. Say:
 > "Let me switch to the pipeline visualization so you can see the full flow."
 
-Open `briefingclaw-dashboard.html` and click "Start Demo" (or press Space). Use the contact dropdown to pick the scenario that fits your narrative (Sarah Chen for overdue commitments, David Park for retention crisis, Rachel Morrison for P1 outage). The 42-second animated simulation shows the complete agent pipeline with activity feed, critical flags, and clickable deliverables. If the dashboard is also not available, fall back to the pre-recorded video.
+Open `briefingclaw-dashboard.html` or `briefingclaw-dashboard-redhat.html` (depending on your audience) and click "Start Demo" (or press Space). Use the contact dropdown to pick the scenario that fits your narrative. The 42-second simulation shows the full agent pipeline with activity feed, critical flags, and all 24 deliverables clickable with complete HTML content. If the dashboard is also not available, fall back to the pre-recorded video.
 
 ### If OpenClaw crashes
 Switch to the dashboard for the visual pipeline demo, then use ZeroClaw CLI for live research. Run Sherlock Ohms's research command live — it's fast and visual. The dashboard shows the orchestration flow; ZeroClaw shows real agent output.
 
 ### If nothing works
-Open the dashboard (`briefingclaw-dashboard.html?autostart`) — it runs entirely standalone with no backend dependencies. You have three scenarios to choose from via the dropdown. Walk through the animated pipeline, click completed deliverables to show the formatted output, and narrate what each agent produces. If even the browser fails, go to slides with screenshots.
+Open the dashboard (`briefingclaw-dashboard.html?autostart` or `briefingclaw-dashboard-redhat.html?autostart`) — it runs entirely standalone with no backend dependencies. Three scenarios via the dropdown. Walk through the animated pipeline, click any completed deliverable to show full formatted content (all 24 embedded), and narrate what each agent produces. If even the browser fails, go to slides with screenshots.
 
 ### If the audience asks "Can I try this?"
 > "Yes. OpenClaw is on GitHub — 273,000 stars, it's the fastest-growing open-source project in history. ZeroClaw is a single binary you can install with Homebrew. Podman AI Lab is a free extension. I'll share links at the end, and I'm happy to talk after the session."

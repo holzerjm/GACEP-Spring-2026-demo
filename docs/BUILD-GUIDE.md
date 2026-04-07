@@ -307,16 +307,21 @@ open briefingclaw-dashboard.html
 open "briefingclaw-dashboard.html?autostart"
 ```
 
-Test all three contact scenarios (use the dropdown in the control bar):
+Test both dashboard variants with all three contacts:
 
-**For each contact (Sarah Chen, David Park, Rachel Morrison):**
-- [ ] The dashboard loads with the dark theme and pipeline visualization
+```bash
+open briefingclaw-dashboard.html          # Original dark theme
+open briefingclaw-dashboard-redhat.html   # Red Hat branded variant
+```
+
+**For the dashboard variant you will present, and for each contact (Sarah Chen, David Park, Rachel Morrison):**
+- [ ] The dashboard loads with improved readability (larger fonts, wider agent spacing)
 - [ ] Contact dropdown switches between the three scenarios
 - [ ] Clicking "Start Demo" runs the full 42-second simulation for that contact
 - [ ] All 6 agent nodes animate through idle/working/complete states
 - [ ] Deliverables count reaches 8/8
 - [ ] Critical flags appear specific to the selected contact (~15 seconds)
-- [ ] Completed deliverable cards are clickable — modal viewer opens with formatted content
+- [ ] All 8 completed deliverable cards are clickable — modal opens with complete HTML content (24 deliverables embedded)
 - [ ] Modal closes via X button, clicking overlay, or Escape key
 - [ ] "Reset" button returns everything to initial state
 - [ ] Pressing F toggles fullscreen mode
@@ -351,7 +356,7 @@ The night before the session (at the hotel):
 - [ ] Set terminal font size to 18pt+
 - [ ] Set browser zoom to 125-150%
 - [ ] Open backup video — test play, then pause at frame 1
-- [ ] Open dashboard in a browser tab: `open briefingclaw-dashboard.html`
+- [ ] Open dashboard in a browser tab: `open briefingclaw-dashboard.html` (or `briefingclaw-dashboard-redhat.html`)
 - [ ] Test mobile hotspot (fallback network)
 - [ ] Mute all notifications (Do Not Disturb mode)
 

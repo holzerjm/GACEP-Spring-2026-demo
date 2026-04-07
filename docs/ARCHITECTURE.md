@@ -158,9 +158,10 @@ ACE assembles the complete briefing package:
 
 ```
 briefingclaw/
-├── briefingclaw-dashboard.html    # Live demo dashboard (3 contact scenarios, modal viewer)
-├── briefingclaw-architecture.html # Static architecture diagram
-├── briefingclaw.sh                # Interactive CLI for demo management
+├── briefingclaw-dashboard.html        # Live demo dashboard (3 scenarios, 24 deliverables, improved readability)
+├── briefingclaw-dashboard-redhat.html # Red Hat branded variant (identical functionality)
+├── briefingclaw-architecture.html     # Static architecture diagram
+├── briefingclaw.sh                    # Interactive CLI for demo management
 ├── agents/
 │   ├── orchestrator/          # Oprah-tor — the coordinator
 │   │   └── SKILL.md
@@ -183,10 +184,10 @@ briefingclaw/
 │   ├── crm-export.json        # CRM data (3 accounts, 9 contacts)
 │   ├── vvip-roster.json       # VVIP tiers & preferences (3 profiles)
 │   └── engagement-history.md  # Engagement timelines (3 narratives)
-├── demo-deliverables/             # Pre-generated sample deliverables
-│   ├── sarah-chen/            # Dossier, agenda, VVIP checklist
-│   ├── david-park/            # Dossier, agenda
-│   └── rachel-morrison/       # Dossier, agenda
+├── demo-deliverables/             # Sample markdown reference files (7 files)
+│   ├── sarah-chen/            # All 24 deliverables (8 types x 3 contacts)
+│   ├── david-park/            # are embedded in the HTML dashboards;
+│   └── rachel-morrison/       # these markdowns are for reference only
 └── docs/
     ├── ARCHITECTURE.md        # This file
     ├── DEMO-SCRIPT.md         # Step-by-step demo script

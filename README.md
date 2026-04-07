@@ -193,8 +193,8 @@ This split ensures that sensitive customer data (CAB records, CRM exports, VVIP 
 gacep-demo/
 |
 +-- briefingclaw.sh                         Interactive CLI for demo management
-+-- briefingclaw-dashboard.html            Live demo dashboard (original dark theme)
-+-- briefingclaw-dashboard-redhat.html     Live demo dashboard (Red Hat branded edition)
++-- briefingclaw-dashboard.html            Live demo dashboard (original dark theme, improved readability)
++-- briefingclaw-dashboard-redhat.html     Live demo dashboard (Red Hat branded, improved readability)
 +-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
 +-- README.md                              This file
 |
@@ -218,10 +218,11 @@ gacep-demo/
 |   +-- vvip-roster.json                   VVIP tiers & full preferences (3 contacts)
 |   +-- engagement-history.md              Engagement timelines (3 complete narratives)
 |
-+-- demo-deliverables/                     Pre-generated sample deliverables
-|   +-- sarah-chen/                        Executive dossier, agenda, VVIP checklist
-|   +-- david-park/                        Executive dossier, agenda
-|   +-- rachel-morrison/                   Executive dossier, agenda
++-- demo-deliverables/                     Sample markdown reference files (7 files)
+|   +-- sarah-chen/                        Dossier, agenda, VVIP checklist
+|   +-- david-park/                        Dossier, agenda
+|   +-- rachel-morrison/                   Dossier, agenda
+|   Note: All 24 deliverables (8 types x 3 contacts) are embedded in the dashboards
 |
 +-- docs/                                  Extended documentation
     +-- ARCHITECTURE.md                    System design document
@@ -233,9 +234,9 @@ gacep-demo/
 
 **`briefingclaw.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
 
-**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization (original dark theme). Features a contact dropdown selector (Sarah Chen, David Park, Rachel Morrison) with unique simulation timelines for each scenario. Shows all six agents working through the briefing preparation flow with particle animations, real-time activity feed, deliverable tracking, and critical flag alerts. Completed deliverables are clickable, opening a formatted modal viewer with sample content. Polls live infrastructure when services are running, falls back to a polished animated simulation. Open in a browser and click "Start Demo", or append `?autostart` to the URL. Keyboard shortcuts: Space/Enter to start, Escape to reset, F for fullscreen.
+**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization (original dark theme). Optimized for projector readability with larger fonts and generous spacing between agent nodes. Features a contact dropdown selector (Sarah Chen, David Park, Rachel Morrison) with unique simulation timelines per scenario. All 24 deliverables (8 types x 3 contacts) are embedded as clickable modal content — click any completed card to view the full formatted document. Polls live infrastructure when running, falls back to animated simulation. `?autostart` URL parameter for hands-free launch. Keyboard: Space/Enter start, Escape reset, F fullscreen.
 
-**`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition of the demo dashboard. Identical functionality to the original, reskinned with official Red Hat design language: Red Hat Display, Red Hat Text, and Red Hat Mono fonts; PatternFly dark theme surfaces (#151515/#1F1F1F/#292929); Red Hat Red (#EE0000) as the primary accent; PatternFly blue for frontier agents; PatternFly teal for local agents. Use this version for Red Hat-affiliated presentations.
+**`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition with identical functionality. Reskinned with Red Hat Display/Text/Mono fonts, PatternFly dark theme surfaces (#151515/#1F1F1F/#292929), Red Hat Red (#EE0000) primary accent, PatternFly blue for frontier agents, PatternFly teal for local agents. Same readability improvements and all 24 embedded deliverables. Use this version for Red Hat-affiliated presentations.
 
 **`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
 

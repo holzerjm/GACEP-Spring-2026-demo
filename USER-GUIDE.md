@@ -297,7 +297,9 @@ Select a contact from the dropdown, then click "Start Demo". Each scenario has i
 
 ### Clickable Deliverables
 
-After the simulation completes (or while running), completed deliverable cards are clickable. Clicking opens a formatted modal viewer showing sample content for that deliverable (executive dossier, recommended agenda, or VVIP checklist). Close the modal with the X button, clicking the overlay, or pressing Escape.
+After the simulation completes (or while running), all 8 completed deliverable cards are clickable. Clicking opens a formatted modal viewer with complete HTML content for that deliverable. All 24 deliverables (8 types x 3 contacts) are embedded in the dashboard — every card has content. Close the modal with the X button, clicking the overlay, or pressing Escape.
+
+> **Red Hat variant:** For Red Hat-affiliated presentations, use `briefingclaw-dashboard-redhat.html` instead. It has identical functionality with Red Hat Display/Text/Mono fonts, PatternFly dark theme, and Red Hat Red accents.
 
 ### Key Moments in the Simulation
 
@@ -450,13 +452,18 @@ The repository includes simulated data for three distinct demo scenarios, each w
 
 ### Demo Deliverables
 
-Pre-generated sample deliverables in `demo-deliverables/` (clickable in the dashboard):
+The `demo-deliverables/` directory contains 7 sample markdown reference files. However, all 24 deliverables (8 types x 3 contacts) are embedded directly in both HTML dashboards as formatted modal content — no external files are needed. The markdown files serve as templates for customization.
 
-| Contact | Files |
-|---------|-------|
-| sarah-chen/ | executive-dossier.md, recommended-agenda.md, vvip-checklist.md |
-| david-park/ | executive-dossier.md, recommended-agenda.md |
-| rachel-morrison/ | executive-dossier.md, recommended-agenda.md |
+| Deliverable Type | Agent | All 3 Contacts |
+|-----------------|-------|:---:|
+| Executive Dossier | Draft Punk | Embedded |
+| Briefing Backgrounder | Draft Punk | Embedded |
+| Sponsor Talking Points | Draft Punk | Embedded |
+| Recommended Agenda | Draft Punk | Embedded |
+| Conversation Starters | Draft Punk | Embedded |
+| VVIP Protocol Checklist | Alfred Bitworth | Embedded |
+| Sponsor Alert Email | Alfred Bitworth | Embedded |
+| Engagement Log Entry | Alfred Bitworth | Embedded |
 
 ### Customizing demo data
 
@@ -489,7 +496,7 @@ This checks:
 - [ ] Gateway UI loads at http://127.0.0.1:18789
 - [ ] Wi-Fi is connected (for frontier model agents)
 - [ ] Backup video is accessible and tested
-- [ ] Dashboard loads: `open briefingclaw-dashboard.html` (works without live services)
+- [ ] Dashboard loads: `open briefingclaw-dashboard.html` (or `briefingclaw-dashboard-redhat.html` for Red Hat branding)
 
 ### 5 minutes before demo
 
@@ -504,7 +511,7 @@ This checks:
 
 | Problem | Fallback |
 |---------|----------|
-| Model is slow | Switch to the dashboard (`briefingclaw-dashboard.html?autostart`) or pre-recorded video |
+| Model is slow | Switch to the dashboard (`briefingclaw-dashboard.html?autostart` or `briefingclaw-dashboard-redhat.html?autostart`) |
 | OpenClaw crashes | Use the dashboard for visual demo, ZeroClaw CLI for live research |
 | Web search fails | Sherlock and Bloom-borg will note limited results; Deja View and local agents still work |
 | Wi-Fi down | Local agents (Deja View, Draft Punk, Alfred Bitworth) still function; skip frontier agents |
