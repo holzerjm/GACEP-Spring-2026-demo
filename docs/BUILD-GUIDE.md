@@ -295,7 +295,32 @@ Record how long each phase takes on YOUR hardware:
 
 ---
 
-## Step 6: Record the Backup Video
+## Step 6: Test the Dashboard
+
+The interactive dashboard (`briefingclaw-dashboard.html`) provides an animated visualization of the full agent pipeline. It works without any live services running, making it a reliable fallback for conference presentations.
+
+```bash
+# Open in your browser
+open briefingclaw-dashboard.html
+
+# Or with autostart (simulation begins automatically)
+open "briefingclaw-dashboard.html?autostart"
+```
+
+Verify that:
+- [ ] The dashboard loads with the dark theme and pipeline visualization
+- [ ] Clicking "Start Demo" runs the full 42-second simulation
+- [ ] All 6 agent nodes animate through idle/working/complete states
+- [ ] Deliverables count reaches 8/8
+- [ ] Critical flags appear (overdue action item at ~15 seconds)
+- [ ] "Reset" button returns everything to initial state
+- [ ] Pressing F toggles fullscreen mode
+
+The dashboard automatically detects whether live services are running and displays "LIVE" or "SIMULATED" accordingly.
+
+---
+
+## Step 7: Record the Backup Video
 
 The night before the session (at the hotel):
 
@@ -308,7 +333,7 @@ The night before the session (at the hotel):
 
 ---
 
-## Step 7: Conference Day Checklist
+## Step 8: Conference Day Checklist
 
 ### 30 Minutes Before Session
 - [ ] Connect to projector, verify display
@@ -321,11 +346,13 @@ The night before the session (at the hotel):
 - [ ] Set terminal font size to 18pt+
 - [ ] Set browser zoom to 125-150%
 - [ ] Open backup video — test play, then pause at frame 1
+- [ ] Open dashboard in a browser tab: `open briefingclaw-dashboard.html`
 - [ ] Test mobile hotspot (fallback network)
 - [ ] Mute all notifications (Do Not Disturb mode)
 
 ### 5 Minutes Before Demo Segment
 - [ ] Arrange terminal layout (Sherlock Ohms left, Bloom-borg right, browser bottom)
+- [ ] Dashboard tab ready as visual fallback
 - [ ] Pre-type the demo prompt in a text editor (ready to paste)
 - [ ] Confirm model is still responsive: quick test query
 - [ ] Deep breath. You've got this.

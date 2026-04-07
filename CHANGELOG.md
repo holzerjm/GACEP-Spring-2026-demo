@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Podman Compose manifest for container orchestration
 - Simulated demo data (CAB meeting notes, CRM export, VVIP roster, engagement history)
 - Interactive CLI wrapper (`briefingclaw.sh`) for demo management
-- Interactive HTML architecture visualization
+- Live demo dashboard (`briefingclaw-dashboard.html`) with animated agent pipeline, canvas particle effects, activity feed, deliverable tracking, critical flags, and infrastructure polling
+- Interactive HTML architecture visualization (`briefingclaw-architecture.html`)
 - Complete documentation: architecture guide, build guide, demo script, user guide
 - Initial release for GACEP Spring 2026 Conference

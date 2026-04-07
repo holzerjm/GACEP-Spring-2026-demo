@@ -27,6 +27,7 @@
 - [ ] OpenClaw UI accessible: `open http://127.0.0.1:18789`
 - [ ] ZeroClaw installed: `zeroclaw --version`
 - [ ] Demo data files in workspace: `ls ~/.openclaw/workspace/`
+- [ ] Dashboard tested: `open briefingclaw-dashboard.html` (works without live agents)
 - [ ] Backup video loaded in media player (DON'T minimize — keep it one click away)
 
 ### Terminal Layout
@@ -182,14 +183,16 @@ Please prepare a full briefing package:
 ## Contingency Plans
 
 ### If the model is slow (>30 seconds per response)
-Switch to the pre-recorded video immediately. Don't wait. Say:
-> "The conference WiFi is giving our model a workout — let me show you what this produced when I ran it this morning."
+Switch to the interactive dashboard immediately. Don't wait. Say:
+> "Let me switch to the pipeline visualization so you can see the full flow."
+
+Open `briefingclaw-dashboard.html` and click "Start Demo" (or press Space). The 42-second animated simulation shows the complete agent pipeline with activity feed and critical flags. If the dashboard is also not available, fall back to the pre-recorded video.
 
 ### If OpenClaw crashes
-Switch to ZeroClaw CLI only. Run Sherlock Ohms's research command live — it's fast and visual. Skip the multi-agent orchestration and show the output documents you pre-generated.
+Switch to the dashboard for the visual pipeline demo, then use ZeroClaw CLI for live research. Run Sherlock Ohms's research command live — it's fast and visual. The dashboard shows the orchestration flow; ZeroClaw shows real agent output.
 
 ### If nothing works
-Go to slides with screenshots. You have the full output pre-captured. Walk through each document and narrate what the agents produced. The content is strong enough to stand on its own.
+Open the dashboard (`briefingclaw-dashboard.html?autostart`) — it runs entirely standalone with no backend dependencies. Walk through the animated pipeline and narrate what each agent produces. If even the browser fails, go to slides with screenshots.
 
 ### If the audience asks "Can I try this?"
 > "Yes. OpenClaw is on GitHub — 273,000 stars, it's the fastest-growing open-source project in history. ZeroClaw is a single binary you can install with Homebrew. Podman AI Lab is a free extension. I'll share links at the end, and I'm happy to talk after the session."

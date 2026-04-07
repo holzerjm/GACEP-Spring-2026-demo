@@ -158,6 +158,9 @@ ACE assembles the complete briefing package:
 
 ```
 briefingclaw/
+├── briefingclaw-dashboard.html    # Live demo dashboard (animated simulation)
+├── briefingclaw-architecture.html # Static architecture diagram
+├── briefingclaw.sh                # Interactive CLI for demo management
 ├── agents/
 │   ├── orchestrator/          # Oprah-tor — the coordinator
 │   │   └── SKILL.md

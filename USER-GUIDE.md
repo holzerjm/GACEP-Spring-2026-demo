@@ -11,13 +11,14 @@ A practical guide for installing, configuring, and operating the BriefingClaw mu
 3. [Configuration](#3-configuration)
 4. [Starting the System](#4-starting-the-system)
 5. [Running a Briefing Request](#5-running-a-briefing-request)
-6. [Using the CLI (briefingclaw.sh)](#6-using-the-cli-briefingclawsh)
-7. [Running Individual Agents](#7-running-individual-agents)
-8. [Understanding the Output](#8-understanding-the-output)
-9. [Demo Data Reference](#9-demo-data-reference)
-10. [Conference Day Checklist](#10-conference-day-checklist)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Customization](#12-customization)
+6. [Using the Dashboard](#6-using-the-dashboard)
+7. [Using the CLI (briefingclaw.sh)](#7-using-the-cli-briefingclawsh)
+8. [Running Individual Agents](#8-running-individual-agents)
+9. [Understanding the Output](#9-understanding-the-output)
+10. [Demo Data Reference](#10-demo-data-reference)
+11. [Conference Day Checklist](#11-conference-day-checklist)
+12. [Troubleshooting](#12-troubleshooting)
+13. [Customization](#13-customization)
 
 ---
 
@@ -240,7 +241,61 @@ She is a CAB member. Her executive sponsor is Maria Torres.
 
 ---
 
-## 6. Using the CLI (briefingclaw.sh)
+## 6. Using the Dashboard
+
+The interactive dashboard (`briefingclaw-dashboard.html`) provides an animated visualization of the entire agent pipeline. It is designed for conference presentations and works both as a live monitoring tool and as a standalone animated simulation.
+
+### Opening the Dashboard
+
+```bash
+# Open in your default browser
+open briefingclaw-dashboard.html
+
+# Or with autostart (simulation begins immediately)
+open "briefingclaw-dashboard.html?autostart"
+```
+
+### Dashboard Layout
+
+| Section | Description |
+|---------|-------------|
+| **Pipeline Visualization** | Top section. Shows all 6 agents as animated nodes with particle flow along connection paths. Agents glow when working and get a green checkmark when complete. |
+| **Control Bar** | Pre-populated briefing request, "Start Demo" and "Reset" buttons, elapsed timer. |
+| **Infrastructure Status** | Bottom-left panel. Pulsing status dots for Podman, Granite 8B, OpenClaw, and ZeroClaw. Green = connected, red = disconnected. |
+| **Agent Activity** | Bottom-right panel. Scrolling log with typewriter animation showing each agent's work in real time. |
+| **Deliverables** | 8 cards that light up gold as each document is completed (0/8 to 8/8). |
+| **Critical Flags** | Slide-in alerts for overdue action items, open follow-ups, and opportunities. |
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| Space / Enter | Start the demo simulation |
+| Escape | Reset to initial state |
+| F | Toggle fullscreen (ideal for projectors) |
+
+### Live vs. Simulated Mode
+
+The dashboard polls `http://127.0.0.1:8001` (Granite model) and `http://127.0.0.1:18789` (OpenClaw gateway) every 5 seconds.
+
+- **LIVE** (green badge): Both services are responding. Infrastructure dots show green.
+- **SIMULATED** (gold badge): Services are not running. Infrastructure dots show red.
+
+The animated simulation runs identically in both modes. It is a scripted 42-second sequence sourced from the real demo data files, designed to match the timing of the live demo script.
+
+### Key Moments in the Simulation
+
+| Time | Event |
+|------|-------|
+| 0-7s | Oprah-tor parses the request and dispatches Phase 1 agents |
+| 7-20s | Sherlock, Bloom-borg, and Deja View work in parallel |
+| ~15s | Deja View flags the **overdue action item** (the dramatic moment) |
+| 21-37s | Draft Punk and Alfred Bitworth produce deliverables progressively |
+| 38-42s | Oprah-tor synthesizes the final package (8/8 deliverables) |
+
+---
+
+## 7. Using the CLI (briefingclaw.sh)
 
 The `briefingclaw.sh` script provides an interactive menu for managing the entire demo lifecycle.
 
@@ -276,7 +331,7 @@ The `briefingclaw.sh` script provides an interactive menu for managing the entir
 
 ---
 
-## 7. Running Individual Agents
+## 8. Running Individual Agents
 
 Each agent can be run independently for testing or targeted research.
 
@@ -318,7 +373,7 @@ Runs inside the OpenClaw container. Reads VVIP roster and engagement history to 
 
 ---
 
-## 8. Understanding the Output
+## 9. Understanding the Output
 
 A complete briefing package contains the following deliverables:
 
@@ -353,7 +408,7 @@ The system surfaces flags that require immediate attention:
 
 ---
 
-## 9. Demo Data Reference
+## 10. Demo Data Reference
 
 The repository includes simulated data for the Sarah Chen / Meridian Health Systems scenario.
 
@@ -393,7 +448,7 @@ Key consistency rules:
 
 ---
 
-## 10. Conference Day Checklist
+## 11. Conference Day Checklist
 
 ### 30 minutes before your session
 
@@ -411,11 +466,13 @@ This checks:
 - [ ] Gateway UI loads at http://127.0.0.1:18789
 - [ ] Wi-Fi is connected (for frontier model agents)
 - [ ] Backup video is accessible and tested
+- [ ] Dashboard loads: `open briefingclaw-dashboard.html` (works without live services)
 
 ### 5 minutes before demo
 
 - [ ] Terminal tabs are arranged (use `./briefingclaw.sh demo`)
 - [ ] Browser is open to the gateway UI
+- [ ] Dashboard tab open as fallback (briefingclaw-dashboard.html)
 - [ ] Font size is large enough for projection
 - [ ] Briefing request text is ready to paste
 - [ ] Backup video is one click away
@@ -424,15 +481,15 @@ This checks:
 
 | Problem | Fallback |
 |---------|----------|
-| Model is slow | Switch to pre-recorded backup video |
-| OpenClaw crashes | Use ZeroClaw CLI agents only + pre-generated documents |
+| Model is slow | Switch to the dashboard (`briefingclaw-dashboard.html?autostart`) or pre-recorded video |
+| OpenClaw crashes | Use the dashboard for visual demo, ZeroClaw CLI for live research |
 | Web search fails | Sherlock and Bloom-borg will note limited results; Deja View and local agents still work |
 | Wi-Fi down | Local agents (Deja View, Draft Punk, Alfred Bitworth) still function; skip frontier agents |
 | Everything fails | Switch to slides with screenshots of the output |
 
 ---
 
-## 11. Troubleshooting
+## 12. Troubleshooting
 
 ### Common Issues
 
@@ -493,7 +550,7 @@ zeroclaw agent -p bloom-borg --dry-run
 
 ---
 
-## 12. Customization
+## 13. Customization
 
 ### Using a different frontier model provider
 
