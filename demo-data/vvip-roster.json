@@ -57,8 +57,20 @@
         "room": "Executive Suite",
         "greeting": "EBC Manager meets at lobby",
         "catering": "Executive level",
-        "sponsor_dropin": "Required",
-        "gift": "Yes"
+        "sponsor_dropin": "Required — formal meeting format preferred",
+        "ceo_dropin": "Optional — recommended given renewal risk",
+        "gift": "Yes — tier-appropriate",
+        "welcome_display": "Yes — personalized",
+        "thank_you_note": "From Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "No restrictions, but prefers light lunches (salads, sushi)",
+        "beverages": "Black coffee, still water. No alcohol during business hours.",
+        "communication_style": "Concise and metrics-driven. Does not tolerate marketing fluff. Leads with questions — let him drive. Appreciates candid acknowledgment of problems over spin.",
+        "scheduling": "Prefers afternoon briefings (1:00-1:30 PM start). Mornings reserved for trading floor oversight. Never schedule before 11 AM.",
+        "meeting_format": "Prefers structured agendas distributed 48 hours in advance. Brings his own data — be prepared for pointed comparisons.",
+        "travel": "Flies private or first class from NYC. Prefers meetings at NYC or Raleigh EBC. Will not travel to West Coast for single-day events.",
+        "notes": "Highly competitive personality. Respects expertise but will test presenters. Former Goldman Sachs infrastructure lead — deep technical knowledge. Currently frustrated with migration failure — avoid overselling, focus on accountability and concrete remediation. Bring architecture diagrams, not slides."
       }
     },
     {
@@ -88,6 +100,15 @@
         "welcome_display": "Yes — personalized",
         "car_service": "Offered",
         "thank_you_note": "From CEO + Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "Pescatarian. Allergic to tree nuts — critical, ensure catering is informed.",
+        "beverages": "Oat milk latte (specific: she requests oat milk, not almond or soy), sparkling water with lemon",
+        "communication_style": "Deeply technical — she will read whitepapers and expects presenters to have read them too. Collaborative rather than adversarial. Asks probing questions but frames them constructively. Loves whiteboard sessions — always have a whiteboard or digital equivalent available.",
+        "scheduling": "Flexible but prefers full-day engagements when she travels. Will fly in the night before for morning starts. Prefers 8:00 AM starts with working breakfast.",
+        "meeting_format": "Prefers interactive workshop format over presentations. Include hands-on technical content whenever possible. She has been known to open a laptop and test things live during briefings.",
+        "travel": "Flies from Houston. Prefers Raleigh EBC for in-person. Will attend Boston or NYC for multi-day events. Always books an extra day for 1:1 follow-ups.",
+        "notes": "Former Apache Kafka committer — deeply embedded in open source community. Respects engineering rigor above all. Currently the strongest champion in the CAB — treat with highest care. After the March 28 P1 outage, she needs to see genuine accountability and a credible RCA before her board presentation in May. Do NOT send junior engineers to present to her. She remembers every commitment made and follows up on all action items. Has a standing monthly call with Elena Vasquez."
       }
     }
   ],

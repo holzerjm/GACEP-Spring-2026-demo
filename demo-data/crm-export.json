@@ -86,6 +86,213 @@
           "notes": "Key stakeholder for AI in clinical settings. Has not been engaged directly — opportunity."
         }
       ]
+    },
+    {
+      "account_id": "ACC-3291",
+      "company": "Apex Financial Group",
+      "industry": "Financial Services",
+      "segment": "Enterprise",
+      "tier": "Strategic",
+      "annual_revenue": "$11.6B",
+      "employees": 42000,
+      "headquarters": "New York, NY",
+      "account_health_score": 62,
+      "account_health_trend": "declining",
+      "contract_value": "$2.9M ARR",
+      "contract_renewal_date": "2026-06-30",
+      "products_deployed": [
+        "Red Hat Enterprise Linux",
+        "OpenShift Container Platform",
+        "Ansible Automation Platform",
+        "Red Hat Advanced Cluster Security"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-21045",
+          "name": "Apex Hybrid Cloud Expansion — Trading Platform",
+          "stage": "Negotiation",
+          "value": "$2.1M",
+          "close_date": "2026-06-30",
+          "notes": "Expanding OpenShift footprint for real-time trading platform modernization. Tied to contract renewal. Competitor Azure actively pitching — at risk."
+        },
+        {
+          "opp_id": "OPP-21330",
+          "name": "Apex Security Automation — SOC Modernization",
+          "stage": "Discovery",
+          "value": "$650K",
+          "close_date": "2026-Q3",
+          "notes": "CISO Karen Wu exploring Ansible for security orchestration and automated compliance. Early stage but strong internal champion in security org."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4587",
+          "date": "2026-01-14",
+          "severity": "P2",
+          "summary": "OpenShift migration failure — core banking workloads failed to migrate from legacy VMware environment. Rollback required after 6 hours of downtime in staging.",
+          "status": "Closed",
+          "satisfaction": "Negative — executive escalation from David Park. Root cause: insufficient pre-migration assessment for stateful workloads. David quoted as saying 'This set us back three months.'"
+        },
+        {
+          "case_id": "ESC-4610",
+          "date": "2026-02-20",
+          "severity": "P3",
+          "summary": "Ansible Automation Platform — playbook performance degradation in large-scale financial compliance scans",
+          "status": "Closed",
+          "satisfaction": "Neutral — resolved but took longer than expected (11 days)"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-9102",
+          "name": "David Park",
+          "title": "SVP Technology",
+          "email": "david.park@apexfinancial.com",
+          "phone": "+1-212-555-0387",
+          "role_type": "Economic Buyer",
+          "engagement_score": 68,
+          "cab_member": true,
+          "executive_sponsor": "James Kim, VP Financial Services",
+          "last_activity": "2026-02-12",
+          "last_activity_type": "CAB Meeting",
+          "preferred_communication": "Phone, then in-person. Does not respond well to long emails.",
+          "notes": "Pragmatic decision-maker. Former Wall Street infrastructure lead. Intensely focused on uptime and reliability. Currently frustrated with failed migration — needs confidence rebuild. Competitor Azure presenting to Apex board next week."
+        },
+        {
+          "contact_id": "CON-9103",
+          "name": "Karen Wu",
+          "title": "CISO",
+          "email": "karen.wu@apexfinancial.com",
+          "role_type": "Technical Decision Maker",
+          "engagement_score": 55,
+          "cab_member": false,
+          "last_activity": "2026-03-05",
+          "last_activity_type": "Security Briefing (virtual)",
+          "notes": "Strong interest in security automation. Less affected by migration failure — sees separate value in Ansible for SOC. Potential independent champion in security org."
+        },
+        {
+          "contact_id": "CON-9104",
+          "name": "Marcus Thompson",
+          "title": "VP Core Banking Engineering",
+          "email": "marcus.thompson@apexfinancial.com",
+          "role_type": "Technical Influencer",
+          "engagement_score": 41,
+          "cab_member": false,
+          "last_activity": "2026-01-14",
+          "last_activity_type": "Support Escalation",
+          "notes": "His team was most impacted by the failed migration. Currently skeptical. Key person to win back for renewal."
+        }
+      ]
+    },
+    {
+      "account_id": "ACC-3458",
+      "company": "TerraScale Energy",
+      "industry": "Energy / Utilities",
+      "segment": "Enterprise",
+      "tier": "Strategic",
+      "annual_revenue": "$8.7B",
+      "employees": 35000,
+      "headquarters": "Houston, TX",
+      "account_health_score": 78,
+      "account_health_trend": "at risk — recent P1 outage",
+      "contract_value": "$4.5M ARR",
+      "contract_renewal_date": "2027-01-15",
+      "products_deployed": [
+        "OpenShift Container Platform",
+        "Red Hat Enterprise Linux",
+        "Ansible Automation Platform",
+        "OpenShift AI",
+        "Red Hat Advanced Cluster Management",
+        "Red Hat Integration (AMQ Streams)"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-21502",
+          "name": "TerraScale Platform Expansion — Grid Modernization",
+          "stage": "Proposal",
+          "value": "$5.0M",
+          "close_date": "2026-08-31",
+          "notes": "Major platform expansion for smart grid analytics and real-time energy management. Rachel Morrison championing internally. Board presentation scheduled for May 2026 — she wants our help with ROI data."
+        },
+        {
+          "opp_id": "OPP-21688",
+          "name": "TerraScale Edge — Remote Substations",
+          "stage": "Discovery",
+          "value": "$1.8M",
+          "close_date": "2026-Q4",
+          "notes": "Edge computing for 200+ remote substations. Tied to grid modernization initiative. Requires ruggedized deployment model."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4701",
+          "date": "2026-03-28",
+          "severity": "P1",
+          "summary": "Production outage — OpenShift cluster hosting energy trading platform went down for 4 hours. Impact: real-time energy trading halted, estimated revenue impact $2.3M. Root cause investigation ongoing — suspected etcd quorum loss during routine certificate rotation.",
+          "status": "Open — RCA in progress",
+          "satisfaction": "Negative — Rachel Morrison escalated directly to Elena Vasquez. Trust at risk. Rachel quoted: 'I've been your biggest advocate internally, and this makes me look bad.'"
+        },
+        {
+          "case_id": "ESC-4455",
+          "date": "2026-01-08",
+          "severity": "P3",
+          "summary": "Advanced Cluster Management — policy sync delay across 12 clusters in field operations",
+          "status": "Closed",
+          "satisfaction": "Positive — resolved in 2 days, customer satisfied with communication"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-9301",
+          "name": "Rachel Morrison",
+          "title": "Chief Technology Officer",
+          "email": "rachel.morrison@terrascale.com",
+          "phone": "+1-713-555-0219",
+          "role_type": "Economic Buyer / Champion",
+          "engagement_score": 96,
+          "cab_member": true,
+          "cab_role": "Co-Chair",
+          "executive_sponsor": "Elena Vasquez, SVP Global Industries",
+          "last_activity": "2026-03-28",
+          "last_activity_type": "P1 Escalation Call",
+          "preferred_communication": "In-person preferred, then video call. Engages deeply — schedule 90 minutes minimum for any meeting.",
+          "notes": "Champion-level advocate. Former open source contributor (Apache Kafka committer). Deeply technical CTO who codes on weekends. Drives platform decisions personally. Currently stressed about P1 outage ahead of board presentation. Needs confidence that we are treating the RCA with urgency."
+        },
+        {
+          "contact_id": "CON-9302",
+          "name": "Anil Desai",
+          "title": "VP Platform Engineering",
+          "email": "anil.desai@terrascale.com",
+          "role_type": "Technical Decision Maker",
+          "engagement_score": 82,
+          "cab_member": false,
+          "last_activity": "2026-03-29",
+          "last_activity_type": "P1 RCA Working Session",
+          "notes": "Rachel's right hand on platform strategy. Running the RCA internally on TerraScale side. Technically rigorous — needs root cause detail, not platitudes."
+        },
+        {
+          "contact_id": "CON-9303",
+          "name": "Lisa Chang",
+          "title": "VP Grid Technology",
+          "email": "lisa.chang@terrascale.com",
+          "role_type": "Business Influencer",
+          "engagement_score": 60,
+          "cab_member": false,
+          "last_activity": "2026-02-12",
+          "last_activity_type": "CAB Meeting (observer)",
+          "notes": "Owns the grid modernization business case. Attended last CAB as Rachel's guest to observe. Key stakeholder for the $5M deal."
+        },
+        {
+          "contact_id": "CON-9304",
+          "name": "Frank Reeves",
+          "title": "CISO",
+          "email": "frank.reeves@terrascale.com",
+          "role_type": "Technical Influencer",
+          "engagement_score": 48,
+          "cab_member": false,
+          "notes": "Involved in P1 post-mortem from security perspective. Concerned about certificate management process that may have contributed to outage. Not yet engaged in broader platform conversation — opportunity."
+        }
+      ]
     }
   ],
   "export_metadata": {
