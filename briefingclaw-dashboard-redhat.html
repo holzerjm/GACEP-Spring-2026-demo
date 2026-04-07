@@ -1,0 +1,2602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Live Demo Dashboard — Red Hat Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;900&family=Red+Hat+Text:wght@400;500;600;700&family=Red+Hat+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   Red Hat / PatternFly Dark Theme
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* Surfaces (PatternFly dark theme) */
+  --bg: #151515;              /* PF almost-black */
+  --bg-card: #1F1F1F;         /* PF very-dark-gray */
+  --bg-card-hover: #292929;   /* PF dark-gray-4 */
+
+  /* Red Hat Red (primary brand) */
+  --rh-red: #EE0000;          /* Red Hat Red */
+  --rh-red-dark: #A60000;     /* Dark red */
+  --rh-red-light: #F56E6E;    /* Medium red for highlights */
+  --rh-red-glow: rgba(238,0,0,0.15);
+
+  /* Frontier agents = PatternFly Blue */
+  --frontier: #4394E5;        /* PF bright blue */
+  --frontier-border: rgba(67,148,229,0.3);
+  --frontier-bg: rgba(67,148,229,0.08);
+
+  /* Local agents = PatternFly Teal */
+  --local: #37A3A3;           /* PF dark teal */
+  --local-border: rgba(55,163,163,0.3);
+  --local-bg: rgba(55,163,163,0.08);
+
+  /* Status colors */
+  --status-green: #63993D;    /* PF forest green */
+  --status-red: #F0561D;      /* PF red-orange danger */
+  --status-amber: #DCA614;    /* PF dark yellow */
+
+  /* Text */
+  --text: #E0E0E0;            /* PF light gray 2 */
+  --text-dim: #A3A3A3;        /* PF medium gray */
+  --text-muted: #707070;      /* PF dark gray 1 */
+
+  /* Borders */
+  --border: #383838;          /* PF dark gray 3 */
+  --border-glow: #4D4D4D;    /* PF dark gray 2 */
+
+  /* Accent (replaces gold) */
+  --accent: #EE0000;          /* Red Hat Red is the primary accent */
+  --accent-dim: #A60000;
+  --accent-glow: rgba(238,0,0,0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Red Hat Text', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD LAYOUT
+   ═══════════════════════════════════════════════════════════ */
+.dashboard {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 56px minmax(280px, 340px) 52px 1fr auto;
+  padding: 0 24px;
+  gap: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════════ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 20px;
+  color: var(--rh-red);
+  line-height: 1;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.logo-text .logo-main {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.logo-text .logo-main .white { color: #FFFFFF; }
+.logo-text .logo-main .red { color: var(--rh-red); }
+
+.logo-text .logo-sub {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.header-title {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.mode-badge {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+}
+
+.mode-badge.live {
+  background: rgba(99,153,61,0.12);
+  color: var(--status-green);
+  border: 1px solid rgba(99,153,61,0.3);
+}
+
+.mode-badge.simulated {
+  background: rgba(238,0,0,0.1);
+  color: var(--rh-red);
+  border: 1px solid rgba(238,0,0,0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PIPELINE VISUALIZATION
+   ═══════════════════════════════════════════════════════════ */
+.pipeline-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.pipeline-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.pipeline-overlay {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 12px;
+}
+
+.pipeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.pipeline-row.phase-label-row {
+  gap: 4px;
+}
+
+.phase-label {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  padding: 2px 0;
+}
+
+/* ── Agent Nodes ──────────────────────────────────────── */
+.agent-node {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  min-width: 150px;
+  max-width: 190px;
+  text-align: center;
+  transition: all 0.4s ease;
+  opacity: 0.45;
+}
+
+.agent-node.frontier {
+  background: linear-gradient(180deg, var(--frontier-bg) 0%, var(--bg-card) 100%);
+  border-color: var(--frontier-border);
+}
+
+.agent-node.local {
+  background: linear-gradient(180deg, var(--local-bg) 0%, var(--bg-card) 100%);
+  border-color: var(--local-border);
+}
+
+.agent-node.orchestrator {
+  background: linear-gradient(180deg, var(--rh-red-glow) 0%, var(--bg-card) 100%);
+  border-color: rgba(238,0,0,0.2);
+  min-width: 170px;
+}
+
+.agent-node .agent-emoji {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.agent-node .agent-name {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 1px;
+}
+
+.agent-node .agent-role {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.agent-node .model-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 7px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.agent-node.frontier .model-badge {
+  background: rgba(67,148,229,0.12);
+  color: var(--frontier);
+  border: 1px solid rgba(67,148,229,0.2);
+}
+
+.agent-node.local .model-badge {
+  background: rgba(55,163,163,0.12);
+  color: var(--local);
+  border: 1px solid rgba(55,163,163,0.2);
+}
+
+.agent-node.orchestrator .model-badge {
+  background: rgba(238,0,0,0.1);
+  color: var(--rh-red);
+  border: 1px solid rgba(238,0,0,0.2);
+}
+
+/* Agent node progress bar */
+.agent-node .progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 0 0 12px 12px;
+  width: 0%;
+  transition: width 0.3s linear;
+}
+
+.agent-node.frontier .progress-bar { background: var(--frontier); }
+.agent-node.local .progress-bar { background: var(--local); }
+.agent-node.orchestrator .progress-bar { background: var(--rh-red); }
+
+/* ── Agent States ─────────────────────────────────────── */
+.agent-node[data-status="idle"] {
+  opacity: 0.45;
+}
+
+.agent-node[data-status="working"] {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.agent-node.frontier[data-status="working"] {
+  border-color: rgba(67,148,229,0.5);
+  box-shadow: 0 0 16px rgba(67,148,229,0.15), 0 0 32px rgba(67,148,229,0.05);
+  animation: pulse-frontier 2s ease-in-out infinite;
+}
+
+.agent-node.local[data-status="working"] {
+  border-color: rgba(55,163,163,0.5);
+  box-shadow: 0 0 16px rgba(55,163,163,0.15), 0 0 32px rgba(55,163,163,0.05);
+  animation: pulse-local 2s ease-in-out infinite;
+}
+
+.agent-node.orchestrator[data-status="working"] {
+  border-color: rgba(238,0,0,0.45);
+  box-shadow: 0 0 16px rgba(238,0,0,0.12), 0 0 32px rgba(238,0,0,0.05);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+.agent-node[data-status="complete"] {
+  opacity: 1;
+}
+
+.agent-node[data-status="complete"]::after {
+  content: '\2713';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--status-green);
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.agent-node[data-status="error"] {
+  opacity: 1;
+  border-color: var(--status-red) !important;
+}
+
+/* ── Trigger & Output Nodes ───────────────────────────── */
+.trigger-node, .output-node {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 18px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.trigger-node {
+  border-color: var(--border-glow);
+  opacity: 0.5;
+}
+
+.trigger-node[data-status="active"] {
+  opacity: 1;
+  border-color: var(--accent-dim);
+}
+
+.trigger-node .node-label,
+.output-node .node-label {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.trigger-node .node-text,
+.output-node .node-text {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.output-node {
+  border-color: var(--border);
+  opacity: 0.4;
+}
+
+.output-node[data-status="complete"] {
+  opacity: 1;
+  border-color: var(--rh-red-dark);
+  background: linear-gradient(135deg, rgba(238,0,0,0.06) 0%, var(--bg-card) 100%);
+}
+
+.output-node .deliverable-count {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--rh-red);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTROL BAR
+   ═══════════════════════════════════════════════════════════ */
+.control-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.contact-select {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A3A3A3' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+.contact-select:focus {
+  border-color: var(--rh-red);
+}
+
+.contact-select option {
+  background: var(--bg-card);
+  color: var(--text);
+  padding: 8px;
+}
+
+.request-input {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.request-input:focus {
+  border-color: var(--border-glow);
+}
+
+.request-input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary {
+  background: var(--rh-red);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background: #CC0000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(238,0,0,0.25);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  color: var(--text);
+}
+
+.elapsed-display {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--rh-red);
+  min-width: 60px;
+  text-align: right;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.elapsed-display.active {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD PANELS
+   ═══════════════════════════════════════════════════════════ */
+.panels-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  overflow: hidden;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.panel-badge {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background: var(--border-glow);
+  border-radius: 2px;
+}
+
+/* ── Infrastructure Status Panel ──────────────────────── */
+.infra-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(56,56,56,0.5);
+}
+
+.infra-row:last-child {
+  border-bottom: none;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.4s ease;
+}
+
+.status-dot.connected {
+  background: var(--status-green);
+  box-shadow: 0 0 8px rgba(99,153,61,0.4);
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+.status-dot.disconnected {
+  background: var(--status-red);
+  box-shadow: 0 0 6px rgba(240,86,29,0.3);
+}
+
+.status-dot.checking {
+  background: var(--status-amber);
+  animation: status-pulse 1s ease-in-out infinite;
+}
+
+.status-dot.static {
+  background: var(--status-green);
+  opacity: 0.6;
+}
+
+.infra-name {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1;
+}
+
+.infra-detail {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* ── Activity Feed Panel ──────────────────────────────── */
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-entry {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  animation: fade-in 0.3s ease;
+  align-items: flex-start;
+}
+
+.activity-time {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 36px;
+  padding-top: 1px;
+}
+
+.activity-agent {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  flex-shrink: 0;
+  min-width: 90px;
+  padding-top: 1px;
+}
+
+.activity-agent.frontier-text { color: var(--frontier); }
+.activity-agent.local-text { color: var(--local); }
+.activity-agent.orchestrator-text { color: var(--rh-red); }
+
+.activity-message {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.activity-message .cursor {
+  animation: blink-cursor 600ms step-end infinite;
+  color: var(--rh-red);
+}
+
+/* ── Deliverables Panel ───────────────────────────────── */
+.deliverables-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.deliverable-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(56,56,56,0.5);
+  border-radius: 8px;
+  padding: 8px 10px;
+  opacity: 0.35;
+  transition: all 0.4s ease;
+}
+
+.deliverable-card.completed {
+  opacity: 1;
+  background: rgba(238,0,0,0.06);
+  border-color: rgba(238,0,0,0.2);
+  animation: deliverable-complete 0.6s ease-out;
+  cursor: pointer;
+}
+
+.deliverable-card.completed:hover {
+  background: rgba(238,0,0,0.1);
+  border-color: rgba(238,0,0,0.35);
+  transform: translateY(-1px);
+}
+
+.deliverable-card .del-icon {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.deliverable-card .del-name {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.deliverable-card .del-agent {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.deliverable-counter {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 11px;
+  color: var(--rh-red);
+}
+
+/* ── Flags Panel ──────────────────────────────────────── */
+.flags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flag-entry {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(56,56,56,0.5);
+  animation: slide-in-flag 0.5s ease-out;
+}
+
+.flag-entry.danger {
+  border-color: rgba(240,86,29,0.25);
+  background: rgba(240,86,29,0.05);
+}
+
+.flag-entry.warning {
+  border-color: rgba(220,166,20,0.25);
+  background: rgba(220,166,20,0.05);
+}
+
+.flag-entry.positive {
+  border-color: rgba(99,153,61,0.25);
+  background: rgba(99,153,61,0.05);
+}
+
+.flag-entry.opportunity {
+  border-color: rgba(67,148,229,0.25);
+  background: rgba(67,148,229,0.05);
+}
+
+.flag-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.flag-text {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.flag-label {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.flag-entry.danger .flag-label { color: var(--status-red); }
+.flag-entry.warning .flag-label { color: var(--status-amber); }
+.flag-entry.positive .flag-label { color: var(--status-green); }
+.flag-entry.opportunity .flag-label { color: var(--frontier); }
+
+.flags-empty {
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL OVERLAY
+   ═══════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(21,21,21,0.92);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.2s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 14px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modal-slide-up 0.25s ease-out;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-title {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--rh-red);
+}
+
+.modal-agent {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-hover);
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.modal-close:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--rh-red);
+  border-color: var(--border-glow);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--border-glow);
+  border-radius: 2px;
+}
+
+.modal-body h2 {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--rh-red);
+  margin: 16px 0 8px 0;
+}
+
+.modal-body h2:first-child {
+  margin-top: 0;
+}
+
+.modal-body h3 {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--rh-red-dark);
+  margin: 12px 0 6px 0;
+}
+
+.modal-body p {
+  margin: 6px 0;
+}
+
+.modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0;
+  font-size: 11px;
+}
+
+.modal-body table th {
+  text-align: left;
+  padding: 6px 10px;
+  background: rgba(238,0,0,0.08);
+  border: 1px solid var(--border);
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-body table td {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.modal-body table tr:nth-child(even) td {
+  background: var(--bg-card-hover);
+}
+
+.modal-body strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.modal-body .flag-badge {
+  display: inline-block;
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin: 2px 0;
+}
+
+.modal-body .flag-badge.danger {
+  background: rgba(240,86,29,0.12);
+  color: var(--status-red);
+  border: 1px solid rgba(240,86,29,0.25);
+}
+
+.modal-body .flag-badge.warning {
+  background: rgba(220,166,20,0.12);
+  color: var(--status-amber);
+  border: 1px solid rgba(220,166,20,0.25);
+}
+
+.modal-body .flag-badge.positive {
+  background: rgba(99,153,61,0.12);
+  color: var(--status-green);
+  border: 1px solid rgba(99,153,61,0.25);
+}
+
+.modal-body .flag-badge.opportunity {
+  background: rgba(67,148,229,0.12);
+  color: var(--frontier);
+  border: 1px solid rgba(67,148,229,0.25);
+}
+
+.modal-body ul {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+.modal-body li {
+  margin: 4px 0;
+}
+
+.modal-body .no-content {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-family: 'Red Hat Text', sans-serif;
+  font-size: 13px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════ */
+.footer {
+  padding: 10px 4px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.footer-text {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.footer-text .rh-red { color: var(--rh-red); font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+@keyframes pulse-frontier {
+  0%, 100% { box-shadow: 0 0 12px rgba(67,148,229,0.15); }
+  50% { box-shadow: 0 0 24px rgba(67,148,229,0.3), 0 0 48px rgba(67,148,229,0.1); }
+}
+
+@keyframes pulse-local {
+  0%, 100% { box-shadow: 0 0 12px rgba(55,163,163,0.15); }
+  50% { box-shadow: 0 0 24px rgba(55,163,163,0.3), 0 0 48px rgba(55,163,163,0.1); }
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 12px rgba(238,0,0,0.1); }
+  50% { box-shadow: 0 0 24px rgba(238,0,0,0.25), 0 0 48px rgba(238,0,0,0.08); }
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+@keyframes deliverable-complete {
+  0% { transform: scale(1); background: rgba(238,0,0,0.2); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); background: rgba(238,0,0,0.06); }
+}
+
+@keyframes slide-in-flag {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes modal-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">&#127913;</span>
+        <div class="logo-text">
+          <span class="logo-main"><span class="white">Briefing</span><span class="red">Claw</span></span>
+          <span class="logo-sub">Red Hat CTO Office</span>
+        </div>
+      </div>
+      <span class="header-title">Live Demo Dashboard &mdash; Red Hat Edition</span>
+    </div>
+    <div id="modeBadge" class="mode-badge simulated">SIMULATED</div>
+  </header>
+
+  <!-- ═══════════════════ PIPELINE VIZ ════════════════════ -->
+  <section class="pipeline-section">
+    <canvas class="pipeline-canvas" id="pipelineCanvas"></canvas>
+    <div class="pipeline-overlay">
+
+      <!-- Row 1: Trigger -->
+      <div class="pipeline-row">
+        <div class="trigger-node" id="triggerNode" data-status="idle">
+          <div class="node-label">Briefing Request</div>
+          <div class="node-text">Awaiting input...</div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 0 &middot; Decomposition</span>
+      </div>
+
+      <!-- Row 2: Orchestrator -->
+      <div class="pipeline-row">
+        <div class="agent-node orchestrator" id="node-oprah-tor" data-agent="oprah-tor" data-status="idle">
+          <span class="model-badge">Frontier</span>
+          <span class="agent-emoji">&#127919;</span>
+          <div class="agent-name">Oprah-tor</div>
+          <div class="agent-role">Orchestrator</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 1 &middot; Intelligence Gathering (parallel)</span>
+      </div>
+
+      <!-- Row 3: Phase 1 agents -->
+      <div class="pipeline-row">
+        <div class="agent-node frontier" id="node-sherlock-ohms" data-agent="sherlock-ohms" data-status="idle">
+          <span class="model-badge">Frontier</span>
+          <span class="agent-emoji">&#128269;</span>
+          <div class="agent-name">Sherlock Ohms</div>
+          <div class="agent-role">Executive Research</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node frontier" id="node-bloom-borg" data-agent="bloom-borg" data-status="idle">
+          <span class="model-badge">Frontier</span>
+          <span class="agent-emoji">&#127970;</span>
+          <div class="agent-name">Bloom-borg</div>
+          <div class="agent-role">Account Intelligence</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node local" id="node-deja-view" data-agent="deja-view" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#128203;</span>
+          <div class="agent-name">D&eacute;j&agrave; View</div>
+          <div class="agent-role">CAB Historian</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 2 &middot; Assembly &amp; Protocol (parallel)</span>
+      </div>
+
+      <!-- Row 4: Phase 2 agents -->
+      <div class="pipeline-row">
+        <div class="agent-node local" id="node-draft-punk" data-agent="draft-punk" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#128196;</span>
+          <div class="agent-name">Draft Punk</div>
+          <div class="agent-role">Briefing Architect</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node local" id="node-alfred-bitworth" data-agent="alfred-bitworth" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#11088;</span>
+          <div class="agent-name">Alfred Bitworth</div>
+          <div class="agent-role">VVIP Protocol</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Row 5: Output -->
+      <div class="pipeline-row">
+        <div class="output-node" id="outputNode" data-status="idle">
+          <div class="node-label">Briefing Package</div>
+          <div class="deliverable-count" id="deliverableCount">0 / 8</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTROL BAR ═════════════════════ -->
+  <div class="control-bar">
+    <select class="contact-select" id="contactSelect">
+      <option value="sarah-chen">Sarah Chen &mdash; CIO, Meridian Health Systems</option>
+      <option value="david-park">David Park &mdash; SVP Technology, Apex Financial Group</option>
+      <option value="rachel-morrison">Rachel Morrison &mdash; CTO, TerraScale Energy</option>
+    </select>
+    <button class="btn btn-primary" id="btnStart">Start Demo</button>
+    <button class="btn btn-secondary" id="btnReset">Reset</button>
+    <div class="elapsed-display" id="elapsedDisplay">00:00</div>
+  </div>
+
+  <!-- ═══════════════════ PANELS ══════════════════════════ -->
+  <div class="panels-section">
+
+    <!-- Infrastructure Status -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Infrastructure Status</span>
+        <span class="panel-badge">System</span>
+      </div>
+      <div class="panel-content">
+        <div class="infra-row" data-infra="podman">
+          <span class="status-dot checking" id="dot-podman"></span>
+          <span class="infra-name">Podman Desktop</span>
+          <span class="infra-detail">Container runtime</span>
+        </div>
+        <div class="infra-row" data-infra="granite">
+          <span class="status-dot checking" id="dot-granite"></span>
+          <span class="infra-name">Granite 8B</span>
+          <span class="infra-detail">:8001</span>
+        </div>
+        <div class="infra-row" data-infra="openclaw">
+          <span class="status-dot checking" id="dot-openclaw"></span>
+          <span class="infra-name">OpenClaw Gateway</span>
+          <span class="infra-detail">:18789</span>
+        </div>
+        <div class="infra-row" data-infra="zeroclaw">
+          <span class="status-dot static" id="dot-zeroclaw"></span>
+          <span class="infra-name">ZeroClaw</span>
+          <span class="infra-detail">Native binary</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Agent Activity</span>
+        <span class="panel-badge">Live Feed</span>
+      </div>
+      <div class="panel-content" id="activityFeed">
+        <div class="activity-feed" id="activityList"></div>
+      </div>
+    </div>
+
+    <!-- Deliverables -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Deliverables</span>
+        <span class="panel-badge deliverable-counter" id="delCounter">0 / 8</span>
+      </div>
+      <div class="panel-content">
+        <div class="deliverables-grid" id="delGrid">
+          <div class="deliverable-card" data-deliverable="exec-dossier">
+            <div class="del-icon">&#128203;</div>
+            <div class="del-name">Executive Dossier</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="backgrounder">
+            <div class="del-icon">&#128209;</div>
+            <div class="del-name">Briefing Backgrounder</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="talking-points">
+            <div class="del-icon">&#128172;</div>
+            <div class="del-name">Sponsor Talking Points</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="agenda">
+            <div class="del-icon">&#128197;</div>
+            <div class="del-name">Recommended Agenda</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="convo-starters">
+            <div class="del-icon">&#128161;</div>
+            <div class="del-name">Conversation Starters</div>
+            <div class="del-agent">Draft Punk</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="vvip-checklist">
+            <div class="del-icon">&#9989;</div>
+            <div class="del-name">VVIP Protocol Checklist</div>
+            <div class="del-agent">Alfred Bitworth</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="sponsor-alert">
+            <div class="del-icon">&#128231;</div>
+            <div class="del-name">Sponsor Alert Email</div>
+            <div class="del-agent">Alfred Bitworth</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="engagement-log">
+            <div class="del-icon">&#128221;</div>
+            <div class="del-name">Engagement Log Entry</div>
+            <div class="del-agent">Alfred Bitworth</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Flags -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Critical Flags</span>
+        <span class="panel-badge" id="flagCounter">0 alerts</span>
+      </div>
+      <div class="panel-content" id="flagsPanel">
+        <div class="flags-list" id="flagsList">
+          <div class="flags-empty">No flags yet. Waiting for agent analysis...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════ FOOTER ══════════════════════════ -->
+  <footer class="footer">
+    <span class="footer-text">Built with open source &middot; Runs on your laptop &middot; <span class="rh-red">Red Hat</span> CTO Office &middot; GACEP Spring 2026</span>
+  </footer>
+
+</div>
+
+<!-- ═══════════════════ MODAL ═══════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-agent" id="modalAgent"></div>
+      </div>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURATION
+   ═══════════════════════════════════════════════════════════ */
+const CONFIG = {
+  endpoints: {
+    granite: 'http://127.0.0.1:8001/v1/models',
+    openclaw: 'http://127.0.0.1:18789/health'
+  },
+  pollInterval: 5000,
+  speedFactor: 1.0,
+  agents: {
+    'oprah-tor':       { name: 'Oprah-tor',       emoji: '\u{1F3AF}', type: 'orchestrator', phase: 0 },
+    'sherlock-ohms':   { name: 'Sherlock Ohms',    emoji: '\u{1F50D}', type: 'frontier',     phase: 1 },
+    'bloom-borg':      { name: 'Bloom-borg',       emoji: '\u{1F3E2}', type: 'frontier',     phase: 1 },
+    'deja-view':       { name: 'D\u00e9j\u00e0 View', emoji: '\u{1F4CB}', type: 'local',    phase: 1 },
+    'draft-punk':      { name: 'Draft Punk',       emoji: '\u{1F4C4}', type: 'local',        phase: 2 },
+    'alfred-bitworth': { name: 'Alfred Bitworth',  emoji: '\u2B50',    type: 'local',        phase: 2 }
+  },
+  connections: [
+    { from: 'triggerNode',     to: 'node-oprah-tor',       color: 'gold' },
+    { from: 'node-oprah-tor',  to: 'node-sherlock-ohms',   color: 'frontier' },
+    { from: 'node-oprah-tor',  to: 'node-bloom-borg',      color: 'frontier' },
+    { from: 'node-oprah-tor',  to: 'node-deja-view',       color: 'local' },
+    { from: 'node-sherlock-ohms', to: 'node-draft-punk',    color: 'frontier' },
+    { from: 'node-bloom-borg',    to: 'node-draft-punk',    color: 'frontier' },
+    { from: 'node-deja-view',     to: 'node-draft-punk',    color: 'local' },
+    { from: 'node-sherlock-ohms', to: 'node-alfred-bitworth', color: 'frontier' },
+    { from: 'node-bloom-borg',    to: 'node-alfred-bitworth', color: 'frontier' },
+    { from: 'node-deja-view',     to: 'node-alfred-bitworth', color: 'local' },
+    { from: 'node-draft-punk',    to: 'outputNode',         color: 'gold' },
+    { from: 'node-alfred-bitworth', to: 'outputNode',       color: 'gold' }
+  ]
+};
+
+const COLORS = {
+  frontier: { line: 'rgba(67,148,229,0.18)', active: 'rgba(67,148,229,0.5)', particle: 'rgba(67,148,229,0.9)' },
+  local:    { line: 'rgba(55,163,163,0.18)',  active: 'rgba(55,163,163,0.5)',  particle: 'rgba(55,163,163,0.9)' },
+  gold:     { line: 'rgba(238,0,0,0.12)',     active: 'rgba(238,0,0,0.4)',     particle: 'rgba(238,0,0,0.85)' }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATION TIMELINES
+   ═══════════════════════════════════════════════════════════ */
+
+const TIMELINE_SARAH_CHEN = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Sarah Chen, CIO, Meridian Health Systems' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Maria Torres, VP Engineering' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Sarah Chen, CIO Meridian Health...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Meridian Health Systems financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... found 2 board meetings' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found 4 recent news articles, 2 conference talks' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... found 8 touchpoints' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $4.2B, 28K employees, Healthcare/Enterprise' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... engagement score 92/100' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Building career arc: former developer, CIO since 2021' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Open opps: $1.2M AI expansion, $800K edge computing' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'Checking vvip-roster.json ... GOLD TIER confirmed' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Deja View critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: Overdue action item found from Feb CAB meeting!' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'OVERDUE', text: 'AI governance reference architecture promised at Feb 2026 CAB \u2014 due March 1, still undelivered. Trust-critical.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Open follow-up from Sept 2025 briefing still unresolved' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'OPEN', text: 'Healthcare customer reference for edge computing \u2014 promised Sept 2025, not yet delivered.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Relationship stage: Trusted (approaching Champion). NPS 9/10' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 17500, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Engagement score 92/100 and improving. Sarah is becoming a champion.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'Dr. Priya Kapoor (CMIO) not yet engaged \u2014 clinical AI opportunity' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Dr. Priya Kapoor, CMIO, has not been engaged \u2014 potential clinical AI use case expansion.' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Analyzing communication style: direct, data-driven' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Tech stack: OpenShift, RHEL, Ansible, OpenShift AI (pilot)' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent priority: AI governance in regulated healthcare' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: 'Contract renewal Sept 2026. Competitive pressure from Azure AI' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: HIGH' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. 6 briefing-relevant insights.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents...' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier lookup: GOLD. Loading protocol requirements...' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  // Deliverables light up progressively
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier (1-page quick reference)...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Vegetarian catering, green tea, morning briefing 8:30 AM' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Weaving CAB themes into Briefing Backgrounder...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating VVIP Protocol Checklist with assignees...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Maria Torres...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Maria Torres...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Recommended Agenda with AI Governance + Edge focus...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting 3 personalized conversation starters...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry for future reference' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Phase 3: Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+const TIMELINE_DAVID_PARK = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: David Park, SVP Technology, Apex Financial Group' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member since Q1 2023. Sponsor: James Kim, VP Financial Services' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for David Park, SVP Technology Apex Financial...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Apex Financial Group financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... David led Hybrid Cloud discussion' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found recent FinTech conference keynote on cloud reliability' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... found failed migration Jan 2026' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $11.6B, 42K employees, Financial Services' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... engagement score 68/100 DECLINING' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: analytical, metrics-driven, risk-averse' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Tech stack: OpenShift, RHEL, Ansible \u2014 migration issues noted' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'Checking vvip-roster.json ... GOLD TIER' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} DANGER: Failed OpenShift migration detected!' }},
+  { t: 14500, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'Failed OpenShift migration Jan 2026 \u2014 6-hour staging outage. David publicly frustrated. Trust damaged.' }},
+  { t: 16000, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Contract renewal June 30, 2026 \u2014 3 months out. Account health 62/100 and declining.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Contract renewal June 30 \u2014 account health declining' }},
+  { t: 17000, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Competitor Azure presenting to Apex board next week. Active displacement effort.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Azure presenting to Apex board next week \u2014 active displacement' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 18000, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'CISO Karen Wu interested in security automation (Ansible). $650K opportunity independent of migration issues.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'CISO Karen Wu \u2014 $650K security automation opp, separate from migration' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent priority: platform consolidation after migration challenges' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Competitor activity: Azure pitching aggressively, board presentation next week' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Risk profile: David is evaluating alternatives. Trust must be rebuilt.' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: '$11.6B account at risk. Renewal contingent on migration resolution.' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: HIGH. Tone: RECOVERY' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. Retention-critical. 5 risk factors identified.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... RETENTION ALERT detected' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier: GOLD. Metrics-driven format, no marketing fluff...' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier with migration RCA summary...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Private dining room, no slide deck \u2014 conversation-first format' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Weaving migration recovery plan into Backgrounder...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating recovery-focused VVIP checklist...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for James Kim \u2014 rebuild trust focus...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for James Kim...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building half-day recovery agenda: acknowledge, resolve, expand...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting 3 data-driven conversation starters (no fluff)...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 flagged as retention-critical' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. RETENTION PRIORITY.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+const TIMELINE_RACHEL_MORRISON = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Rachel Morrison, CTO, TerraScale Energy' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB Co-Chair confirmed. Sponsor: Elena Vasquez, SVP Global Industries' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Rachel Morrison, CTO TerraScale...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing TerraScale Energy financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Rachel co-chairs the board' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found board testimony on grid modernization, keynote at Energy Summit' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... 7 touchpoints, Champion trajectory' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $8.7B, 35K employees, Energy/Utilities' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... engagement score 96/100' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: visionary yet detail-oriented, sustainability advocate' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: '$5M grid modernization expansion in pipeline' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'ALERT: P1 production outage March 28 \u2014 OPEN investigation' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14000, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} P1 OUTAGE: OpenShift cluster failure, 4.5-hour grid monitoring disruption!' }},
+  { t: 14000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'P1 production outage March 28 \u2014 OpenShift cluster failure, 4.5-hour grid monitoring disruption. RCA in progress. Rachel\'s trust at risk.' }},
+  { t: 16000, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Board presentation May 2 \u2014 Rachel planning to advocate for $5M expansion. Needs ROI data and reliability assurances.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Board presentation May 2 \u2014 Rachel advocating for $5M expansion' }},
+  { t: 17000, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Engagement score 96/100 \u2014 Champion level. Single highest-value individual relationship in portfolio.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Engagement score 96/100 \u2014 Champion. Highest-value relationship in portfolio' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 18000, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: '$5M grid modernization + $1.8M edge IoT = $6.8M total pipeline. Board approval pending May presentation.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: '$6.8M total pipeline \u2014 board approval pending May presentation' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent concern: infrastructure reliability after P1 outage' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Sustainability mandate: net-zero 2035 commitment driving all technology decisions' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Dual priority: grid reliability + sustainability innovation' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: '$5M + $1.8M edge IoT pipeline. Board approval May 2.' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: VERY HIGH. Tone: CHAMPION PRESERVATION' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. Highest-value account. 7 strategic insights.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... P1 RCA section required' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier: PLATINUM (highest). CEO drop-in REQUIRED. Premier boardroom MANDATORY...' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier with P1 outage RCA section...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Premier boardroom, sustainability-sourced catering, CEO calendar hold...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Backgrounder with grid modernization ROI data...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating PLATINUM protocol checklist \u2014 CEO participation mandatory...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Elena Vasquez \u2014 P1 recovery + expansion...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Elena Vasquez...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building full-day Platinum agenda: CEO drop-in, RCA review, expansion roadmap...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting conversation starters: sustainability vision + reliability assurance...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 PLATINUM priority, CEO involvement logged' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. PLATINUM PROTOCOL.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   SCENARIOS
+   ═══════════════════════════════════════════════════════════ */
+const SCENARIOS = {
+  'sarah-chen': {
+    timeline: TIMELINE_SARAH_CHEN,
+    requestText: 'Briefing tomorrow: Sarah Chen, CIO, Meridian Health Systems. CAB member. Sponsor: Maria Torres, VP Engineering.',
+    contact: { name: 'Sarah Chen', title: 'CIO', org: 'Meridian Health Systems', tier: 'GOLD' }
+  },
+  'david-park': {
+    timeline: TIMELINE_DAVID_PARK,
+    requestText: 'Briefing tomorrow: David Park, SVP Technology, Apex Financial Group. CAB member. Sponsor: James Kim, VP Financial Services.',
+    contact: { name: 'David Park', title: 'SVP Technology', org: 'Apex Financial Group', tier: 'GOLD' }
+  },
+  'rachel-morrison': {
+    timeline: TIMELINE_RACHEL_MORRISON,
+    requestText: 'Briefing tomorrow: Rachel Morrison, CTO, TerraScale Energy. CAB Co-Chair. Sponsor: Elena Vasquez, SVP Global Industries.',
+    contact: { name: 'Rachel Morrison', title: 'CTO', org: 'TerraScale Energy', tier: 'PLATINUM' }
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   DELIVERABLE CONTENT
+   ═══════════════════════════════════════════════════════════ */
+const DELIVERABLE_CONTENT = {
+  // ── Sarah Chen ──────────────────────────────────────────
+  'sarah-chen/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Sarah Chen</td></tr>
+        <tr><td><strong>Title</strong></td><td>Chief Information Officer</td></tr>
+        <tr><td><strong>Organization</strong></td><td>Meridian Health Systems</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$4.2B / 28,000</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td>GOLD</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>92/100 (improving)</td></tr>
+        <tr><td><strong>Relationship Stage</strong></td><td>Trusted (approaching Champion)</td></tr>
+        <tr><td><strong>NPS</strong></td><td>9/10</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>Maria Torres, VP Engineering</td></tr>
+      </table>
+
+      <h2>Relationship Summary</h2>
+      <p>Sarah Chen has been a CAB member since 2024 and is on an upward trajectory toward Champion status. She is a former developer turned CIO (since 2021) with a direct, data-driven communication style. Her engagement score of 92/100 is among the highest in the portfolio, and she consistently advocates for Red Hat solutions internally.</p>
+
+      <h2>Top 3 Priorities</h2>
+      <ul>
+        <li><strong>AI Governance in Regulated Healthcare</strong> &mdash; Sarah's top strategic initiative. She needs a reference architecture for deploying AI models under HIPAA constraints.</li>
+        <li><strong>Edge Computing Expansion</strong> &mdash; $800K opportunity for edge infrastructure across 12 regional clinics.</li>
+        <li><strong>OpenShift AI Pilot Scaling</strong> &mdash; $1.2M expansion from pilot to production for clinical decision support.</li>
+      </ul>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge danger">OVERDUE</span></td><td>AI governance reference architecture promised at Feb 2026 CAB &mdash; due March 1, still undelivered</td></tr>
+        <tr><td><span class="flag-badge warning">OPEN</span></td><td>Healthcare customer reference for edge computing &mdash; promised Sept 2025, not yet delivered</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Engagement score 92/100 and improving &mdash; becoming a champion</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Dr. Priya Kapoor (CMIO) not yet engaged &mdash; clinical AI use case expansion</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Lead with accountability.</strong> Acknowledge the overdue AI governance deliverable before Sarah raises it. Present a concrete timeline with named owners. Then pivot to the AI expansion opportunity, connecting it to her governance priorities. Introduce the idea of engaging Dr. Kapoor to expand the clinical AI footprint.</p>
+    `
+  },
+  'sarah-chen/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Full-Day Briefing Agenda &mdash; Sarah Chen</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> GOLD &nbsp;|&nbsp; <strong>Format:</strong> Full Day</p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>8:30 AM</strong></td><td>Welcome &amp; Breakfast</td><td>Green tea, vegetarian options. Informal catch-up with Maria Torres (sponsor).</td></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>Opening: Accountability First</td><td>Address overdue AI governance reference architecture. Present recovery timeline with named owners and milestone dates.</td></tr>
+        <tr><td><strong>9:30 AM</strong></td><td>Strategic Alignment</td><td>AI governance in regulated healthcare &mdash; share HIPAA-compliant reference patterns. Connect to Sarah's public advocacy for responsible AI.</td></tr>
+        <tr><td><strong>10:15 AM</strong></td><td>Technical Deep-Dive</td><td>OpenShift AI: pilot-to-production scaling path. Live demo of clinical decision support workflow on OpenShift AI.</td></tr>
+        <tr><td><strong>11:00 AM</strong></td><td>Break</td><td>Refreshments. Informal Q&amp;A.</td></tr>
+        <tr><td><strong>11:15 AM</strong></td><td>Edge Computing Roadmap</td><td>$800K edge opportunity across 12 clinics. Architecture walkthrough tailored to Meridian's network topology.</td></tr>
+        <tr><td><strong>12:00 PM</strong></td><td>Working Lunch</td><td>Introduce Dr. Priya Kapoor engagement opportunity. Discuss clinical AI use case expansion.</td></tr>
+        <tr><td><strong>1:00 PM</strong></td><td>CAB Themes &amp; Feedback</td><td>Review upcoming CAB agenda items. Capture Sarah's input on hybrid cloud governance track.</td></tr>
+        <tr><td><strong>2:00 PM</strong></td><td>Wrap-Up &amp; Next Steps</td><td>Confirm action items, owners, deadlines. Schedule 30-day follow-up check-in.</td></tr>
+      </table>
+    `
+  },
+  'sarah-chen/vvip-checklist': {
+    title: 'VVIP Protocol Checklist',
+    agent: 'Alfred Bitworth',
+    html: `
+      <h2>VVIP Protocol &mdash; GOLD Tier</h2>
+      <p><strong>Visitor:</strong> Sarah Chen, CIO &nbsp;|&nbsp; <strong>Tier:</strong> GOLD &nbsp;|&nbsp; <strong>Sponsor:</strong> Maria Torres</p>
+
+      <h3>Pre-Visit (T-24h)</h3>
+      <ul>
+        <li><strong>Catering:</strong> Vegetarian menu confirmed. Green tea (preferred beverage). No shellfish (allergy noted).</li>
+        <li><strong>Room Setup:</strong> Executive briefing center, boardroom configuration. Dual-screen for live demos.</li>
+        <li><strong>Materials:</strong> Printed executive dossier (1 copy). No slide deck at table (conversation-first format per Sarah's preference).</li>
+        <li><strong>Parking:</strong> Reserved VIP spot. Welcome signage at reception.</li>
+        <li><strong>Gift:</strong> GOLD-tier welcome package. Personalized note from VP Engineering.</li>
+      </ul>
+
+      <h3>Day-Of Protocol</h3>
+      <ul>
+        <li><strong>8:15 AM:</strong> Maria Torres (sponsor) arrives for pre-brief alignment.</li>
+        <li><strong>8:25 AM:</strong> Lobby escort ready. Greet by name.</li>
+        <li><strong>8:30 AM:</strong> Sarah arrives. Direct to executive briefing center.</li>
+        <li><strong>All sessions:</strong> No phones on table. Dedicated note-taker assigned.</li>
+        <li><strong>Lunch:</strong> Private dining room. Table for 6 maximum.</li>
+      </ul>
+
+      <h3>Post-Visit (T+24h)</h3>
+      <ul>
+        <li>Thank-you email from sponsor within 4 hours.</li>
+        <li>Action item summary delivered within 24 hours.</li>
+        <li>Engagement log updated in CRM within 24 hours.</li>
+        <li>30-day follow-up calendar hold sent before EOD.</li>
+      </ul>
+    `
+  },
+
+  // ── David Park ──────────────────────────────────────────
+  'david-park/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>David Park</td></tr>
+        <tr><td><strong>Title</strong></td><td>SVP Technology</td></tr>
+        <tr><td><strong>Organization</strong></td><td>Apex Financial Group</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$11.6B / 42,000</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td>GOLD</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>68/100 <span class="flag-badge danger">DECLINING</span></td></tr>
+        <tr><td><strong>Account Health</strong></td><td>62/100 <span class="flag-badge danger">AT RISK</span></td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>James Kim, VP Financial Services</td></tr>
+        <tr><td><strong>Contract Renewal</strong></td><td>June 30, 2026 (3 months)</td></tr>
+      </table>
+
+      <h2>Relationship at Risk</h2>
+      <p>David Park has been a CAB member since Q1 2023. He is analytical, metrics-driven, and risk-averse. The relationship was severely damaged by a failed OpenShift migration in January 2026 that caused a 6-hour staging outage. David was publicly frustrated and has been evaluating Azure as an alternative. With contract renewal in 3 months and Azure presenting to the Apex board next week, this is a retention-critical briefing.</p>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge danger">DANGER</span></td><td>Failed OpenShift migration Jan 2026 &mdash; 6-hour staging outage. David publicly frustrated. Trust damaged.</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Contract renewal June 30, 2026 &mdash; 3 months out. Account health 62/100 and declining.</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Azure presenting to Apex board next week. Active displacement effort.</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>CISO Karen Wu interested in security automation (Ansible) &mdash; $650K independent of migration issues.</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Lead with ownership.</strong> Open with an unscripted acknowledgment of the migration failure. Present the completed RCA with specific corrective actions already taken. Share concrete platform stability metrics from the past 60 days. Then pivot: the Karen Wu security automation opportunity ($650K) is independent of the migration issues and demonstrates expanding value. Close by asking David what he needs to see before renewal &mdash; and commit to delivering it.</p>
+    `
+  },
+  'david-park/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Half-Day Recovery Briefing &mdash; David Park</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> GOLD &nbsp;|&nbsp; <strong>Format:</strong> Half-Day (Recovery)</p>
+      <p><em>Note: Half-day format is intentional. David's time is precious and trust is low. Demonstrate respect by being concise and action-oriented. No filler.</em></p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>Arrival &amp; Coffee</td><td>Private meeting room. No lobby wait. James Kim (sponsor) present for pre-alignment.</td></tr>
+        <tr><td><strong>9:15 AM</strong></td><td>Acknowledge &amp; Own</td><td>Open with direct acknowledgment of the Jan migration failure. No excuses. Present completed RCA: root cause, corrective actions taken, prevention measures implemented.</td></tr>
+        <tr><td><strong>9:45 AM</strong></td><td>Proof of Recovery</td><td>Live platform stability dashboard: 60-day uptime metrics, deployment success rates, staging environment improvements. Bring the data David needs.</td></tr>
+        <tr><td><strong>10:15 AM</strong></td><td>Break</td><td>Brief pause. Let David process and ask questions informally.</td></tr>
+        <tr><td><strong>10:30 AM</strong></td><td>Forward Path</td><td>Migration completion roadmap with milestone gates. Each gate has a rollback plan. Show David the engineering rigor he demands.</td></tr>
+        <tr><td><strong>11:00 AM</strong></td><td>Expansion: Security Automation</td><td>CISO Karen Wu's interest in Ansible security automation ($650K). Independent of migration. Demonstrate expanding value beyond the pain point.</td></tr>
+        <tr><td><strong>11:30 AM</strong></td><td>Renewal Conversation</td><td>Direct question: what does David need to see before June 30? Commit to a 30-day checkpoint with measurable deliverables.</td></tr>
+        <tr><td><strong>12:00 PM</strong></td><td>Wrap-Up</td><td>Confirm action items with owners and dates. Schedule 2-week follow-up. No working lunch &mdash; respect his time.</td></tr>
+      </table>
+    `
+  },
+
+  // ── Rachel Morrison ─────────────────────────────────────
+  'rachel-morrison/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Rachel Morrison</td></tr>
+        <tr><td><strong>Title</strong></td><td>Chief Technology Officer</td></tr>
+        <tr><td><strong>Organization</strong></td><td>TerraScale Energy</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$8.7B / 35,000</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td><span class="flag-badge positive">PLATINUM</span> (Highest)</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>96/100 <span class="flag-badge positive">CHAMPION</span></td></tr>
+        <tr><td><strong>Relationship Stage</strong></td><td>Champion (single highest-value individual)</td></tr>
+        <tr><td><strong>CAB Role</strong></td><td>Co-Chair</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>Elena Vasquez, SVP Global Industries</td></tr>
+        <tr><td><strong>Pipeline</strong></td><td>$6.8M ($5M grid + $1.8M edge IoT)</td></tr>
+      </table>
+
+      <h2>The P1 Outage Crisis</h2>
+      <p>On March 28, a P1 production outage struck TerraScale's OpenShift cluster, causing a 4.5-hour grid monitoring disruption. The RCA is still in progress. While Rachel's engagement score remains at 96/100, her trust in platform reliability is shaken. She is scheduled to advocate for a $5M grid modernization expansion at the TerraScale board on May 2 &mdash; and she needs reliability assurances and ROI data to make that case confidently.</p>
+
+      <h2>$6.8M Opportunity at Risk</h2>
+      <p>The total pipeline is $5M (grid modernization) + $1.8M (edge IoT) = <strong>$6.8M</strong>, pending board approval in May. Rachel is our internal champion for this expansion, but the P1 outage has given ammunition to internal skeptics. This briefing must arm Rachel with the data and confidence she needs to advocate successfully.</p>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge danger">DANGER</span></td><td>P1 production outage March 28 &mdash; OpenShift cluster failure, 4.5-hour grid monitoring disruption. RCA in progress.</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Board presentation May 2 &mdash; Rachel advocating for $5M expansion. Needs ROI data and reliability assurances.</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Engagement score 96/100 &mdash; Champion level. Highest-value individual relationship in portfolio.</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>$6.8M total pipeline. Board approval pending May presentation.</td></tr>
+      </table>
+    `
+  },
+  'rachel-morrison/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Full-Day Platinum Protocol &mdash; Rachel Morrison</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> PLATINUM &nbsp;|&nbsp; <strong>Format:</strong> Full Day with CEO Drop-In</p>
+      <p><em>PLATINUM PROTOCOL: CEO participation mandatory. Premier boardroom required. Sustainability-sourced catering.</em></p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>8:00 AM</strong></td><td>Pre-Brief Alignment</td><td>Elena Vasquez (sponsor) + senior leadership alignment. Review P1 RCA talking points and board presentation support strategy.</td></tr>
+        <tr><td><strong>8:30 AM</strong></td><td>Welcome &amp; Breakfast</td><td>Premier boardroom. Sustainability-sourced catering. Rachel arrives to CEO welcome at door.</td></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>CEO Opening</td><td>CEO drop-in (30 min). Personal acknowledgment of P1 outage. Commitment to reliability investment. Frame the partnership at the highest level.</td></tr>
+        <tr><td><strong>9:30 AM</strong></td><td>P1 RCA Deep-Dive</td><td>Complete root cause analysis. Corrective actions already implemented. Prevention architecture for grid-critical workloads. Be transparent and thorough.</td></tr>
+        <tr><td><strong>10:15 AM</strong></td><td>Break</td><td>Refreshments. Informal discussion.</td></tr>
+        <tr><td><strong>10:30 AM</strong></td><td>Grid Modernization Roadmap</td><td>$5M expansion architecture. ROI modeling for Rachel's May 2 board presentation. Provide data she can present directly.</td></tr>
+        <tr><td><strong>11:30 AM</strong></td><td>Edge IoT Vision</td><td>$1.8M edge IoT for grid monitoring. Real-time sensor integration. Sustainability metrics dashboard concept.</td></tr>
+        <tr><td><strong>12:15 PM</strong></td><td>Working Lunch</td><td>Sustainability innovation discussion. Net-zero 2035 technology roadmap alignment. Rachel's personal passion area.</td></tr>
+        <tr><td><strong>1:15 PM</strong></td><td>Board Prep Session</td><td>Collaborative session to refine Rachel's May 2 board presentation. Provide slides, data, and talking points she can use directly.</td></tr>
+        <tr><td><strong>2:15 PM</strong></td><td>CAB Co-Chair Debrief</td><td>Upcoming CAB agenda items. Rachel's input on board direction and member engagement.</td></tr>
+        <tr><td><strong>3:00 PM</strong></td><td>Wrap-Up &amp; Partnership Commitment</td><td>Joint action plan with owners and dates. Reliability SLA commitment. Schedule weekly check-ins through May 2 board date.</td></tr>
+      </table>
+    `
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════ */
+const state = {
+  running: false,
+  startTime: null,
+  timerInterval: null,
+  timeouts: [],
+  deliverablesDone: 0,
+  flagCount: 0,
+  infraStatus: { podman: 'checking', granite: 'checking', openclaw: 'checking', zeroclaw: 'static' },
+  isLive: false,
+  activeConnections: new Set(),
+  activeScenario: 'sarah-chen'
+};
+
+/* ═══════════════════════════════════════════════════════════
+   INFRASTRUCTURE POLLING
+   ═══════════════════════════════════════════════════════════ */
+async function checkEndpoint(url) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const resp = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    return resp.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function pollInfrastructure() {
+  const [graniteOk, openclawOk] = await Promise.all([
+    checkEndpoint(CONFIG.endpoints.granite),
+    checkEndpoint(CONFIG.endpoints.openclaw)
+  ]);
+
+  state.infraStatus.granite = graniteOk ? 'connected' : 'disconnected';
+  state.infraStatus.openclaw = openclawOk ? 'connected' : 'disconnected';
+  state.infraStatus.podman = graniteOk ? 'connected' : 'disconnected';
+  state.isLive = graniteOk && openclawOk;
+
+  updateInfraUI();
+  updateModeBadge();
+}
+
+function updateInfraUI() {
+  for (const [key, status] of Object.entries(state.infraStatus)) {
+    const dot = document.getElementById(`dot-${key}`);
+    if (dot) {
+      dot.className = `status-dot ${status}`;
+    }
+  }
+}
+
+function updateModeBadge() {
+  const badge = document.getElementById('modeBadge');
+  if (state.isLive) {
+    badge.className = 'mode-badge live';
+    badge.textContent = 'LIVE';
+  } else {
+    badge.className = 'mode-badge simulated';
+    badge.textContent = 'SIMULATED';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PIPELINE CANVAS - PARTICLES & CONNECTIONS
+   ═══════════════════════════════════════════════════════════ */
+class PipelineCanvas {
+  constructor(canvasEl) {
+    this.canvas = canvasEl;
+    this.ctx = canvasEl.getContext('2d');
+    this.particles = [];
+    this.resolvedConnections = [];
+    this.animFrameId = null;
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  }
+
+  resize() {
+    const section = this.canvas.parentElement;
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = section.offsetWidth * dpr;
+    this.canvas.height = section.offsetHeight * dpr;
+    this.canvas.style.width = section.offsetWidth + 'px';
+    this.canvas.style.height = section.offsetHeight + 'px';
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.resolveConnections();
+  }
+
+  resolveConnections() {
+    const section = this.canvas.parentElement;
+    const rect = section.getBoundingClientRect();
+    this.resolvedConnections = CONFIG.connections.map(conn => {
+      const fromEl = document.getElementById(conn.from);
+      const toEl = document.getElementById(conn.to);
+      if (!fromEl || !toEl) return null;
+      const fromRect = fromEl.getBoundingClientRect();
+      const toRect = toEl.getBoundingClientRect();
+      return {
+        fromX: fromRect.left + fromRect.width / 2 - rect.left,
+        fromY: fromRect.top + fromRect.height - rect.top,
+        toX: toRect.left + toRect.width / 2 - rect.left,
+        toY: toRect.top - rect.top,
+        color: conn.color,
+        active: false,
+        key: `${conn.from}-${conn.to}`
+      };
+    }).filter(Boolean);
+  }
+
+  setConnectionActive(fromId, toId, active) {
+    const key = `${fromId}-${toId}`;
+    for (const c of this.resolvedConnections) {
+      if (c.key === key) c.active = active;
+    }
+    if (active) state.activeConnections.add(key);
+    else state.activeConnections.delete(key);
+  }
+
+  spawnParticle(conn) {
+    this.particles.push({
+      x: conn.fromX,
+      y: conn.fromY,
+      targetX: conn.toX,
+      targetY: conn.toY,
+      progress: 0,
+      speed: 0.008 + Math.random() * 0.012,
+      color: COLORS[conn.color]?.particle || COLORS.gold.particle,
+      size: 2 + Math.random() * 2,
+      opacity: 0.6 + Math.random() * 0.4
+    });
+  }
+
+  start() {
+    const loop = () => {
+      this.render();
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  stop() {
+    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+  }
+
+  render() {
+    const { ctx, canvas } = this;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw connection lines
+    for (const conn of this.resolvedConnections) {
+      const colors = COLORS[conn.color] || COLORS.gold;
+      ctx.beginPath();
+      ctx.moveTo(conn.fromX, conn.fromY);
+      // Bezier curve for smooth paths
+      const midY = (conn.fromY + conn.toY) / 2;
+      ctx.bezierCurveTo(conn.fromX, midY, conn.toX, midY, conn.toX, conn.toY);
+      ctx.strokeStyle = conn.active ? colors.active : colors.line;
+      ctx.lineWidth = conn.active ? 1.5 : 0.8;
+      ctx.stroke();
+
+      // Spawn particles on active connections
+      if (conn.active && Math.random() < 0.06) {
+        this.spawnParticle(conn);
+      }
+    }
+
+    // Update and draw particles
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      const p = this.particles[i];
+      p.progress += p.speed;
+      if (p.progress >= 1) {
+        this.particles.splice(i, 1);
+        continue;
+      }
+      const t = p.progress;
+      const midY = (p.y + p.targetY) / 2;
+      // Bezier interpolation
+      const u = 1 - t;
+      const px = u*u*u * p.x + 3*u*u*t * p.x + 3*u*t*t * p.targetX + t*t*t * p.targetX;
+      const py = u*u*u * p.y + 3*u*u*t * midY  + 3*u*t*t * midY     + t*t*t * p.targetY;
+
+      const alpha = p.opacity * (t < 0.1 ? t / 0.1 : t > 0.85 ? (1 - t) / 0.15 : 1);
+      ctx.beginPath();
+      ctx.arc(px, py, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color.replace(/[\d.]+\)$/, `${alpha})`);
+      ctx.fill();
+    }
+  }
+
+  clearParticles() {
+    this.particles = [];
+    for (const c of this.resolvedConnections) c.active = false;
+    state.activeConnections.clear();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DOM UPDATE FUNCTIONS
+   ═══════════════════════════════════════════════════════════ */
+function setAgentStatus(agentId, status, progress) {
+  const node = document.getElementById(`node-${agentId}`);
+  if (!node) return;
+  if (status) node.setAttribute('data-status', status);
+  if (progress !== undefined) {
+    const bar = node.querySelector('.progress-bar');
+    if (bar) bar.style.width = status === 'complete' ? '100%' : progress + '%';
+  }
+}
+
+function addActivityEntry(agentId, text) {
+  const agent = CONFIG.agents[agentId];
+  if (!agent) return;
+
+  const list = document.getElementById('activityList');
+  const entry = document.createElement('div');
+  entry.className = 'activity-entry';
+
+  const elapsed = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+
+  const typeClass = agent.type === 'orchestrator' ? 'orchestrator-text' :
+                    agent.type === 'frontier' ? 'frontier-text' : 'local-text';
+
+  entry.innerHTML = `
+    <span class="activity-time">${mm}:${ss}</span>
+    <span class="activity-agent ${typeClass}">${agent.emoji} ${agent.name}</span>
+    <span class="activity-message"></span>
+  `;
+
+  list.insertBefore(entry, list.firstChild);
+
+  // Typewriter effect
+  const msgEl = entry.querySelector('.activity-message');
+  let i = 0;
+  const typeTimer = setInterval(() => {
+    i++;
+    msgEl.textContent = text.slice(0, i);
+    if (i >= text.length) {
+      clearInterval(typeTimer);
+    }
+  }, 12);
+
+  // Keep feed scrolled
+  const feedContainer = document.getElementById('activityFeed');
+  feedContainer.scrollTop = 0;
+}
+
+function completeDeliverable(delId) {
+  const card = document.querySelector(`[data-deliverable="${delId}"]`);
+  if (card && !card.classList.contains('completed')) {
+    card.classList.add('completed');
+    state.deliverablesDone++;
+    updateDeliverableCount();
+  }
+}
+
+function updateDeliverableCount() {
+  const text = `${state.deliverablesDone} / 8`;
+  document.getElementById('deliverableCount').textContent = text;
+  document.getElementById('delCounter').textContent = text;
+}
+
+function addFlag(type, icon, label, text) {
+  const list = document.getElementById('flagsList');
+
+  // Remove empty message
+  const empty = list.querySelector('.flags-empty');
+  if (empty) empty.remove();
+
+  const entry = document.createElement('div');
+  entry.className = `flag-entry ${type}`;
+  entry.innerHTML = `
+    <span class="flag-icon">${icon}</span>
+    <div>
+      <div class="flag-text">${text}</div>
+      <div class="flag-label">${label}</div>
+    </div>
+  `;
+  list.appendChild(entry);
+  state.flagCount++;
+  document.getElementById('flagCounter').textContent = `${state.flagCount} alert${state.flagCount !== 1 ? 's' : ''}`;
+}
+
+function updateElapsed() {
+  if (!state.startTime) return;
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('elapsedDisplay').textContent = `${mm}:${ss}`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL FUNCTIONS
+   ═══════════════════════════════════════════════════════════ */
+function openModal(deliverableId) {
+  const key = `${state.activeScenario}/${deliverableId}`;
+  const content = DELIVERABLE_CONTENT[key];
+  const overlay = document.getElementById('modalOverlay');
+  const titleEl = document.getElementById('modalTitle');
+  const agentEl = document.getElementById('modalAgent');
+  const bodyEl = document.getElementById('modalBody');
+
+  if (content) {
+    titleEl.textContent = content.title;
+    agentEl.textContent = 'Generated by ' + content.agent;
+    bodyEl.innerHTML = content.html;
+  } else {
+    // Get deliverable name from the card
+    const card = document.querySelector(`[data-deliverable="${deliverableId}"]`);
+    const name = card ? card.querySelector('.del-name').textContent : deliverableId;
+    const agent = card ? card.querySelector('.del-agent').textContent : '';
+    titleEl.textContent = name;
+    agentEl.textContent = agent ? 'Generated by ' + agent : '';
+    bodyEl.innerHTML = '<div class="no-content">Full content available in the complete briefing package.</div>';
+  }
+
+  overlay.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIMULATION ENGINE
+   ═══════════════════════════════════════════════════════════ */
+function activateConnectionsForAgent(agentId, activate) {
+  const nodeId = `node-${agentId}`;
+  for (const conn of CONFIG.connections) {
+    if (conn.to === nodeId) {
+      pipelineCanvas.setConnectionActive(conn.from, conn.to, activate);
+    }
+    if (conn.from === nodeId) {
+      // Activate downstream when agent is complete
+    }
+  }
+}
+
+function activateDownstream(agentId) {
+  const nodeId = `node-${agentId}`;
+  for (const conn of CONFIG.connections) {
+    if (conn.from === nodeId) {
+      pipelineCanvas.setConnectionActive(conn.from, conn.to, true);
+    }
+  }
+}
+
+function executeEvent(event) {
+  switch (event.action) {
+    case 'trigger':
+      document.getElementById('triggerNode').setAttribute('data-status', 'active');
+      document.querySelector('#triggerNode .node-text').textContent = SCENARIOS[state.activeScenario].requestText;
+      break;
+
+    case 'setAgent':
+      setAgentStatus(event.data.id, event.data.status, event.data.progress);
+      if (event.data.status === 'working') {
+        activateConnectionsForAgent(event.data.id, true);
+      }
+      if (event.data.status === 'complete') {
+        activateConnectionsForAgent(event.data.id, false);
+        activateDownstream(event.data.id);
+        setTimeout(() => {
+          // Deactivate downstream after a beat
+          const nodeId = `node-${event.data.id}`;
+          for (const conn of CONFIG.connections) {
+            if (conn.from === nodeId) {
+              // Keep active if target is working
+              const targetAgent = conn.to.replace('node-', '');
+              const targetNode = document.getElementById(conn.to);
+              if (targetNode && targetNode.getAttribute('data-status') !== 'working') {
+                pipelineCanvas.setConnectionActive(conn.from, conn.to, false);
+              }
+            }
+          }
+        }, 2000);
+      }
+      break;
+
+    case 'log':
+      addActivityEntry(event.data.agent, event.data.text);
+      break;
+
+    case 'deliverable':
+      completeDeliverable(event.data.id);
+      break;
+
+    case 'addFlag':
+      addFlag(event.data.type, event.data.icon, event.data.label, event.data.text);
+      break;
+
+    case 'output':
+      const outputNode = document.getElementById('outputNode');
+      outputNode.setAttribute('data-status', 'complete');
+      break;
+  }
+}
+
+function getActiveTimeline() {
+  return SCENARIOS[state.activeScenario].timeline;
+}
+
+function startDemo() {
+  if (state.running) return;
+  resetDemo();
+  state.running = true;
+  state.startTime = Date.now();
+
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('elapsedDisplay').classList.add('active');
+
+  state.timerInterval = setInterval(updateElapsed, 100);
+
+  const timeline = getActiveTimeline();
+  for (const event of timeline) {
+    const id = setTimeout(() => executeEvent(event), event.t * CONFIG.speedFactor);
+    state.timeouts.push(id);
+  }
+
+  // Mark demo complete after last event
+  const lastT = Math.max(...timeline.map(e => e.t));
+  const doneId = setTimeout(() => {
+    state.running = false;
+    document.getElementById('btnStart').disabled = false;
+    clearInterval(state.timerInterval);
+  }, (lastT + 2000) * CONFIG.speedFactor);
+  state.timeouts.push(doneId);
+}
+
+function resetDemo() {
+  state.running = false;
+  state.startTime = null;
+  state.deliverablesDone = 0;
+  state.flagCount = 0;
+
+  for (const id of state.timeouts) clearTimeout(id);
+  state.timeouts = [];
+  if (state.timerInterval) clearInterval(state.timerInterval);
+
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('elapsedDisplay').textContent = '00:00';
+  document.getElementById('elapsedDisplay').classList.remove('active');
+
+  // Reset agents
+  for (const agentId of Object.keys(CONFIG.agents)) {
+    setAgentStatus(agentId, 'idle', 0);
+  }
+
+  // Reset trigger and output
+  document.getElementById('triggerNode').setAttribute('data-status', 'idle');
+  document.querySelector('#triggerNode .node-text').textContent = 'Awaiting input...';
+  document.getElementById('outputNode').setAttribute('data-status', 'idle');
+
+  updateDeliverableCount();
+
+  // Clear deliverables
+  document.querySelectorAll('.deliverable-card').forEach(c => c.classList.remove('completed'));
+
+  // Clear activity feed
+  document.getElementById('activityList').innerHTML = '';
+
+  // Clear flags
+  document.getElementById('flagsList').innerHTML = '<div class="flags-empty">No flags yet. Waiting for agent analysis...</div>';
+  document.getElementById('flagCounter').textContent = '0 alerts';
+
+  // Clear canvas
+  if (typeof pipelineCanvas !== 'undefined') {
+    pipelineCanvas.clearParticles();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTACT SELECTOR
+   ═══════════════════════════════════════════════════════════ */
+function switchScenario(contactId) {
+  if (!SCENARIOS[contactId]) return;
+  const wasRunning = state.running;
+  if (wasRunning) {
+    resetDemo();
+  }
+  state.activeScenario = contactId;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INITIALIZATION
+   ═══════════════════════════════════════════════════════════ */
+let pipelineCanvas;
+
+document.addEventListener('DOMContentLoaded', () => {
+  pipelineCanvas = new PipelineCanvas(document.getElementById('pipelineCanvas'));
+
+  // Small delay to let layout settle before resolving connections
+  setTimeout(() => {
+    pipelineCanvas.resolveConnections();
+    pipelineCanvas.start();
+  }, 200);
+
+  // Buttons
+  document.getElementById('btnStart').addEventListener('click', startDemo);
+  document.getElementById('btnReset').addEventListener('click', resetDemo);
+
+  // Contact selector
+  document.getElementById('contactSelect').addEventListener('change', (e) => {
+    switchScenario(e.target.value);
+  });
+
+  // Deliverable card clicks
+  document.getElementById('delGrid').addEventListener('click', (e) => {
+    const card = e.target.closest('.deliverable-card');
+    if (card && card.classList.contains('completed')) {
+      const delId = card.getAttribute('data-deliverable');
+      openModal(delId);
+    }
+  });
+
+  // Modal close handlers
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+    // Close modal on Escape
+    if (e.code === 'Escape') {
+      const modal = document.getElementById('modalOverlay');
+      if (modal.classList.contains('active')) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      e.preventDefault();
+      resetDemo();
+      return;
+    }
+
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      if (!state.running) startDemo();
+    }
+    if (e.code === 'KeyF') {
+      e.preventDefault();
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+
+  // Infrastructure polling
+  pollInfrastructure();
+  setInterval(pollInfrastructure, CONFIG.pollInterval);
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    setTimeout(() => pipelineCanvas.resolveConnections(), 100);
+  });
+
+  // Autostart via URL parameter: ?autostart or #autostart
+  if (location.search.includes('autostart') || location.hash.includes('autostart')) {
+    setTimeout(startDemo, 1000);
+  }
+});
+</script>
+
+</body>
+</html>

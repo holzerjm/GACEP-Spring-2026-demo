@@ -193,7 +193,8 @@ This split ensures that sensitive customer data (CAB records, CRM exports, VVIP 
 gacep-demo/
 |
 +-- briefingclaw.sh                         Interactive CLI for demo management
-+-- briefingclaw-dashboard.html            Live demo dashboard with animated simulation
++-- briefingclaw-dashboard.html            Live demo dashboard (original dark theme)
++-- briefingclaw-dashboard-redhat.html     Live demo dashboard (Red Hat branded edition)
 +-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
 +-- README.md                              This file
 |
@@ -232,7 +233,9 @@ gacep-demo/
 
 **`briefingclaw.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
 
-**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization. Features a contact dropdown selector (Sarah Chen, David Park, Rachel Morrison) with unique simulation timelines for each scenario. Shows all six agents working through the briefing preparation flow with particle animations, real-time activity feed, deliverable tracking, and critical flag alerts. Completed deliverables are clickable, opening a formatted modal viewer with sample content. Polls live infrastructure when services are running, falls back to a polished animated simulation. Open in a browser and click "Start Demo", or append `?autostart` to the URL. Keyboard shortcuts: Space/Enter to start, Escape to reset, F for fullscreen.
+**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization (original dark theme). Features a contact dropdown selector (Sarah Chen, David Park, Rachel Morrison) with unique simulation timelines for each scenario. Shows all six agents working through the briefing preparation flow with particle animations, real-time activity feed, deliverable tracking, and critical flag alerts. Completed deliverables are clickable, opening a formatted modal viewer with sample content. Polls live infrastructure when services are running, falls back to a polished animated simulation. Open in a browser and click "Start Demo", or append `?autostart` to the URL. Keyboard shortcuts: Space/Enter to start, Escape to reset, F for fullscreen.
+
+**`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition of the demo dashboard. Identical functionality to the original, reskinned with official Red Hat design language: Red Hat Display, Red Hat Text, and Red Hat Mono fonts; PatternFly dark theme surfaces (#151515/#1F1F1F/#292929); Red Hat Red (#EE0000) as the primary accent; PatternFly blue for frontier agents; PatternFly teal for local agents. Use this version for Red Hat-affiliated presentations.
 
 **`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
 
