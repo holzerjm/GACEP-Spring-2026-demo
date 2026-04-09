@@ -1103,9 +1103,97 @@ body::before {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* ── Presentation Mode ────────────────────────────────── */
+body.presentation-mode .agent-node .agent-name { font-size: 20px !important; }
+body.presentation-mode .agent-node .agent-role { font-size: 13px !important; }
+body.presentation-mode .agent-node .agent-emoji { font-size: 28px !important; }
+body.presentation-mode .agent-node .model-badge { font-size: 11px !important; }
+body.presentation-mode .phase-label { font-size: 14px !important; }
+body.presentation-mode .panel-title { font-size: 18px !important; }
+body.presentation-mode .panel-badge { font-size: 12px !important; }
+body.presentation-mode .activity-time { font-size: 13px !important; }
+body.presentation-mode .activity-agent { font-size: 13px !important; }
+body.presentation-mode .activity-message { font-size: 13px !important; }
+body.presentation-mode .deliverable-card .del-name { font-size: 14px !important; }
+body.presentation-mode .deliverable-card .del-icon { font-size: 22px !important; }
+body.presentation-mode .flag-text { font-size: 15px !important; }
+body.presentation-mode .flag-icon { font-size: 20px !important; }
+body.presentation-mode .flag-label { font-size: 11px !important; }
+body.presentation-mode .infra-name { font-size: 15px !important; }
+body.presentation-mode .elapsed-display { font-size: 26px !important; }
+body.presentation-mode .trigger-node .node-label,
+body.presentation-mode .output-node .node-label { font-size: 13px !important; }
+body.presentation-mode .output-node .deliverable-count { font-size: 20px !important; }
+body.presentation-mode .header-title { font-size: 20px !important; }
+body.presentation-mode .logo-text { font-size: 17px !important; }
+body.presentation-mode .footer-text { font-size: 12px !important; }
+
+.pmode-indicator {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  background: rgba(255,198,0,0.08);
+  border: 1px solid rgba(255,198,0,0.2);
+  padding: 2px 12px;
+  border-radius: 4px;
+  z-index: 200;
+  display: none;
+}
+
+body.presentation-mode .pmode-indicator { display: block; }
+
+.modal-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  margin-right: 16px;
+}
+
+.modal-nav-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-nav-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--border-glow);
+  color: var(--text);
+}
+
+.modal-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.modal-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 40px;
+  text-align: center;
+}
+
 </style>
 </head>
 <body>
+<div class="pmode-indicator" id="pmodeIndicator">Presentation Mode (P to toggle)</div>
 
 <div class="dashboard">
 
@@ -1350,6 +1438,11 @@ body::before {
         <div class="modal-title" id="modalTitle"></div>
         <div class="modal-agent" id="modalAgent"></div>
       </div>
+      <div class="modal-nav">
+        <button class="modal-nav-btn" id="modalPrev" title="Previous deliverable">&larr;</button>
+        <span class="modal-counter" id="modalCounter">1 / 8</span>
+        <button class="modal-nav-btn" id="modalNext" title="Next deliverable">&rarr;</button>
+      </div>
       <button class="modal-close" id="modalClose">&times;</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
@@ -1358,12 +1451,17 @@ body::before {
 
 <script>
 /* ═══════════════════════════════════════════════════════════
+   URL PARAMETER PARSING
+   ═══════════════════════════════════════════════════════════ */
+const URL_PARAMS = new URLSearchParams(window.location.search);
+
+/* ═══════════════════════════════════════════════════════════
    CONFIGURATION
    ═══════════════════════════════════════════════════════════ */
 const CONFIG = {
   endpoints: {
-    granite: 'http://127.0.0.1:8001/v1/models',
-    openclaw: 'http://127.0.0.1:18789/health'
+    granite: URL_PARAMS.get('granite_url') || 'http://127.0.0.1:8001/v1/models',
+    openclaw: URL_PARAMS.get('openclaw_url') || 'http://127.0.0.1:18789/health'
   },
   pollInterval: 5000,
   speedFactor: 1.0,
@@ -1396,6 +1494,27 @@ const COLORS = {
   local:    { line: 'rgba(74,222,128,0.18)',  active: 'rgba(74,222,128,0.5)',  particle: 'rgba(74,222,128,0.9)' },
   gold:     { line: 'rgba(255,198,0,0.12)',   active: 'rgba(255,198,0,0.4)',   particle: 'rgba(255,198,0,0.85)' }
 };
+
+/* ═══════════════════════════════════════════════════════════
+   NOTIFICATION SOUND (Web Audio API — no external files)
+   ═══════════════════════════════════════════════════════════ */
+function playAlertSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch (e) { /* silently fail if audio not available */ }
+}
+
+const DELIVERABLE_ORDER = ['exec-dossier', 'backgrounder', 'talking-points', 'agenda', 'convo-starters', 'vvip-checklist', 'sponsor-alert', 'engagement-log'];
 
 /* ═══════════════════════════════════════════════════════════
    SIMULATION TIMELINES
@@ -2569,7 +2688,8 @@ const state = {
   infraStatus: { podman: 'checking', granite: 'checking', openclaw: 'checking', zeroclaw: 'static' },
   isLive: false,
   activeConnections: new Set(),
-  activeScenario: 'sarah-chen'
+  activeScenario: 'sarah-chen',
+  currentDeliverable: null
 };
 
 /* ═══════════════════════════════════════════════════════════
@@ -2841,6 +2961,10 @@ function addFlag(type, icon, label, text) {
     </div>
   `;
   list.appendChild(entry);
+  // Play alert sound for danger/warning flags
+  if (type === 'danger' || type === 'warning') {
+    playAlertSound();
+  }
   state.flagCount++;
   document.getElementById('flagCounter').textContent = `${state.flagCount} alert${state.flagCount !== 1 ? 's' : ''}`;
 }
@@ -2857,19 +2981,20 @@ function updateElapsed() {
    MODAL FUNCTIONS
    ═══════════════════════════════════════════════════════════ */
 function openModal(deliverableId) {
+  state.currentDeliverable = deliverableId;
   const key = `${state.activeScenario}/${deliverableId}`;
   const content = DELIVERABLE_CONTENT[key];
   const overlay = document.getElementById('modalOverlay');
   const titleEl = document.getElementById('modalTitle');
   const agentEl = document.getElementById('modalAgent');
   const bodyEl = document.getElementById('modalBody');
+  const counterEl = document.getElementById('modalCounter');
 
   if (content) {
     titleEl.textContent = content.title;
     agentEl.textContent = 'Generated by ' + content.agent;
     bodyEl.innerHTML = content.html;
   } else {
-    // Get deliverable name from the card
     const card = document.querySelector(`[data-deliverable="${deliverableId}"]`);
     const name = card ? card.querySelector('.del-name').textContent : deliverableId;
     const agent = card ? card.querySelector('.del-agent').textContent : '';
@@ -2878,11 +3003,30 @@ function openModal(deliverableId) {
     bodyEl.innerHTML = '<div class="no-content">Full content available in the complete briefing package.</div>';
   }
 
+  // Update counter
+  const idx = DELIVERABLE_ORDER.indexOf(deliverableId);
+  counterEl.textContent = `${idx + 1} / ${DELIVERABLE_ORDER.length}`;
+
+  // Update nav button states
+  document.getElementById('modalPrev').disabled = (idx <= 0);
+  document.getElementById('modalNext').disabled = (idx >= DELIVERABLE_ORDER.length - 1);
+
   overlay.classList.add('active');
+  bodyEl.scrollTop = 0;
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function modalPrev() {
+  const idx = DELIVERABLE_ORDER.indexOf(state.currentDeliverable);
+  if (idx > 0) openModal(DELIVERABLE_ORDER[idx - 1]);
+}
+
+function modalNext() {
+  const idx = DELIVERABLE_ORDER.indexOf(state.currentDeliverable);
+  if (idx < DELIVERABLE_ORDER.length - 1) openModal(DELIVERABLE_ORDER[idx + 1]);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3082,12 +3226,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('modalOverlay').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeModal();
   });
+  document.getElementById('modalPrev').addEventListener('click', modalPrev);
+  document.getElementById('modalNext').addEventListener('click', modalNext);
 
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
-    // Close modal on Escape
+    // Modal keyboard navigation
     if (e.code === 'Escape') {
       const modal = document.getElementById('modalOverlay');
       if (modal.classList.contains('active')) {
@@ -3100,6 +3246,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Arrow keys for modal navigation
+    const modalActive = document.getElementById('modalOverlay').classList.contains('active');
+    if (modalActive && e.code === 'ArrowLeft') { e.preventDefault(); modalPrev(); return; }
+    if (modalActive && e.code === 'ArrowRight') { e.preventDefault(); modalNext(); return; }
+
     if (e.code === 'Space' || e.code === 'Enter') {
       e.preventDefault();
       if (!state.running) startDemo();
@@ -3108,6 +3259,12 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       if (!document.fullscreenElement) document.documentElement.requestFullscreen();
       else document.exitFullscreen();
+    }
+    if (e.code === 'KeyP') {
+      e.preventDefault();
+      document.body.classList.toggle('presentation-mode');
+      // Re-resolve canvas connections after font size change
+      setTimeout(() => pipelineCanvas.resolveConnections(), 200);
     }
   });
 

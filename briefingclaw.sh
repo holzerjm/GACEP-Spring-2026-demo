@@ -14,6 +14,14 @@
 
 set -euo pipefail
 
+# ── Logging ─────────────────────────────────────────────────────
+LOG_DIR="${HOME}/.briefingclaw/logs"
+mkdir -p "${LOG_DIR}"
+LOG_FILE="${LOG_DIR}/$(date +%F).log"
+exec > >(tee -a "${LOG_FILE}") 2>&1
+echo ""
+echo "═══ BriefingClaw session started: $(date) ═══"
+
 # ── Platform Check ──────────────────────────────────────────────
 # This script is tested on macOS (Darwin) with bash 4+ or zsh.
 # It uses macOS-specific features:
