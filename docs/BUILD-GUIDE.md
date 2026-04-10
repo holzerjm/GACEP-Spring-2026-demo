@@ -307,21 +307,21 @@ open briefingclaw-dashboard.html
 open "briefingclaw-dashboard.html?autostart"
 ```
 
-Test both dashboard variants with all three contacts:
+Test both dashboard variants with all eight contacts:
 
 ```bash
 open briefingclaw-dashboard.html          # Original dark theme
 open briefingclaw-dashboard-redhat.html   # Red Hat branded variant
 ```
 
-**For the dashboard variant you will present, and for each contact (Sarah Chen, David Park, Rachel Morrison):**
+**For the dashboard variant you will present, test at least 3 contacts from the dropdown (8 available):**
 - [ ] The dashboard loads with improved readability (larger fonts, wider agent spacing)
-- [ ] Contact dropdown switches between the three scenarios
+- [ ] Contact dropdown switches between all eight scenarios
 - [ ] Clicking "Start Demo" runs the full 42-second simulation for that contact
 - [ ] All 6 agent nodes animate through idle/working/complete states
 - [ ] Deliverables count reaches 8/8
 - [ ] Critical flags appear specific to the selected contact (~15 seconds)
-- [ ] All 8 completed deliverable cards are clickable — modal opens with complete HTML content (24 deliverables embedded)
+- [ ] Completed deliverable cards are clickable — modal opens with formatted HTML content
 - [ ] Modal closes via X button, clicking overlay, or Escape key
 - [ ] "Reset" button returns everything to initial state
 - [ ] Pressing F toggles fullscreen mode

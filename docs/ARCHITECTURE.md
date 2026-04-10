@@ -158,7 +158,7 @@ ACE assembles the complete briefing package:
 
 ```
 briefingclaw/
-├── briefingclaw-dashboard.html        # Live demo dashboard (3 scenarios, 24 deliverables, improved readability)
+├── briefingclaw-dashboard.html        # Live demo dashboard (8 scenarios, embedded deliverables, improved readability)
 ├── briefingclaw-dashboard-redhat.html # Red Hat branded variant (identical functionality)
 ├── briefingclaw-architecture.html     # Static architecture diagram
 ├── briefingclaw.sh                    # Interactive CLI for demo management
@@ -179,13 +179,13 @@ briefingclaw/
 │   ├── podman-compose.yml     # Container orchestration
 │   ├── openclaw-config.yml    # OpenClaw gateway config
 │   └── zeroclaw-config.toml   # ZeroClaw native config
-├── demo-data/                     # 3 accounts, 3 contacts, cross-program data
-│   ├── cab-meeting-notes.md   # CAB meetings (Q1 2026, Q4 2025, 3 contacts)
-│   ├── crm-export.json        # CRM data (3 accounts, 9 contacts)
-│   ├── vvip-roster.json       # VVIP tiers & preferences (3 profiles)
+├── demo-data/                     # 8 accounts, 8 contacts, cross-program data
+│   ├── cab-meeting-notes.md   # CAB meetings (Q1 2026, Q4 2025, 8 contacts)
+│   ├── crm-export.json        # CRM data (8 accounts, 20+ contacts)
+│   ├── vvip-roster.json       # VVIP tiers & preferences (8 profiles)
 │   └── engagement-history.md  # Engagement timelines (3 narratives)
 ├── demo-deliverables/             # Sample markdown reference files (7 files)
-│   ├── sarah-chen/            # All 24 deliverables (8 types x 3 contacts)
+│   ├── sarah-chen/            # Key deliverables for all 8 contacts
 │   ├── david-park/            # are embedded in the HTML dashboards;
 │   └── rachel-morrison/       # these markdowns are for reference only
 └── docs/

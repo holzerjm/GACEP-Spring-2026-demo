@@ -292,18 +292,23 @@ The dashboard includes a dropdown selector to switch between three demo scenario
 | Sarah Chen | Meridian Health Systems | Gold | Overdue commitments, approaching champion |
 | David Park | Apex Financial Group | Gold | Retention crisis, Azure competitor, failed migration |
 | Rachel Morrison | TerraScale Energy | Platinum | P1 outage, champion under stress, board presentation |
+| Pepper Minton | SnackStack Technologies | Gold | Viral TikTok scaling crisis, production crashed |
+| Ziggy Stardust-Chen | Quantum Pretzel Corp | Silver | CAB alumni win-back, AWS courting, renewal at risk |
+| Luna Wavelength | GalactiCorp Space Industries | Platinum | $8M deal blocked by CISO security audit |
+| Max Bandwidth | Thunderbolt Logistics | Gold | AI pilot $4M savings, VP Ops blocking scale-up |
+| Sage Cloudberry | WonderPaws Pet Wellness | Standard | First briefing, evaluating Red Hat vs VMware |
 
 Select a contact from the dropdown, then click "Start Demo". Each scenario has its own timeline with distinct activity feed messages, critical flags, and narrative arc.
 
 ### Clickable Deliverables
 
-After the simulation completes (or while running), all 8 completed deliverable cards are clickable. Clicking opens a formatted modal viewer with complete HTML content for that deliverable. All 24 deliverables (8 types x 3 contacts) are embedded in the dashboard — every card has content. Close the modal with the X button, clicking the overlay, or pressing Escape.
+After the simulation completes (or while running), all 8 completed deliverable cards are clickable. Clicking opens a formatted modal viewer with complete HTML content for that deliverable. Key deliverables for all 8 contacts are embedded in the dashboard with clickable modal content. Close the modal with the X button, clicking the overlay, or pressing Escape.
 
 > **Red Hat variant:** For Red Hat-affiliated presentations, use `briefingclaw-dashboard-redhat.html` instead. It has identical functionality with Red Hat Display/Text/Mono fonts, PatternFly dark theme, and Red Hat Red accents.
 
 ### Key Moments in the Simulation
 
-All three scenarios follow the same phase structure but surface different intelligence:
+All eight scenarios follow the same phase structure but surface different intelligence:
 
 | Time | Event |
 |------|-------|
@@ -430,29 +435,34 @@ The system surfaces flags that require immediate attention:
 
 ## 10. Demo Data Reference
 
-The repository includes simulated data for three distinct demo scenarios, each with complete cross-program records.
+The repository includes simulated data for eight demo scenarios — three serious enterprise contacts and five fun personas with whimsical names but realistic relationship dynamics.
 
-### Three Contact Scenarios
+### Contact Scenarios
 
-| Contact | Company | Industry | Health | Tier | Engagement | Key Tension |
-|---------|---------|----------|--------|------|------------|-------------|
-| Sarah Chen | Meridian Health | Healthcare | 87/100 | Gold | 92/100 | Overdue AI governance commitment |
-| David Park | Apex Financial | Financial Services | 62/100 | Gold | 68/100 | Failed migration, Azure threat, renewal at risk |
-| Rachel Morrison | TerraScale Energy | Energy/Utilities | 78/100 | Platinum | 96/100 | P1 outage, champion credibility at stake |
+| Contact | Company | Industry | Tier | Key Tension |
+|---------|---------|----------|------|-------------|
+| Sarah Chen | Meridian Health | Healthcare | Gold | Overdue AI governance commitment |
+| David Park | Apex Financial | Financial Services | Gold | Failed migration, Azure threat, renewal at risk |
+| Rachel Morrison | TerraScale Energy | Energy/Utilities | Platinum | P1 outage, champion credibility at stake |
+| Pepper Minton | SnackStack Technologies | Food Tech | Gold | Viral TikTok crash, scaling crisis |
+| Ziggy Stardust-Chen | Quantum Pretzel Corp | FinTech/Crypto | Silver | CAB alumni, AWS courting, broken promises |
+| Luna Wavelength | GalactiCorp Space Industries | Aerospace | Platinum | $8M deal blocked by CISO |
+| Max Bandwidth | Thunderbolt Logistics | Supply Chain | Gold | AI champion vs internal politics |
+| Sage Cloudberry | WonderPaws Pet Wellness | Veterinary | Standard | First briefing, greenfield opportunity |
 
 ### Data Files
 
-**cab-meeting-notes.md** — Q1 2026 and Q4 2025 board meetings with all three contacts participating. Sarah led AI Governance, David led Hybrid Cloud, Rachel co-chairs and contributed across topics.
+**cab-meeting-notes.md** — Q1 2026 and Q4 2025 board meetings with 8 contacts. Sarah led AI Governance, David led Hybrid Cloud, Rachel co-chairs, Pepper/Luna/Max contributed. Includes alumni roster (Ziggy).
 
-**crm-export.json** — Three full account records (Meridian Health $4.2B, Apex Financial $11.6B, TerraScale Energy $8.7B) with 9 contacts total, open opportunities, and support escalations including David's P2 migration failure and Rachel's P1 production outage.
+**crm-export.json** — Eight account records with 20+ contacts, open opportunities, and support escalations. Ranges from $780M (WonderPaws) to $14.5B (GalactiCorp).
 
-**vvip-roster.json** — Full VVIP profiles for all three contacts with comprehensive preferences (dietary, beverages, scheduling, communication style, room preferences) and protocol requirements per tier.
+**vvip-roster.json** — Full VVIP profiles for all eight contacts with comprehensive preferences and protocol requirements across all tiers (Platinum, Gold, Silver, Standard).
 
-**engagement-history.md** — Three complete engagement timelines with relationship stage progression, open items, and flags. Sarah's timeline shows 8 touchpoints over 2 years. David's shows declining trust after the migration failure. Rachel's shows champion-level engagement threatened by the P1 outage.
+**engagement-history.md** — Eight complete engagement timelines with relationship stage progression, open items, and flags. Ranges from multi-year champion relationships to first-time briefings.
 
 ### Demo Deliverables
 
-The `demo-deliverables/` directory contains 7 sample markdown reference files. However, all 24 deliverables (8 types x 3 contacts) are embedded directly in both HTML dashboards as formatted modal content — no external files are needed. The markdown files serve as templates for customization.
+The `demo-deliverables/` directory contains 7 sample markdown reference files for the original 3 contacts. Key deliverables for all 8 contacts (3 per contact) are embedded directly in both HTML dashboards as formatted modal content. The markdown files serve as templates for customization.
 
 | Deliverable Type | Agent | All 3 Contacts |
 |-----------------|-------|:---:|

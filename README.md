@@ -212,17 +212,17 @@ gacep-demo/
 |   +-- zeroclaw-config.toml               ZeroClaw agent profiles
 |   +-- podman-compose.yml                 Container orchestration manifest
 |
-+-- demo-data/                             Simulated data for three contact scenarios
-|   +-- cab-meeting-notes.md               CAB meeting records (Q1 2026, Q4 2025, 3 contacts)
-|   +-- crm-export.json                    CRM records (3 accounts, 9 contacts)
-|   +-- vvip-roster.json                   VVIP tiers & full preferences (3 contacts)
-|   +-- engagement-history.md              Engagement timelines (3 complete narratives)
++-- demo-data/                             Simulated data for eight contact scenarios
+|   +-- cab-meeting-notes.md               CAB meeting records (Q1 2026, Q4 2025, 8 contacts)
+|   +-- crm-export.json                    CRM records (8 accounts, 20+ contacts)
+|   +-- vvip-roster.json                   VVIP tiers & full preferences (8 contacts)
+|   +-- engagement-history.md              Engagement timelines (8 complete narratives)
 |
 +-- demo-deliverables/                     Sample markdown reference files (7 files)
 |   +-- sarah-chen/                        Dossier, agenda, VVIP checklist
 |   +-- david-park/                        Dossier, agenda
 |   +-- rachel-morrison/                   Dossier, agenda
-|   Note: All 24 deliverables (8 types x 3 contacts) are embedded in the dashboards
+|   Note: Key deliverables for all 8 contacts are embedded in the dashboards
 |
 +-- docs/                                  Extended documentation
     +-- ARCHITECTURE.md                    System design document
@@ -234,9 +234,9 @@ gacep-demo/
 
 **`briefingclaw.sh`** — Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, and backup video recording. Designed so a non-technical presenter can operate the system.
 
-**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization (original dark theme). Optimized for projector readability with larger fonts and generous spacing between agent nodes. Features a contact dropdown selector (Sarah Chen, David Park, Rachel Morrison) with unique simulation timelines per scenario. All 24 deliverables (8 types x 3 contacts) are embedded as clickable modal content — click any completed card to view the full formatted document. Polls live infrastructure when running, falls back to animated simulation. `?autostart` URL parameter for hands-free launch. Keyboard: Space/Enter start, Escape reset, F fullscreen.
+**`briefingclaw-dashboard.html`** — Live demo dashboard with animated pipeline visualization (original dark theme). Optimized for projector readability with larger fonts and generous spacing between agent nodes. Features a contact dropdown selector with 8 scenarios (3 serious + 5 fun personas) and unique simulation timelines per contact. Key deliverables for all 8 contacts are embedded as clickable modal content — click any completed card to view the full formatted document. Polls live infrastructure when running, falls back to animated simulation. `?autostart` URL parameter for hands-free launch. Keyboard: Space/Enter start, Escape reset, F fullscreen.
 
-**`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition with identical functionality. Reskinned with Red Hat Display/Text/Mono fonts, PatternFly dark theme surfaces (#151515/#1F1F1F/#292929), Red Hat Red (#EE0000) primary accent, PatternFly blue for frontier agents, PatternFly teal for local agents. Same readability improvements and all 24 embedded deliverables. Use this version for Red Hat-affiliated presentations.
+**`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition with identical functionality. Reskinned with Red Hat Display/Text/Mono fonts, PatternFly dark theme surfaces (#151515/#1F1F1F/#292929), Red Hat Red (#EE0000) primary accent, PatternFly blue for frontier agents, PatternFly teal for local agents. Same readability improvements, all 8 contact scenarios, and embedded deliverables. Use this version for Red Hat-affiliated presentations.
 
 **`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
 
@@ -252,15 +252,20 @@ gacep-demo/
 
 ## Demo Scenarios
 
-The system includes three distinct demo scenarios, each showcasing different relationship challenges and cross-program intelligence patterns:
+The system includes eight demo scenarios, each showcasing different relationship challenges and cross-program intelligence patterns:
 
-| Scenario | Contact | Company | Tier | Challenge | Key Drama |
-|----------|---------|---------|------|-----------|-----------|
-| **Overdue Commitments** | Sarah Chen, CIO | Meridian Health Systems | Gold | AI governance architecture overdue from Feb CAB | Trust-critical miss before briefing |
-| **Retention Crisis** | David Park, SVP Technology | Apex Financial Group | Gold | Failed migration, Azure pitching, 3-month renewal | Account at risk of competitive displacement |
-| **Champion Under Stress** | Rachel Morrison, CTO | TerraScale Energy | Platinum | P1 outage damaged trust, board presentation in 30 days | Highest-value relationship under threat |
+| Scenario | Contact | Company | Tier | Key Drama |
+|----------|---------|---------|------|-----------|
+| **Overdue Commitments** | Sarah Chen, CIO | Meridian Health Systems | Gold | AI governance architecture overdue from Feb CAB |
+| **Retention Crisis** | David Park, SVP Technology | Apex Financial Group | Gold | Failed migration, Azure pitching, 3-month renewal |
+| **Champion Under Stress** | Rachel Morrison, CTO | TerraScale Energy | Platinum | P1 outage damaged trust, board presentation in 30 days |
+| **Viral Scaling Crisis** | Pepper Minton, CTO | SnackStack Technologies | Gold | Recipe AI went viral on TikTok, crashed production |
+| **Win-Back / Re-engagement** | Ziggy Stardust-Chen, VP Platform Eng | Quantum Pretzel Corp | Silver | Left CAB feeling ignored, AWS courting, renewal at risk |
+| **Security Blocker** | Luna Wavelength, CIO | GalactiCorp Space Industries | Platinum | $8M satellite deal blocked by CISO security audit |
+| **Internal Politics** | Max Bandwidth, SVP Digital | Thunderbolt Logistics | Gold | AI pilot saved $4M but VP Ops blocking scale-up |
+| **First Briefing** | Sage Cloudberry, CIO | WonderPaws Pet Wellness | Standard | Greenfield opportunity, evaluating Red Hat vs VMware |
 
-Each scenario demonstrates that the system connects dots across CAB records, EBC history, CRM data, support escalations, and VVIP protocol that no single person would consistently assemble. The dashboard includes a contact dropdown to switch between scenarios during a live demo.
+Each scenario demonstrates cross-program intelligence across CAB records, EBC history, CRM data, support escalations, and VVIP protocol. The dashboard includes a contact dropdown to switch between all eight scenarios during a live demo.
 
 ---
 
