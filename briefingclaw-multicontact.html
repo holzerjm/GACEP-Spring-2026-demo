@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Multi-Contact Briefing</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06070A;
+  --bg-card: #0F1117;
+  --bg-card-hover: #161820;
+  --gold: #FFC600;
+  --gold-dim: #B8900A;
+  --gold-glow: rgba(255,198,0,0.15);
+  --frontier: #6E9BFF;
+  --local: #4ADE80;
+  --red: #EE0000;
+  --text: #E8E8EC;
+  --text-dim: #8B8FA3;
+  --text-muted: #5A5E72;
+  --border: #1E2030;
+  --border-glow: #2A2E42;
+  --status-red: #EF4444;
+  --status-amber: #F59E0B;
+  --status-green: #4ADE80;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+/* ═══════════════════ TOPBAR ═══════════════════ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text-dim);
+  margin-left: 16px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--gold);
+  border-color: rgba(255,198,0,0.3);
+  background: rgba(255,198,0,0.05);
+}
+
+/* ═══════════════════ INTRO ═══════════════════ */
+.intro {
+  margin-bottom: 32px;
+}
+
+.intro h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.intro .subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 820px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════ STEP 1: SELECTION ═══════════════════ */
+.step-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin-bottom: 20px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.step-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.step-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.contact-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.contact-chip {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-chip:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+}
+
+.contact-chip.selected {
+  background: rgba(255,198,0,0.06);
+  border-color: rgba(255,198,0,0.45);
+  box-shadow: 0 0 12px rgba(255,198,0,0.1);
+}
+
+.chip-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip-check {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: transparent;
+}
+
+.contact-chip.selected .chip-check {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #000;
+}
+
+.chip-role {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.chip-company {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.group-toggle {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: rgba(74,222,128,0.04);
+  border: 1px solid rgba(74,222,128,0.2);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.group-toggle .check-icon {
+  color: var(--status-green);
+  font-size: 16px;
+}
+
+/* ═══════════════════ START BUTTON ═══════════════════ */
+.start-row {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 24px;
+}
+
+.btn-start {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 14px 36px;
+  border-radius: 10px;
+  border: none;
+  background: var(--gold);
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-start:hover:not(:disabled) {
+  background: #FFD23F;
+  box-shadow: 0 4px 20px rgba(255,198,0,0.3);
+  transform: translateY(-1px);
+}
+
+.btn-start:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════ RESULTS PANELS ═══════════════════ */
+.results {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.results.active { display: flex; }
+
+.result-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 26px;
+  animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.result-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Shared company context */
+.company-box {
+  background: rgba(110,155,255,0.04);
+  border: 1px solid rgba(110,155,255,0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.company-box .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--frontier);
+  margin-bottom: 4px;
+}
+
+.company-box .name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.company-box .stats {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* Role matrix */
+.role-matrix {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.role-row {
+  display: grid;
+  grid-template-columns: 180px 120px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(30,32,48,0.6);
+  border-radius: 8px;
+}
+
+.role-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.role-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.role-tag.champion { color: var(--status-green); background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); }
+.role-tag.economic { color: var(--gold); background: rgba(255,198,0,0.08); border: 1px solid rgba(255,198,0,0.3); }
+.role-tag.technical { color: var(--frontier); background: rgba(110,155,255,0.1); border: 1px solid rgba(110,155,255,0.3); }
+.role-tag.blocker { color: var(--status-red); background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+.role-tag.influencer { color: #E8E8EC; background: rgba(232,232,236,0.06); border: 1px solid rgba(232,232,236,0.25); }
+
+.role-note {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* Dynamics list */
+.dynamics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dynamic-item {
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(30,32,48,0.6);
+  border-radius: 8px;
+  border-left: 3px solid var(--text-muted);
+}
+
+.dynamic-item.alignment { border-left-color: var(--status-green); }
+.dynamic-item.tension { border-left-color: var(--status-amber); }
+.dynamic-item.conflict { border-left-color: var(--status-red); }
+
+.dynamic-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.dynamic-item.alignment .dynamic-type { color: var(--status-green); }
+.dynamic-item.tension .dynamic-type { color: var(--status-amber); }
+.dynamic-item.conflict .dynamic-type { color: var(--status-red); }
+
+.dynamic-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Briefing order */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-step {
+  display: flex;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(30,32,48,0.6);
+  border-radius: 8px;
+}
+
+.order-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.order-content {
+  flex: 1;
+}
+
+.order-who {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.order-why {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* Combined agenda */
+.agenda-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.agenda-table th, .agenda-table td {
+  padding: 9px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(30,32,48,0.6);
+  font-size: 12px;
+}
+
+.agenda-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-bottom-color: var(--border);
+}
+
+.agenda-table td {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+
+.agenda-table td.time {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--gold);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.agenda-table td.topic strong {
+  color: var(--text);
+  display: block;
+}
+
+.agenda-table td.topic .desc {
+  color: var(--text-dim);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.agenda-table td.owner {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* Coordination risks */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.risk-card {
+  padding: 12px 14px;
+  background: rgba(245,158,11,0.04);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 8px;
+}
+
+.risk-card.critical {
+  background: rgba(239,68,68,0.04);
+  border-color: rgba(239,68,68,0.2);
+}
+
+.risk-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--status-amber);
+  margin-bottom: 4px;
+}
+
+.risk-card.critical .risk-label { color: var(--status-red); }
+
+.risk-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Pagination footer */
+.footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.footer .red { color: var(--red); }
+
+.github-link {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,198,0,0.4);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.empty-state .icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+  display: block;
+  opacity: 0.5;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo-row">
+      <img class="logo-icon" src="jmhclaw.png" alt="BriefingClaw">
+      <span class="logo-text">BriefingClaw</span>
+      <span class="page-title">Multi-Contact Briefing</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">&larr; Home</a>
+      <a href="briefingclaw-dashboard.html" class="nav-link">Single Contact</a>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <h1>Prepare for a Group Briefing</h1>
+    <p class="subtitle">
+      Real enterprise briefings have 2&ndash;5 executives in the room. The single-contact dashboard prepares one agent; this view
+      coordinates multiple. Pick any combination of contacts &mdash; the system identifies shared company context, cross-contact dynamics,
+      recommended briefing order, and coordination risks that no single-contact briefing would catch.
+    </p>
+  </div>
+
+  <!-- STEP 1: CONTACT PICKER -->
+  <div class="step-panel">
+    <div class="step-header">
+      <div class="step-title"><span class="step-number">1</span>Select 2&ndash;5 contacts</div>
+      <div class="step-hint">Select 2 or more to enable multi-contact analysis</div>
+    </div>
+    <div class="contact-picker" id="contactPicker"></div>
+    <div class="group-toggle" id="groupToggle" style="display:none;">
+      <span class="check-icon">&#10003;</span>
+      <span id="groupToggleText">Same company detected &mdash; multi-contact analysis will identify shared context and cross-contact dynamics.</span>
+    </div>
+  </div>
+
+  <div class="start-row">
+    <button class="btn-start" id="btnStart" disabled>
+      <span>&#127919;</span>
+      <span id="btnStartText">Select at least 2 contacts</span>
+    </button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <!-- Shared Company Context -->
+    <div class="result-panel">
+      <div class="result-title">&#127970; Shared Company Context</div>
+      <div class="result-sub">Bloom-borg's single account pull (avoids duplicate research)</div>
+      <div id="companyContext"></div>
+    </div>
+
+    <!-- Role Matrix -->
+    <div class="result-panel">
+      <div class="result-title">&#128101; Buying Center Role Matrix</div>
+      <div class="result-sub">Déjà View identified the decision-maker roles for this group</div>
+      <div class="role-matrix" id="roleMatrix"></div>
+    </div>
+
+    <!-- Cross-Contact Dynamics -->
+    <div class="result-panel">
+      <div class="result-title">&#128274; Cross-Contact Dynamics</div>
+      <div class="result-sub">Alignments, tensions, and conflicts between these contacts</div>
+      <div class="dynamics-list" id="dynamicsList"></div>
+    </div>
+
+    <!-- Briefing Order -->
+    <div class="result-panel">
+      <div class="result-title">&#128202; Recommended Briefing Order</div>
+      <div class="result-sub">Who should set the tone, who should close &mdash; sequenced for maximum alignment</div>
+      <div class="order-list" id="orderList"></div>
+    </div>
+
+    <!-- Unified Agenda -->
+    <div class="result-panel">
+      <div class="result-title">&#128197; Unified Agenda (Draft Punk)</div>
+      <div class="result-sub">Coordinated agenda covering all contacts' priorities in one session</div>
+      <table class="agenda-table">
+        <thead>
+          <tr>
+            <th style="width: 100px;">Time</th>
+            <th>Topic</th>
+            <th style="width: 180px;">Lead / Owner</th>
+          </tr>
+        </thead>
+        <tbody id="agendaBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Coordination Risks -->
+    <div class="result-panel">
+      <div class="result-title">&#9888; Coordination Risks</div>
+      <div class="result-sub">Alfred Bitworth flagged these for pre-briefing mitigation</div>
+      <div class="risk-grid" id="riskGrid"></div>
+    </div>
+
+    <!-- Oddsfather -->
+    <div class="result-panel">
+      <div class="result-title">&#127922; The Oddsfather's Group Verdict</div>
+      <div class="result-sub">Combined probability with cross-contact adjustments</div>
+      <div id="oddsfatherVerdict"></div>
+    </div>
+
+  </div>
+
+  <!-- Empty state when no contacts selected -->
+  <div class="empty-state" id="emptyState">
+    <span class="icon">&#128101;</span>
+    Select contacts above to generate a multi-contact briefing analysis.
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Built with open source &middot; Runs on your laptop &middot; <span class="red">Red Hat</span> CTO Office &middot; GACEP Spring 2026<br>
+    <a class="github-link" href="https://github.com/holzerjm/GACEP-Spring-2026-demo" target="_blank">github.com/holzerjm/GACEP-Spring-2026-demo</a>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONTACT DATA (aligned with dashboard + CRM data)
+// ═══════════════════════════════════════════════════════════
+const CONTACTS = {
+  'sarah-chen': {
+    name: 'Sarah Chen', title: 'CIO', company: 'Meridian Health Systems', companyId: 'meridian',
+    role: 'economic', roleLabel: 'Economic Buyer', style: 'Data-driven, direct, former developer',
+    priorities: ['AI governance', 'Edge computing', 'Open-source transparency'],
+    predicted: 79
+  },
+  'tom-richards': {
+    name: 'Tom Richards', title: 'VP Infrastructure', company: 'Meridian Health Systems', companyId: 'meridian',
+    role: 'technical', roleLabel: 'Technical Decision Maker', style: 'Hands-on, cautious, workshop-oriented',
+    priorities: ['Platform reliability', 'OpenShift AI deployment', 'Hands-on validation'],
+    predicted: 70
+  },
+  'priya-kapoor': {
+    name: 'Dr. Priya Kapoor', title: 'CMIO', company: 'Meridian Health Systems', companyId: 'meridian',
+    role: 'influencer', roleLabel: 'Clinical Influencer', style: 'Evidence-based, skeptical of vendor claims',
+    priorities: ['Clinical AI safety', 'Physician workflow', 'Regulatory compliance'],
+    predicted: 55
+  },
+  'david-park': {
+    name: 'David Park', title: 'SVP Technology', company: 'Apex Financial Group', companyId: 'apex',
+    role: 'economic', roleLabel: 'Economic Buyer', style: 'Analytical, risk-averse, needs benchmarks',
+    priorities: ['Migration recovery', 'Platform consolidation', 'Security automation'],
+    predicted: 56
+  },
+  'karen-wu': {
+    name: 'Karen Wu', title: 'CISO', company: 'Apex Financial Group', companyId: 'apex',
+    role: 'champion', roleLabel: 'Security Champion', style: 'Collaborative, open to Ansible automation',
+    priorities: ['SOC modernization', 'Security automation', 'Compliance posture'],
+    predicted: 78
+  },
+  'marcus-thompson': {
+    name: 'Marcus Thompson', title: 'VP Core Banking', company: 'Apex Financial Group', companyId: 'apex',
+    role: 'blocker', roleLabel: 'Migration Blocker', style: 'Scarred by Jan migration failure, gun-shy',
+    priorities: ['Trading floor reliability', 'Zero-downtime guarantees', 'Rollback strategies'],
+    predicted: 35
+  },
+  'rachel-morrison': {
+    name: 'Rachel Morrison', title: 'CTO', company: 'TerraScale Energy', companyId: 'terrascale',
+    role: 'champion', roleLabel: 'Platinum Champion', style: 'Deeply technical, tests things live, Apache committer',
+    priorities: ['Grid modernization', 'Net-zero 2035 roadmap', 'Board presentation support'],
+    predicted: 71
+  },
+  'anil-desai': {
+    name: 'Anil Desai', title: 'VP Platform Eng', company: 'TerraScale Energy', companyId: 'terrascale',
+    role: 'technical', roleLabel: 'Platform Architect', style: 'Architecture-first, documentation-heavy',
+    priorities: ['OpenShift cluster reliability', 'Observability maturity', 'Edge compute for grid'],
+    predicted: 72
+  },
+  'frank-reeves': {
+    name: 'Frank Reeves', title: 'CISO', company: 'TerraScale Energy', companyId: 'terrascale',
+    role: 'blocker', roleLabel: 'Post-P1 Skeptic', style: 'Newly engaged via P1 RCA, demanding accountability',
+    priorities: ['Incident response posture', 'Compliance audit readiness', 'SLA enforcement'],
+    predicted: 48
+  }
+};
+
+const COMPANIES = {
+  'meridian':   { name: 'Meridian Health Systems', industry: 'Healthcare', revenue: '$4.2B', employees: '28,000', health: '87/100 (improving)' },
+  'apex':       { name: 'Apex Financial Group',     industry: 'Financial Services', revenue: '$11.6B', employees: '42,000', health: '62/100 (declining)' },
+  'terrascale': { name: 'TerraScale Energy',        industry: 'Energy / Utilities', revenue: '$8.7B', employees: '35,000', health: '78/100 (at risk)' }
+};
+
+// Cross-contact dynamics table keyed by normalized company
+const DYNAMICS = {
+  'meridian': [
+    { type: 'alignment', text: 'Sarah and Tom are aligned on OpenShift AI direction — Tom has attended workshops Sarah approved. Lead technical tracks through Tom.' },
+    { type: 'tension', text: 'Dr. Kapoor has never been engaged. Sarah will notice if we present AI use cases without clinical voice in the room — recommend clinical AI case study section.' },
+    { type: 'alignment', text: 'Priya shares Sarah\'s open-source philosophy — use that as bridge. Both value transparency over vendor promises.' }
+  ],
+  'apex': [
+    { type: 'conflict', text: 'Marcus Thompson is scarred by the January migration failure. David respects Marcus but will defer to him on reliability questions. Marcus can kill any expansion ask in one sentence.' },
+    { type: 'alignment', text: 'Karen Wu (CISO) is independent of the migration failure story — her Ansible SOC modernization track is a clean win opportunity. Use her momentum to rebuild David\'s confidence.' },
+    { type: 'tension', text: 'David wants platform consolidation; Marcus wants to keep the three existing platforms stable. Position Red Hat as the consolidation path that doesn\'t require another risky migration.' }
+  ],
+  'terrascale': [
+    { type: 'alignment', text: 'Rachel and Anil are technically aligned — Anil implements what Rachel champions. Workshop tracks should include both.' },
+    { type: 'conflict', text: 'Frank Reeves was only engaged after the March P1 outage. He is the newest stakeholder and the most skeptical. Lead with RCA accountability before any forward-looking content.' },
+    { type: 'tension', text: 'Rachel needs the $5M expansion; Frank will want SLA enforcement and incident response commitments before signing off. These requests must be presented as complementary, not competing.' }
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const state = {
+  selected: new Set()
+};
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+function init() {
+  renderContactPicker();
+  document.getElementById('btnStart').addEventListener('click', runAnalysis);
+}
+
+function renderContactPicker() {
+  const picker = document.getElementById('contactPicker');
+  picker.innerHTML = '';
+  for (const [id, c] of Object.entries(CONTACTS)) {
+    const chip = document.createElement('div');
+    chip.className = 'contact-chip';
+    chip.dataset.id = id;
+    chip.innerHTML = `
+      <div class="chip-name">${c.name}<span class="chip-check">&#10003;</span></div>
+      <div class="chip-role">${c.title}</div>
+      <div class="chip-company">${c.company}</div>
+    `;
+    chip.addEventListener('click', () => toggleContact(id));
+    picker.appendChild(chip);
+  }
+}
+
+function toggleContact(id) {
+  if (state.selected.has(id)) {
+    state.selected.delete(id);
+  } else {
+    if (state.selected.size >= 5) return; // cap at 5
+    state.selected.add(id);
+  }
+  updateUI();
+}
+
+function updateUI() {
+  // Update chip selection state
+  document.querySelectorAll('.contact-chip').forEach(chip => {
+    chip.classList.toggle('selected', state.selected.has(chip.dataset.id));
+  });
+
+  // Same-company detection
+  const companies = new Set();
+  state.selected.forEach(id => companies.add(CONTACTS[id].companyId));
+  const toggle = document.getElementById('groupToggle');
+  const toggleText = document.getElementById('groupToggleText');
+  if (state.selected.size >= 2) {
+    toggle.style.display = 'flex';
+    if (companies.size === 1) {
+      toggleText.textContent = 'Same company detected — multi-contact analysis will identify shared context and cross-contact dynamics.';
+    } else {
+      toggleText.textContent = 'Mixed companies detected — analysis will identify parallel briefing opportunities and coordination challenges.';
+    }
+  } else {
+    toggle.style.display = 'none';
+  }
+
+  // Start button
+  const btn = document.getElementById('btnStart');
+  const btnText = document.getElementById('btnStartText');
+  if (state.selected.size >= 2) {
+    btn.disabled = false;
+    btnText.textContent = `Analyze ${state.selected.size} contacts`;
+  } else {
+    btn.disabled = true;
+    btnText.textContent = 'Select at least 2 contacts';
+  }
+}
+
+function runAnalysis() {
+  document.getElementById('emptyState').style.display = 'none';
+  const results = document.getElementById('results');
+  results.classList.add('active');
+
+  const selectedIds = Array.from(state.selected);
+  const selectedContacts = selectedIds.map(id => CONTACTS[id]);
+
+  // Determine primary company (or "mixed")
+  const companyIds = new Set(selectedContacts.map(c => c.companyId));
+  const isSameCompany = companyIds.size === 1;
+  const primaryCompanyId = isSameCompany ? Array.from(companyIds)[0] : null;
+
+  renderCompanyContext(selectedContacts, isSameCompany);
+  renderRoleMatrix(selectedContacts);
+  renderDynamics(primaryCompanyId, selectedContacts, isSameCompany);
+  renderBriefingOrder(selectedContacts);
+  renderAgenda(selectedContacts);
+  renderRisks(selectedContacts, isSameCompany);
+  renderOddsfather(selectedContacts);
+
+  // Smooth scroll to results
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderCompanyContext(contacts, isSameCompany) {
+  const target = document.getElementById('companyContext');
+  if (isSameCompany) {
+    const c = COMPANIES[contacts[0].companyId];
+    target.innerHTML = `
+      <div class="company-box">
+        <div class="label">Primary Account</div>
+        <div class="name">${c.name}</div>
+        <div class="stats">${c.industry} &middot; ${c.revenue} revenue &middot; ${c.employees} employees &middot; Health: ${c.health}</div>
+      </div>
+    `;
+  } else {
+    const cList = Array.from(new Set(contacts.map(c => c.companyId)));
+    target.innerHTML = cList.map(id => {
+      const c = COMPANIES[id];
+      return `
+        <div class="company-box">
+          <div class="label">Account</div>
+          <div class="name">${c.name}</div>
+          <div class="stats">${c.industry} &middot; ${c.revenue} &middot; ${c.employees} employees &middot; Health: ${c.health}</div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function renderRoleMatrix(contacts) {
+  const target = document.getElementById('roleMatrix');
+  target.innerHTML = contacts.map(c => `
+    <div class="role-row">
+      <div class="role-name">${c.name}<div style="font-size:10px;color:var(--text-muted);font-weight:normal;font-family:'DM Sans',sans-serif;">${c.title}</div></div>
+      <div><span class="role-tag ${c.role}">${c.roleLabel}</span></div>
+      <div class="role-note"><strong>Style:</strong> ${c.style}<br><strong>Priorities:</strong> ${c.priorities.join(', ')}</div>
+    </div>
+  `).join('');
+}
+
+function renderDynamics(primaryCompanyId, contacts, isSameCompany) {
+  const target = document.getElementById('dynamicsList');
+  if (isSameCompany && DYNAMICS[primaryCompanyId]) {
+    target.innerHTML = DYNAMICS[primaryCompanyId].map(d => `
+      <div class="dynamic-item ${d.type}">
+        <div class="dynamic-type">${d.type}</div>
+        <div class="dynamic-text">${d.text}</div>
+      </div>
+    `).join('');
+  } else {
+    target.innerHTML = `
+      <div class="dynamic-item tension">
+        <div class="dynamic-type">Tension</div>
+        <div class="dynamic-text">Mixed-company briefing. No shared relationship history. Each contact brings independent priorities — recommend parallel briefing tracks with dedicated sponsor coverage per account.</div>
+      </div>
+      <div class="dynamic-item alignment">
+        <div class="dynamic-type">Opportunity</div>
+        <div class="dynamic-text">${contacts.length} executives in the same room represent ${new Set(contacts.map(c=>c.companyId)).size} distinct revenue streams — opportunity for cross-pollinated use cases and peer learning between non-competitive accounts.</div>
+      </div>
+    `;
+  }
+}
+
+function renderBriefingOrder(contacts) {
+  const target = document.getElementById('orderList');
+  // Order strategy: blocker first (address fears), then economic (set direction), then champion (close), then technical/influencer (depth)
+  const priority = { blocker: 1, economic: 2, champion: 3, technical: 4, influencer: 5 };
+  const sorted = [...contacts].sort((a, b) => priority[a.role] - priority[b.role]);
+  const reasons = {
+    blocker: 'Address their concerns first — if they\'re unconvinced, they\'ll kill the conversation later. Give them airtime upfront.',
+    economic: 'Set the strategic tone. They own the budget decision. Their framing shapes everything that follows.',
+    champion: 'Close with the advocate. They\'ve already bought in — use their energy to build momentum for the ask.',
+    technical: 'Go deep with them after direction is set. They want architecture, not vision.',
+    influencer: 'Keep them engaged throughout — they shape opinions outside the room more than you realize.'
+  };
+  target.innerHTML = sorted.map((c, i) => `
+    <div class="order-step">
+      <div class="order-num">${i + 1}</div>
+      <div class="order-content">
+        <div class="order-who">${c.name} <span style="color:var(--text-muted);font-weight:normal;font-size:11px;">(${c.roleLabel})</span></div>
+        <div class="order-why">${reasons[c.role]}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAgenda(contacts) {
+  const target = document.getElementById('agendaBody');
+  // Generate a reasonable unified agenda based on priorities
+  const allPriorities = [];
+  contacts.forEach(c => {
+    c.priorities.forEach(p => {
+      if (!allPriorities.find(x => x.topic === p)) {
+        allPriorities.push({ topic: p, owner: c.name });
+      }
+    });
+  });
+
+  const rows = [
+    { time: '8:30 AM', topic: '<strong>Welcome &amp; Coffee</strong><div class="desc">Sponsor + EBC Manager greet at lobby. Allow informal introductions between contacts.</div>', owner: 'EBC Manager' },
+    { time: '9:00 AM', topic: '<strong>Opening: Relationship Reset</strong><div class="desc">Acknowledge recent tensions (overdue items, escalations). Frame the day\'s objectives.</div>', owner: 'Sponsor' },
+    { time: '9:30 AM', topic: `<strong>${allPriorities[0]?.topic || 'Strategic Priority #1'}</strong><div class="desc">Led by ${allPriorities[0]?.owner || contacts[0].name}. Technical deep-dive with live examples.</div>`, owner: allPriorities[0]?.owner || contacts[0].name },
+    { time: '10:45 AM', topic: `<strong>${allPriorities[1]?.topic || 'Strategic Priority #2'}</strong><div class="desc">Led by ${allPriorities[1]?.owner || contacts[Math.min(1, contacts.length-1)].name}. Workshop format with whiteboard.</div>`, owner: allPriorities[1]?.owner || contacts[Math.min(1, contacts.length-1)].name },
+    { time: '12:00 PM', topic: '<strong>Working Lunch: Cross-Team Discussion</strong><div class="desc">Unstructured time for the group to align on shared concerns. No formal presentation.</div>', owner: 'Sponsor' },
+    { time: '1:00 PM', topic: `<strong>${allPriorities[2]?.topic || 'Strategic Priority #3'}</strong><div class="desc">${contacts.length >= 3 ? 'Parallel track session — pair each contact with appropriate expert.' : 'Hands-on lab. Let contacts drive the keyboard.'}</div>`, owner: allPriorities[2]?.owner || 'Product Lead' },
+    { time: '2:30 PM', topic: '<strong>Unified Roadmap Review</strong><div class="desc">Bring all contacts back together. Present the path forward as one coordinated motion.</div>', owner: 'Sponsor + Draft Punk output' },
+    { time: '3:30 PM', topic: '<strong>Wrap-up &amp; Commitments</strong><div class="desc">Capture actions, confirm follow-ups, set next engagement date. Alfred Bitworth logs everything.</div>', owner: 'EBC Manager' }
+  ];
+  target.innerHTML = rows.map(r => `<tr><td class="time">${r.time}</td><td class="topic">${r.topic}</td><td class="owner">${r.owner}</td></tr>`).join('');
+}
+
+function renderRisks(contacts, isSameCompany) {
+  const target = document.getElementById('riskGrid');
+  const risks = [];
+
+  // Role-based risks
+  if (contacts.some(c => c.role === 'blocker')) {
+    const blockers = contacts.filter(c => c.role === 'blocker').map(c => c.name).join(', ');
+    risks.push({ critical: true, label: 'Blocker in room', text: `${blockers} can veto any ask. Do NOT present expansion proposals until their specific concerns are addressed.` });
+  }
+  if (contacts.length >= 4) {
+    risks.push({ critical: false, label: 'Group size', text: `${contacts.length} contacts in one room — keep presentations short, allow cross-talk time, avoid death-by-roundtable.` });
+  }
+  if (!isSameCompany) {
+    risks.push({ critical: true, label: 'Multi-account coordination', text: 'Contacts are from different companies. Do not share account-specific intelligence across them. Confidentiality matters.' });
+  }
+  if (contacts.some(c => c.role === 'economic') && contacts.some(c => c.role === 'technical')) {
+    risks.push({ critical: false, label: 'Mixed seniority', text: 'Economic buyers and technical decision-makers in the same room can disengage if content drifts too technical or too high-level. Balance both.' });
+  }
+  if (contacts.some(c => c.predicted < 50)) {
+    const low = contacts.filter(c => c.predicted < 50).map(c => c.name).join(', ');
+    risks.push({ critical: true, label: 'Low-probability contacts', text: `${low} have individual success probabilities below 50%. Pair them with stronger advocates during the briefing to leverage social proof.` });
+  }
+  if (risks.length === 0) {
+    risks.push({ critical: false, label: 'Low risk profile', text: 'This group has well-aligned roles and no identified blockers. Standard multi-contact protocol applies.' });
+  }
+
+  target.innerHTML = risks.map(r => `
+    <div class="risk-card ${r.critical ? 'critical' : ''}">
+      <div class="risk-label">${r.label}</div>
+      <div class="risk-text">${r.text}</div>
+    </div>
+  `).join('');
+}
+
+function renderOddsfather(contacts) {
+  const target = document.getElementById('oddsfatherVerdict');
+  // Weighted average of individual probabilities, with adjustments for coordination
+  const avg = contacts.reduce((sum, c) => sum + c.predicted, 0) / contacts.length;
+  let adjustment = 0;
+  const notes = [];
+
+  if (contacts.some(c => c.role === 'blocker')) {
+    adjustment -= 8;
+    notes.push('Blocker in room: -8 points for defensive dynamics');
+  }
+  if (contacts.some(c => c.role === 'champion') && contacts.length >= 3) {
+    adjustment += 5;
+    notes.push('Champion + supporting cast: +5 points for peer validation');
+  }
+  if (contacts.length >= 4) {
+    adjustment -= 3;
+    notes.push('Large group: -3 points for diluted attention');
+  }
+  const aligned = contacts.filter(c => ['champion', 'economic'].includes(c.role)).length >= 2;
+  if (aligned) {
+    adjustment += 6;
+    notes.push('Aligned decision makers: +6 points for clearer path to decision');
+  }
+
+  const finalScore = Math.max(10, Math.min(95, Math.round(avg + adjustment)));
+
+  let verdictClass = 'match';
+  if (finalScore < 50) verdictClass = 'miss';
+  else if (finalScore < 70) verdictClass = 'drift';
+
+  target.innerHTML = `
+    <div style="text-align: center; padding: 20px 0;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 8px;">Group Success Probability</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 64px; font-weight: 700; color: var(--gold); line-height: 1;">${finalScore}%</div>
+      <div style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text-dim); margin-top: 8px;">Individual average: ${Math.round(avg)}% ${adjustment >= 0 ? '+' : ''}${adjustment} coordination adjustment</div>
+    </div>
+    <div style="background: rgba(255,198,0,0.04); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; padding: 12px 14px; margin-top: 10px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-dim); margin-bottom: 6px;">Oddsfather's Adjustments</div>
+      ${notes.length > 0 ? notes.map(n => `<div style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text); padding: 3px 0;">&middot; ${n}</div>`).join('') : '<div style="font-family: \'DM Sans\', sans-serif; font-size: 12px; color: var(--text-dim);">No coordination adjustments applied.</div>'}
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>

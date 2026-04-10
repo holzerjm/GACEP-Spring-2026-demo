@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Persona Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06070A;
+  --bg-card: #0F1117;
+  --bg-card-hover: #161820;
+  --gold: #FFC600;
+  --gold-dim: #B8900A;
+  --gold-glow: rgba(255,198,0,0.15);
+  --frontier: #6E9BFF;
+  --local: #4ADE80;
+  --red: #EE0000;
+  --text: #E8E8EC;
+  --text-dim: #8B8FA3;
+  --text-muted: #5A5E72;
+  --border: #1E2030;
+  --border-glow: #2A2E42;
+  --status-red: #EF4444;
+  --status-amber: #F59E0B;
+  --status-green: #4ADE80;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+/* ═══════════════════ HEADER ═══════════════════ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text-dim);
+  margin-left: 16px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 16px;
+}
+
+.nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--gold);
+  border-color: rgba(255,198,0,0.3);
+  background: rgba(255,198,0,0.05);
+}
+
+.nav-link.primary {
+  color: var(--gold);
+  border-color: rgba(255,198,0,0.3);
+  background: rgba(255,198,0,0.05);
+}
+
+/* ═══════════════════ INTRO ═══════════════════ */
+.intro {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.intro h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+}
+
+.intro .subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ═══════════════════ FILTERS ═══════════════════ */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--border-glow);
+  color: var(--text);
+}
+
+.filter-btn.active {
+  color: var(--gold);
+  border-color: rgba(255,198,0,0.4);
+  background: rgba(255,198,0,0.08);
+}
+
+/* ═══════════════════ PERSONA GRID ═══════════════════ */
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 20px;
+}
+
+.persona-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.3s ease;
+}
+
+.persona-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.persona-card.hidden {
+  display: none;
+}
+
+.persona-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.persona-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.persona-role {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.persona-tier {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.persona-tier.platinum { color: #E8E8EC; background: rgba(232,232,236,0.1); border: 1px solid rgba(232,232,236,0.3); }
+.persona-tier.gold { color: var(--gold); background: rgba(255,198,0,0.08); border: 1px solid rgba(255,198,0,0.25); }
+.persona-tier.silver { color: #A3A3A3; background: rgba(163,163,163,0.08); border: 1px solid rgba(163,163,163,0.25); }
+.persona-tier.standard { color: var(--text-dim); background: rgba(139,143,163,0.08); border: 1px solid rgba(139,143,163,0.25); }
+
+.persona-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  padding: 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(30,32,48,0.6);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.persona-drama {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+  padding: 10px 12px;
+  background: rgba(238,0,0,0.04);
+  border-left: 3px solid var(--status-red);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+}
+
+.persona-drama.warning {
+  background: rgba(245,158,11,0.04);
+  border-left-color: var(--status-amber);
+}
+
+.persona-drama.opportunity {
+  background: rgba(74,222,128,0.04);
+  border-left-color: var(--status-green);
+}
+
+.persona-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.priority-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.priority-list li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding-left: 16px;
+  position: relative;
+}
+
+.priority-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 2px;
+  color: var(--gold-dim);
+}
+
+.persona-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(30,32,48,0.6);
+}
+
+.action-btn {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.action-btn.primary {
+  color: #000;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  font-weight: 600;
+}
+
+.action-btn.primary:hover {
+  background: #FFD23F;
+  box-shadow: 0 4px 16px rgba(255,198,0,0.2);
+}
+
+.action-btn.secondary {
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+}
+
+.action-btn.secondary:hover {
+  color: var(--text);
+  border-color: var(--border-glow);
+  background: rgba(255,255,255,0.08);
+}
+
+/* ═══════════════════ FOOTER ═══════════════════ */
+.footer {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.footer .red { color: var(--red); }
+
+.github-link {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,198,0,0.4);
+  transition: all 0.2s ease;
+}
+
+.github-link:hover { border-bottom-color: var(--gold); }
+
+@media (max-width: 720px) {
+  .persona-grid { grid-template-columns: 1fr; }
+  .topbar { flex-direction: column; gap: 16px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="topbar">
+    <div class="logo-row">
+      <img class="logo-icon" src="jmhclaw.png" alt="BriefingClaw">
+      <span class="logo-text">BriefingClaw</span>
+      <span class="page-title">Persona Gallery</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">&larr; Home</a>
+      <a href="briefingclaw-dashboard.html" class="nav-link primary">Dashboard</a>
+    </div>
+  </div>
+
+  <div class="intro">
+    <h1>Meet the Eight Personas</h1>
+    <p class="subtitle">
+      Each persona represents a distinct briefing scenario with unique relationship dynamics,
+      strategic priorities, and dramatic tension. Three enterprise contacts plus five fun personas —
+      every one of them is a fully-developed case study for the multi-agent system.
+    </p>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All (8)</button>
+    <button class="filter-btn" data-filter="platinum">Platinum</button>
+    <button class="filter-btn" data-filter="gold">Gold</button>
+    <button class="filter-btn" data-filter="silver">Silver</button>
+    <button class="filter-btn" data-filter="standard">Standard</button>
+    <button class="filter-btn" data-filter="enterprise">Enterprise</button>
+    <button class="filter-btn" data-filter="fun">Fun Personas</button>
+  </div>
+
+  <div class="persona-grid">
+
+    <!-- ═════════ SARAH CHEN ═════════ -->
+    <div class="persona-card" data-tier="gold" data-type="enterprise">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Sarah Chen</div>
+          <div class="persona-role">CIO &middot; Meridian Health Systems</div>
+        </div>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Healthcare</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$4.2B</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Trusted &rarr; Champion</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">92/100</span></div>
+      </div>
+      <div class="persona-drama warning">
+        Overdue AI governance reference architecture promised at Feb 2026 SAB. Trust-critical miss that Deja View catches before walking into the briefing room.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>AI governance in regulated healthcare</li>
+          <li>Edge computing for remote patient monitoring</li>
+          <li>Open-source transparency &amp; vendor independence</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=sarah-chen&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/sarah-chen/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ DAVID PARK ═════════ -->
+    <div class="persona-card" data-tier="gold" data-type="enterprise">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">David Park</div>
+          <div class="persona-role">SVP Technology &middot; Apex Financial Group</div>
+        </div>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Financial Services</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$11.6B</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Trusted (at risk)</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">68/100 &darr;</span></div>
+      </div>
+      <div class="persona-drama">
+        Failed OpenShift migration in January (6-hour downtime). Azure Solution Architect embedded for 3 weeks. $2.9M contract renewal in 3 months. Retention crisis.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>Hybrid cloud migration recovery plan</li>
+          <li>Platform consolidation &amp; reliability</li>
+          <li>Security automation for financial compliance</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=david-park&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/david-park/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ RACHEL MORRISON ═════════ -->
+    <div class="persona-card" data-tier="platinum" data-type="enterprise">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Rachel Morrison</div>
+          <div class="persona-role">CTO &middot; TerraScale Energy</div>
+        </div>
+        <span class="persona-tier platinum">Platinum</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Energy / Utilities</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$8.7B</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Champion (stressed)</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">96/100</span></div>
+      </div>
+      <div class="persona-drama">
+        P1 production outage March 28 — 4 hours, $2.3M revenue impact. Board presentation in 30 days for $5M expansion. Champion credibility on the line.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>RCA &amp; reliability assurances for board</li>
+          <li>$5M grid modernization expansion</li>
+          <li>Net-zero 2035 infrastructure roadmap</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=rachel-morrison&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/rachel-morrison/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ PEPPER MINTON ═════════ -->
+    <div class="persona-card" data-tier="gold" data-type="fun">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Pepper Minton</div>
+          <div class="persona-role">CTO &middot; SnackStack Technologies</div>
+        </div>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Food Tech</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$2.1B</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Engaged</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">78/100</span></div>
+      </div>
+      <div class="persona-drama warning">
+        Recipe AI went viral on TikTok (47M views). Production crashed under 10x load. HATES POWERPOINT. Needs scaling architecture immediately. Breakfast tacos in Austin.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>Auto-scaling architecture for viral traffic</li>
+          <li>Smart kitchen device edge computing</li>
+          <li>Developer experience improvements</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=pepper-minton&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/pepper-minton/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ ZIGGY STARDUST-CHEN ═════════ -->
+    <div class="persona-card" data-tier="silver" data-type="fun">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Ziggy Stardust-Chen</div>
+          <div class="persona-role">VP Platform Eng &middot; Quantum Pretzel Corp</div>
+        </div>
+        <span class="persona-tier silver">Silver</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">FinTech / Crypto</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$890M</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Alumni (at risk)</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">55/100 &darr;</span></div>
+      </div>
+      <div class="persona-drama">
+        Left the SAB Q4 2025 citing 2 broken commitments. AWS Solution Architect embedded for 3 weeks. $1.4M renewal in 2 months. Night owl — no meetings before noon. Zero corporate jargon allowed.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>Platform reliability for 24/7 crypto trading</li>
+          <li>Cost optimization under board pressure</li>
+          <li>Reduced vendor dependency</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=ziggy-chen&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/ziggy-chen/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ LUNA WAVELENGTH ═════════ -->
+    <div class="persona-card" data-tier="platinum" data-type="fun">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Luna Wavelength</div>
+          <div class="persona-role">CIO &middot; GalactiCorp Space Industries</div>
+        </div>
+        <span class="persona-tier platinum">Platinum</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Aerospace / Defense</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$14.5B</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Champion</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">94/100</span></div>
+      </div>
+      <div class="persona-drama opportunity">
+        Former NASA JPL engineer, Apache committer, SAB Co-Vice-Chair. $8M satellite ground station deal blocked by CISO Colonel Drake after NIST 800-171 audit. Dual-track briefing to unblock.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>Satellite ground station edge computing</li>
+          <li>NIST 800-171 compliance remediation</li>
+          <li>Air-gapped deployment capabilities</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=luna-wavelength&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/luna-wavelength/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ MAX BANDWIDTH ═════════ -->
+    <div class="persona-card" data-tier="gold" data-type="fun">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Max Bandwidth</div>
+          <div class="persona-role">SVP Digital Transformation &middot; Thunderbolt Logistics</div>
+        </div>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Supply Chain</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$6.3B</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Trusted</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">81/100 &uarr;</span></div>
+      </div>
+      <div class="persona-drama opportunity">
+        Former competitive gamer turned logistics exec. AI pilot saved $4M/year on route optimization. VP Operations Helen Gearshift blocking scale-up. Needs board ammunition. Deep dish pizza only.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>Fleet-wide AI route optimization scale-up</li>
+          <li>Real-time fleet tracking with edge computing</li>
+          <li>ROI data for board approval</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=max-bandwidth&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/max-bandwidth/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <!-- ═════════ SAGE CLOUDBERRY ═════════ -->
+    <div class="persona-card" data-tier="standard" data-type="fun">
+      <div class="persona-card-header">
+        <div>
+          <div class="persona-name">Sage Cloudberry</div>
+          <div class="persona-role">CIO &middot; WonderPaws Pet Wellness</div>
+        </div>
+        <span class="persona-tier standard">Standard</span>
+      </div>
+      <div class="persona-stats">
+        <div class="stat-item"><span class="stat-label">Industry</span><span class="stat-value">Veterinary</span></div>
+        <div class="stat-item"><span class="stat-label">Revenue</span><span class="stat-value">$780M</span></div>
+        <div class="stat-item"><span class="stat-label">Relationship</span><span class="stat-value">Aware (first briefing)</span></div>
+        <div class="stat-item"><span class="stat-label">Engagement</span><span class="stat-value">New account</span></div>
+      </div>
+      <div class="persona-drama opportunity">
+        First-ever executive briefing. Fast-growing 40% YoY. Former SRE evaluating Red Hat vs VMware. Brings golden retriever therapy dog "Kubernetes" to meetings. Greenfield land-and-expand opportunity.
+      </div>
+      <div class="persona-section">
+        <span class="section-label">Top Priorities</span>
+        <ul class="priority-list">
+          <li>Container platform selection (Red Hat vs VMware)</li>
+          <li>Scaling infrastructure for 40% YoY growth</li>
+          <li>Veterinary AI for predictive wellness</li>
+        </ul>
+      </div>
+      <div class="persona-actions">
+        <a class="action-btn primary" href="briefingclaw-dashboard.html?contact=sage-cloudberry&amp;autostart">Run Demo</a>
+        <a class="action-btn secondary" href="demo-deliverables/sage-cloudberry/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Built with open source &middot; Runs on your laptop &middot; <span class="red">Red Hat</span> CTO Office &middot; GACEP Spring 2026<br>
+    <a class="github-link" href="https://github.com/holzerjm/GACEP-Spring-2026-demo" target="_blank">github.com/holzerjm/GACEP-Spring-2026-demo</a>
+  </div>
+
+</div>
+
+<script>
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.persona-card').forEach(card => {
+      if (filter === 'all') {
+        card.classList.remove('hidden');
+      } else if (['platinum', 'gold', 'silver', 'standard'].includes(filter)) {
+        card.classList.toggle('hidden', card.dataset.tier !== filter);
+      } else if (['enterprise', 'fun'].includes(filter)) {
+        card.classList.toggle('hidden', card.dataset.type !== filter);
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

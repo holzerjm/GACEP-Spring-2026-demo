@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Post-Briefing Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06070A;
+  --bg-card: #0F1117;
+  --bg-card-hover: #161820;
+  --gold: #FFC600;
+  --gold-dim: #B8900A;
+  --gold-glow: rgba(255,198,0,0.15);
+  --frontier: #6E9BFF;
+  --local: #4ADE80;
+  --red: #EE0000;
+  --text: #E8E8EC;
+  --text-dim: #8B8FA3;
+  --text-muted: #5A5E72;
+  --border: #1E2030;
+  --border-glow: #2A2E42;
+  --status-red: #EF4444;
+  --status-amber: #F59E0B;
+  --status-green: #4ADE80;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+/* ═══════════════════ TOPBAR ═══════════════════ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--text-dim);
+  margin-left: 16px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--gold);
+  border-color: rgba(255,198,0,0.3);
+  background: rgba(255,198,0,0.05);
+}
+
+/* ═══════════════════ INTRO ═══════════════════ */
+.intro {
+  margin-bottom: 36px;
+}
+
+.intro h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.intro .subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 760px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════ LAYOUT ═══════════════════ */
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 880px) {
+  .feedback-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════ FORM PANEL ═══════════════════ */
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 26px;
+}
+
+.panel-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.panel-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.form-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.form-input, .form-select, .form-textarea {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--border-glow);
+  background: rgba(255,255,255,0.04);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%238B8FA3' d='M6 8L2 4h8z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* NPS slider */
+.nps-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.nps-btn {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 10px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nps-btn:hover {
+  border-color: var(--border-glow);
+  color: var(--text);
+}
+
+.nps-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #000;
+}
+
+.nps-btn.active.detractor { background: var(--status-red); border-color: var(--status-red); color: #fff; }
+.nps-btn.active.passive { background: var(--status-amber); border-color: var(--status-amber); color: #000; }
+.nps-btn.active.promoter { background: var(--status-green); border-color: var(--status-green); color: #000; }
+
+/* Commitments list */
+.commitments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.commitment-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.commitment-row input {
+  flex: 1;
+}
+
+.commitment-row .remove-btn {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  color: var(--status-red);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.commitment-row .remove-btn:hover {
+  background: rgba(239,68,68,0.15);
+}
+
+.add-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gold);
+  background: rgba(255,198,0,0.06);
+  border: 1px dashed rgba(255,198,0,0.3);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+  align-self: flex-start;
+  transition: all 0.2s ease;
+}
+
+.add-btn:hover {
+  background: rgba(255,198,0,0.12);
+  border-style: solid;
+}
+
+/* Action buttons */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.btn {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #000;
+  flex: 1;
+}
+
+.btn-primary:hover {
+  background: #FFD23F;
+  box-shadow: 0 4px 16px rgba(255,198,0,0.25);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  color: var(--text);
+  border-color: var(--border-glow);
+}
+
+/* ═══════════════════ RIGHT PANEL: ANALYSIS ═══════════════════ */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analysis-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+
+.analysis-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analysis-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.placeholder {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* Relationship stage indicator */
+.stage-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.stage-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.stage-dot.from { background: var(--text-muted); }
+.stage-dot.to { background: var(--local); box-shadow: 0 0 8px rgba(74,222,128,0.4); }
+.stage-dot.to.down { background: var(--status-amber); box-shadow: 0 0 8px rgba(245,158,11,0.4); }
+.stage-dot.to.danger { background: var(--status-red); box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+
+.stage-arrow {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.stage-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stage-change {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Prediction calibration */
+.calibration {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.calib-cell {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(30,32,48,0.6);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.calib-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.calib-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--gold);
+}
+
+.calib-value.match { color: var(--status-green); }
+.calib-value.drift { color: var(--status-amber); }
+.calib-value.miss { color: var(--status-red); }
+
+.verdict-line {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: rgba(255,198,0,0.04);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Recent history */
+.history-item {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(30,32,48,0.6);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.history-contact {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.history-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.history-outcome {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.history-outcome .nps-chip {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.nps-chip.promoter { background: rgba(74,222,128,0.12); color: var(--status-green); border: 1px solid rgba(74,222,128,0.3); }
+.nps-chip.passive { background: rgba(245,158,11,0.12); color: var(--status-amber); border: 1px solid rgba(245,158,11,0.3); }
+.nps-chip.detractor { background: rgba(239,68,68,0.12); color: var(--status-red); border: 1px solid rgba(239,68,68,0.3); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  opacity: 0;
+  transition: all 0.35s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success { border-left: 3px solid var(--status-green); }
+
+/* ═══════════════════ FOOTER ═══════════════════ */
+.footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.footer .red { color: var(--red); }
+
+.github-link {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,198,0,0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo-row">
+      <img class="logo-icon" src="jmhclaw.png" alt="BriefingClaw">
+      <span class="logo-text">BriefingClaw</span>
+      <span class="page-title">Post-Briefing Feedback</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">&larr; Home</a>
+      <a href="briefingclaw-dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <h1>Log the Outcome</h1>
+    <p class="subtitle">
+      Close the loop. Log what actually happened at the briefing &mdash; NPS score, commitments made,
+      relationship signals. Déjà View will use this to update the engagement history for the next cycle,
+      and The Oddsfather will calibrate its prediction weights against reality.
+    </p>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="feedback-grid">
+
+    <!-- LEFT: FORM -->
+    <div class="panel">
+      <div class="panel-title">Briefing Outcome</div>
+      <div class="panel-sub">Submit within 24 hours for best Deja View recall accuracy</div>
+
+      <div class="form-group">
+        <label class="form-label">Contact</label>
+        <select class="form-select" id="contactSelect">
+          <option value="sarah-chen">Sarah Chen — CIO, Meridian Health Systems</option>
+          <option value="david-park">David Park — SVP Technology, Apex Financial Group</option>
+          <option value="rachel-morrison">Rachel Morrison — CTO, TerraScale Energy</option>
+          <option value="pepper-minton">Pepper Minton — CTO, SnackStack Technologies</option>
+          <option value="ziggy-chen">Ziggy Stardust-Chen — VP Platform Eng, Quantum Pretzel Corp</option>
+          <option value="luna-wavelength">Luna Wavelength — CIO, GalactiCorp Space Industries</option>
+          <option value="max-bandwidth">Max Bandwidth — SVP Digital, Thunderbolt Logistics</option>
+          <option value="sage-cloudberry">Sage Cloudberry — CIO, WonderPaws Pet Wellness</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Briefing Date</label>
+        <input class="form-input" type="date" id="briefingDate">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">NPS Score (0 &ndash; 10)</label>
+        <div class="nps-row" id="npsRow">
+          <button class="nps-btn" data-nps="0">0</button>
+          <button class="nps-btn" data-nps="1">1</button>
+          <button class="nps-btn" data-nps="2">2</button>
+          <button class="nps-btn" data-nps="3">3</button>
+          <button class="nps-btn" data-nps="4">4</button>
+          <button class="nps-btn" data-nps="5">5</button>
+          <button class="nps-btn" data-nps="6">6</button>
+          <button class="nps-btn" data-nps="7">7</button>
+          <button class="nps-btn" data-nps="8">8</button>
+          <button class="nps-btn" data-nps="9">9</button>
+          <button class="nps-btn" data-nps="10">10</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Commitments Made</label>
+        <div class="commitments-list" id="commitmentsList">
+          <div class="commitment-row">
+            <input class="form-input commitment-input" type="text" placeholder="e.g., Deliver AI governance reference architecture by April 30">
+            <button class="remove-btn" onclick="removeCommitment(this)">&times;</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addCommitment()">+ Add Commitment</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Actual Outcome (vs. stated business goal)</label>
+        <select class="form-select" id="outcomeSelect">
+          <option value="">Select outcome...</option>
+          <option value="exceeded">✅ Exceeded — goal hit + expansion signal</option>
+          <option value="met">✅ Met — goal achieved as planned</option>
+          <option value="partial">🟡 Partial — progress but not closure</option>
+          <option value="missed">🔴 Missed — goal not achieved</option>
+          <option value="damaged">🔴 Damaged — relationship regressed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Relationship Stage Signal</label>
+        <select class="form-select" id="stageSignal">
+          <option value="advance">↑ Advanced — ready to promote relationship stage</option>
+          <option value="stable" selected>→ Stable — no change</option>
+          <option value="cooling">↓ Cooling — watch for further regression</option>
+          <option value="declining">↓↓ Declining — take action within 30 days</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notes / Debrief (what happened, what surprised you)</label>
+        <textarea class="form-textarea" id="notesField" placeholder="Free-form debrief. Include quotes, moments that landed, moments that fell flat, anything Deja View should remember for next time..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+        <button class="btn btn-primary" onclick="submitFeedback()">Submit to Déjà View</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: LIVE ANALYSIS -->
+    <div class="side-panel">
+
+      <!-- PREDICTION CALIBRATION -->
+      <div class="analysis-card">
+        <div class="analysis-title">&#127922; The Oddsfather&apos;s Calibration</div>
+        <div class="analysis-sub">Predicted vs. Actual</div>
+        <div class="calibration">
+          <div class="calib-cell">
+            <div class="calib-label">Predicted</div>
+            <div class="calib-value" id="calibPredicted">—</div>
+          </div>
+          <div class="calib-cell">
+            <div class="calib-label">Actual</div>
+            <div class="calib-value" id="calibActual">—</div>
+          </div>
+        </div>
+        <div class="verdict-line" id="verdictLine">Select a contact and log an outcome to see calibration.</div>
+      </div>
+
+      <!-- RELATIONSHIP STAGE -->
+      <div class="analysis-card">
+        <div class="analysis-title">&#128203; Relationship Stage Update</div>
+        <div class="analysis-sub">Déjà View will apply this change</div>
+        <div class="stage-row">
+          <div class="stage-dot from"></div>
+          <span class="stage-text" id="stageFrom">Current Stage</span>
+          <span class="stage-arrow">&rarr;</span>
+          <div class="stage-dot to" id="stageToDot"></div>
+          <span class="stage-text" id="stageTo">New Stage</span>
+          <span class="stage-change" id="stageChange"></span>
+        </div>
+        <div class="placeholder" id="stagePlaceholder">Select an outcome to preview the relationship update.</div>
+      </div>
+
+      <!-- RECENT FEEDBACK HISTORY -->
+      <div class="analysis-card">
+        <div class="analysis-title">&#128196; Recent Submissions</div>
+        <div class="analysis-sub">Stored in localStorage</div>
+        <div id="historyList">
+          <div class="placeholder">No feedback logged yet. Your first submission will appear here.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Built with open source &middot; Runs on your laptop &middot; <span class="red">Red Hat</span> CTO Office &middot; GACEP Spring 2026<br>
+    <a class="github-link" href="https://github.com/holzerjm/GACEP-Spring-2026-demo" target="_blank">github.com/holzerjm/GACEP-Spring-2026-demo</a>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONTACT METADATA (mirrors dashboard SCENARIOS + predictions)
+// ═══════════════════════════════════════════════════════════
+const CONTACTS = {
+  'sarah-chen':       { name: 'Sarah Chen',         stage: 'Trusted → Champion',      predicted: 79 },
+  'david-park':       { name: 'David Park',         stage: 'Trusted (at risk)',       predicted: 56 },
+  'rachel-morrison':  { name: 'Rachel Morrison',    stage: 'Champion (stressed)',     predicted: 71 },
+  'pepper-minton':    { name: 'Pepper Minton',      stage: 'Engaged',                 predicted: 74 },
+  'ziggy-chen':       { name: 'Ziggy Stardust-Chen', stage: 'Alumni (at risk)',       predicted: 38 },
+  'luna-wavelength':  { name: 'Luna Wavelength',    stage: 'Champion',                predicted: 82 },
+  'max-bandwidth':    { name: 'Max Bandwidth',      stage: 'Trusted',                 predicted: 67 },
+  'sage-cloudberry':  { name: 'Sage Cloudberry',    stage: 'Aware (first briefing)',  predicted: 62 }
+};
+
+// Outcome → actual success score mapping
+const OUTCOME_SCORES = {
+  'exceeded': 95,
+  'met': 80,
+  'partial': 55,
+  'missed': 25,
+  'damaged': 10
+};
+
+// Stage progression map
+const STAGE_DELTAS = {
+  'advance': { label: '+1 stage', className: 'to' },
+  'stable':  { label: 'no change', className: 'to' },
+  'cooling': { label: '-1 stage', className: 'to down' },
+  'declining': { label: '-2 stages', className: 'to danger' }
+};
+
+const NEXT_STAGE = {
+  'Trusted → Champion': { advance: 'Champion',    stable: 'Trusted → Champion', cooling: 'Trusted',       declining: 'Engaged' },
+  'Trusted (at risk)':  { advance: 'Trusted',     stable: 'Trusted (at risk)',  cooling: 'Engaged',       declining: 'Favorable' },
+  'Champion (stressed)': { advance: 'Champion',   stable: 'Champion (stressed)', cooling: 'Trusted',      declining: 'Engaged' },
+  'Engaged':            { advance: 'Trusted',     stable: 'Engaged',             cooling: 'Favorable',    declining: 'Aware' },
+  'Alumni (at risk)':   { advance: 'Re-engaged',  stable: 'Alumni (at risk)',    cooling: 'Alumni (lost)', declining: 'Lost' },
+  'Champion':           { advance: 'Platinum Champion', stable: 'Champion',      cooling: 'Trusted',      declining: 'Engaged' },
+  'Trusted':            { advance: 'Trusted → Champion', stable: 'Trusted',      cooling: 'Engaged',      declining: 'Favorable' },
+  'Aware (first briefing)': { advance: 'Favorable', stable: 'Aware',             cooling: 'Aware (no follow-up)', declining: 'Lost' }
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let selectedNps = null;
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+function init() {
+  // Default date to today
+  document.getElementById('briefingDate').valueAsDate = new Date();
+
+  // NPS buttons
+  document.querySelectorAll('.nps-btn').forEach(btn => {
+    btn.addEventListener('click', () => selectNps(parseInt(btn.dataset.nps)));
+  });
+
+  // Contact change
+  document.getElementById('contactSelect').addEventListener('change', updatePredicted);
+  document.getElementById('outcomeSelect').addEventListener('change', updatePreview);
+  document.getElementById('stageSignal').addEventListener('change', updatePreview);
+
+  updatePredicted();
+  renderHistory();
+}
+
+function selectNps(score) {
+  selectedNps = score;
+  document.querySelectorAll('.nps-btn').forEach(btn => {
+    btn.classList.remove('active', 'detractor', 'passive', 'promoter');
+    if (parseInt(btn.dataset.nps) === score) {
+      btn.classList.add('active');
+      if (score <= 6) btn.classList.add('detractor');
+      else if (score <= 8) btn.classList.add('passive');
+      else btn.classList.add('promoter');
+    }
+  });
+  updatePreview();
+}
+
+function updatePredicted() {
+  const id = document.getElementById('contactSelect').value;
+  const contact = CONTACTS[id];
+  if (contact) {
+    document.getElementById('calibPredicted').textContent = contact.predicted + '%';
+    document.getElementById('stageFrom').textContent = contact.stage;
+  }
+  updatePreview();
+}
+
+function updatePreview() {
+  const outcomeVal = document.getElementById('outcomeSelect').value;
+  const stageVal = document.getElementById('stageSignal').value;
+  const id = document.getElementById('contactSelect').value;
+  const contact = CONTACTS[id];
+
+  // Actual score
+  const actualEl = document.getElementById('calibActual');
+  const verdictEl = document.getElementById('verdictLine');
+  if (outcomeVal) {
+    const actual = OUTCOME_SCORES[outcomeVal];
+    actualEl.textContent = actual + '%';
+    actualEl.className = 'calib-value';
+    const drift = Math.abs(actual - contact.predicted);
+    if (drift <= 10) { actualEl.classList.add('match'); verdictEl.textContent = "The Oddsfather's call was on target. Drift: " + drift + " points. Weights unchanged."; }
+    else if (drift <= 25) { actualEl.classList.add('drift'); verdictEl.textContent = "Moderate drift (" + drift + " points). The Oddsfather will re-weight " + (actual > contact.predicted ? 'positive' : 'risk') + " signals next cycle."; }
+    else { actualEl.classList.add('miss'); verdictEl.textContent = "Significant miss (" + drift + " points). The Oddsfather flags this for manual review and scoring recalibration."; }
+  } else {
+    actualEl.textContent = '—';
+    actualEl.className = 'calib-value';
+    verdictEl.textContent = "Select an outcome to see calibration.";
+  }
+
+  // Stage update
+  const stageToEl = document.getElementById('stageTo');
+  const stageDotEl = document.getElementById('stageToDot');
+  const stageChangeEl = document.getElementById('stageChange');
+  const placeholderEl = document.getElementById('stagePlaceholder');
+  if (stageVal && contact) {
+    const next = (NEXT_STAGE[contact.stage] && NEXT_STAGE[contact.stage][stageVal]) || contact.stage;
+    stageToEl.textContent = next;
+    stageChangeEl.textContent = STAGE_DELTAS[stageVal].label;
+    stageDotEl.className = 'stage-dot ' + STAGE_DELTAS[stageVal].className;
+    placeholderEl.style.display = 'none';
+  } else {
+    placeholderEl.style.display = 'block';
+  }
+}
+
+function addCommitment() {
+  const list = document.getElementById('commitmentsList');
+  const row = document.createElement('div');
+  row.className = 'commitment-row';
+  row.innerHTML = '<input class="form-input commitment-input" type="text" placeholder="Another commitment..."><button class="remove-btn" onclick="removeCommitment(this)">&times;</button>';
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function removeCommitment(btn) {
+  const list = document.getElementById('commitmentsList');
+  if (list.children.length > 1) {
+    btn.parentElement.remove();
+  } else {
+    btn.parentElement.querySelector('input').value = '';
+  }
+}
+
+function clearForm() {
+  document.getElementById('briefingDate').valueAsDate = new Date();
+  selectedNps = null;
+  document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('active', 'detractor', 'passive', 'promoter'));
+  document.getElementById('outcomeSelect').value = '';
+  document.getElementById('stageSignal').value = 'stable';
+  document.getElementById('notesField').value = '';
+  document.getElementById('commitmentsList').innerHTML = '<div class="commitment-row"><input class="form-input commitment-input" type="text" placeholder="e.g., Deliver AI governance reference architecture by April 30"><button class="remove-btn" onclick="removeCommitment(this)">&times;</button></div>';
+  updatePredicted();
+}
+
+function submitFeedback() {
+  const id = document.getElementById('contactSelect').value;
+  const contact = CONTACTS[id];
+  const outcome = document.getElementById('outcomeSelect').value;
+  if (!outcome) {
+    showToast('Please select an actual outcome before submitting.', 'error');
+    return;
+  }
+  if (selectedNps === null) {
+    showToast('Please select an NPS score.', 'error');
+    return;
+  }
+
+  const commitments = Array.from(document.querySelectorAll('.commitment-input'))
+    .map(i => i.value.trim())
+    .filter(v => v.length > 0);
+
+  const entry = {
+    contact: id,
+    contactName: contact.name,
+    date: document.getElementById('briefingDate').value,
+    nps: selectedNps,
+    outcome: outcome,
+    predicted: contact.predicted,
+    actual: OUTCOME_SCORES[outcome],
+    stageSignal: document.getElementById('stageSignal').value,
+    stageFrom: contact.stage,
+    stageTo: document.getElementById('stageTo').textContent,
+    commitments: commitments,
+    notes: document.getElementById('notesField').value.trim(),
+    submittedAt: new Date().toISOString()
+  };
+
+  // Store in localStorage
+  try {
+    const stored = JSON.parse(localStorage.getItem('briefingclaw-feedback') || '[]');
+    stored.unshift(entry);
+    if (stored.length > 50) stored.length = 50;
+    localStorage.setItem('briefingclaw-feedback', JSON.stringify(stored));
+  } catch (e) { console.error(e); }
+
+  showToast('✅ Feedback submitted. Déjà View updated. The Oddsfather recalibrated.', 'success');
+  clearForm();
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  let stored = [];
+  try { stored = JSON.parse(localStorage.getItem('briefingclaw-feedback') || '[]'); } catch (e) {}
+
+  if (stored.length === 0) {
+    list.innerHTML = '<div class="placeholder">No feedback logged yet. Your first submission will appear here.</div>';
+    return;
+  }
+
+  list.innerHTML = stored.slice(0, 5).map(entry => {
+    const npsClass = entry.nps >= 9 ? 'promoter' : entry.nps >= 7 ? 'passive' : 'detractor';
+    const outcomeLabels = { exceeded: 'Exceeded', met: 'Met', partial: 'Partial', missed: 'Missed', damaged: 'Damaged' };
+    return `
+      <div class="history-item">
+        <div class="history-line">
+          <span class="history-contact">${entry.contactName}</span>
+          <span class="history-date">${entry.date}</span>
+        </div>
+        <div class="history-outcome">
+          <span class="nps-chip ${npsClass}">NPS ${entry.nps}</span>
+          ${outcomeLabels[entry.outcome] || entry.outcome} · predicted ${entry.predicted}% / actual ${entry.actual}%
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function showToast(msg, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast show ' + (type || '');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
