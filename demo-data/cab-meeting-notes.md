@@ -15,9 +15,12 @@
 - Sarah Chen, CIO, Meridian Health Systems ✓
 - David Park, SVP Technology, Apex Financial Group ✓
 - Rachel Morrison, CTO, TerraScale Energy ✓ (Co-Chair)
+- Pepper Minton, CTO, SnackStack Technologies ✓
+- Luna Wavelength, Chief Innovation Officer, GalactiCorp Space Industries ✓ (Co-Vice-Chair)
+- Max Bandwidth, SVP Digital Transformation, Thunderbolt Logistics ✓
 - James Liu, VP Infrastructure, NovaTech Industries ✓
 - Maria Santos, CISO, Pacific Coast Mutual ✓
-- [... 9 additional members]
+- [... 6 additional members]
 
 ### Theme 1: AI Governance in Regulated Industries
 **Discussion lead**: Sarah Chen (Meridian Health Systems)
@@ -39,6 +42,21 @@ David Park raised the financial services angle:
 - "Our regulators are three years behind on AI guidance, but they'll catch up fast and retroactively. We need to build governance now that will survive future regulation."
 - Asked whether open-source models would satisfy OCC and FINRA auditability requirements
 - Noted that Apex is evaluating three vendors for AI governance tooling
+
+Luna Wavelength contributed from the aerospace and defense perspective:
+- "When your AI is controlling satellite ground station handoffs, explainability isn't a nice-to-have — it's a mission-critical requirement. Our CISO won't sign off on any AI deployment without a full audit trail."
+- Shared GalactiCorp's internal AI review process for safety-critical systems
+- Connected with Rachel Morrison on similarities between energy grid and satellite operations governance needs
+
+Pepper Minton offered the scale-up perspective:
+- "We went from zero to 50 million API calls a day when our recipe engine went viral. Governance was an afterthought — we're retrofitting it now. Learn from our mistakes."
+- Asked about lightweight governance frameworks for fast-moving SaaS companies
+- Noted that AI governance in food tech has fewer regulatory constraints but still needs consumer trust
+
+Max Bandwidth connected AI governance to logistics:
+- "Route optimization AI affects 2,000 truck drivers' daily schedules. If the model makes a bad call, people sit in traffic for hours. We need governance that accounts for human impact, not just financial risk."
+- Shared that Thunderbolt's AI pilot includes a human-override mechanism for dispatcher review
+- Asked whether Red Hat has benchmark data on AI ROI in logistics — wants ammunition for internal skeptics
 
 **Board consensus**: Strong demand for governance frameworks that work in regulated environments. Multiple members echoed the need for explainable, auditable AI.
 
@@ -66,6 +84,17 @@ Rachel Morrison added the energy sector perspective:
 - Offered to connect David with TerraScale's platform engineering lead for a peer exchange
 - Noted that edge computing migrations for remote substations present a unique version of this challenge
 
+Luna Wavelength shared the aerospace challenge:
+- "Try doing hybrid cloud when half your clusters are air-gapped at classified facilities. Our migration challenge isn't just technical — it's regulatory. FedRAMP and ITAR add layers that most enterprises don't deal with."
+- Offered to share GalactiCorp's air-gapped cluster management approach with interested members
+
+Max Bandwidth brought the logistics angle:
+- "We have 200 warehouses with edge nodes that need to sync with our central OpenShift clusters. Migration isn't a one-time event for us — it's continuous. Every new warehouse is a mini-migration."
+- Asked about automated cluster provisioning for edge-to-core hybrid architectures
+- Connected with Pepper Minton afterward on scaling challenges (both dealing with rapid growth scenarios)
+
+Pepper Minton added: "We migrated to OpenShift in 6 months because we had no legacy to deal with — we were born cloud-native. But scaling is our version of the migration problem. When your traffic goes 40x overnight, your architecture gets stress-tested in ways no migration plan anticipates."
+
 **Action item**: Develop a "Hybrid Cloud Reality" benchmarking survey for board members (Assigned: CTO Office, Due: Q2 2026)
 **Action item**: Rachel Morrison to share TerraScale migration playbook with David Park's team (Assigned: Rachel, Due: March 2026)
 
@@ -78,6 +107,13 @@ Rachel Morrison (as Co-Chair) facilitated this segment:
 - Polled the group on IDP adoption maturity — 4 members in production, 6 evaluating, 4 not started
 
 David Park commented: "We have three different internal platforms at Apex because no one agreed on standards. We need consolidation before we can talk about developer experience."
+
+Pepper Minton was highly animated on this topic:
+- "We built our IDP in 3 months with a team of 4 engineers. The secret? We treated it like a product — daily standups, user interviews with our own developers, and a public backlog. If your developers hate your platform, it's because you built it like an IT project, not a product."
+- Offered to demo SnackStack's developer portal to any interested members
+
+Max Bandwidth connected platform engineering to his AI scaling challenge:
+- "My data science team bypasses the platform team because it's too slow to get GPU resources provisioned. That's a developer experience problem — if the platform doesn't serve the AI workflow, people go around it."
 
 **Action item**: Schedule a deep-dive session on IDP maturity models for Q2 meeting (Assigned: Kristin Waitkus, Due: April 2026)
 
@@ -146,4 +182,13 @@ David Park attended the post-meeting executive dinner at Angus Barn with 8 other
 | David Park | SVP Technology | Apex Financial Group | Q1 2023 | Strategic Technology | 3/4 (75%) |
 | Rachel Morrison | CTO | TerraScale Energy | Q3 2024 | Strategic Technology | 4/4 (100%) |
 | James Liu | VP Infrastructure | NovaTech Industries | Q1 2024 | Strategic Technology | 3/4 (75%) |
+| Pepper Minton | CTO | SnackStack Technologies | Q3 2024 | Strategic Technology | 3/4 (75%) |
+| Luna Wavelength | Chief Innovation Officer | GalactiCorp Space Industries | Q1 2025 | Strategic Technology | 4/4 (100%) |
+| Max Bandwidth | SVP Digital Transformation | Thunderbolt Logistics | Q1 2025 | Strategic Technology | 3/3 (100%) |
 | Maria Santos | CISO | Pacific Coast Mutual | Q2 2025 | Strategic Technology | 2/2 (100%) |
+
+## Membership Roster — Alumni
+
+| Name | Title | Company | Member Since | Departed | Board | Reason |
+|------|-------|---------|-------------|----------|-------|--------|
+| Ziggy Stardust-Chen | VP Platform Engineering | Quantum Pretzel Corp | Q1 2024 | Q4 2025 | Strategic Technology | Stepped down — cited lack of responsiveness to feedback |

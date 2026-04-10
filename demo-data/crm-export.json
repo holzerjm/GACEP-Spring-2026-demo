@@ -293,6 +293,423 @@
           "notes": "Involved in P1 post-mortem from security perspective. Concerned about certificate management process that may have contributed to outage. Not yet engaged in broader platform conversation — opportunity."
         }
       ]
+    },
+    {
+      "account_id": "ACC-4102",
+      "company": "SnackStack Technologies",
+      "industry": "Food Tech / SaaS",
+      "segment": "Enterprise",
+      "tier": "Strategic",
+      "annual_revenue": "$2.1B",
+      "employees": 12000,
+      "headquarters": "Austin, TX",
+      "account_health_score": 78,
+      "account_health_trend": "improving — viral growth driving urgency",
+      "contract_value": "$1.6M ARR",
+      "contract_renewal_date": "2027-03-01",
+      "products_deployed": [
+        "OpenShift Container Platform",
+        "Red Hat Enterprise Linux",
+        "Red Hat OpenShift AI (pilot)",
+        "Red Hat Integration (AMQ Streams)"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-22401",
+          "name": "SnackStack Platform Scaling — TikTok Viral Load",
+          "stage": "Proposal",
+          "value": "$2.4M",
+          "close_date": "2026-07-31",
+          "notes": "AI recipe engine went viral on TikTok — 40x traffic spike crashed production. Urgent need for platform auto-scaling and multi-region deployment. Pepper Minton personally championing."
+        },
+        {
+          "opp_id": "OPP-22555",
+          "name": "SnackStack AI Expansion — Flavor Profile Engine",
+          "stage": "Discovery",
+          "value": "$680K",
+          "close_date": "2026-Q4",
+          "notes": "Next-gen AI model for personalized flavor recommendations. Requires GPU-accelerated inference at scale on OpenShift AI."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4812",
+          "date": "2026-03-15",
+          "severity": "P1",
+          "summary": "Production outage — OpenShift cluster overwhelmed by TikTok-driven traffic surge. Recipe recommendation API returned 503 errors for 2.5 hours during peak. Auto-scaling limits hit. Revenue impact estimated at $180K in lost ad impressions.",
+          "status": "Closed",
+          "satisfaction": "Mixed — resolved quickly but Pepper wants a scalability architecture review to prevent recurrence"
+        },
+        {
+          "case_id": "ESC-4830",
+          "date": "2026-03-22",
+          "severity": "P3",
+          "summary": "AMQ Streams — Kafka consumer lag in event processing pipeline during high-traffic periods",
+          "status": "Open — tuning in progress",
+          "satisfaction": "Neutral — team is working through it collaboratively"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-9501",
+          "name": "Pepper Minton",
+          "title": "Chief Technology Officer",
+          "email": "pepper.minton@snackstack.io",
+          "phone": "+1-512-555-0198",
+          "role_type": "Economic Buyer / Champion",
+          "engagement_score": 78,
+          "cab_member": true,
+          "executive_sponsor": "Carlos Diaz, VP Developer Experience",
+          "last_activity": "2026-03-15",
+          "last_activity_type": "P1 Escalation Call",
+          "preferred_communication": "Slack first, then video call. Hates email threads longer than 3 messages.",
+          "notes": "High-energy CTO. Built SnackStack's original recipe engine as a weekend hackathon project. Loves standing meetings, tacos, and oat milk lattes. Hates PowerPoint — insists on live demos or whiteboard sessions. Currently focused on scaling after unexpected viral growth."
+        },
+        {
+          "contact_id": "CON-9502",
+          "name": "Riley Forks",
+          "title": "VP Engineering",
+          "email": "riley.forks@snackstack.io",
+          "role_type": "Technical Decision Maker",
+          "engagement_score": 71,
+          "cab_member": false,
+          "last_activity": "2026-03-20",
+          "last_activity_type": "Architecture Review Call",
+          "notes": "Pepper's right hand on infrastructure decisions. Former SRE at a major cloud provider. Focused on reliability and cost optimization."
+        }
+      ]
+    },
+    {
+      "account_id": "ACC-4267",
+      "company": "Quantum Pretzel Corp",
+      "industry": "FinTech / Crypto",
+      "segment": "Growth",
+      "tier": "Growth",
+      "annual_revenue": "$890M",
+      "employees": 4200,
+      "headquarters": "Miami, FL",
+      "account_health_score": 55,
+      "account_health_trend": "declining — engagement dropping, competitor threat",
+      "contract_value": "$920K ARR",
+      "contract_renewal_date": "2026-06-15",
+      "products_deployed": [
+        "OpenShift Container Platform",
+        "Red Hat Enterprise Linux",
+        "Red Hat Advanced Cluster Security"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-22610",
+          "name": "Quantum Pretzel Platform Renewal + Expansion",
+          "stage": "Negotiation",
+          "value": "$1.4M",
+          "close_date": "2026-06-15",
+          "notes": "Contract renewal with proposed expansion. At risk — Ziggy Stardust-Chen stepped down from CAB in Q4 2025 and competitor AWS is aggressively pitching EKS migration. Renewal is the immediate priority."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4799",
+          "date": "2026-02-10",
+          "severity": "P2",
+          "summary": "Advanced Cluster Security — false positive alerts flooding the SOC during crypto transaction peaks. Alert tuning request escalated after 3 weeks without resolution.",
+          "status": "Closed",
+          "satisfaction": "Negative — Ziggy cited this as an example of feeling deprioritized. Resolution took too long."
+        },
+        {
+          "case_id": "ESC-4756",
+          "date": "2026-01-05",
+          "severity": "P3",
+          "summary": "OpenShift — pod scheduling latency spikes during high-frequency trading workloads",
+          "status": "Closed",
+          "satisfaction": "Neutral — resolved but required multiple follow-ups"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-9601",
+          "name": "Ziggy Stardust-Chen",
+          "title": "VP Platform Engineering",
+          "email": "ziggy.stardust-chen@quantumpretzel.com",
+          "phone": "+1-305-555-0274",
+          "role_type": "Economic Buyer",
+          "engagement_score": 55,
+          "cab_member": false,
+          "cab_alumni": true,
+          "cab_departure": "Q4 2025 — stepped down citing lack of responsiveness to feedback",
+          "executive_sponsor": "Aisha Patel, Director Strategic Accounts",
+          "last_activity": "2026-02-10",
+          "last_activity_type": "Support Escalation",
+          "preferred_communication": "Video call only — no meetings before noon (night owl). Allergic to corporate jargon — be direct and technical.",
+          "notes": "Remote-first advocate. Former CAB member who left feeling ignored. Competitor AWS is actively courting with EKS migration offer. Contract renewal in 2 months. Wants to feel valued — re-engagement is possible but requires genuine effort, not a sales pitch."
+        },
+        {
+          "contact_id": "CON-9602",
+          "name": "Kai Nakamura",
+          "title": "Director Infrastructure",
+          "email": "kai.nakamura@quantumpretzel.com",
+          "role_type": "Technical Influencer",
+          "engagement_score": 62,
+          "cab_member": false,
+          "last_activity": "2026-01-28",
+          "last_activity_type": "Technical Support Session",
+          "notes": "Still technically favorable toward OpenShift but frustrated by support response times. Key person to retain for renewal."
+        }
+      ]
+    },
+    {
+      "account_id": "ACC-4390",
+      "company": "GalactiCorp Space Industries",
+      "industry": "Aerospace / Defense",
+      "segment": "Enterprise",
+      "tier": "Strategic",
+      "annual_revenue": "$14.5B",
+      "employees": 68000,
+      "headquarters": "Denver, CO",
+      "account_health_score": 82,
+      "account_health_trend": "stable — strong champion, but CISO blocker on expansion",
+      "contract_value": "$5.2M ARR",
+      "contract_renewal_date": "2027-06-30",
+      "products_deployed": [
+        "OpenShift Container Platform",
+        "Red Hat Enterprise Linux",
+        "Ansible Automation Platform",
+        "Red Hat Advanced Cluster Security",
+        "Red Hat Advanced Cluster Management"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-22780",
+          "name": "GalactiCorp Satellite Ground Station Edge Computing",
+          "stage": "Proposal",
+          "value": "$8.0M",
+          "close_date": "2026-09-30",
+          "notes": "Massive edge computing deployment for satellite ground station network. Luna Wavelength is championing internally. CISO is blocking expansion pending resolution of security audit findings in current OpenShift deployment."
+        },
+        {
+          "opp_id": "OPP-22815",
+          "name": "GalactiCorp Ansible Expansion — Launch Operations Automation",
+          "stage": "Discovery",
+          "value": "$1.2M",
+          "close_date": "2026-Q4",
+          "notes": "Automating satellite launch prep workflows with Ansible. Early conversations with Luna's team."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4845",
+          "date": "2026-03-05",
+          "severity": "P2",
+          "summary": "Security audit finding — OpenShift cluster configurations not meeting NIST 800-171 requirements in 3 of 12 clusters. CISO flagged as blocker to expansion. Remediation plan requested.",
+          "status": "Open — remediation plan in review",
+          "satisfaction": "Neutral — Luna understands, but her CISO (Colonel Drake) is using this to slow the deal"
+        },
+        {
+          "case_id": "ESC-4790",
+          "date": "2026-02-01",
+          "severity": "P3",
+          "summary": "Advanced Cluster Management — policy propagation delay across air-gapped clusters at classified facilities",
+          "status": "Closed",
+          "satisfaction": "Positive — resolved with dedicated support engineer onsite"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-9701",
+          "name": "Luna Wavelength",
+          "title": "Chief Innovation Officer",
+          "email": "luna.wavelength@galacticorp.com",
+          "phone": "+1-303-555-0341",
+          "role_type": "Economic Buyer / Champion",
+          "engagement_score": 88,
+          "cab_member": true,
+          "cab_role": "Co-Vice-Chair",
+          "executive_sponsor": "Roberto Vega, SVP Public Sector",
+          "last_activity": "2026-03-10",
+          "last_activity_type": "Executive Strategy Call",
+          "preferred_communication": "In-person or video call. Loves whiteboards. Tests everything hands-on — always have a lab environment ready.",
+          "notes": "Former NASA engineer. Vegetarian. Drinks earl grey tea. Deeply technical leader who personally evaluates technology. Strong champion but currently blocked by CISO Colonel Drake on expansion. Needs help building the security compliance case to unblock the $8M deal."
+        },
+        {
+          "contact_id": "CON-9702",
+          "name": "Colonel (Ret.) James Drake",
+          "title": "CISO",
+          "email": "james.drake@galacticorp.com",
+          "role_type": "Technical Decision Maker / Blocker",
+          "engagement_score": 35,
+          "cab_member": false,
+          "last_activity": "2026-03-05",
+          "last_activity_type": "Security Audit Review",
+          "notes": "Former military cybersecurity. Extremely risk-averse. Blocking expansion until all NIST 800-171 findings are remediated. Not opposed to the technology — opposed to moving fast without compliance assurance. Needs a dedicated security engagement."
+        },
+        {
+          "contact_id": "CON-9703",
+          "name": "Orion Pax",
+          "title": "VP Satellite Operations",
+          "email": "orion.pax@galacticorp.com",
+          "role_type": "Business Influencer",
+          "engagement_score": 60,
+          "cab_member": false,
+          "last_activity": "2026-02-20",
+          "last_activity_type": "Edge Computing Requirements Workshop",
+          "notes": "Owns the ground station network. Needs edge compute for real-time satellite telemetry. Supportive of expansion but defers to CISO on security posture."
+        }
+      ]
+    },
+    {
+      "account_id": "ACC-4501",
+      "company": "Thunderbolt Logistics",
+      "industry": "Supply Chain / Logistics",
+      "segment": "Enterprise",
+      "tier": "Strategic",
+      "annual_revenue": "$6.3B",
+      "employees": 45000,
+      "headquarters": "Chicago, IL",
+      "account_health_score": 74,
+      "account_health_trend": "stable — AI pilot success but internal politics blocking scale",
+      "contract_value": "$2.8M ARR",
+      "contract_renewal_date": "2027-02-28",
+      "products_deployed": [
+        "OpenShift Container Platform",
+        "Red Hat Enterprise Linux",
+        "Ansible Automation Platform",
+        "OpenShift AI (pilot)"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-22901",
+          "name": "Thunderbolt AI Scale-Out — Route Optimization Platform",
+          "stage": "Proposal",
+          "value": "$3.2M",
+          "close_date": "2026-08-31",
+          "notes": "Scaling successful AI pilot ($4M/year savings) to full fleet. Max Bandwidth championing but VP Operations (old guard) is resisting AI adoption. Board presentation needed to unlock budget."
+        },
+        {
+          "opp_id": "OPP-22935",
+          "name": "Thunderbolt Ansible Fleet — Warehouse Automation",
+          "stage": "Discovery",
+          "value": "$750K",
+          "close_date": "2026-Q4",
+          "notes": "Automating configuration management across 200+ warehouse edge nodes with Ansible."
+        }
+      ],
+      "recent_support_escalations": [
+        {
+          "case_id": "ESC-4860",
+          "date": "2026-03-18",
+          "severity": "P3",
+          "summary": "OpenShift AI — model serving latency spikes during peak logistics hours (6-9 AM). Route optimization predictions delayed by 45 seconds, impacting dispatch schedules.",
+          "status": "Open — performance tuning in progress",
+          "satisfaction": "Neutral — Max understands it is a scaling challenge, but needs resolution before board presentation"
+        }
+      ],
+      "contacts": [
+        {
+          "contact_id": "CON-9801",
+          "name": "Max Bandwidth",
+          "title": "SVP Digital Transformation",
+          "email": "max.bandwidth@thunderboltlogistics.com",
+          "phone": "+1-312-555-0456",
+          "role_type": "Economic Buyer / Champion",
+          "engagement_score": 76,
+          "cab_member": true,
+          "executive_sponsor": "Diana Kim, VP Transportation & Logistics",
+          "last_activity": "2026-03-18",
+          "last_activity_type": "Technical Review Call",
+          "preferred_communication": "Fast-paced meetings with real-time dashboards. Espresso double shot. Former competitive gamer — appreciates speed and data visualization.",
+          "notes": "Deep dish pizza enthusiast from Chicago. Drives AI transformation at Thunderbolt. Successful pilot saved $4M/year on route optimization. Now fighting internal politics — VP Operations (old guard) is resisting AI. Needs ROI ammunition for the board to unlock scale-out budget."
+        },
+        {
+          "contact_id": "CON-9802",
+          "name": "Helen Gearshift",
+          "title": "VP Operations",
+          "email": "helen.gearshift@thunderboltlogistics.com",
+          "role_type": "Blocker / Internal Skeptic",
+          "engagement_score": 22,
+          "cab_member": false,
+          "last_activity": "2026-01-10",
+          "last_activity_type": "QBR (attended reluctantly)",
+          "notes": "30-year logistics veteran. Skeptical of AI replacing experienced dispatchers. Not anti-technology but worried about reliability and job displacement. Key person to win over — or work around — for the AI scale-out."
+        },
+        {
+          "contact_id": "CON-9803",
+          "name": "Dev Patel",
+          "title": "Director Data Science",
+          "email": "dev.patel@thunderboltlogistics.com",
+          "role_type": "Technical Champion",
+          "engagement_score": 85,
+          "cab_member": false,
+          "last_activity": "2026-03-25",
+          "last_activity_type": "AI Model Performance Review",
+          "notes": "Built the route optimization model. Strong technical champion. Needs OpenShift AI to scale from 50 trucks (pilot) to 2,000 trucks (fleet-wide)."
+        }
+      ]
+    },
+    {
+      "account_id": "ACC-4688",
+      "company": "WonderPaws Pet Wellness",
+      "industry": "Healthcare / Veterinary",
+      "segment": "Growth",
+      "tier": "Growth",
+      "annual_revenue": "$780M",
+      "employees": 8500,
+      "headquarters": "Portland, OR",
+      "account_health_score": 65,
+      "account_health_trend": "new — first engagement, high potential",
+      "contract_value": "$320K ARR",
+      "contract_renewal_date": "2027-01-15",
+      "products_deployed": [
+        "Red Hat Enterprise Linux",
+        "Ansible Automation Platform"
+      ],
+      "open_opportunities": [
+        {
+          "opp_id": "OPP-23050",
+          "name": "WonderPaws Container Platform Evaluation",
+          "stage": "Discovery",
+          "value": "$900K",
+          "close_date": "2026-Q3",
+          "notes": "Sage Cloudberry evaluating OpenShift vs. VMware Tanzu for container platform. First executive briefing scheduled. Land-and-expand opportunity — success here leads to enterprise-wide adoption."
+        },
+        {
+          "opp_id": "OPP-23088",
+          "name": "WonderPaws AI — Veterinary Diagnostics Platform",
+          "stage": "Qualification",
+          "value": "$450K",
+          "close_date": "2027-Q1",
+          "notes": "Early-stage AI for veterinary diagnostic imaging. Sage wants to explore OpenShift AI but needs to see the container platform first."
+        }
+      ],
+      "recent_support_escalations": [],
+      "contacts": [
+        {
+          "contact_id": "CON-9901",
+          "name": "Sage Cloudberry",
+          "title": "Chief Information Officer",
+          "email": "sage.cloudberry@wonderpaws.com",
+          "phone": "+1-503-555-0512",
+          "role_type": "Economic Buyer",
+          "engagement_score": 52,
+          "cab_member": false,
+          "executive_sponsor": null,
+          "last_activity": "2026-03-28",
+          "last_activity_type": "Introductory Call",
+          "preferred_communication": "Prefers morning meetings (before 10 AM). Casual style. Brings their golden retriever Biscuit to all meetings (therapy dog).",
+          "notes": "Former SRE — deeply technical CIO who still reviews pull requests. Vegan, drinks matcha lattes. First executive briefing ever with Red Hat. Evaluating us vs. VMware. Very hands-on — will want to see a live OpenShift demo. No executive sponsor assigned yet — opportunity to assign one. If briefing goes well, CAB nomination follows."
+        },
+        {
+          "contact_id": "CON-9902",
+          "name": "Juniper Moss",
+          "title": "VP Engineering",
+          "email": "juniper.moss@wonderpaws.com",
+          "role_type": "Technical Decision Maker",
+          "engagement_score": 48,
+          "cab_member": false,
+          "last_activity": "2026-03-30",
+          "last_activity_type": "Technical Discovery Call",
+          "notes": "Sage's technical counterpart. Evaluating container orchestration options. Has VMware Tanzu experience from previous role — needs to be shown clear OpenShift advantages."
+        }
+      ]
     }
   ],
   "export_metadata": {

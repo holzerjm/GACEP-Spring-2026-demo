@@ -348,6 +348,10 @@ body::before {
 }
 
 /* ── Trigger & Output Nodes ───────────────────────────── */
+.pipeline-row:last-child {
+  margin-top: 8px;
+}
+
 .trigger-node, .output-node {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -1301,6 +1305,11 @@ body.presentation-mode .pmode-indicator { display: block; }
       <option value="sarah-chen">Sarah Chen &mdash; CIO, Meridian Health Systems</option>
       <option value="david-park">David Park &mdash; SVP Technology, Apex Financial Group</option>
       <option value="rachel-morrison">Rachel Morrison &mdash; CTO, TerraScale Energy</option>
+      <option value="pepper-minton">Pepper Minton &mdash; CTO, SnackStack Technologies</option>
+      <option value="ziggy-chen">Ziggy Stardust-Chen &mdash; VP Platform Eng, Quantum Pretzel Corp</option>
+      <option value="luna-wavelength">Luna Wavelength &mdash; CIO, GalactiCorp Space Industries</option>
+      <option value="max-bandwidth">Max Bandwidth &mdash; SVP Digital, Thunderbolt Logistics</option>
+      <option value="sage-cloudberry">Sage Cloudberry &mdash; CIO, WonderPaws Pet Wellness</option>
     </select>
     <button class="btn btn-primary" id="btnStart">Start Demo</button>
     <button class="btn btn-secondary" id="btnReset">Reset</button>
@@ -1868,6 +1877,606 @@ const TIMELINE_RACHEL_MORRISON = [
 ];
 
 /* ═══════════════════════════════════════════════════════════
+   TIMELINE: PEPPER MINTON — Viral Scaling Crisis
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE_PEPPER_MINTON = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Pepper Minton, CTO, SnackStack Technologies' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Carlos Diaz, VP Developer Experience' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Pepper Minton, CTO SnackStack Technologies...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing SnackStack Technologies financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... found Platform Engineering discussion' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found TikTok viral moment coverage \u2014 recipe AI served 12M requests in 2 hours' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... engagement score 78/100' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $2.1B, 12K employees, Food Tech / AI-powered recipe platform' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... found P1 escalation from TikTok surge' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Food tech conference keynote: "Scaling Flavor at Internet Speed." Press note: hates PowerPoint' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Open opps: $1.8M edge computing for smart kitchen devices' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'Checking vvip-roster.json ... GOLD TIER confirmed' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: P1 production outage during TikTok viral surge!' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'P1 production outage during TikTok viral surge \u2014 recipe engine down 8 hours, 2M users affected. Trust-critical.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Scaling architecture review overdue \u2014 promised at last CAB meeting' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Scaling architecture review overdue \u2014 promised at last CAB meeting, never delivered.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Pepper\'s team published case study praising OpenShift auto-scaling' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 17500, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Pepper\'s team independently published case study praising OpenShift auto-scaling capabilities.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'SnackStack exploring edge computing for smart kitchen devices \u2014 $1.8M opportunity' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'SnackStack exploring edge computing for smart kitchen devices \u2014 $1.8M pipeline opportunity.' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: informal, whiteboard-first, hates slide decks' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Tech stack: OpenShift, RHEL, Kafka, Redis. Recipe AI on OpenShift AI' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Priority: surviving viral scale events without downtime' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: 'Smart kitchen edge play could drive $1.8M+ in new ARR' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: HIGH. Tone: SCALING CRISIS RECOVERY' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. 5 briefing-relevant insights.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... TikTok scaling crisis is central theme' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier: GOLD. Tacos for catering. Oat milk lattes. NO POWERPOINT \u2014 whiteboard only.' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier with viral scaling post-mortem...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Whiteboard room confirmed. Slide decks BANNED per Pepper\'s preference...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Weaving scaling crisis into Briefing Backgrounder...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating GOLD protocol checklist \u2014 NO POWERPOINT note in bold...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Carlos Diaz \u2014 scaling resilience + edge play...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Carlos Diaz...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Recommended Agenda: scaling deep-dive, edge roadmap, whiteboard sessions...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting conversation starters: TikTok moment, scaling war stories...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 GOLD priority, scaling crisis follow-up' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. NO POWERPOINT PROTOCOL.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   TIMELINE: ZIGGY STARDUST-CHEN — Win-back / Re-engagement
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE_ZIGGY_CHEN = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB alumni \u2014 stepped down Q4 2025. Sponsor: Aisha Patel, Director Strategic Accounts' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Ziggy Stardust-Chen, VP Platform Eng, Quantum Pretzel...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Quantum Pretzel Corp financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Ziggy listed as ALUMNI, stepped down Q4 2025' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found crypto/fintech conference talks, blog posts on platform engineering at scale' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... engagement score 55/100 DECLINING' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $890M, crypto trading platform, Miami HQ' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... contract renewal May 2026 \u2014 2 MONTHS' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: direct, no-nonsense, allergic to corporate jargon' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Contract value: $1.4M ARR. Renewal risk flagged by account team' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'CAB alumni record: "left citing lack of follow-through on commitments"' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: Contract renewal May 2026 \u2014 $1.4M at risk!' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'Contract renewal May 2026 \u2014 $1.4M at risk. Engagement score 55 and declining.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'AWS Solution Architect embedded at Quantum Pretzel for 3 weeks' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'AWS Solution Architect embedded at Quantum Pretzel for 3 weeks. Active competitive displacement threat.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Ziggy left CAB citing broken promises \u2014 2 action items never delivered' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 17500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Ziggy left CAB citing broken promises \u2014 2 action items from 2025 never delivered.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'Re-engagement signal: Ziggy hinted at returning if we demonstrate accountability' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Re-engagement: Ziggy hinted at returning to CAB if we demonstrate accountability on past commitments.' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent blog post: "Why I Broke Up With My Platform Vendor" \u2014 thinly veiled' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Tech stack: OpenShift, Kafka, Redis. Evaluating EKS migration' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Priorities: platform reliability, zero corporate fluff, accountability' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: '$1.4M renewal at risk. AWS actively pitching managed Kubernetes' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: MEDIUM. Tone: WIN-BACK / ACCOUNTABILITY' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. 5 strategic insights. CHURN RISK HIGH.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... win-back framing required' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier: SILVER (alumni). No meetings before noon. Remote-preferred. Zero corporate jargon.' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier with win-back accountability section...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Afternoon slot confirmed. Virtual option ready. No slides, no jargon...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Backgrounder with re-engagement accountability framework...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating SILVER protocol checklist \u2014 alumni re-engagement protocol...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Aisha Patel \u2014 accountability-first approach...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting URGENT sponsor alert for Aisha Patel \u2014 renewal at risk...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Recommended Agenda: accountability review, technical deep-dive, renewal discussion...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting conversation starters: platform engineering blog, crypto scaling challenges...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 SILVER alumni, win-back critical path' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. WIN-BACK PROTOCOL.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   TIMELINE: LUNA WAVELENGTH — Security Blocker on Mega-Deal
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE_LUNA_WAVELENGTH = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Luna Wavelength, CIO, GalactiCorp Space Industries' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB Co-Vice-Chair confirmed. Sponsor: Roberto Vega, SVP Public Sector' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Luna Wavelength, CIO GalactiCorp Space Industries...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing GalactiCorp Space Industries financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Luna is CAB Co-Vice-Chair' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Former NASA engineer. Keynotes at aerospace conferences. Open-source advocate.' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... Platinum VVIP, engagement 94/100' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $14.5B, 68K employees, Aerospace & Defense, satellite ground stations' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... CISO Colonel Drake blocking $8M expansion' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: technically precise, expects depth. Former NASA \u2014 zero tolerance for hand-waving' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: '$8M satellite ground station + $1.2M air-gapped cluster = $9.2M pipeline' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'Security audit found 3 NIST 800-171 compliance gaps in OpenShift deployment' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14000, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} BLOCKER: CISO Colonel Drake blocking $8M expansion \u2014 NIST findings unresolved!' }},
+  { t: 14000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'CISO Colonel Drake blocking $8M expansion \u2014 NIST compliance findings unresolved. Deal frozen.' }},
+  { t: 16000, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Luna is Platinum tier champion \u2014 engagement score 94, CAB Co-Vice-Chair. Strongest advocate in aerospace.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Platinum VVIP confirmed. Engagement score 94/100 \u2014 champion level' }},
+  { t: 17000, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: '3 NIST 800-171 compliance gaps found in security audit \u2014 remediation plan needed before deal can proceed.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: '3 NIST 800-171 compliance gaps \u2014 remediation plan critical' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 18000, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: '$8M satellite ground station + $1.2M air-gapped cluster = $9.2M total pipeline. Unblock the CISO and it flows.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: '$9.2M total pipeline \u2014 blocked by security audit findings' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent concern: NIST compliance gaps threatening satellite program timeline' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Defense mandate: all systems must pass NIST 800-171 audit by Q3 2026' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Dual priority: unblock security audit + advance satellite edge deployment' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: '$9.2M pipeline. Colonel Drake is the gatekeeper. Need remediation plan.' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: VERY HIGH. Tone: SECURITY UNBLOCK + CHAMPION SUPPORT' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. Highest-value pipeline. 6 strategic insights.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... NIST remediation is the linchpin' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier: PLATINUM. Earl grey tea. Vegetarian. Whiteboard mandatory. CEO drop-in REQUIRED.' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier with NIST compliance remediation roadmap...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Premier boardroom, Earl Grey, CEO calendar hold confirmed...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Backgrounder with satellite edge architecture and security posture...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating PLATINUM protocol checklist \u2014 security briefing prep for Colonel Drake...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Roberto Vega \u2014 NIST unblock strategy...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Roberto Vega \u2014 $9.2M pipeline at stake...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building full-day Platinum agenda: CEO drop-in, security deep-dive, satellite roadmap...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting conversation starters: NASA background, open-source advocacy, satellite vision...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 PLATINUM priority, $9.2M pipeline tracking' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. PLATINUM PROTOCOL.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   TIMELINE: MAX BANDWIDTH — Internal Politics / Scale-up
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE_MAX_BANDWIDTH = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Max Bandwidth, SVP Digital Transformation, Thunderbolt Logistics' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Diana Kim, VP Transportation & Logistics' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Max Bandwidth, SVP Digital, Thunderbolt Logistics...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Thunderbolt Logistics financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Max contributed to AI/ML track discussion' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Former competitive gamer turned logistics exec. Supply chain conference speaker.' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... Gold VVIP, engagement 81/100' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $6.3B, 45K employees, AI route optimization saving $4M/year' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... internal tension: VP Ops opposing AI scale-up' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: fast-paced, data-obsessed, loves real-time dashboards' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'AI pilot ROI confirmed: $4M/year savings from route optimization' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'VP Operations Helen Gearshift actively opposing AI expansion \u2014 internal politics' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F7E2} CONFIRMED: AI pilot ROI $4M/year \u2014 Max needs board ammunition' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'AI pilot ROI confirmed \u2014 $4M/year savings from route optimization. Strong proof point for expansion.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'VP Operations Helen Gearshift actively opposing AI expansion' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'VP Operations Helen Gearshift actively opposing AI expansion \u2014 internal political risk to scale-up.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Board presentation Q3 2026 \u2014 Max needs ROI data to override Operations resistance' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 17500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Board presentation Q3 2026 \u2014 Max needs ROI data to override Operations resistance. $2.5M expansion deal.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'Fleet-wide edge computing for real-time tracking \u2014 $1.45M opportunity' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Fleet-wide edge computing for real-time tracking \u2014 $1.45M additional pipeline opportunity.' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Recent keynote: "From Joystick to Supply Chain \u2014 How Gamers Think About Logistics"' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Fleet: 12K vehicles, 200 warehouses. AI optimization deployed on 15% of routes' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Priority: scaling AI pilot fleet-wide + winning internal political battle' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: '$2.5M expansion + $1.45M edge = $3.95M pipeline. Board approval needed.' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: HIGH. Tone: CHAMPION AMMUNITION' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. 6 briefing-relevant insights. Internal politics noted.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... board ammunition is the theme' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'VVIP tier: GOLD. Deep dish pizza. Double espresso. Fast-paced agenda. Real-time dashboards.' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier with internal politics navigation strategy...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Deep dish pizza ordered. Double espresso standing by. Dashboard screens prepped...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Backgrounder with AI ROI data and board presentation framework...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating GOLD protocol checklist \u2014 fast-paced format, real-time demos...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Sponsor Talking Points for Diana Kim \u2014 internal politics prep...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Diana Kim...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Recommended Agenda: AI ROI review, board prep, edge computing roadmap...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting conversation starters: gaming background, logistics innovation, AI scaling wins...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 GOLD priority, board prep pipeline tracking' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. BOARD AMMUNITION PROTOCOL.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
+   TIMELINE: SAGE CLOUDBERRY — First Briefing / Land-and-Expand
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE_SAGE_CLOUDBERRY = [
+  // Phase 0: Trigger
+  { t: 0,    action: 'trigger',   data: {} },
+  { t: 500,  action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing request received. Parsing entities...' }},
+  { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
+  { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Sage Cloudberry, CIO, WonderPaws Pet Wellness' }},
+  { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'No CAB membership. No VVIP status. No executive sponsor assigned. First briefing.' }},
+  { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
+  { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
+  { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
+  { t: 7000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1: Intelligence Gathering (parallel)
+  { t: 7500, action: 'setAgent',  data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'bloom-borg', status: 'working', progress: 5 }},
+  { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
+  { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Sage Cloudberry, CIO WonderPaws Pet Wellness...' }},
+  { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing WonderPaws Pet Wellness financials...' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... no records found for Sage Cloudberry' }},
+  { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
+  { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Former SRE. Open-source contributor. Writes about veterinary tech on Medium.' }},
+  { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
+  { t: 10500, action: 'log',      data: { agent: 'deja-view', text: 'Reading engagement-history.md ... no past briefings. Brand new account.' }},
+  { t: 10500, action: 'setAgent', data: { id: 'deja-view', progress: 40 }},
+  { t: 11000, action: 'log',      data: { agent: 'bloom-borg', text: 'Revenue $780M, 8.5K employees, Veterinary Wellness, Portland HQ. Growing 40% YoY.' }},
+  { t: 11000, action: 'setAgent', data: { id: 'bloom-borg', progress: 30 }},
+  { t: 12000, action: 'log',      data: { agent: 'deja-view', text: 'Cross-referencing crm-export.json ... no engagement history. Zero touchpoints.' }},
+  { t: 12000, action: 'setAgent', data: { id: 'deja-view', progress: 55 }},
+  { t: 12500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Communication style: deeply technical, hands-on, prefers demos over slides' }},
+  { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
+  { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Evaluating Red Hat vs VMware for container platform. $850K initial deal.' }},
+  { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'No VVIP roster entry. No sponsor assigned. Completely greenfield.' }},
+  { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
+
+  // Critical flags
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F4A1} OPPORTUNITY: First executive briefing \u2014 land-and-expand potential' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'First executive briefing \u2014 land-and-expand opportunity. No prior relationship to build on.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Evaluating Red Hat vs VMware \u2014 competitive displacement opportunity' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Evaluating Red Hat vs VMware \u2014 competitive displacement opportunity. $850K initial deal.' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Fast-growing 40% YoY \u2014 account could 3x in 3 years if we win now' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
+  { t: 17500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Fast-growing 40% YoY \u2014 if we win now, account could 3x in 3 years.' }},
+  { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'Sage is former SRE \u2014 will appreciate technical depth. Golden retriever therapy dog in attendance.' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Sage is former SRE \u2014 will appreciate technical depth and hands-on demos. Golden retriever therapy dog in attendance.' }},
+  { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
+  { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
+
+  // Sherlock and Bloom-borg continue
+  { t: 15000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Medium blog: "Why Your Vet Clinic Needs Kubernetes (No, Really)"' }},
+  { t: 15000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 60 }},
+  { t: 16000, action: 'log',      data: { agent: 'bloom-borg', text: 'Tech stack: VMware (legacy), evaluating OpenShift. 200 clinic locations.' }},
+  { t: 16000, action: 'setAgent', data: { id: 'bloom-borg', progress: 65 }},
+  { t: 17500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Priority: modernize infrastructure, replace VMware, enable telemedicine platform' }},
+  { t: 17500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 18000, action: 'log',      data: { agent: 'bloom-borg', text: '$850K initial + telemedicine platform = $1.5M+ if fully expanded' }},
+  { t: 18000, action: 'setAgent', data: { id: 'bloom-borg', progress: 80 }},
+  { t: 19500, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Executive profile compiled. Confidence: MEDIUM (first contact). Tone: TECHNICAL CREDIBILITY' }},
+  { t: 19500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 20000, action: 'log',      data: { agent: 'bloom-borg', text: 'Company brief compiled. 5 insights. GREENFIELD OPPORTUNITY.' }},
+  { t: 20000, action: 'setAgent', data: { id: 'bloom-borg', status: 'complete' }},
+
+  // Phase 2: Assembly
+  { t: 21000, action: 'log',       data: { agent: 'oprah-tor', text: 'Phase 1 complete. Dispatching Draft Punk + Alfred Bitworth' }},
+  { t: 21000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 70 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'draft-punk', status: 'working', progress: 5 }},
+  { t: 21500, action: 'setAgent',  data: { id: 'alfred-bitworth', status: 'working', progress: 5 }},
+  { t: 22000, action: 'log',       data: { agent: 'draft-punk', text: 'Synthesizing intelligence from 3 agents... first impression is everything' }},
+  { t: 22500, action: 'log',       data: { agent: 'alfred-bitworth', text: 'STANDARD tier. No sponsor. Vegan catering. Matcha latte. Morning. Note: therapy dog present \u2014 pet-friendly room.' }},
+  { t: 23000, action: 'setAgent',  data: { id: 'draft-punk', progress: 15 }},
+
+  { t: 24000, action: 'log',        data: { agent: 'draft-punk', text: 'Assembling Executive Dossier for first-ever briefing...' }},
+  { t: 25000, action: 'deliverable', data: { id: 'exec-dossier' }},
+  { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
+
+  { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Pet-friendly room confirmed. Matcha latte ready. Vegan catering ordered...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Backgrounder with VMware competitive positioning...' }},
+  { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
+  { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
+
+  { t: 28000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Generating STANDARD protocol checklist \u2014 first briefing, no sponsor assigned...' }},
+  { t: 28000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 29000, action: 'deliverable', data: { id: 'vvip-checklist' }},
+  { t: 29000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 55 }},
+
+  { t: 29500, action: 'log',        data: { agent: 'draft-punk', text: 'Drafting Talking Points \u2014 VMware migration path + technical credibility...' }},
+  { t: 30500, action: 'deliverable', data: { id: 'talking-points' }},
+  { t: 30500, action: 'setAgent',   data: { id: 'draft-punk', progress: 65 }},
+
+  { t: 31000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'No sponsor assigned \u2014 flagging for post-briefing sponsor assignment...' }},
+  { t: 32000, action: 'deliverable', data: { id: 'sponsor-alert' }},
+  { t: 32000, action: 'setAgent',   data: { id: 'alfred-bitworth', progress: 75 }},
+
+  { t: 32500, action: 'log',        data: { agent: 'draft-punk', text: 'Building Recommended Agenda: hands-on demo, VMware migration workshop, technical deep-dive...' }},
+  { t: 33500, action: 'deliverable', data: { id: 'agenda' }},
+  { t: 33500, action: 'setAgent',   data: { id: 'draft-punk', progress: 82 }},
+
+  { t: 34000, action: 'log',        data: { agent: 'draft-punk', text: 'Crafting conversation starters: SRE background, veterinary tech blog, open-source...' }},
+  { t: 35000, action: 'deliverable', data: { id: 'convo-starters' }},
+  { t: 35000, action: 'setAgent',   data: { id: 'draft-punk', status: 'complete' }},
+
+  { t: 35500, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Creating engagement log entry \u2014 FIRST BRIEFING, greenfield account, therapy dog noted' }},
+  { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
+  { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
+
+  // Synthesis
+  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
+  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
+  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
+  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
+  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 flags. FIRST IMPRESSION PROTOCOL.' }},
+  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 41000, action: 'output',    data: {} },
+  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+];
+
+/* ═══════════════════════════════════════════════════════════
    SCENARIOS
    ═══════════════════════════════════════════════════════════ */
 const SCENARIOS = {
@@ -1885,6 +2494,46 @@ const SCENARIOS = {
     timeline: TIMELINE_RACHEL_MORRISON,
     requestText: 'Briefing tomorrow: Rachel Morrison, CTO, TerraScale Energy. CAB Co-Chair. Sponsor: Elena Vasquez, SVP Global Industries.',
     contact: { name: 'Rachel Morrison', title: 'CTO', org: 'TerraScale Energy', tier: 'PLATINUM' }
+  },
+  'pepper-minton': {
+    name: 'Pepper Minton',
+    title: 'CTO',
+    company: 'SnackStack Technologies',
+    requestText: 'Briefing tomorrow: Pepper Minton, CTO, SnackStack Technologies. CAB member. Their recipe AI went viral and crashed production. Sponsor: Carlos Diaz, VP Developer Experience.',
+    timeline: TIMELINE_PEPPER_MINTON,
+    contact: { name: 'Pepper Minton', title: 'CTO', org: 'SnackStack Technologies', tier: 'GOLD' }
+  },
+  'ziggy-chen': {
+    name: 'Ziggy Stardust-Chen',
+    title: 'VP Platform Engineering',
+    company: 'Quantum Pretzel Corp',
+    requestText: 'Briefing tomorrow: Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp. CAB alumni \u2014 left feeling ignored. AWS courting them. Contract renewal in 2 months. Sponsor: Aisha Patel.',
+    timeline: TIMELINE_ZIGGY_CHEN,
+    contact: { name: 'Ziggy Stardust-Chen', title: 'VP Platform Engineering', org: 'Quantum Pretzel Corp', tier: 'SILVER' }
+  },
+  'luna-wavelength': {
+    name: 'Luna Wavelength',
+    title: 'Chief Innovation Officer',
+    company: 'GalactiCorp Space Industries',
+    requestText: 'Briefing tomorrow: Luna Wavelength, CIO, GalactiCorp Space Industries. CAB Co-Vice-Chair, Platinum VVIP. $8M satellite edge deal blocked by CISO security audit. Sponsor: Roberto Vega, SVP Public Sector.',
+    timeline: TIMELINE_LUNA_WAVELENGTH,
+    contact: { name: 'Luna Wavelength', title: 'CIO', org: 'GalactiCorp Space Industries', tier: 'PLATINUM' }
+  },
+  'max-bandwidth': {
+    name: 'Max Bandwidth',
+    title: 'SVP Digital Transformation',
+    company: 'Thunderbolt Logistics',
+    requestText: 'Briefing tomorrow: Max Bandwidth, SVP Digital Transformation, Thunderbolt Logistics. CAB member. AI pilot saved $4M/year but VP Operations blocking scale-up. Needs board ammunition. Sponsor: Diana Kim.',
+    timeline: TIMELINE_MAX_BANDWIDTH,
+    contact: { name: 'Max Bandwidth', title: 'SVP Digital Transformation', org: 'Thunderbolt Logistics', tier: 'GOLD' }
+  },
+  'sage-cloudberry': {
+    name: 'Sage Cloudberry',
+    title: 'CIO',
+    company: 'WonderPaws Pet Wellness',
+    requestText: 'First executive briefing: Sage Cloudberry, CIO, WonderPaws Pet Wellness. No CAB membership yet. Evaluating Red Hat vs VMware. Former SRE, very technical. No sponsor assigned \u2014 opportunity to assign one.',
+    timeline: TIMELINE_SAGE_CLOUDBERRY,
+    contact: { name: 'Sage Cloudberry', title: 'CIO', org: 'WonderPaws Pet Wellness', tier: 'STANDARD' }
   }
 };
 
@@ -2665,6 +3314,464 @@ const DELIVERABLE_CONTENT = {
         <tr><td>$1.8M Edge IoT</td><td>Discovery phase</td><td><em>[To be assessed]</em></td></tr>
         <tr><td>Champion Confidence</td><td>Under stress (P1 impact)</td><td><em>[To be assessed]</em></td></tr>
         <tr><td>Next Actions</td><td colspan="2"><em>[To be completed]</em></td></tr>
+      </table>
+    `
+  },
+
+  // ── Pepper Minton ──────────────────────────────────────────
+  'pepper-minton/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Pepper Minton</td></tr>
+        <tr><td><strong>Title</strong></td><td>Chief Technology Officer</td></tr>
+        <tr><td><strong>Organization</strong></td><td>SnackStack Technologies</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$2.1B / 12,000</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td>GOLD</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>78/100</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>Carlos Diaz, VP Developer Experience</td></tr>
+      </table>
+
+      <h2>Relationship Summary</h2>
+      <p>Pepper Minton is a CAB member who leads the engineering team behind SnackStack's AI-powered recipe platform. After a TikTok-driven viral surge crashed production for 8 hours and affected 2M users, Pepper's confidence in platform resilience is shaken. She contributed actively to the Platform Engineering track at the last CAB. Known for a whiteboard-first, no-PowerPoint style.</p>
+
+      <h2>Top 3 Priorities</h2>
+      <ul>
+        <li><strong>Viral Scaling Resilience</strong> &mdash; Prevent a repeat of the TikTok surge that took down the recipe engine. Needs auto-scaling architecture review.</li>
+        <li><strong>Edge Computing for Smart Kitchens</strong> &mdash; $1.8M opportunity to deploy edge nodes in connected kitchen devices.</li>
+        <li><strong>Platform Engineering Maturity</strong> &mdash; Wants to evolve from reactive scaling to predictive capacity planning.</li>
+      </ul>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge danger">DANGER</span></td><td>P1 production outage during TikTok viral surge &mdash; recipe engine down 8 hours, 2M users affected</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Scaling architecture review overdue &mdash; promised at last CAB, never delivered</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Pepper's team independently published case study praising OpenShift auto-scaling</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>SnackStack exploring edge computing for smart kitchen devices ($1.8M)</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Lead with the scaling post-mortem.</strong> Acknowledge the TikTok outage before Pepper raises it. Present a concrete auto-scaling architecture with load testing benchmarks. Use the whiteboard &mdash; Pepper hates PowerPoint. Then pivot to the edge computing opportunity for smart kitchens.</p>
+    `
+  },
+  'pepper-minton/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Briefing Agenda &mdash; Pepper Minton</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> GOLD &nbsp;|&nbsp; <strong>Format:</strong> Half Day, Whiteboard Only</p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>Welcome &amp; Tacos</td><td>Taco bar, oat milk lattes. Informal catch-up with Carlos Diaz (sponsor). NO SLIDES.</td></tr>
+        <tr><td><strong>9:30 AM</strong></td><td>Scaling Post-Mortem</td><td>Whiteboard session: TikTok surge timeline, what failed, what we're fixing. Pepper leads Q&amp;A.</td></tr>
+        <tr><td><strong>10:15 AM</strong></td><td>Auto-Scaling Architecture</td><td>Whiteboard deep-dive: OpenShift auto-scaling patterns, load testing benchmarks, burst capacity planning.</td></tr>
+        <tr><td><strong>11:00 AM</strong></td><td>Break</td><td>Refreshments. Informal discussion.</td></tr>
+        <tr><td><strong>11:15 AM</strong></td><td>Edge Computing Roadmap</td><td>Smart kitchen device edge deployment. $1.8M opportunity walkthrough on whiteboard.</td></tr>
+        <tr><td><strong>12:00 PM</strong></td><td>Wrap-Up &amp; Next Steps</td><td>Action items on whiteboard, photograph and distribute. Schedule 2-week follow-up.</td></tr>
+      </table>
+    `
+  },
+  'pepper-minton/vvip-checklist': {
+    title: 'VVIP Protocol Checklist',
+    agent: 'Alfred Bitworth',
+    html: `
+      <h2>VVIP Protocol &mdash; GOLD Tier</h2>
+      <p><strong>Visitor:</strong> Pepper Minton, CTO &nbsp;|&nbsp; <strong>Tier:</strong> GOLD &nbsp;|&nbsp; <strong>Sponsor:</strong> Carlos Diaz</p>
+
+      <h3>Pre-Visit (T-24h)</h3>
+      <ul>
+        <li><strong>Catering:</strong> Taco bar confirmed. Oat milk lattes (preferred). Extra hot sauce selection.</li>
+        <li><strong>Room Setup:</strong> Whiteboard room ONLY. Multiple whiteboards. Fresh markers (test all colors). <span class="flag-badge danger">NO POWERPOINT &mdash; NO PROJECTOR &mdash; NO SLIDES</span></li>
+        <li><strong>Materials:</strong> Printed executive dossier (1 copy). Whiteboard markers and erasers only at table.</li>
+        <li><strong>Parking:</strong> Reserved VIP spot. Welcome signage at reception.</li>
+      </ul>
+
+      <h3>Day-Of Protocol</h3>
+      <ul>
+        <li><strong>8:45 AM:</strong> Carlos Diaz (sponsor) arrives for pre-brief alignment.</li>
+        <li><strong>8:55 AM:</strong> Lobby escort ready. Greet by name.</li>
+        <li><strong>9:00 AM:</strong> Pepper arrives. Direct to whiteboard room. Verify zero screens are displaying slides.</li>
+        <li><strong>All sessions:</strong> Whiteboard-first format. Photograph all boards before erasing.</li>
+      </ul>
+
+      <h3>Post-Visit (T+24h)</h3>
+      <ul>
+        <li>Whiteboard photos compiled and sent within 4 hours.</li>
+        <li>Action item summary delivered within 24 hours.</li>
+        <li>Scaling architecture review scheduled within 2 weeks.</li>
+      </ul>
+    `
+  },
+
+  // ── Ziggy Stardust-Chen ──────────────────────────────────────────
+  'ziggy-chen/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Ziggy Stardust-Chen</td></tr>
+        <tr><td><strong>Title</strong></td><td>VP Platform Engineering</td></tr>
+        <tr><td><strong>Organization</strong></td><td>Quantum Pretzel Corp</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$890M / Fintech, Crypto Trading</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td>SILVER (Alumni)</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>55/100 <span class="flag-badge danger">DECLINING</span></td></tr>
+        <tr><td><strong>Contract Renewal</strong></td><td>May 2026 &mdash; 2 months ($1.4M at risk)</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>Aisha Patel, Director Strategic Accounts</td></tr>
+      </table>
+
+      <h2>Relationship Summary</h2>
+      <p>Ziggy Stardust-Chen is a CAB alumni who stepped down in Q4 2025, citing a lack of follow-through on two committed action items. Engagement has declined to 55/100. AWS has embedded a Solution Architect at Quantum Pretzel for 3 weeks. Contract renewal is May 2026 &mdash; $1.4M at risk. However, Ziggy has hinted at returning to the CAB if we demonstrate accountability.</p>
+
+      <h2>Top 3 Priorities</h2>
+      <ul>
+        <li><strong>Accountability on Past Commitments</strong> &mdash; Two action items from 2025 were never delivered. Must address directly.</li>
+        <li><strong>Platform Reliability at Scale</strong> &mdash; Crypto trading requires sub-millisecond latency. Zero tolerance for downtime.</li>
+        <li><strong>Contract Renewal Decision</strong> &mdash; May 2026 deadline. AWS actively pitching managed Kubernetes as replacement.</li>
+      </ul>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge danger">DANGER</span></td><td>Contract renewal May 2026 &mdash; $1.4M at risk. Engagement score 55 and declining.</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>AWS Solution Architect embedded at Quantum Pretzel for 3 weeks</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Ziggy left CAB citing broken promises &mdash; 2 action items never delivered</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Re-engagement: Ziggy hinted at returning if we demonstrate accountability</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Lead with accountability, not a sales pitch.</strong> Open by acknowledging the two broken commitments by name. Present concrete remediation with dates and owners. Zero corporate jargon &mdash; Ziggy will walk out. Only after trust is re-established, discuss the technical roadmap that makes staying worthwhile.</p>
+    `
+  },
+  'ziggy-chen/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Briefing Agenda &mdash; Ziggy Stardust-Chen</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> SILVER (Alumni) &nbsp;|&nbsp; <strong>Format:</strong> Afternoon, Remote-Friendly</p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>1:00 PM</strong></td><td>Welcome</td><td>No meetings before noon per Ziggy's preference. Keep it casual. No corporate jargon.</td></tr>
+        <tr><td><strong>1:15 PM</strong></td><td>Accountability Review</td><td>Address the 2 undelivered action items by name. Present remediation plan with dates and owners.</td></tr>
+        <tr><td><strong>2:00 PM</strong></td><td>Technical Deep-Dive</td><td>Platform reliability for crypto trading workloads. Sub-millisecond latency architecture.</td></tr>
+        <tr><td><strong>2:45 PM</strong></td><td>Break</td><td>Informal. Let Ziggy steer the conversation.</td></tr>
+        <tr><td><strong>3:00 PM</strong></td><td>Roadmap &amp; Renewal</td><td>Only if trust has been re-established. Technical roadmap that makes staying worthwhile.</td></tr>
+        <tr><td><strong>3:45 PM</strong></td><td>Wrap-Up</td><td>Concrete next steps. CAB re-engagement invitation if appropriate.</td></tr>
+      </table>
+    `
+  },
+  'ziggy-chen/sponsor-alert': {
+    title: 'Sponsor Alert',
+    agent: 'Alfred Bitworth',
+    html: `
+      <h2>URGENT: Sponsor Briefing &mdash; Ziggy Stardust-Chen</h2>
+      <p><strong>To:</strong> Aisha Patel, Director Strategic Accounts<br>
+      <strong>Priority:</strong> <span class="flag-badge danger">URGENT &mdash; RENEWAL AT RISK</span><br>
+      <strong>Re:</strong> Tomorrow's briefing with Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp</p>
+
+      <h3>Situation</h3>
+      <p>Ziggy left the CAB in Q4 2025 citing broken promises. Engagement score has dropped to 55/100 and is declining. AWS has embedded a Solution Architect on-site for 3 weeks. Contract renewal is May 2026 &mdash; $1.4M ARR at risk.</p>
+
+      <h3>What Ziggy Needs to Hear</h3>
+      <ul>
+        <li><strong>Acknowledgment:</strong> Name the two undelivered action items. No excuses, no deflection.</li>
+        <li><strong>Remediation Plan:</strong> Specific dates, specific owners, specific deliverables.</li>
+        <li><strong>Technical Credibility:</strong> Show we understand crypto trading platform requirements better than AWS.</li>
+        <li><strong>Zero Corporate Jargon:</strong> Ziggy will disengage immediately if they hear buzzwords.</li>
+      </ul>
+
+      <h3>Your Role</h3>
+      <ul>
+        <li>Full engagement required. This is a win-back briefing, not a routine check-in.</li>
+        <li>Open with the accountability review. Do not skip or delay it.</li>
+        <li>If Ziggy re-engages, extend the CAB re-invitation personally.</li>
+        <li>Escalate to VP level if Ziggy signals intent to churn.</li>
+      </ul>
+    `
+  },
+
+  // ── Luna Wavelength ──────────────────────────────────────────
+  'luna-wavelength/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Luna Wavelength</td></tr>
+        <tr><td><strong>Title</strong></td><td>Chief Innovation Officer</td></tr>
+        <tr><td><strong>Organization</strong></td><td>GalactiCorp Space Industries</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$14.5B / 68,000</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td><span class="flag-badge positive">PLATINUM</span></td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>94/100 (Champion)</td></tr>
+        <tr><td><strong>CAB Role</strong></td><td>Co-Vice-Chair</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>Roberto Vega, SVP Public Sector</td></tr>
+      </table>
+
+      <h2>Relationship Summary</h2>
+      <p>Luna Wavelength is a former NASA engineer, open-source advocate, and CAB Co-Vice-Chair with a 94/100 engagement score. She is our strongest champion in aerospace. However, CISO Colonel Drake is blocking an $8M satellite edge expansion due to 3 unresolved NIST 800-171 compliance gaps found in a security audit. Total pipeline at stake: $9.2M.</p>
+
+      <h2>Top 3 Priorities</h2>
+      <ul>
+        <li><strong>Unblock CISO Security Audit</strong> &mdash; 3 NIST 800-171 compliance gaps must be remediated before Colonel Drake will approve the $8M expansion.</li>
+        <li><strong>Satellite Ground Station Edge</strong> &mdash; $8M deployment across ground stations. Architecture approved, blocked by security.</li>
+        <li><strong>Air-Gapped Cluster</strong> &mdash; Additional $1.2M for classified workloads requiring air-gapped OpenShift.</li>
+      </ul>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge danger">DANGER</span></td><td>CISO Colonel Drake blocking $8M expansion &mdash; NIST compliance findings unresolved</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Luna is Platinum champion &mdash; engagement 94, CAB Co-Vice-Chair</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>3 NIST 800-171 compliance gaps &mdash; remediation plan needed</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>$8M satellite + $1.2M air-gapped = $9.2M total pipeline</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Arm Luna to unblock Colonel Drake.</strong> Present a NIST 800-171 remediation plan with specific gap closures, timelines, and third-party validation. Luna expects technical depth &mdash; she is former NASA. Whiteboard the security architecture. CEO drop-in is mandatory for Platinum tier. Then advance the satellite edge roadmap.</p>
+    `
+  },
+  'luna-wavelength/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Full-Day Briefing Agenda &mdash; Luna Wavelength</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> PLATINUM &nbsp;|&nbsp; <strong>Format:</strong> Full Day, Technical Depth</p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>8:30 AM</strong></td><td>Welcome &amp; Breakfast</td><td>Earl Grey tea, vegetarian options. Roberto Vega (sponsor) pre-brief.</td></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>CEO Drop-In</td><td>Minimum 15 minutes. Acknowledge security audit concerns. Reaffirm partnership commitment.</td></tr>
+        <tr><td><strong>9:30 AM</strong></td><td>NIST Remediation Deep-Dive</td><td>Whiteboard: 3 compliance gaps, remediation plan, timelines, third-party validation approach.</td></tr>
+        <tr><td><strong>10:30 AM</strong></td><td>Security Architecture</td><td>Air-gapped OpenShift deployment patterns for classified workloads. Technical depth expected.</td></tr>
+        <tr><td><strong>11:15 AM</strong></td><td>Break</td><td>Earl Grey refresh. Informal Q&amp;A.</td></tr>
+        <tr><td><strong>11:30 AM</strong></td><td>Satellite Edge Roadmap</td><td>$8M ground station deployment architecture. Integration with existing GalactiCorp systems.</td></tr>
+        <tr><td><strong>12:30 PM</strong></td><td>Working Lunch</td><td>Vegetarian. Discuss Colonel Drake engagement strategy and CISO meeting prep.</td></tr>
+        <tr><td><strong>1:30 PM</strong></td><td>CAB Themes</td><td>Co-Vice-Chair input on upcoming CAB agenda. Open-source track planning.</td></tr>
+        <tr><td><strong>2:30 PM</strong></td><td>Wrap-Up &amp; Next Steps</td><td>NIST remediation milestones confirmed. Colonel Drake meeting scheduled. 2-week follow-up.</td></tr>
+      </table>
+    `
+  },
+  'luna-wavelength/vvip-checklist': {
+    title: 'VVIP Protocol Checklist',
+    agent: 'Alfred Bitworth',
+    html: `
+      <h2>VVIP Protocol &mdash; PLATINUM Tier</h2>
+      <p><strong>Visitor:</strong> Luna Wavelength, CIO &nbsp;|&nbsp; <strong>Tier:</strong> PLATINUM &nbsp;|&nbsp; <strong>Sponsor:</strong> Roberto Vega</p>
+
+      <h3>Pre-Visit (T-24h)</h3>
+      <ul>
+        <li><strong>Catering:</strong> Earl Grey tea (mandatory). Vegetarian menu. Water carafe at table.</li>
+        <li><strong>Room Setup:</strong> Premier boardroom. Whiteboard mandatory. Dual screens for technical diagrams. <span class="flag-badge positive">PLATINUM CONFIGURATION</span></li>
+        <li><strong>Materials:</strong> Printed executive dossier. NIST 800-171 remediation plan (classified handling). Security briefing materials in sealed folder.</li>
+        <li><strong>CEO Calendar:</strong> <span class="flag-badge danger">CEO DROP-IN REQUIRED</span> &mdash; minimum 15 minutes confirmed. Messaging aligned on security commitment.</li>
+        <li><strong>Security Briefing Prep:</strong> NIST compliance gap summary for Colonel Drake follow-up. Pre-cleared with legal.</li>
+      </ul>
+
+      <h3>Day-Of Protocol</h3>
+      <ul>
+        <li><strong>8:00 AM:</strong> Roberto Vega + senior leadership pre-brief. Security messaging alignment.</li>
+        <li><strong>8:25 AM:</strong> Lobby escort ready. Greet by name. Premier boardroom.</li>
+        <li><strong>9:00 AM:</strong> CEO drop-in. Personal acknowledgment of security concerns.</li>
+        <li><strong>All sessions:</strong> Technical depth expected. Former NASA engineer &mdash; no hand-waving.</li>
+      </ul>
+
+      <h3>Post-Visit (T+24h)</h3>
+      <ul>
+        <li>NIST remediation timeline confirmed in writing within 24 hours.</li>
+        <li>Colonel Drake meeting invitation sent within 48 hours.</li>
+        <li>PLATINUM review filed. Pipeline tracking updated for $9.2M.</li>
+      </ul>
+    `
+  },
+
+  // ── Max Bandwidth ──────────────────────────────────────────
+  'max-bandwidth/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Max Bandwidth</td></tr>
+        <tr><td><strong>Title</strong></td><td>SVP Digital Transformation</td></tr>
+        <tr><td><strong>Organization</strong></td><td>Thunderbolt Logistics</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$6.3B / 45,000</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td>GOLD</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>81/100</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>Diana Kim, VP Transportation &amp; Logistics</td></tr>
+      </table>
+
+      <h2>Relationship Summary</h2>
+      <p>Max Bandwidth is a former competitive gamer turned logistics executive and CAB member. His AI route optimization pilot has saved $4M/year, but VP Operations Helen Gearshift is actively blocking fleet-wide scale-up. Max needs board-ready ROI data to override internal resistance at the Q3 2026 board presentation. Total pipeline: $3.95M.</p>
+
+      <h2>Top 3 Priorities</h2>
+      <ul>
+        <li><strong>Board Ammunition</strong> &mdash; Q3 2026 board presentation requires airtight ROI data to override VP Operations resistance. $2.5M expansion deal.</li>
+        <li><strong>AI Scale-Up</strong> &mdash; Expand route optimization from 15% of fleet to 100%. Helen Gearshift blocking.</li>
+        <li><strong>Fleet Edge Computing</strong> &mdash; Real-time tracking across 12K vehicles. $1.45M opportunity.</li>
+      </ul>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>AI pilot ROI confirmed &mdash; $4M/year savings from route optimization</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>VP Operations Helen Gearshift actively opposing AI expansion</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Board presentation Q3 2026 &mdash; needs ROI data for $2.5M expansion</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Fleet-wide edge computing for real-time tracking &mdash; $1.45M</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Build the board deck together.</strong> Max doesn't need convincing &mdash; he needs ammunition. Frame every session around data Helen Gearshift can't argue with. Provide comparable customer case studies, ROI calculators, and risk-of-inaction analysis. Make the briefing a working session to co-create the board presentation.</p>
+    `
+  },
+  'max-bandwidth/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Briefing Agenda &mdash; Max Bandwidth</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> GOLD &nbsp;|&nbsp; <strong>Format:</strong> Fast-Paced, Dashboard-Driven</p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>8:30 AM</strong></td><td>Welcome &amp; Deep Dish</td><td>Deep dish pizza breakfast (yes, breakfast). Double espresso. Diana Kim (sponsor) pre-brief.</td></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>AI Pilot ROI Review</td><td>Real-time dashboard: $4M/year savings breakdown by route, region, season. Board-ready data.</td></tr>
+        <tr><td><strong>9:45 AM</strong></td><td>Scale-Up Business Case</td><td>Co-create board presentation: 15% to 100% fleet expansion. Counter-arguments for Helen Gearshift's objections.</td></tr>
+        <tr><td><strong>10:30 AM</strong></td><td>Break</td><td>Espresso refill. Informal strategy discussion.</td></tr>
+        <tr><td><strong>10:45 AM</strong></td><td>Customer Case Studies</td><td>3 comparable logistics companies that scaled AI fleet-wide. ROI data Max can cite at the board.</td></tr>
+        <tr><td><strong>11:30 AM</strong></td><td>Edge Computing Demo</td><td>Real-time fleet tracking prototype. $1.45M opportunity overview.</td></tr>
+        <tr><td><strong>12:15 PM</strong></td><td>Wrap-Up &amp; Board Prep</td><td>Finalize board presentation outline. Schedule dry-run before Q3. Action items with deadlines.</td></tr>
+      </table>
+    `
+  },
+  'max-bandwidth/talking-points': {
+    title: 'Sponsor Talking Points',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Sponsor Talking Points &mdash; Diana Kim</h2>
+      <p><strong>Re:</strong> Max Bandwidth briefing &nbsp;|&nbsp; <strong>Key Theme:</strong> Internal Politics Navigation</p>
+
+      <h3>Context: The Helen Gearshift Problem</h3>
+      <p>Max's AI route optimization pilot has proven $4M/year in savings, but VP Operations Helen Gearshift is blocking fleet-wide scale-up. Helen's concerns center on operational disruption risk and loss of control over routing decisions. Max needs board-level ammunition to override this resistance at Q3 2026.</p>
+
+      <h3>Your Talking Points</h3>
+      <ul>
+        <li><strong>On ROI:</strong> "The pilot data is unambiguous &mdash; $4M/year on 15% of routes. Fleet-wide projection is $26M/year. The board will ask why we're NOT scaling."</li>
+        <li><strong>On Helen's Concerns:</strong> "We've seen this pattern at other logistics companies. The key is phased rollout with Operations co-ownership, not replacement. We should position Helen as a partner, not an obstacle."</li>
+        <li><strong>On Competitive Risk:</strong> "Three competitors have already deployed fleet-wide AI routing. Delay is the bigger risk than disruption."</li>
+        <li><strong>On the Board Deck:</strong> "We'll co-create the presentation during the briefing. Max leaves with a draft he can present, not a to-do list."</li>
+      </ul>
+
+      <h3>Watch For</h3>
+      <ul>
+        <li>Max moves fast &mdash; keep the pace up or he'll disengage.</li>
+        <li>He responds to real-time data and dashboards, not static slides.</li>
+        <li>If Helen Gearshift comes up, steer toward partnership framing, not adversarial.</li>
+      </ul>
+    `
+  },
+
+  // ── Sage Cloudberry ──────────────────────────────────────────
+  'sage-cloudberry/exec-dossier': {
+    title: 'Executive Dossier',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Visitor Snapshot</h2>
+      <table>
+        <tr><th>Field</th><th>Detail</th></tr>
+        <tr><td><strong>Name</strong></td><td>Sage Cloudberry</td></tr>
+        <tr><td><strong>Title</strong></td><td>Chief Information Officer</td></tr>
+        <tr><td><strong>Organization</strong></td><td>WonderPaws Pet Wellness</td></tr>
+        <tr><td><strong>Revenue / Employees</strong></td><td>$780M / 8,500 (growing 40% YoY)</td></tr>
+        <tr><td><strong>VVIP Tier</strong></td><td>STANDARD (first briefing)</td></tr>
+        <tr><td><strong>Engagement Score</strong></td><td>N/A &mdash; no prior engagement</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td>None assigned &mdash; recommend post-briefing</td></tr>
+      </table>
+
+      <h2>Relationship Summary</h2>
+      <p>Sage Cloudberry is a first-time visitor with zero prior engagement history. Former SRE and open-source contributor who writes about veterinary tech on Medium. WonderPaws is a fast-growing company (40% YoY) evaluating Red Hat vs VMware for their container platform. This is a greenfield land-and-expand opportunity. Note: Sage's golden retriever therapy dog will be attending.</p>
+
+      <h2>Top 3 Priorities</h2>
+      <ul>
+        <li><strong>VMware Replacement</strong> &mdash; Evaluating Red Hat vs VMware for container platform across 200 clinic locations. $850K initial deal.</li>
+        <li><strong>Telemedicine Platform</strong> &mdash; Needs scalable infrastructure for veterinary telehealth across all clinics.</li>
+        <li><strong>Technical Credibility</strong> &mdash; Former SRE who will evaluate us on technical merit, not marketing.</li>
+      </ul>
+
+      <h2>Critical Flags</h2>
+      <table>
+        <tr><th>Severity</th><th>Flag</th></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>First briefing &mdash; land-and-expand. No prior relationship.</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Red Hat vs VMware evaluation &mdash; competitive displacement ($850K)</td></tr>
+        <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>40% YoY growth &mdash; account could 3x in 3 years</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Former SRE &mdash; appreciates technical depth. Therapy dog in attendance.</td></tr>
+      </table>
+
+      <h2>Recommended Approach</h2>
+      <p><strong>Earn technical respect first.</strong> Sage is an SRE at heart &mdash; lead with hands-on demos, not slides. Show a live VMware-to-OpenShift migration. Let Sage drive the keyboard if possible. The therapy dog is a great icebreaker &mdash; acknowledge it warmly. Focus on making a strong first impression that positions us for a long-term relationship.</p>
+    `
+  },
+  'sage-cloudberry/agenda': {
+    title: 'Recommended Agenda',
+    agent: 'Draft Punk',
+    html: `
+      <h2>Briefing Agenda &mdash; Sage Cloudberry</h2>
+      <p><strong>Date:</strong> Tomorrow &nbsp;|&nbsp; <strong>Tier:</strong> STANDARD (First Briefing) &nbsp;|&nbsp; <strong>Format:</strong> Morning, Hands-On</p>
+
+      <table>
+        <tr><th>Time</th><th>Block</th><th>Details</th></tr>
+        <tr><td><strong>9:00 AM</strong></td><td>Welcome</td><td>Matcha latte, vegan snacks. Pet-friendly room. Meet the therapy dog. Icebreaker conversation.</td></tr>
+        <tr><td><strong>9:30 AM</strong></td><td>Discovery &amp; Listening</td><td>Understand Sage's evaluation criteria. What matters most in the VMware replacement? Let Sage talk.</td></tr>
+        <tr><td><strong>10:00 AM</strong></td><td>Hands-On Demo</td><td>Live VMware-to-OpenShift migration walkthrough. Let Sage drive the keyboard. SRE-level depth.</td></tr>
+        <tr><td><strong>10:45 AM</strong></td><td>Break</td><td>Matcha refill. Therapy dog break. Informal Q&amp;A.</td></tr>
+        <tr><td><strong>11:00 AM</strong></td><td>Veterinary Tech Use Cases</td><td>Telemedicine platform architecture. 200-clinic deployment patterns. Edge computing for clinics.</td></tr>
+        <tr><td><strong>11:45 AM</strong></td><td>Open Source &amp; Community</td><td>Sage's Medium blog resonates here. Discuss upstream contributions and community engagement.</td></tr>
+        <tr><td><strong>12:15 PM</strong></td><td>Wrap-Up &amp; Next Steps</td><td>Evaluation timeline. POC proposal. Sponsor assignment recommendation. Schedule 2-week follow-up.</td></tr>
+      </table>
+    `
+  },
+  'sage-cloudberry/engagement-log': {
+    title: 'Engagement Log',
+    agent: 'Alfred Bitworth',
+    html: `
+      <h2>Engagement Log &mdash; Sage Cloudberry</h2>
+      <p><em>FIRST BRIEFING RECORD. New account. No prior engagement history. Complete all fields to establish baseline.</em></p>
+
+      <table>
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td><strong>Contact</strong></td><td>Sage Cloudberry, CIO, WonderPaws Pet Wellness</td></tr>
+        <tr><td><strong>Briefing Date</strong></td><td>Tomorrow (half-day, STANDARD)</td></tr>
+        <tr><td><strong>Tier</strong></td><td>STANDARD (first briefing &mdash; evaluate for upgrade)</td></tr>
+        <tr><td><strong>Sponsor</strong></td><td><span class="flag-badge warning">NONE ASSIGNED</span> &mdash; recommend assigning post-briefing</td></tr>
+        <tr><td><strong>Prior Engagement</strong></td><td>Zero touchpoints. Brand new account.</td></tr>
+        <tr><td><strong>Therapy Dog</strong></td><td>Golden retriever present. Pet-friendly room confirmed.</td></tr>
+      </table>
+
+      <h3>First Impression Assessment</h3>
+      <table>
+        <tr><th>Metric</th><th>Initial Value</th><th>Post-Briefing</th></tr>
+        <tr><td>Engagement Score</td><td>N/A (first contact)</td><td><em>[To be established]</em></td></tr>
+        <tr><td>Technical Credibility</td><td>N/A</td><td><em>[Did we earn SRE respect?]</em></td></tr>
+        <tr><td>VMware Evaluation</td><td>Competitive (vs VMware)</td><td><em>[Where do we stand?]</em></td></tr>
+        <tr><td>$850K Initial Deal</td><td>Discovery</td><td><em>[POC approved?]</em></td></tr>
+        <tr><td>Sponsor Assignment</td><td>None</td><td><em>[Recommend assignment]</em></td></tr>
+      </table>
+
+      <h3>Follow-Up Actions</h3>
+      <table>
+        <tr><th>Action</th><th>Owner</th><th>Deadline</th><th>Status</th></tr>
+        <tr><td>Assign executive sponsor</td><td><em>[TBD]</em></td><td>Within 48 hours</td><td>Pending</td></tr>
+        <tr><td>Send POC proposal</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
+        <tr><td>Schedule 2-week follow-up</td><td><em>[TBD]</em></td><td>Before EOD</td><td>Pending</td></tr>
+        <tr><td>Evaluate for CAB nomination</td><td><em>[TBD]</em></td><td>Within 30 days</td><td>Pending</td></tr>
+        <tr><td>Thank-you email (include therapy dog photo)</td><td><em>[TBD]</em></td><td>Within 4 hours</td><td>Pending</td></tr>
       </table>
     `
   }

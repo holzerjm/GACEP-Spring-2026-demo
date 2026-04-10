@@ -110,6 +110,191 @@
         "travel": "Flies from Houston. Prefers Raleigh EBC for in-person. Will attend Boston or NYC for multi-day events. Always books an extra day for 1:1 follow-ups.",
         "notes": "Former Apache Kafka committer — deeply embedded in open source community. Respects engineering rigor above all. Currently the strongest champion in the CAB — treat with highest care. After the March 28 P1 outage, she needs to see genuine accountability and a credible RCA before her board presentation in May. Do NOT send junior engineers to present to her. She remembers every commitment made and follows up on all action items. Has a standing monthly call with Elena Vasquez."
       }
+    },
+    {
+      "name": "Pepper Minton",
+      "title": "CTO",
+      "company": "SnackStack Technologies",
+      "tier": "Gold",
+      "tier_reason": "Active CAB Member, C-level, Strategic Account",
+      "member_since": "2024-09-01",
+      "cab_board": "Strategic Technology Advisory Board",
+      "executive_sponsor": {
+        "name": "Carlos Diaz",
+        "title": "VP Developer Experience",
+        "email": "cdiaz@redhat.com",
+        "sponsor_since": "2024-10-01",
+        "last_touchpoint": "2026-03-15",
+        "last_touchpoint_type": "P1 Escalation — TikTok traffic surge",
+        "engagement_level": "Active"
+      },
+      "protocol_requirements": {
+        "room": "Executive Suite or Premier Boardroom",
+        "greeting": "EBC Manager meets at lobby",
+        "catering": "Executive level",
+        "sponsor_dropin": "Required — casual format preferred (standing meeting or walk-and-talk)",
+        "ceo_dropin": "Optional — request if schedule permits",
+        "gift": "Yes — tier-appropriate",
+        "welcome_display": "Yes — personalized",
+        "thank_you_note": "From Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "No restrictions — loves tacos (breakfast tacos specifically)",
+        "beverages": "Oat milk latte (ask barista to make it extra hot), sparkling water",
+        "communication_style": "High-energy, fast-paced. Prefers standing meetings. Hates PowerPoint — insists on live demos or whiteboard sessions. Keep slides to zero if possible.",
+        "scheduling": "Flexible — prefers 10 AM starts. Standing meetings only (no sitting). Limit to 45-minute blocks.",
+        "meeting_format": "Live demos, whiteboard sessions, hands-on labs. No slide decks. If you must present, use a terminal or a live dashboard.",
+        "notes": "Built SnackStack's original recipe engine as a weekend hackathon project. Communicates primarily via Slack — hates long email threads. Will lose interest if the meeting feels scripted. Bring energy and be ready to improvise."
+      }
+    },
+    {
+      "name": "Ziggy Stardust-Chen",
+      "title": "VP Platform Engineering",
+      "company": "Quantum Pretzel Corp",
+      "tier": "Silver",
+      "tier_reason": "CAB Alumni (stepped down Q4 2025), VP level, Growth Account",
+      "member_since": "2024-01-15",
+      "member_until": "2025-12-01",
+      "cab_status": "Alumni — departed Q4 2025",
+      "cab_board": "Strategic Technology Advisory Board (former)",
+      "executive_sponsor": {
+        "name": "Aisha Patel",
+        "title": "Director Strategic Accounts",
+        "email": "apatel@redhat.com",
+        "sponsor_since": "2024-02-01",
+        "last_touchpoint": "2026-01-20",
+        "last_touchpoint_type": "Re-engagement call — contract renewal discussion",
+        "engagement_level": "Re-engaging"
+      },
+      "protocol_requirements": {
+        "room": "Executive Suite",
+        "greeting": "EBC Manager meets at lobby",
+        "catering": "Standard-plus level",
+        "sponsor_dropin": "Required — video format preferred",
+        "ceo_dropin": "Optional — recommended to signal importance for re-engagement",
+        "gift": "Yes — tier-appropriate",
+        "welcome_display": "Yes — personalized",
+        "thank_you_note": "From Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "No restrictions — enjoys Cuban cuisine (Miami native)",
+        "beverages": "Cold brew coffee, coconut water",
+        "communication_style": "Remote-first. Prefers video calls over in-person. Allergic to corporate jargon — be direct and technical. Night owl — absolutely no meetings before noon.",
+        "scheduling": "Afternoon or evening only. No meetings before 12:00 PM. Prefers 2:00-5:00 PM ET window. Will accept late evening calls (up to 9 PM).",
+        "meeting_format": "Video calls with screen sharing. Prefers technical deep-dives over executive overviews. Wants to see real product, not roadmap slides.",
+        "notes": "Left the CAB after feeling that feedback was not being acted on — specifically frustrated about support response times for FinTech-specific workloads. Wants to feel valued as a partner, not just a customer. Competitor AWS is actively courting with an EKS migration package. Contract renewal in 2 months — re-engagement is time-critical. Do NOT lead with a sales pitch — lead with listening."
+      }
+    },
+    {
+      "name": "Luna Wavelength",
+      "title": "Chief Innovation Officer",
+      "company": "GalactiCorp Space Industries",
+      "tier": "Platinum",
+      "tier_reason": "CAB Co-Vice-Chair, C-level, Strategic Account, $8M pipeline",
+      "member_since": "2025-03-01",
+      "cab_board": "Strategic Technology Advisory Board",
+      "executive_sponsor": {
+        "name": "Roberto Vega",
+        "title": "SVP Public Sector",
+        "email": "rvega@redhat.com",
+        "sponsor_since": "2025-03-15",
+        "last_touchpoint": "2026-03-10",
+        "last_touchpoint_type": "Executive strategy call — security audit remediation",
+        "engagement_level": "Highly Active"
+      },
+      "protocol_requirements": {
+        "room": "Premier Boardroom — mandatory",
+        "greeting": "Sponsor + EBC Manager meet at lobby",
+        "catering": "Executive level — plated",
+        "sponsor_dropin": "Full session participation",
+        "ceo_dropin": "Required — 15 min minimum",
+        "gift": "Yes — premium personalized",
+        "welcome_display": "Yes — personalized",
+        "car_service": "Offered",
+        "lab_access": "Required — Luna tests everything hands-on. Pre-provision a dedicated lab environment.",
+        "thank_you_note": "From CEO + Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "Vegetarian — strict (no fish, no gelatin)",
+        "beverages": "Earl grey tea (hot, with a splash of oat milk), still water with lemon",
+        "communication_style": "Deeply technical. Former NASA engineer — she expects rigorous, evidence-based presentations. Loves whiteboards and architectural diagrams. Will challenge assumptions constructively. Prefers collaborative problem-solving over polished pitches.",
+        "scheduling": "Flexible — prefers full-day engagements when traveling. Will fly in the night before for 8:00 AM starts. Prefers Denver or Raleigh EBC.",
+        "meeting_format": "Interactive workshops with hands-on lab time. Always have a whiteboard (physical or digital). Include architecture review sessions. She has been known to pull up a terminal and test configurations live during briefings.",
+        "notes": "Former NASA JPL systems engineer — worked on Mars rover communications. Deeply embedded in aerospace open source community. Currently the strongest champion at GalactiCorp but blocked by CISO Colonel Drake on the $8M expansion. She needs our help building the security compliance case. Respects engineering rigor above all else. Do NOT send junior engineers to present to her."
+      }
+    },
+    {
+      "name": "Max Bandwidth",
+      "title": "SVP Digital Transformation",
+      "company": "Thunderbolt Logistics",
+      "tier": "Gold",
+      "tier_reason": "Active CAB Member, SVP level, Strategic Account",
+      "member_since": "2025-01-15",
+      "cab_board": "Strategic Technology Advisory Board",
+      "executive_sponsor": {
+        "name": "Diana Kim",
+        "title": "VP Transportation & Logistics",
+        "email": "dkim@redhat.com",
+        "sponsor_since": "2025-02-01",
+        "last_touchpoint": "2026-03-18",
+        "last_touchpoint_type": "Technical review — AI model scaling",
+        "engagement_level": "Active"
+      },
+      "protocol_requirements": {
+        "room": "Executive Suite or Premier Boardroom",
+        "greeting": "EBC Manager meets at lobby",
+        "catering": "Executive level",
+        "sponsor_dropin": "Required — data-heavy format preferred (bring dashboards)",
+        "ceo_dropin": "Optional — request if schedule permits",
+        "gift": "Yes — tier-appropriate",
+        "welcome_display": "Yes — personalized",
+        "thank_you_note": "From Sponsor + EBC Manager"
+      },
+      "known_preferences": {
+        "dietary": "No restrictions — deep dish pizza enthusiast (do not offer thin crust)",
+        "beverages": "Espresso double shot, still water. Multiple coffees throughout the day.",
+        "communication_style": "Fast-paced, metrics-driven. Former competitive gamer — appreciates dashboards, real-time data, and visual performance indicators. Gets bored in slow meetings. Bring data, not opinions.",
+        "scheduling": "Prefers morning starts (8:00-8:30 AM). Compressed meeting format — 30-minute blocks with 5-minute breaks. Full-day briefings should end by 3:00 PM.",
+        "meeting_format": "Dashboard-driven presentations. Live data demos. ROI calculations on screen. Bring a calculator and be ready to model scenarios in real time.",
+        "notes": "Former competitive StarCraft player — approaches business like a strategy game. His AI pilot saved $4M/year on route optimization but internal politics (VP Operations Helen Gearshift resisting AI) are blocking scale. He needs ROI ammunition for the board. Show him the leaderboard: how does his AI pilot compare to industry benchmarks? He responds to competition and rankings."
+      }
+    },
+    {
+      "name": "Sage Cloudberry",
+      "title": "CIO",
+      "company": "WonderPaws Pet Wellness",
+      "tier": "Standard",
+      "tier_reason": "No advisory program membership — first executive briefing",
+      "member_since": null,
+      "cab_board": null,
+      "executive_sponsor": {
+        "name": "Unassigned",
+        "title": null,
+        "email": null,
+        "sponsor_since": null,
+        "last_touchpoint": null,
+        "last_touchpoint_type": null,
+        "engagement_level": "Not yet assigned — opportunity to assign sponsor at first briefing"
+      },
+      "protocol_requirements": {
+        "room": "Standard Briefing Room",
+        "greeting": "EBC Manager meets at lobby",
+        "catering": "Standard level — ensure vegan options are prominent",
+        "sponsor_dropin": "N/A — no sponsor assigned. Recommend assigning sponsor and scheduling introductory drop-in.",
+        "ceo_dropin": "Not required at Standard tier",
+        "gift": "Optional — consider welcome package to make strong first impression",
+        "welcome_display": "Yes — personalized (first briefing — make it memorable)",
+        "thank_you_note": "From EBC Manager",
+        "special_note": "Sage brings their golden retriever Biscuit (therapy dog) to meetings. Confirm pet policy at the briefing center. If not permitted, flag early — this is important to Sage."
+      },
+      "known_preferences": {
+        "dietary": "Vegan — strict. Confirm all catering is fully plant-based, including condiments and desserts.",
+        "beverages": "Matcha latte (oat milk), herbal tea. No coffee.",
+        "communication_style": "Casual, technical, hands-on. Former SRE who still reviews pull requests. Will ask deeply technical questions but in a friendly, collaborative tone. Does not stand on ceremony — first-name basis, casual dress.",
+        "scheduling": "Prefers morning meetings (8:00-10:00 AM start). Energy drops after lunch. Avoid afternoon-heavy agendas.",
+        "meeting_format": "Hands-on demos are essential. Sage will want to see a live OpenShift environment. Include a comparison framework (Red Hat vs. VMware) but make it objective, not a sales pitch. Sage will see through bias instantly.",
+        "notes": "First executive briefing ever — this is a land-and-expand opportunity. If it goes well, CAB nomination follows. Sage is evaluating Red Hat vs. VMware for their container platform. Former SRE with deep Kubernetes expertise — do not oversimplify. Brings golden retriever Biscuit to all meetings. Casual dress code. Small but fast-growing company with big ambitions in veterinary AI. No sponsor assigned yet — recommend assigning someone from the healthcare vertical."
+      }
     }
   ],
   "tier_definitions": {

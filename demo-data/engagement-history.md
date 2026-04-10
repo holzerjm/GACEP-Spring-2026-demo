@@ -364,3 +364,326 @@
 - 💡 **OPPORTUNITY**: $5M platform expansion deal (OPP-21502) plus $1.8M edge deployment (OPP-21688) = $6.8M total pipeline. Largest single-account opportunity in the portfolio.
 - 💡 **OPPORTUNITY**: Frank Reeves (CISO) is now engaged via the P1 post-mortem — first time security team is in the conversation. Could lead to security-focused expansion.
 - 🟡 **STRATEGY**: The P1 response is the defining moment for this relationship. Rachel needs: (1) a credible, detailed RCA with no spin, (2) a concrete prevention plan, (3) evidence of executive-level ownership on our side. Elena Vasquez should deliver the RCA personally.
+
+---
+---
+
+# Engagement History — SnackStack Technologies
+
+## Account: SnackStack Technologies (ACC-4102)
+## Primary Contact: Pepper Minton, CTO
+
+---
+
+## Engagement Timeline
+
+### 2026
+
+**March 15, 2026 — P1 Production Outage (TikTok Traffic Surge)**
+- Type: Critical support incident
+- Event: AI recipe recommendation engine went viral on TikTok. Traffic surged 40x overnight. OpenShift auto-scaling limits hit. Recipe API returned 503 errors for 2.5 hours during peak.
+- Revenue impact: ~$180K in lost ad impressions and partner referral fees
+- Pepper Minton escalated personally to Carlos Diaz at 6:15 AM (before her first oat milk latte)
+- Resolution: Emergency scaling applied within 3 hours. Cluster node pool expanded.
+- Pepper's take: "We need an architecture that laughs at TikTok. This can't happen again."
+- Follow-up: Scalability architecture review scheduled for April 2026
+
+**February 12, 2026 — CAB Meeting (Virtual)**
+- Type: Customer Advisory Board — Strategic Technology
+- Pepper attended and contributed to AI Governance, Hybrid Cloud, and Platform Engineering discussions
+- Shared SnackStack's rapid IDP build story (3 months, 4 engineers) — generated strong interest
+- Offered to demo SnackStack's developer portal to interested members
+- Connected with Max Bandwidth on scaling challenges post-meeting
+- Relationship signal: Engaged and energetic. Pepper brings startup energy to the board.
+
+**December 10, 2025 — Executive Briefing (Austin — on-site at SnackStack HQ)**
+- Type: Half-day executive briefing at SnackStack's Austin office
+- Visitors (our team went to them): Carlos Diaz (sponsor), Platform solutions architect
+- Topics: OpenShift AI for recommendation engines, event streaming architecture, scaling strategy
+- Outcome: Pepper approved OpenShift AI pilot for the flavor profile engine
+- Pepper gave the team a tour of "The Kitchen" — SnackStack's innovation lab where engineers taste-test AI-recommended recipes
+- NPS Score: 8/10
+- Pepper's feedback: "Good session. Loved the live demo. Next time, skip the intro slides entirely — just open a terminal."
+
+### 2025
+
+**September 1, 2024 — CAB Onboarding**
+- Pepper officially joined the Strategic Technology Advisory Board
+- Onboarding call with Kristin Waitkus and Carlos Diaz
+- Pepper's stated interests: AI at scale, developer experience, event-driven architecture, real-time data pipelines
+- Pepper's opening line: "I joined this board to learn from the big kids. We're small but growing fast — I want to know what breaks at 10x scale before we get there."
+
+---
+
+## Relationship Stage Progression
+
+| Date | Stage | Evidence |
+|------|-------|----------|
+| Early 2024 | **Aware** | SnackStack was a RHEL customer, no executive relationship |
+| Q3 2024 | **Engaged** | Joined CAB, active participant, approved AI pilot |
+| December 2025 | **Trusted** | On-site EBC, strong rapport with sponsor, 8/10 NPS |
+| Current (March 2026) | **Trusted** (under pressure) | TikTok-driven P1 outage tested the relationship. Pepper is not angry — she's focused on solving the scaling problem. Trust intact but needs credible scaling architecture. |
+
+## Open Items & Flags
+
+- ⚠️ **URGENT**: Scalability architecture review needed before next viral event (scheduled April 2026)
+- ⚠️ **OPEN**: AMQ Streams Kafka consumer lag issue still being tuned (ESC-4830)
+- 🟢 **POSITIVE**: Engagement score 78 and improving. Pepper is an enthusiastic advocate.
+- 💡 **OPPORTUNITY**: $2.4M platform scaling deal (OPP-22401) plus $680K AI expansion (OPP-22555) = $3.08M pipeline
+- 💡 **OPPORTUNITY**: Pepper's IDP demo offer at CAB could be turned into a co-marketing case study
+
+---
+---
+
+# Engagement History — Quantum Pretzel Corp
+
+## Account: Quantum Pretzel Corp (ACC-4267)
+## Primary Contact: Ziggy Stardust-Chen, VP Platform Engineering
+
+---
+
+## Engagement Timeline
+
+### 2026
+
+**February 10, 2026 — Support Escalation (P2)**
+- Type: Support escalation — ACS false positive alerts
+- Advanced Cluster Security generating false positive alerts during crypto transaction peaks. SOC overwhelmed.
+- Ziggy escalated after 3 weeks without resolution — cited this as evidence of deprioritization
+- Ziggy's quote to Aisha Patel: "I spent a year on your advisory board telling you FinTech workloads need specialized support. This is exactly what I warned about."
+- Resolution: Eventually resolved, but damage to relationship was done
+- Relationship signal: This incident reinforced Ziggy's decision to leave the CAB
+
+**January 20, 2026 — Re-engagement Call**
+- Type: Sponsor outreach — contract renewal
+- Aisha Patel reached out for a renewal discussion call
+- Ziggy was polite but direct: "I'm not going to pretend everything is fine. AWS has been in my inbox every week with a serious EKS migration offer. Give me a reason to stay."
+- Outcome: Ziggy agreed to a technical deep-dive in March to evaluate whether staying on OpenShift makes sense
+- Relationship signal: Door is open but narrowing. Ziggy wants to feel heard, not sold to.
+
+### 2025
+
+**November 8, 2025 — Last CAB Meeting (In-person, Raleigh EBC)**
+- Type: Customer Advisory Board — Strategic Technology
+- Ziggy's final meeting before stepping down from the CAB
+- Participated in Container Security discussion — raised FinTech-specific alert tuning concerns
+- Post-meeting: Informed Kristin Waitkus of decision to step down, effective end of Q4 2025
+- Reason cited: "I've raised the same FinTech support priority issue three meetings in a row. Nothing has changed. My time is better spent elsewhere."
+
+**June 15, 2025 — Red Hat Summit (Denver)**
+- Type: Conference attendance
+- Ziggy attended remotely (virtual pass) — 2 sessions on Kubernetes security and 1 on crypto workloads
+- Did not attend any in-person networking events
+- Relationship signal: Already disengaging. Remote attendance at a conference Ziggy previously attended in person.
+
+---
+
+## Relationship Stage Progression
+
+| Date | Stage | Evidence |
+|------|-------|----------|
+| Q1 2024 | **Engaged** | Joined CAB, active participant, expanded OpenShift footprint |
+| Q2 2025 | **Trusted** | Active CAB contributor, strong technical engagement |
+| Q4 2025 | **Engaged** (downgraded) | Stepped down from CAB citing lack of responsiveness |
+| Current (March 2026) | **Favorable** (at risk of **Aware**) | Contract renewal in 2 months. Competitor AWS actively courting. Engagement declining. Re-engagement attempt in progress. |
+
+## Open Items & Flags
+
+- 🔴 **WARNING**: Contract renewal June 2026 — 2 months out, at risk. $920K ARR plus $1.4M expansion opportunity.
+- 🔴 **WARNING**: Competitor AWS aggressively pitching EKS migration package
+- 🔴 **NEGATIVE**: Left CAB feeling ignored. Support escalation reinforced frustration.
+- ⚠️ **STRATEGY**: Re-engagement must lead with listening, not selling. Ziggy wants to be heard.
+- 💡 **OPPORTUNITY**: Ziggy expressed interest in returning to CAB if feedback loop improves. CAB re-invitation could be a powerful retention signal.
+- 💡 **OPPORTUNITY**: Technical deep-dive scheduled for March — this is the make-or-break moment for retention
+
+---
+---
+
+# Engagement History — GalactiCorp Space Industries
+
+## Account: GalactiCorp Space Industries (ACC-4390)
+## Primary Contact: Luna Wavelength, Chief Innovation Officer
+
+---
+
+## Engagement Timeline
+
+### 2026
+
+**March 10, 2026 — Executive Strategy Call**
+- Type: Executive strategy session — security audit remediation
+- Luna and Roberto Vega discussed the path forward on the $8M satellite ground station deal
+- Key blocker: CISO Colonel Drake is holding expansion pending NIST 800-171 remediation in 3 of 12 clusters
+- Luna's strategy: "I need you to help me build the compliance case. If we can show Drake a remediation plan with a timeline, I can get him to conditionally approve the expansion."
+- Outcome: Agreed to a joint security remediation workshop with Colonel Drake's team
+- Action item: Deliver NIST 800-171 remediation plan by April 15 — IN PROGRESS
+
+**February 12, 2026 — CAB Meeting (Virtual)**
+- Type: Customer Advisory Board — Strategic Technology
+- Luna attended as Co-Vice-Chair
+- Contributed to AI Governance discussion — shared GalactiCorp's safety-critical AI review process
+- Connected with Rachel Morrison on energy-aerospace governance parallels
+- Contributed to Hybrid Cloud discussion — shared air-gapped cluster management challenges
+- Relationship signal: Highly engaged. Luna is building cross-industry connections through the CAB.
+
+**February 1, 2026 — Support Incident (P3)**
+- Type: Support ticket — ACM policy propagation delay in air-gapped clusters
+- Resolved with dedicated support engineer sent onsite to classified facility
+- Luna was informed but not directly involved — Orion Pax handled
+- Satisfaction: Positive — onsite support made a strong impression
+
+### 2025
+
+**September 15, 2025 — Executive Briefing (Raleigh EBC)**
+- Type: Full-day executive briefing
+- Visitors: Luna Wavelength, Orion Pax (VP Satellite Operations), Colonel Drake (CISO — first engagement)
+- Topics: OpenShift for aerospace, edge computing for ground stations, security compliance for defense workloads, Ansible for launch operations
+- Luna opened her laptop during the edge session and ran connectivity tests against a simulated ground station environment
+- Colonel Drake attended the security session but remained reserved — asked pointed questions about NIST compliance
+- Outcome: Luna initiated the $8M ground station edge computing conversation. Colonel Drake agreed to a security deep-dive (but later became the blocker after the March audit).
+- NPS Score: 9/10 (Luna), 6/10 (Colonel Drake)
+
+---
+
+## Relationship Stage Progression
+
+| Date | Stage | Evidence |
+|------|-------|----------|
+| 2024 (pre-engagement) | **Aware** | GalactiCorp was a RHEL and Ansible customer, no executive relationship |
+| Q1 2025 | **Engaged** | Joined CAB, appointed Co-Vice-Chair, executive briefing initiated |
+| September 2025 | **Trusted** | Full-day EBC, initiated $8M deal, active CAB contributor |
+| Current (March 2026) | **Trusted** (blocked) | Luna is a champion but the $8M deal is blocked by CISO. Security remediation is the key to unlocking expansion. |
+
+## Open Items & Flags
+
+- 🔴 **BLOCKER**: CISO Colonel Drake blocking $8M expansion pending NIST 800-171 remediation in 3 clusters
+- ⚠️ **URGENT**: NIST 800-171 remediation plan due April 15 — must be credible and detailed to satisfy Colonel Drake
+- 🟢 **POSITIVE**: Engagement score 88. Luna is a strong champion who actively builds cross-industry connections.
+- 💡 **OPPORTUNITY**: $8M ground station deal (OPP-22780) plus $1.2M Ansible expansion (OPP-22815) = $9.2M pipeline. Largest single opportunity after TerraScale.
+- 💡 **OPPORTUNITY**: Joint security workshop with Colonel Drake could convert him from blocker to supporter
+- 🟡 **STRATEGY**: Win Colonel Drake, win the deal. Dedicate senior security architect to this engagement.
+
+---
+---
+
+# Engagement History — Thunderbolt Logistics
+
+## Account: Thunderbolt Logistics (ACC-4501)
+## Primary Contact: Max Bandwidth, SVP Digital Transformation
+
+---
+
+## Engagement Timeline
+
+### 2026
+
+**March 18, 2026 — Technical Review Call**
+- Type: Technical review — AI model serving performance
+- Max and Dev Patel (Director Data Science) discussed OpenShift AI latency spikes during peak logistics hours (6-9 AM)
+- Route optimization predictions delayed by 45 seconds — impacting morning dispatch schedules
+- Max's concern: "I'm about to present to the board about scaling this to 2,000 trucks. I can't do that if the system chokes at 50."
+- Outcome: Performance tuning in progress. Dedicated AI platform engineer assigned.
+- Relationship signal: Max is not frustrated — he's focused on solving the problem before the board meeting
+
+**February 12, 2026 — CAB Meeting (Virtual)**
+- Type: Customer Advisory Board — Strategic Technology
+- Max attended and contributed to AI Governance (human-impact governance), Hybrid Cloud (edge-to-core logistics), and Platform Engineering (AI workflow friction) discussions
+- Connected with Pepper Minton on scaling challenges post-meeting
+- Asked for AI ROI benchmark data for logistics — wants competitive intelligence for the board
+- Relationship signal: Engaged and strategic. Max is using the CAB to build his internal business case.
+
+**January 10, 2026 — QBR (Virtual)**
+- Type: Quarterly Business Review
+- Attendees: Max Bandwidth, Helen Gearshift (VP Operations — attended reluctantly), Dev Patel, Diana Kim (sponsor)
+- Key moment: Max presented the AI pilot results ($4M/year savings). Helen Gearshift questioned reliability and job displacement risks.
+- Helen's challenge: "What happens when this thing tells a driver to go left and there's a bridge out? Who's liable?"
+- Max needs data to counter Helen's objections at the board level
+- Diana Kim (sponsor) offered to arrange an industry peer exchange with another logistics customer
+
+### 2025
+
+**November 8, 2025 — Executive Briefing (Chicago — on-site at Thunderbolt HQ)**
+- Type: Half-day executive briefing at Thunderbolt's Chicago headquarters
+- Visitors (our team went to them): Diana Kim (sponsor), AI solutions architect, Account team
+- Topics: OpenShift AI for logistics, route optimization ML model deployment, fleet management at scale
+- Max showed the team Thunderbolt's operations center — wall-to-wall dashboards showing real-time fleet data
+- Outcome: Max approved the AI pilot expansion and committed to CAB membership
+- NPS Score: 8/10
+- Max's feedback: "The AI demo was strong. I want to see more real-time dashboards and less PowerPoint. Show me what the data looks like at 2,000 trucks, not 50."
+
+---
+
+## Relationship Stage Progression
+
+| Date | Stage | Evidence |
+|------|-------|----------|
+| 2024 (pre-engagement) | **Aware** | Thunderbolt was a RHEL and Ansible customer, no executive relationship |
+| Q1 2025 | **Engaged** | Joined CAB, executive briefing, approved AI pilot |
+| November 2025 | **Trusted** | On-site EBC, 8/10 NPS, committed to scaling AI |
+| Current (March 2026) | **Trusted** (stalled by internal politics) | AI pilot success proven but internal blocker (VP Operations) preventing scale. Max needs external validation and ROI data. |
+
+## Open Items & Flags
+
+- ⚠️ **BLOCKER**: VP Operations Helen Gearshift resisting AI adoption — skeptical of reliability and concerned about job displacement
+- ⚠️ **OPEN**: OpenShift AI latency issue during peak hours — performance tuning in progress (ESC-4860)
+- 🟢 **POSITIVE**: AI pilot saved $4M/year — strong proof point for board presentation
+- 💡 **OPPORTUNITY**: $3.2M AI scale-out deal (OPP-22901) plus $750K Ansible expansion (OPP-22935) = $3.95M pipeline
+- 💡 **OPPORTUNITY**: Industry peer exchange could help Max build the case to win over Helen Gearshift
+- 🟡 **STRATEGY**: Help Max build the board presentation. Provide AI ROI benchmarks, industry comparison data, and a reliability/safety framework that addresses Helen's concerns. Win Helen or work around her.
+
+---
+---
+
+# Engagement History — WonderPaws Pet Wellness
+
+## Account: WonderPaws Pet Wellness (ACC-4688)
+## Primary Contact: Sage Cloudberry, CIO
+
+---
+
+## Engagement Timeline
+
+### 2026
+
+**March 28, 2026 — Introductory Call**
+- Type: First executive conversation
+- Sage Cloudberry reached out after attending a Red Hat webinar on container platform modernization
+- 30-minute introductory call with the account team
+- Sage was direct: "I'm evaluating Red Hat and VMware for our container platform. I'm a former SRE — don't oversimplify. Tell me what OpenShift does better and where VMware wins. I'll respect honesty more than a pitch."
+- Outcome: Executive briefing scheduled for April 2026
+- Biscuit (Sage's golden retriever) was visible on camera and barked once during the call
+- Relationship signal: Early but promising. Sage is genuinely evaluating and appreciates directness.
+
+**March 30, 2026 — Technical Discovery Call**
+- Type: Technical deep-dive with engineering team
+- Attendee: Juniper Moss (VP Engineering) — Sage did not attend this session
+- Topics: Current VMware estate, container adoption maturity, Kubernetes experience level
+- Key insight: WonderPaws team has strong Kubernetes skills (former SRE leadership). They don't need hand-holding — they need an honest comparison.
+- Juniper has VMware Tanzu experience from a previous role and is currently the strongest Tanzu advocate internally
+
+**March 15, 2026 — Webinar Attendance**
+- Type: Digital engagement
+- Sage attended the "Container Platform Modernization" webinar
+- Watched the full 60 minutes (high engagement signal for a CIO)
+- Submitted a question during Q&A about multi-cluster management for distributed veterinary clinics
+- This webinar triggered the introductory call outreach
+
+---
+
+## Relationship Stage Progression
+
+| Date | Stage | Evidence |
+|------|-------|----------|
+| Pre-March 2026 | **Aware** | WonderPaws was a RHEL and Ansible customer, no executive relationship |
+| March 2026 | **Favorable** | Webinar attendance, introductory call, executive briefing scheduled |
+| Next milestone | **Engaged** (target) | Successful first executive briefing should move to Engaged. If briefing goes well, CAB nomination follows. |
+
+## Open Items & Flags
+
+- 🟡 **NEW**: First executive briefing ever — scheduled April 2026. This is the defining moment.
+- 🟡 **ATTENTION**: No executive sponsor assigned yet. Recommend assigning someone from healthcare vertical before the briefing.
+- ⚠️ **COMPETITIVE**: Sage is evaluating Red Hat vs. VMware Tanzu. Juniper Moss (VP Engineering) has Tanzu experience and may favor VMware.
+- 🟢 **POSITIVE**: Sage's technical depth (former SRE) means they can evaluate OpenShift on its merits. Honest, hands-on demos will resonate.
+- 💡 **OPPORTUNITY**: Land-and-expand. $900K container platform (OPP-23050) plus $450K AI for veterinary diagnostics (OPP-23088) = $1.35M pipeline with significant growth potential.
+- 💡 **OPPORTUNITY**: If briefing succeeds, CAB nomination follows — adding a healthcare/veterinary voice to the board.
+- 🐕 **NOTE**: Sage brings golden retriever Biscuit to all meetings. Confirm pet policy at the briefing center before the visit.
