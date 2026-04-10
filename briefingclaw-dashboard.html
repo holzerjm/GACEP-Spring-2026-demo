@@ -101,9 +101,9 @@ body::before {
 }
 
 .logo-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   object-fit: contain;
 }
 
@@ -1128,10 +1128,6 @@ body.presentation-mode .logo-text { font-size: 17px !important; }
 body.presentation-mode .footer-text { font-size: 12px !important; }
 
 .pmode-indicator {
-  position: fixed;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   text-transform: uppercase;
@@ -1141,7 +1137,6 @@ body.presentation-mode .footer-text { font-size: 12px !important; }
   border: 1px solid rgba(255,198,0,0.2);
   padding: 2px 12px;
   border-radius: 4px;
-  z-index: 200;
   display: none;
 }
 
@@ -1192,7 +1187,6 @@ body.presentation-mode .pmode-indicator { display: block; }
 </style>
 </head>
 <body>
-<div class="pmode-indicator" id="pmodeIndicator">Presentation Mode (P to toggle)</div>
 
 <div class="dashboard">
 
@@ -1205,7 +1199,10 @@ body.presentation-mode .pmode-indicator { display: block; }
       </div>
       <span class="header-title">Live Demo Dashboard &mdash; BriefingClaw GACEP Edition</span>
     </div>
-    <div id="modeBadge" class="mode-badge simulated">SIMULATED</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="pmode-indicator" id="pmodeIndicator">Presentation Mode (P to toggle)</div>
+      <div id="modeBadge" class="mode-badge simulated">SIMULATED</div>
+    </div>
   </header>
 
   <!-- ═══════════════════ PIPELINE VIZ ════════════════════ -->
