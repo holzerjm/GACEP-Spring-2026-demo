@@ -12,7 +12,7 @@ Built for the **GACEP Spring 2026 Conference** session: *"One Customer, Many Doo
 
 ## Getting Started
 
-Open `index.html` in a browser to navigate between all demo pages and resources. The navigation landing page links to both dashboards (original and Red Hat branded), the architecture diagram, the persona gallery, the documentation set, and the enterprise deployment guide. It is the recommended entry point for first-time users and for orienting an audience at the start of a presentation.
+Open `index.html` in a browser to navigate between all demo pages and resources. The navigation landing page links to both dashboards (original and Red Hat branded), the architecture diagram, the standalone persona gallery, the multi-contact briefing mode, the post-briefing feedback loop, the documentation set, and the enterprise deployment guide. It is the recommended entry point for first-time users and for orienting an audience at the start of a presentation.
 
 ---
 
@@ -220,6 +220,9 @@ gacep-demo/
 +-- briefingclaw-dashboard.html            Live demo dashboard (original dark theme, improved readability)
 +-- briefingclaw-dashboard-redhat.html     Live demo dashboard (Red Hat branded, improved readability)
 +-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
++-- briefingclaw-personas.html              Standalone filterable persona gallery (8 personas)
++-- briefingclaw-multicontact.html          Multi-contact group briefing mode (pick 2-5 of 9 contacts)
++-- briefingclaw-postbriefing.html          Post-briefing feedback loop with Oddsfather calibration
 +-- README.md                              This file
 |
 +-- agents/                                Agent skill definitions
@@ -267,7 +270,13 @@ gacep-demo/
 
 **`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition with identical functionality. Reskinned with Red Hat Display/Text/Mono fonts, PatternFly dark theme surfaces (#151515/#1F1F1F/#292929), Red Hat Red (#EE0000) primary accent, PatternFly blue for frontier agents, PatternFly teal for local agents. Same readability improvements, risk badges, PDF export, LIVE/LOCAL ONLY/SIMULATED mode detection, telemetry logging (T key), GitHub footer link, all 8 contact scenarios, and embedded deliverables. Use this version for Red Hat-affiliated presentations.
 
-**`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the three-phase pipeline, model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
+**`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the four-phase pipeline (Phase 1 intelligence gathering; Phase 2 assembly; Phase 3 three-column assembly including Sponsor Coach; Phase 4 The Oddsfather synthesis), model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
+
+**`briefingclaw-personas.html`** — Standalone persona gallery. Filterable card view of all 8 personas with tier and type filters, rich stat cards, color-coded drama callouts, top-3 priorities per persona, and action buttons (Run Demo to launch the dashboard for that persona, Open Dossier to jump straight to the deliverable view). Designed as a warm-up or reference page that attendees can browse before the main demo.
+
+**`briefingclaw-multicontact.html`** — Multi-contact briefing mode. Pick 2-5 contacts from 9 total across 3 companies (Sarah Chen / Tom Richards / Dr. Priya Kapoor at Meridian, David Park / Karen Wu / Marcus Thompson at Apex, Rachel Morrison / Anil Desai / Frank Reeves at TerraScale). Outputs a shared company context, a buying center role matrix (economic / champion / technical / blocker / influencer), cross-contact dynamics (alignments / tensions / conflicts), a recommended briefing order (blocker first, champion last), a unified agenda, coordination risks, and The Oddsfather's group verdict with coordination adjustments. Self-contained with no backend.
+
+**`briefingclaw-postbriefing.html`** — Post-briefing feedback loop. Form for logging briefing outcomes: contact dropdown, NPS score buttons (0-10), commitments list, actual outcome, relationship stage signal, and debrief notes. A live analysis panel on the right shows The Oddsfather's prediction calibration (predicted vs actual with drift classification), Deja View's relationship stage update preview, and recent submission history. Submissions persist to browser `localStorage` under the `briefingclaw-feedback` key (capped at 50 entries) so rehearsal data survives between sessions without any server.
 
 **`docs/ENTERPRISE-DEPLOYMENT.md`** — Guide for scaling BriefingClaw from the laptop prototype shown in the demo to an enterprise deployment on Red Hat OpenShift AI. Covers reference architecture, multi-tenant considerations, governance controls, integration patterns with existing CRM and EBC tooling, and the migration path from OpenClaw/ZeroClaw to production agent runtimes.
 

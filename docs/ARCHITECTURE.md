@@ -193,7 +193,10 @@ briefingclaw/
 ├── index.html                         # Navigation landing page with persona gallery
 ├── briefingclaw-dashboard.html        # Live demo dashboard (8 scenarios, embedded deliverables, improved readability)
 ├── briefingclaw-dashboard-redhat.html # Red Hat branded variant (identical functionality)
-├── briefingclaw-architecture.html     # Static architecture diagram
+├── briefingclaw-architecture.html     # Static architecture diagram (Phase 3 Sponsor Coach + Phase 4 Oddsfather)
+├── briefingclaw-personas.html         # Standalone filterable persona gallery (8 personas)
+├── briefingclaw-multicontact.html     # Multi-contact group briefing mode (2-5 of 9 contacts)
+├── briefingclaw-postbriefing.html     # Post-briefing feedback loop (Oddsfather calibration + localStorage)
 ├── briefingclaw.sh                    # Interactive CLI for demo management
 ├── agents/
 │   ├── orchestrator/          # Oprah-tor — the coordinator
@@ -231,3 +234,15 @@ briefingclaw/
     ├── BUILD-GUIDE.md         # How to build & configure
     └── ENTERPRISE-DEPLOYMENT.md # Scaling to Red Hat OpenShift AI
 ```
+
+## Standalone Interfaces
+
+Alongside the two live dashboards, three additional HTML pages provide specialized workflows. All three are **self-contained** — no backend required, no calls to the OpenClaw gateway or the Granite model — and they render entirely from static assets:
+
+| Page | Purpose | Persistence |
+|------|---------|-------------|
+| `briefingclaw-personas.html` | Standalone filterable persona gallery with tier/type filters and per-card Run Demo / Open Dossier actions | None (stateless view) |
+| `briefingclaw-multicontact.html` | Multi-contact group briefing mode — pick 2-5 of 9 contacts across Meridian, Apex, and TerraScale; outputs shared company context, buying center role matrix, cross-contact dynamics, recommended briefing order, unified agenda, coordination risks, and the Oddsfather's group verdict | None (stateless view) |
+| `briefingclaw-postbriefing.html` | Post-briefing feedback loop with NPS scoring, commitments, actual outcome, and live Oddsfather calibration (predicted vs actual with drift classification) and Déjà View stage update preview | Browser `localStorage` under `briefingclaw-feedback` key, capped at 50 entries |
+
+**Architectural note:** These three pages deliberately do not depend on the agent runtime. They act as either pre-demo warm-ups (persona gallery), advanced-scenario extensions (multi-contact), or closing feedback artefacts (post-briefing) that can run on any laptop in any room — including on a plane with no Wi-Fi. The post-briefing page uses `localStorage` (not a server) so rehearsal data survives between sessions without any deployment footprint. In the enterprise deployment vision, the post-briefing feedback would flow into a real datastore that Déjà View can query, but for the demo and for local rehearsal the browser-side persistence is sufficient and keeps the "runs on a laptop with no data leaving the building" promise intact.

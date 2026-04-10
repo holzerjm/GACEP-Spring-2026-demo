@@ -12,6 +12,10 @@ A practical guide for installing, configuring, and operating the BriefingClaw mu
 4. [Starting the System](#4-starting-the-system)
 5. [Running a Briefing Request](#5-running-a-briefing-request)
 6. [Using the Dashboard](#6-using-the-dashboard)
+   - [Additional Views & Modes](#additional-views--modes)
+     - [Multi-Contact Briefing Mode](#multi-contact-briefing-mode)
+     - [Persona Gallery](#persona-gallery)
+     - [Post-Briefing Feedback](#post-briefing-feedback)
 7. [Using the CLI (briefingclaw.sh)](#7-using-the-cli-briefingclawsh)
 8. [Running Individual Agents](#8-running-individual-agents)
 9. [Understanding the Output](#9-understanding-the-output)
@@ -347,6 +351,92 @@ All eight scenarios follow the same phase structure but surface different intell
 | 21-37s | Draft Punk and Alfred Bitworth produce deliverables progressively |
 | 38-42s | Oprah-tor synthesizes the final package (8/8 deliverables) |
 
+### Additional Views & Modes
+
+Three standalone HTML pages extend the dashboard experience with specialized workflows. All three are self-contained (no backend required) and can be opened directly from `index.html`:
+
+| Page | Purpose |
+|------|---------|
+| `briefingclaw-personas.html` | Standalone filterable persona gallery |
+| `briefingclaw-multicontact.html` | Multi-contact group briefing mode |
+| `briefingclaw-postbriefing.html` | Post-briefing feedback loop with Oddsfather calibration |
+
+#### Multi-Contact Briefing Mode
+
+Open `briefingclaw-multicontact.html` to run a **group briefing** scenario where multiple stakeholders from the same company attend together. This is the mode to use when the audience asks "what if there's more than one person in the room?"
+
+**How to use:**
+
+1. Open `briefingclaw-multicontact.html` (or click its card on the `index.html` landing page).
+2. Pick **2 to 5 contacts** from the picker. The picker shows 9 contacts across 3 companies:
+   - **Meridian Health Systems** — Sarah Chen, Tom Richards, Dr. Priya Kapoor
+   - **Apex Financial Group** — David Park, Karen Wu, Marcus Thompson
+   - **TerraScale Energy** — Rachel Morrison, Anil Desai, Frank Reeves
+3. The **Start** button enables once at least 2 contacts are selected and disables again if you exceed 5.
+4. Click Start to generate the group briefing.
+
+**What outputs to expect:**
+
+| Panel | Contents |
+|-------|----------|
+| **Shared Company Context** | One unified company brief (not repeated per contact) — business overview, recent news, strategic priorities |
+| **Buying Center Role Matrix** | Each contact mapped to a role: *economic*, *champion*, *technical*, *blocker*, or *influencer*. This is how to interpret the group dynamics — the blocker is usually the hardest conversation, the champion is the one with the budget conviction |
+| **Cross-Contact Dynamics** | Alignments (who agrees with whom), tensions (friction points surfaced by SAB history), and outright conflicts (directly opposing agendas) |
+| **Recommended Briefing Order** | A suggested agenda sequence — conventionally **blocker first, champion last**, so the blocker's objections get addressed before the champion closes the room |
+| **Unified Agenda** | A single time-blocked agenda tuned to the group, not a per-person agenda |
+| **Coordination Risks** | Things that can derail a group briefing — scheduling conflicts, awkward hierarchy moments, topics one person should not hear in front of another |
+| **Oddsfather Group Verdict** | Success probability expressed as a percentage with **coordination adjustments** layered on top of the per-person verdicts — a low coordination score can drop the group probability even when every individual would score well |
+
+**How to interpret the role matrix and group verdict:** A briefing with a champion plus a blocker is harder than a briefing with two champions, even if the individual relationship stages look strong, because the blocker's veto power is the constraint. The Oddsfather's group verdict already accounts for this — a drop of 15+ percentage points between the individual and group numbers is the signal that coordination, not content, is the problem to solve.
+
+#### Persona Gallery
+
+Open `briefingclaw-personas.html` for a **standalone filterable persona gallery** that shows all 8 personas as rich cards. Use this as a warm-up view before the main demo or as a reference whenever you need to remember which contact has which drama.
+
+**How to use:**
+
+1. Open `briefingclaw-personas.html` (or click the Persona Gallery card on `index.html`).
+2. Use the **tier filter** to narrow by VVIP tier (Platinum, Gold, Silver, Standard).
+3. Use the **type filter** to narrow by scenario type (serious enterprise vs. fun persona).
+4. Each card shows: stat block (tier, industry, relationship stage), a color-coded drama callout (the hook of the scenario), and the contact's top-3 priorities.
+
+**Action buttons** on each card:
+
+| Button | Action |
+|--------|--------|
+| **Run Demo** | Launches the dashboard pre-loaded with that persona (passes the persona through the query string) |
+| **Open Dossier** | Jumps directly to the deliverable modal for that persona without running the pipeline animation |
+
+This page is the fastest way to answer "can you show me the Rachel Morrison one?" without scrolling through a dropdown.
+
+#### Post-Briefing Feedback
+
+Open `briefingclaw-postbriefing.html` to log a briefing outcome after the room is cleared. This is the **feedback loop that makes Deja View smarter over time**: every logged outcome becomes input that Deja View and The Oddsfather can use to recalibrate their predictions on the next briefing with the same contact.
+
+**Submit workflow:**
+
+1. Open `briefingclaw-postbriefing.html`.
+2. On the left, fill in the debrief form:
+   - **Contact dropdown** — pick which contact the feedback is for.
+   - **NPS score buttons (0-10)** — click a single button for the visitor's net promoter score.
+   - **Commitments list** — what did we promise in the room? One per line.
+   - **Actual outcome** — what actually happened? (Plain text.)
+   - **Relationship stage signal** — did the briefing move the relationship forward, hold it, or regress it?
+   - **Debrief notes** — anything else worth capturing.
+3. Click **Submit**.
+
+**What the live analysis panel shows (right side):**
+
+| Card | Contents |
+|------|----------|
+| **Oddsfather Calibration** | Shows The Oddsfather's **predicted** success probability against the **actual** outcome, with a drift classification — *well calibrated*, *optimistic drift*, *pessimistic drift*, or *severe miss*. This is how you catch a model that's systematically wrong about a persona and need to correct it. |
+| **Deja View Stage Update Preview** | A preview of how Deja View would move the relationship stage based on the feedback (e.g., "would advance from Trusted to Champion"). |
+| **Recent Submissions** | A scrolling history of the most recently logged outcomes. |
+
+**What localStorage stores:** All submissions persist to browser `localStorage` under the key `briefingclaw-feedback`, capped at **50 entries** (the oldest entries are evicted when the cap is reached). There is no server and no network call — rehearsal data stays on the laptop and survives between sessions until the browser storage is cleared.
+
+**How The Oddsfather uses the calibration:** Each new feedback entry gets folded into the drift calculation. If The Oddsfather predicted 72% and the actual outcome was a clear loss, the calibration card highlights the miss and — in the production vision — the next briefing with the same contact would start with a shifted prior. For the demo, the calibration card is the artefact that shows "this is a learning loop, not a one-shot prediction."
+
 ---
 
 ## 7. Using the CLI (briefingclaw.sh)
@@ -557,6 +647,7 @@ This checks:
 - [ ] Wi-Fi is connected (for frontier model agents)
 - [ ] Backup video is accessible and tested
 - [ ] Dashboard loads: `open briefingclaw-dashboard.html` (or `briefingclaw-dashboard-redhat.html` for Red Hat branding)
+- [ ] **Verify all three new pages load:** `open briefingclaw-personas.html`, `open briefingclaw-multicontact.html`, `open briefingclaw-postbriefing.html` — all three should render cleanly without broken elements
 
 ### 5 minutes before demo
 

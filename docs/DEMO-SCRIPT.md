@@ -51,6 +51,17 @@
 
 ## Demo Script
 
+### BEAT 0 (optional warm-up): Persona Gallery Browse
+**[Before the session begins, while attendees are filing in]**
+
+If the room is already seated and there are a few idle minutes before the official start, throw `briefingclaw-personas.html` on the projector. This is the standalone filterable persona gallery. Say something like:
+
+> "While we're getting started — this is a gallery of the 8 personas we could have picked for the demo. Each one has a different drama: an overdue commitment, a renewal at risk, a champion under stress, a viral TikTok crisis. You can filter by tier or by scenario type. The one we're going to run in a few minutes is Sarah Chen — overdue commitments — but if anyone wants to see a different one at the end, just tell me which card and we'll run it live."
+
+This is a low-risk opener that gets the audience oriented without burning any of the main demo time.
+
+---
+
 ### BEAT 1: The Setup (2 minutes)
 **[Slides still visible. Jan Mark at the podium.]**
 
@@ -187,11 +198,41 @@ Please prepare a full briefing package:
 >
 > THAT is the connective tissue Kristin described. And it's running on open-source software on a laptop."
 
+### BEAT 6b (extension): Advanced Scenario — Multi-Contact Briefing
+**[Optional. Trigger when the audience asks about group briefings.]**
+
+If the audience asks the natural follow-up — *"what if there's more than one person in the room?"* — switch to `briefingclaw-multicontact.html` and pick a group. A strong default is **Sarah Chen + Tom Richards + Dr. Priya Kapoor** at Meridian, because it stretches across an economic buyer, a technical champion, and a clinical stakeholder.
+
+> "Great question. Let me show you what happens when the room isn't one person. This is the multi-contact mode. I'm picking Sarah Chen, Tom Richards, and Dr. Priya Kapoor — three different people at Meridian, each with their own agenda.
+>
+> [Click Start.]
+>
+> You get one shared company context instead of three redundant company briefs. Then the role matrix: Sarah is the economic buyer, Tom is the technical champion, Priya is the clinical blocker. That's the buying center — and the buying center is usually where deals actually die.
+>
+> Now look at the recommended briefing order: blocker first, champion last. You don't want Priya's objections ambushing you in the closing minutes. Address them up front, then let Tom close the room.
+>
+> And the Oddsfather — notice how the group verdict is lower than any individual verdict would be. That's the coordination adjustment. A group briefing with a blocker is harder than the sum of its parts, and the agent tells you that before you walk in."
+
+Use this as an advanced scenario only if the audience signals interest — do not force it into the main narrative, because the main demo's Sarah Chen story has cleaner dramatic beats.
+
 ### BEAT 7: The Enterprise Bridge (1 minute)
 
 > "Everything you just saw: the model is IBM Granite, open source. The agent frameworks are OpenClaw and ZeroClaw, open source. The container runtime is Podman, open source. If you wanted to scale this for your whole EBC team — across multiple centers, integrated with your CRM, with guardrails and governance — that's what Red Hat's OpenShift AI platform does.
 >
 > But the point is: you can start experimenting today. On your own laptop. For free."
+
+### BEAT 7b (closing): The Feedback Loop — Post-Briefing
+**[Optional but recommended as the final beat before handing off]**
+
+Open `briefingclaw-postbriefing.html` for the closer. This is the feedback loop that makes Deja View smarter over time.
+
+> "One last thing before I hand back. Every briefing ends — and most organizations throw away the debrief. This is where we capture it. NPS, commitments made, actual outcome, relationship stage shift.
+>
+> [Fill in a quick example — NPS 9, one commitment, outcome positive.]
+>
+> Watch the Oddsfather calibration card: we predicted 72%, the actual outcome was strong positive — the calibration says we were well calibrated. But if we had predicted 72% and walked into a disaster, this card would flag it as an *optimistic drift* and the next briefing with Sarah Chen would start from a shifted prior.
+>
+> **This is the feedback loop that makes Deja View smarter over time.** It's not a one-shot prediction — it's a learning system. And everything you see here is persisted locally to browser storage, so nothing leaves the laptop."
 
 ### BEAT 8: Hand Back to Kristin (30 seconds)
 

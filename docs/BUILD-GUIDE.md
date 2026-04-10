@@ -357,6 +357,52 @@ open briefingclaw-dashboard-redhat.html   # Red Hat branded variant
 
 The dashboard automatically detects whether live services are running and displays "LIVE", "LOCAL ONLY", or "SIMULATED" accordingly.
 
+### Standalone Pages — Persona Gallery, Multi-Contact, Post-Briefing
+
+Three additional HTML pages extend the demo experience. All three are self-contained (no backend required) and should be tested independently of the main dashboard.
+
+```bash
+open briefingclaw-personas.html
+open briefingclaw-multicontact.html
+open briefingclaw-postbriefing.html
+```
+
+**`briefingclaw-personas.html` (Persona Gallery):**
+- [ ] Page loads and renders all 8 persona cards
+- [ ] Tier filter works (Platinum / Gold / Silver / Standard narrow the gallery correctly)
+- [ ] Type filter works (serious enterprise vs fun persona narrow the gallery correctly)
+- [ ] Each card renders the stat block, color-coded drama callout, and top-3 priorities
+- [ ] **Run Demo** action button links correctly to the dashboard with the persona preloaded
+- [ ] **Open Dossier** action button links correctly to the deliverable view for the selected persona
+- [ ] Removing filters restores all 8 cards
+
+**`briefingclaw-postbriefing.html` (Post-Briefing Feedback):**
+- [ ] Page loads with the form on the left and the analysis panel on the right
+- [ ] Contact dropdown populates with the expected contacts
+- [ ] NPS buttons (0-10) work — clicking a single button selects it and deselects the others
+- [ ] Form submits without errors
+- [ ] The Oddsfather calibration card updates after submission with predicted-vs-actual and a drift classification
+- [ ] Déjà View stage update preview renders after submission
+- [ ] Submission persists to browser `localStorage` under the `briefingclaw-feedback` key — verify via DevTools `Application` tab
+- [ ] Recent submissions list shows the new entry immediately after submit
+- [ ] Submissions survive a page refresh (localStorage persistence)
+- [ ] Verify the 50-entry cap by submitting rapidly or inspecting the cap logic in DevTools
+
+**`briefingclaw-multicontact.html` (Multi-Contact Briefing Mode):**
+- [ ] Page loads the contact picker with 9 contacts across 3 companies (Meridian: Sarah Chen / Tom Richards / Dr. Priya Kapoor; Apex: David Park / Karen Wu / Marcus Thompson; TerraScale: Rachel Morrison / Anil Desai / Frank Reeves)
+- [ ] Contact picker allows selection of 2-5 contacts (more than 5 should be blocked or the Start button disabled)
+- [ ] **Start** button is disabled when 0 or 1 contacts are selected
+- [ ] **Start** button enables at 2+ selected contacts
+- [ ] Clicking Start renders **all 6 result panels**:
+  - [ ] Shared Company Context
+  - [ ] Buying Center Role Matrix (economic / champion / technical / blocker / influencer)
+  - [ ] Cross-Contact Dynamics (alignments / tensions / conflicts)
+  - [ ] Recommended Briefing Order (blocker first, champion last)
+  - [ ] Unified Agenda
+  - [ ] Coordination Risks
+- [ ] **Oddsfather Group Verdict** renders with success probability and coordination adjustments
+- [ ] Switching the selection and re-running produces different results that reflect the new contact mix
+
 ---
 
 ## Step 7: Record the Backup Video
