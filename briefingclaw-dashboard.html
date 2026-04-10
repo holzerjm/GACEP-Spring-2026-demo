@@ -72,7 +72,7 @@ body::before {
   margin: 0 auto;
   height: 100vh;
   display: grid;
-  grid-template-rows: 56px minmax(340px, 420px) 52px 1fr auto;
+  grid-template-rows: 56px auto 52px 1fr auto;
   padding: 0 24px;
   gap: 0;
 }
@@ -151,7 +151,8 @@ body::before {
    ═══════════════════════════════════════════════════════════ */
 .pipeline-section {
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  min-height: 340px;
 }
 
 .pipeline-canvas {
@@ -163,12 +164,12 @@ body::before {
 .pipeline-overlay {
   position: relative;
   z-index: 2;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 0 12px;
+  justify-content: space-evenly;
+  padding: 12px 0;
+  min-height: 340px;
 }
 
 .pipeline-row {
@@ -1103,11 +1104,13 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 /* ── Presentation Mode ────────────────────────────────── */
-body.presentation-mode .agent-node .agent-name { font-size: 20px !important; }
-body.presentation-mode .agent-node .agent-role { font-size: 13px !important; }
-body.presentation-mode .agent-node .agent-emoji { font-size: 28px !important; }
-body.presentation-mode .agent-node .model-badge { font-size: 11px !important; }
-body.presentation-mode .phase-label { font-size: 14px !important; }
+/* Pipeline stays compact — only bump text slightly, don't change box sizes */
+body.presentation-mode .agent-node .agent-name { font-size: 16px !important; }
+body.presentation-mode .agent-node .agent-role { font-size: 11px !important; }
+body.presentation-mode .agent-node .agent-emoji { font-size: 24px !important; }
+body.presentation-mode .phase-label { font-size: 12px !important; }
+
+/* Panels get the big readability boost — they scroll independently */
 body.presentation-mode .panel-title { font-size: 18px !important; }
 body.presentation-mode .panel-badge { font-size: 12px !important; }
 body.presentation-mode .activity-time { font-size: 13px !important; }
@@ -1120,9 +1123,6 @@ body.presentation-mode .flag-icon { font-size: 20px !important; }
 body.presentation-mode .flag-label { font-size: 11px !important; }
 body.presentation-mode .infra-name { font-size: 15px !important; }
 body.presentation-mode .elapsed-display { font-size: 26px !important; }
-body.presentation-mode .trigger-node .node-label,
-body.presentation-mode .output-node .node-label { font-size: 13px !important; }
-body.presentation-mode .output-node .deliverable-count { font-size: 20px !important; }
 body.presentation-mode .header-title { font-size: 20px !important; }
 body.presentation-mode .logo-text { font-size: 17px !important; }
 body.presentation-mode .footer-text { font-size: 12px !important; }
