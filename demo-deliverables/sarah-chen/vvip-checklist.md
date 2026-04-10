@@ -146,7 +146,7 @@
 
 - [ ] **EBC Manager escorts Sarah to lobby** at conclusion
 - [ ] **Confirm any follow-up logistics** (e.g., materials to be sent, next meeting)
-- [ ] **Thank Sarah for her time and CAB contributions**
+- [ ] **Thank Sarah for her time and SAB contributions**
 
 ---
 

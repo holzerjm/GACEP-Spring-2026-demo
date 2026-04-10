@@ -2,7 +2,7 @@
 <!-- All names, companies, events, and details in this file are entirely fictional. -->
 <!-- Created for the BriefingClaw demo at GACEP Spring 2026. Not real customer data. -->
 
-# Customer Advisory Board Meeting Notes
+# Strategic Advisory Board Meeting Notes
 
 ## Strategic Technology Advisory Board — Q1 2026
 
@@ -170,7 +170,7 @@ David Park listened but noted financial services has different edge requirements
 
 Rachel Morrison (as Co-Chair) stayed an additional 90 minutes after the formal meeting to debrief with Kristin Waitkus and Elena Vasquez on board health, member engagement, and Q1 2026 agenda planning. She proposed the AI Governance and Hybrid Cloud themes that were ultimately adopted.
 
-David Park attended the post-meeting executive dinner at Angus Barn with 8 other members. Informal conversation topics included frustrations with cloud vendor pricing and interest in FinOps practices. David was notably more relaxed in the dinner setting and shared candid feedback about wanting more "real talk" in CAB sessions.
+David Park attended the post-meeting executive dinner at Angus Barn with 8 other members. Informal conversation topics included frustrations with cloud vendor pricing and interest in FinOps practices. David was notably more relaxed in the dinner setting and shared candid feedback about wanting more "real talk" in SAB sessions.
 
 ---
 

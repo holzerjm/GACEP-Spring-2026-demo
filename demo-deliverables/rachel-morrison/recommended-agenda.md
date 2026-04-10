@@ -20,7 +20,7 @@
 
 ### Agenda Overview
 
-This is the highest-stakes briefing in the current cycle. Rachel Morrison is a Platinum VVIP, CAB Co-Chair, and our most valuable individual champion. A P1 production outage on March 28 has damaged her trust at the worst possible time -- weeks before she presents to her board to approve a $5M platform expansion.
+This is the highest-stakes briefing in the current cycle. Rachel Morrison is a Platinum VVIP, SAB Co-Chair, and our most valuable individual champion. A P1 production outage on March 28 has damaged her trust at the worst possible time -- weeks before she presents to her board to approve a $5M platform expansion.
 
 The agenda is structured in three acts:
 
@@ -200,14 +200,14 @@ Refresh beverages. Oat milk latte, sparkling water with lemon. Team check-in on 
 **CEO talking points:**
 1. Personal acknowledgment of the P1 outage and its impact on Rachel and TerraScale
 2. Commitment to the partnership at the highest organizational level
-3. Recognition of Rachel's extraordinary contributions as CAB Co-Chair
+3. Recognition of Rachel's extraordinary contributions as SAB Co-Chair
 4. Confidence in the grid modernization vision and our role in supporting it
 5. Invitation to a future strategic dinner or CEO advisory circle
 
 **CEO prep requirements:**
 - [ ] Brief CEO on Rachel's dossier, P1 context, and $5M deal status
 - [ ] Prepare 3-4 specific talking points (printed card)
-- [ ] CEO should know Rachel's name, title, company, and CAB role without prompting
+- [ ] CEO should know Rachel's name, title, company, and SAB role without prompting
 - [ ] CEO should reference at least one specific contribution Rachel has made
 
 > **This is not a formality.** Rachel needs to see that the relationship matters at the CEO level, especially after the P1 outage. A genuine, specific, informed conversation will carry more weight than any technical session.
@@ -322,7 +322,7 @@ Refresh beverages. Assess energy level. If Rachel is energized by the workshop, 
 - Edge computing: substations today, field operations tomorrow
 - AI and ML: operational intelligence for energy trading and grid management
 - Platform reliability: the investment roadmap that protects Rachel's advocacy
-- Community and CAB: Rachel's continued leadership role and what we invest in return
+- Community and SAB: Rachel's continued leadership role and what we invest in return
 - Sustainability and green computing (Rachel is sustainability-focused)
 
 > **Approach:** Let Rachel paint the vision. She is a visionary CTO who thinks in 5-year arcs. Our role in this session is to show how we enable her vision, not to pitch our products.
@@ -341,7 +341,7 @@ Refresh beverages. Assess energy level. If Rachel is energized by the workshop, 
 - [ ] Confirm ROI analysis finalization and delivery
 - [ ] Schedule follow-up technical session with Anil Desai's team
 - [ ] Schedule follow-up with Lisa Chang on grid modernization business case
-- [ ] Confirm next CAB meeting plans and Rachel's Co-Chair role
+- [ ] Confirm next SAB meeting plans and Rachel's Co-Chair role
 - [ ] Gift presentation (Platinum tier -- premium personalized)
 
 **Critical commitments to document:**
@@ -399,7 +399,7 @@ Refresh beverages. Assess energy level. If Rachel is energized by the workshop, 
 
 ---
 
-*Agenda generated from: Executive Dossier, Engagement History, CAB Meeting Notes, VVIP Protocol, P1 Escalation Logs*
+*Agenda generated from: Executive Dossier, Engagement History, SAB Meeting Notes, VVIP Protocol, P1 Escalation Logs*
 *Briefing priority: CRITICAL | Platinum Protocol | Champion Retention*
 *Pre-briefing deadline: Must occur before May 2026 board presentation*
 *Agenda distribution: 48 hours pre-briefing*

@@ -124,7 +124,7 @@ Refresh beverages. Black coffee and still water restocked. Brief check-in with t
 - Trading platform reference architecture on OpenShift
 - Performance benchmarks: latency, throughput, failover times
 - Regulatory compliance evidence: FINRA, OCC, SOC 2 attestation paths
-- Day 2 operations cost model (address David's CAB concern about hidden costs)
+- Day 2 operations cost model (address David's SAB concern about hidden costs)
 
 **Data David will want to see:**
 - Migration completion rates for stateful workloads at comparable firms
@@ -158,7 +158,7 @@ Refresh beverages. Black coffee and still water restocked. Brief check-in with t
 - Present a balanced analysis -- acknowledge where Azure has advantages
 
 **Platform Differentiation (15 min):**
-- Open-source flexibility and vendor independence (David raised lock-in concerns at CAB)
+- Open-source flexibility and vendor independence (David raised lock-in concerns at SAB)
 - Multi-cloud portability vs. single-vendor dependency
 - Financial services-specific capabilities: compliance, security, auditability
 - Ecosystem and community advantages for financial services
@@ -263,7 +263,7 @@ Refresh beverages. Black coffee and still water restocked. Brief check-in with t
 
 ---
 
-*Agenda generated from: Executive Dossier, Engagement History, CAB Meeting Notes, Support Escalation Logs*
+*Agenda generated from: Executive Dossier, Engagement History, SAB Meeting Notes, Support Escalation Logs*
 *Briefing priority: RETENTION-CRITICAL | Renewal date: June 30, 2026*
 *Agenda distribution: 48 hours pre-briefing (David requires advance distribution)*
 *Presenter briefing packets: Distributed T-72h -- all presenters must be senior level*

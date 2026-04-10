@@ -179,7 +179,7 @@
 ### Commitment Tracking (T+2 days)
 
 - [ ] **Document all commitments** made during briefing:
-  - Auto-scaling architecture review document (close overdue CAB item)
+  - Auto-scaling architecture review document (close overdue SAB item)
   - 2-day scaling workshop in Austin (schedule within 14 days)
   - Smart kitchen edge computing proposal timeline
   - Any new commitments from chaos engineering lab

@@ -89,7 +89,7 @@ You should see a response from the model. If not, check that the Podman machine 
 
 ---
 
-## Step 2: Configure OpenClaw (Oprah-tor + Déjà View + Draft Punk + Alfred Bitworth)
+## Step 2: Configure OpenClaw (Oprah-tor + Déjà View + Draft Punk + Alfred Bitworth + Sponsor Coach + The Oddsfather)
 
 ### Build the OpenClaw Container
 ```bash
@@ -115,9 +115,11 @@ mkdir -p ~/.openclaw/skills
 
 # Copy all agent skills
 cp ~/briefingclaw/agents/orchestrator/SKILL.md ~/.openclaw/skills/orchestrator.md
-cp ~/briefingclaw/agents/cab-historian/SKILL.md ~/.openclaw/skills/cab-historian.md
+cp ~/briefingclaw/agents/sab-historian/SKILL.md ~/.openclaw/skills/sab-historian.md
 cp ~/briefingclaw/agents/briefing-architect/SKILL.md ~/.openclaw/skills/briefing-architect.md
 cp ~/briefingclaw/agents/vvip-protocol/SKILL.md ~/.openclaw/skills/vvip-protocol.md
+cp ~/briefingclaw/agents/sponsor-coach/SKILL.md ~/.openclaw/skills/sponsor-coach.md
+cp ~/briefingclaw/agents/oddsfather/SKILL.md ~/.openclaw/skills/oddsfather.md
 ```
 
 ### Run the Onboarding Wizard
@@ -295,6 +297,27 @@ Record how long each phase takes on YOUR hardware:
 
 ---
 
+## Step 5b: CLI commands reference
+
+The `briefingclaw.sh` wrapper provides all the day-to-day commands you'll need. The commands most relevant during build and rehearsal:
+
+| Command | Description |
+|---------|-------------|
+| `./briefingclaw.sh setup` | First-time configuration wizard |
+| `./briefingclaw.sh start` | Start Podman, model server, and OpenClaw |
+| `./briefingclaw.sh stop` | Stop the OpenClaw container |
+| `./briefingclaw.sh status` | Show system health for all components |
+| `./briefingclaw.sh demo` | Launch the full demo environment |
+| `./briefingclaw.sh preview` | **Rehearsal mode** — opens the dashboards without running any infrastructure checks. Ideal for practising narration and timing at a desk or on a plane. |
+| `./briefingclaw.sh preflight` | Conference-day checklist |
+| `./briefingclaw.sh sherlock "<query>"` | Run Sherlock Ohms standalone |
+| `./briefingclaw.sh bloomborg "<query>"` | Run Bloom-borg standalone |
+| `./briefingclaw.sh record` | Guide for recording a backup video |
+
+See the [USER-GUIDE.md](../USER-GUIDE.md) for full command descriptions.
+
+---
+
 ## Step 6: Test the Dashboard
 
 The interactive dashboard (`briefingclaw-dashboard.html`) provides an animated visualization of the full agent pipeline. It works without any live services running, making it a reliable fallback for conference presentations.
@@ -318,15 +341,21 @@ open briefingclaw-dashboard-redhat.html   # Red Hat branded variant
 - [ ] The dashboard loads with improved readability (larger fonts, wider agent spacing)
 - [ ] Contact dropdown switches between all eight scenarios
 - [ ] Clicking "Start Demo" runs the full 42-second simulation for that contact
-- [ ] All 6 agent nodes animate through idle/working/complete states
-- [ ] Deliverables count reaches 8/8
+- [ ] All 8 agent nodes (including Sponsor Coach and The Oddsfather) animate through idle/working/complete states
+- [ ] Deliverables count reaches the full expected total
+- [ ] Risk badges appear on completed deliverable cards with the correct colour (red / amber / green)
+- [ ] PDF Export button produces a printable briefing package for the selected persona
+- [ ] Mode badge shows the correct state: **LIVE** (full stack), **LOCAL ONLY** (Granite reachable, OpenClaw down), or **SIMULATED** (no services)
+- [ ] Test LOCAL ONLY mode specifically: stop OpenClaw while the model is still serving and confirm the badge switches to LOCAL ONLY
+- [ ] Press **T** and confirm the telemetry JSON downloads with the expected session events
+- [ ] GitHub repository link in the footer opens the public repo
 - [ ] Critical flags appear specific to the selected contact (~15 seconds)
 - [ ] Completed deliverable cards are clickable — modal opens with formatted HTML content
 - [ ] Modal closes via X button, clicking overlay, or Escape key
 - [ ] "Reset" button returns everything to initial state
 - [ ] Pressing F toggles fullscreen mode
 
-The dashboard automatically detects whether live services are running and displays "LIVE" or "SIMULATED" accordingly.
+The dashboard automatically detects whether live services are running and displays "LIVE", "LOCAL ONLY", or "SIMULATED" accordingly.
 
 ---
 

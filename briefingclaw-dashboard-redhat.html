@@ -178,6 +178,12 @@ body::before {
   border: 1px solid rgba(238,0,0,0.25);
 }
 
+.mode-badge.partial {
+  background: rgba(220,166,20,0.1);
+  color: var(--status-amber);
+  border: 1px solid rgba(220,166,20,0.3);
+}
+
 /* ═══════════════════════════════════════════════════════════
    PIPELINE VISUALIZATION
    ═══════════════════════════════════════════════════════════ */
@@ -347,6 +353,26 @@ body::before {
 }
 
 .agent-node.orchestrator[data-status="working"] {
+  border-color: rgba(238,0,0,0.45);
+  box-shadow: 0 0 16px rgba(238,0,0,0.12), 0 0 32px rgba(238,0,0,0.05);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+.agent-node.oddsfather {
+  background: linear-gradient(180deg, var(--rh-red-glow) 0%, var(--bg-card) 100%);
+  border-color: rgba(238,0,0,0.2);
+  min-width: 190px;
+}
+
+.agent-node.oddsfather .model-badge {
+  background: rgba(238,0,0,0.1);
+  color: var(--rh-red);
+  border: 1px solid rgba(238,0,0,0.2);
+}
+
+.agent-node.oddsfather .progress-bar { background: var(--rh-red); }
+
+.agent-node.oddsfather[data-status="working"] {
   border-color: rgba(238,0,0,0.45);
   box-shadow: 0 0 16px rgba(238,0,0,0.12), 0 0 32px rgba(238,0,0,0.05);
   animation: pulse-red 2s ease-in-out infinite;
@@ -739,6 +765,7 @@ body::before {
 }
 
 .deliverable-card {
+  position: relative;
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(56,56,56,0.5);
   border-radius: 8px;
@@ -746,6 +773,25 @@ body::before {
   opacity: 0.35;
   transition: all 0.4s ease;
 }
+
+.risk-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.deliverable-card.completed .risk-dot {
+  opacity: 1;
+}
+
+.risk-dot.danger { background: var(--status-red); box-shadow: 0 0 6px rgba(240,86,29,0.5); }
+.risk-dot.warning { background: var(--status-amber); box-shadow: 0 0 6px rgba(220,166,20,0.5); }
+.risk-dot.positive { background: var(--status-green); box-shadow: 0 0 6px rgba(99,153,61,0.5); }
 
 .deliverable-card.completed {
   opacity: 1;
@@ -1057,6 +1103,22 @@ body::before {
   border: 1px solid rgba(67,148,229,0.25);
 }
 
+.modal-body .src-badge {
+  display: inline-block;
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.modal-body .src-badge.sherlock { color: var(--frontier); background: rgba(67,148,229,0.1); border: 1px solid rgba(67,148,229,0.25); }
+.modal-body .src-badge.bloomborg { color: var(--frontier); background: rgba(67,148,229,0.1); border: 1px solid rgba(67,148,229,0.25); }
+.modal-body .src-badge.dejaview { color: var(--local); background: rgba(55,163,163,0.1); border: 1px solid rgba(55,163,163,0.25); }
+.modal-body .src-badge.alfred { color: var(--rh-red); background: rgba(238,0,0,0.08); border: 1px solid rgba(238,0,0,0.25); }
+
 .modal-body ul {
   margin: 6px 0;
   padding-left: 18px;
@@ -1090,6 +1152,16 @@ body::before {
 }
 
 .footer-text .rh-red { color: var(--rh-red); font-weight: 700; }
+
+.footer-text .footer-link {
+  color: var(--rh-red);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(238,0,0,0.4);
+  transition: all 0.2s ease;
+}
+.footer-text .footer-link:hover {
+  border-bottom-color: var(--rh-red);
+}
 
 /* ═══════════════════════════════════════════════════════════
    KEYFRAME ANIMATIONS
@@ -1220,6 +1292,18 @@ body.presentation-mode .pmode-indicator { display: block; }
   text-align: center;
 }
 
+@media print {
+  body { background: white !important; color: black !important; }
+  body::before { display: none !important; }
+  .header, .pipeline-section, .control-bar, .panels-section .panel:not(.deliverables-panel), .footer, .modal-overlay { display: none !important; }
+  .dashboard { display: block !important; max-width: 100% !important; padding: 0 !important; }
+  .panels-section { display: block !important; }
+  .deliverables-grid { display: block !important; }
+  .deliverable-card { background: white !important; color: black !important; border: 1px solid #ccc !important; padding: 12px !important; margin-bottom: 8px !important; opacity: 1 !important; page-break-inside: avoid; }
+  .deliverable-card .del-name { color: black !important; font-size: 14px !important; }
+  .deliverable-card .del-agent { color: #666 !important; }
+}
+
 </style>
 </head>
 <body>
@@ -1296,7 +1380,7 @@ body.presentation-mode .pmode-indicator { display: block; }
           <span class="model-badge">Local</span>
           <span class="agent-emoji">&#128203;</span>
           <div class="agent-name">D&eacute;j&agrave; View</div>
-          <div class="agent-role">CAB Historian</div>
+          <div class="agent-role">SAB Historian</div>
           <div class="progress-bar"></div>
         </div>
       </div>
@@ -1319,6 +1403,20 @@ body.presentation-mode .pmode-indicator { display: block; }
           <span class="agent-emoji">&#11088;</span>
           <div class="agent-name">Alfred Bitworth</div>
           <div class="agent-role">VVIP Protocol</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 3 &middot; Success Prediction</span>
+      </div>
+
+      <div class="pipeline-row">
+        <div class="agent-node oddsfather" id="node-oddsfather" data-agent="oddsfather" data-status="idle">
+          <span class="model-badge">Local</span>
+          <span class="agent-emoji">&#127922;</span>
+          <div class="agent-name">The Oddsfather</div>
+          <div class="agent-role">Success Predictor</div>
           <div class="progress-bar"></div>
         </div>
       </div>
@@ -1348,6 +1446,7 @@ body.presentation-mode .pmode-indicator { display: block; }
     </select>
     <button class="btn btn-primary" id="btnStart">Start Demo</button>
     <button class="btn btn-secondary" id="btnReset">Reset</button>
+    <button class="btn btn-secondary" id="btnExport" title="Export current deliverables as PDF">&#128196; Export PDF</button>
     <div class="elapsed-display" id="elapsedDisplay">00:00</div>
   </div>
 
@@ -1404,41 +1503,49 @@ body.presentation-mode .pmode-indicator { display: block; }
       <div class="panel-content">
         <div class="deliverables-grid" id="delGrid">
           <div class="deliverable-card" data-deliverable="exec-dossier">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128203;</div>
             <div class="del-name">Executive Dossier</div>
             <div class="del-agent">Draft Punk</div>
           </div>
           <div class="deliverable-card" data-deliverable="backgrounder">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128209;</div>
             <div class="del-name">Briefing Backgrounder</div>
             <div class="del-agent">Draft Punk</div>
           </div>
           <div class="deliverable-card" data-deliverable="talking-points">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128172;</div>
             <div class="del-name">Sponsor Talking Points</div>
             <div class="del-agent">Draft Punk</div>
           </div>
           <div class="deliverable-card" data-deliverable="agenda">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128197;</div>
             <div class="del-name">Recommended Agenda</div>
             <div class="del-agent">Draft Punk</div>
           </div>
           <div class="deliverable-card" data-deliverable="convo-starters">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128161;</div>
             <div class="del-name">Conversation Starters</div>
             <div class="del-agent">Draft Punk</div>
           </div>
           <div class="deliverable-card" data-deliverable="vvip-checklist">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#9989;</div>
             <div class="del-name">VVIP Protocol Checklist</div>
             <div class="del-agent">Alfred Bitworth</div>
           </div>
           <div class="deliverable-card" data-deliverable="sponsor-alert">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128231;</div>
             <div class="del-name">Sponsor Alert Email</div>
             <div class="del-agent">Alfred Bitworth</div>
           </div>
           <div class="deliverable-card" data-deliverable="engagement-log">
+            <span class="risk-dot"></span>
             <div class="del-icon">&#128221;</div>
             <div class="del-name">Engagement Log Entry</div>
             <div class="del-agent">Alfred Bitworth</div>
@@ -1464,7 +1571,10 @@ body.presentation-mode .pmode-indicator { display: block; }
 
   <!-- ═══════════════════ FOOTER ══════════════════════════ -->
   <footer class="footer">
-    <span class="footer-text">Built with open source &middot; Runs on your laptop &middot; <span class="rh-red">Red Hat</span> CTO Office &middot; GACEP Spring 2026</span>
+    <span class="footer-text">
+      Built with open source &middot; Runs on your laptop &middot; <span class="rh-red">Red Hat</span> CTO Office &middot; GACEP Spring 2026
+      &middot; <a class="footer-link" href="https://github.com/holzerjm/GACEP-Spring-2026-demo" target="_blank">github.com/holzerjm/GACEP-Spring-2026-demo</a>
+    </span>
   </footer>
 
 </div>
@@ -1510,7 +1620,8 @@ const CONFIG = {
     'bloom-borg':      { name: 'Bloom-borg',       emoji: '\u{1F3E2}', type: 'frontier',     phase: 1 },
     'deja-view':       { name: 'D\u00e9j\u00e0 View', emoji: '\u{1F4CB}', type: 'local',    phase: 1 },
     'draft-punk':      { name: 'Draft Punk',       emoji: '\u{1F4C4}', type: 'local',        phase: 2 },
-    'alfred-bitworth': { name: 'Alfred Bitworth',  emoji: '\u2B50',    type: 'local',        phase: 2 }
+    'alfred-bitworth': { name: 'Alfred Bitworth',  emoji: '\u2B50',    type: 'local',        phase: 2 },
+    'oddsfather':      { name: 'The Oddsfather',   emoji: '\u{1F3B2}', type: 'orchestrator', phase: 3 }
   },
   connections: [
     { from: 'triggerNode',     to: 'node-oprah-tor',       color: 'gold' },
@@ -1523,8 +1634,9 @@ const CONFIG = {
     { from: 'node-sherlock-ohms', to: 'node-alfred-bitworth', color: 'frontier' },
     { from: 'node-bloom-borg',    to: 'node-alfred-bitworth', color: 'frontier' },
     { from: 'node-deja-view',     to: 'node-alfred-bitworth', color: 'local' },
-    { from: 'node-draft-punk',    to: 'outputNode',         color: 'gold' },
-    { from: 'node-alfred-bitworth', to: 'outputNode',       color: 'gold' }
+    { from: 'node-draft-punk',    to: 'node-oddsfather',    color: 'gold' },
+    { from: 'node-alfred-bitworth', to: 'node-oddsfather',  color: 'gold' },
+    { from: 'node-oddsfather',    to: 'outputNode',         color: 'gold' }
   ]
 };
 
@@ -1566,7 +1678,7 @@ const TIMELINE_SARAH_CHEN = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Sarah Chen, CIO, Meridian Health Systems' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Maria Torres, VP Engineering' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB member confirmed. Sponsor: Maria Torres, VP Engineering' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -1578,7 +1690,7 @@ const TIMELINE_SARAH_CHEN = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Sarah Chen, CIO Meridian Health...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Meridian Health Systems financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... found 2 board meetings' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... found 2 board meetings' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found 4 recent news articles, 2 conference talks' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -1596,8 +1708,8 @@ const TIMELINE_SARAH_CHEN = [
   { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
 
   // Deja View critical flags
-  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: Overdue action item found from Feb CAB meeting!' }},
-  { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'OVERDUE', text: 'AI governance reference architecture promised at Feb 2026 CAB \u2014 due March 1, still undelivered. Trust-critical.' }},
+  { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: Overdue action item found from Feb SAB meeting!' }},
+  { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'OVERDUE', text: 'AI governance reference architecture promised at Feb 2026 SAB \u2014 due March 1, still undelivered. Trust-critical.' }},
   { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Open follow-up from Sept 2025 briefing still unresolved' }},
   { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'OPEN', text: 'Healthcare customer reference for edge computing \u2014 promised Sept 2025, not yet delivered.' }},
   { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Relationship stage: Trusted (approaching Champion). NPS 9/10' }},
@@ -1637,7 +1749,7 @@ const TIMELINE_SARAH_CHEN = [
   { t: 25000, action: 'setAgent',   data: { id: 'draft-punk', progress: 30 }},
 
   { t: 26000, action: 'log',        data: { agent: 'alfred-bitworth', text: 'Vegetarian catering, green tea, morning briefing 8:30 AM' }},
-  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Weaving CAB themes into Briefing Backgrounder...' }},
+  { t: 26500, action: 'log',        data: { agent: 'draft-punk', text: 'Weaving SAB themes into Briefing Backgrounder...' }},
   { t: 27500, action: 'deliverable', data: { id: 'backgrounder' }},
   { t: 27500, action: 'setAgent',   data: { id: 'draft-punk', progress: 50 }},
 
@@ -1666,15 +1778,23 @@ const TIMELINE_SARAH_CHEN = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
-  // Phase 3: Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 79% success probability. High confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'positive', icon: '\u{1F3B2}', label: '79%', text: 'The Oddsfather predicts 79% success probability. Address the overdue AI governance commitment first \u2014 worth +12 points.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
+  // Synthesis
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 const TIMELINE_DAVID_PARK = [
@@ -1684,7 +1804,7 @@ const TIMELINE_DAVID_PARK = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: David Park, SVP Technology, Apex Financial Group' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member since Q1 2023. Sponsor: James Kim, VP Financial Services' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB member since Q1 2023. Sponsor: James Kim, VP Financial Services' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -1696,7 +1816,7 @@ const TIMELINE_DAVID_PARK = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for David Park, SVP Technology Apex Financial...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Apex Financial Group financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... David led Hybrid Cloud discussion' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... David led Hybrid Cloud discussion' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found recent FinTech conference keynote on cloud reliability' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -1783,15 +1903,23 @@ const TIMELINE_DAVID_PARK = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 56% success probability. Medium confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'warning', icon: '\u{1F3B2}', label: '56%', text: 'The Oddsfather predicts 56% success. Failed migration trust gap is the biggest drag (-22 points). Lead with accountability.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. RETENTION PRIORITY.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 const TIMELINE_RACHEL_MORRISON = [
@@ -1801,7 +1929,7 @@ const TIMELINE_RACHEL_MORRISON = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Rachel Morrison, CTO, TerraScale Energy' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB Co-Chair confirmed. Sponsor: Elena Vasquez, SVP Global Industries' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB Co-Chair confirmed. Sponsor: Elena Vasquez, SVP Global Industries' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -1813,7 +1941,7 @@ const TIMELINE_RACHEL_MORRISON = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Rachel Morrison, CTO TerraScale...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing TerraScale Energy financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Rachel co-chairs the board' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... Rachel co-chairs the board' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found board testimony on grid modernization, keynote at Energy Summit' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -1900,15 +2028,23 @@ const TIMELINE_RACHEL_MORRISON = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 71% success probability. High confidence (volatile).' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'warning', icon: '\u{1F3B2}', label: '71%', text: 'The Oddsfather predicts 71% success but volatility is high. Champion engagement (+18) offset by P1 trust damage (-15). Lead with RCA accountability.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. PLATINUM PROTOCOL.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -1921,7 +2057,7 @@ const TIMELINE_PEPPER_MINTON = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Pepper Minton, CTO, SnackStack Technologies' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Carlos Diaz, VP Developer Experience' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB member confirmed. Sponsor: Carlos Diaz, VP Developer Experience' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -1933,7 +2069,7 @@ const TIMELINE_PEPPER_MINTON = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Pepper Minton, CTO SnackStack Technologies...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing SnackStack Technologies financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... found Platform Engineering discussion' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... found Platform Engineering discussion' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found TikTok viral moment coverage \u2014 recipe AI served 12M requests in 2 hours' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -1953,8 +2089,8 @@ const TIMELINE_PEPPER_MINTON = [
   // Critical flags
   { t: 14500, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} ALERT: P1 production outage during TikTok viral surge!' }},
   { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'P1 production outage during TikTok viral surge \u2014 recipe engine down 8 hours, 2M users affected. Trust-critical.' }},
-  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Scaling architecture review overdue \u2014 promised at last CAB meeting' }},
-  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Scaling architecture review overdue \u2014 promised at last CAB meeting, never delivered.' }},
+  { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Scaling architecture review overdue \u2014 promised at last SAB meeting' }},
+  { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Scaling architecture review overdue \u2014 promised at last SAB meeting, never delivered.' }},
   { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Pepper\'s team published case study praising OpenShift auto-scaling' }},
   { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
   { t: 17500, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Pepper\'s team independently published case study praising OpenShift auto-scaling capabilities.' }},
@@ -2020,15 +2156,23 @@ const TIMELINE_PEPPER_MINTON = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 74% success probability. High confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'positive', icon: '\u{1F3B2}', label: '74%', text: 'The Oddsfather predicts 74% success. Viral moment is a positive signal if we deliver scaling architecture today. Skip the slides.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. NO POWERPOINT PROTOCOL.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -2041,7 +2185,7 @@ const TIMELINE_ZIGGY_CHEN = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB alumni \u2014 stepped down Q4 2025. Sponsor: Aisha Patel, Director Strategic Accounts' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB alumni \u2014 stepped down Q4 2025. Sponsor: Aisha Patel, Director Strategic Accounts' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -2053,7 +2197,7 @@ const TIMELINE_ZIGGY_CHEN = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Ziggy Stardust-Chen, VP Platform Eng, Quantum Pretzel...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Quantum Pretzel Corp financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Ziggy listed as ALUMNI, stepped down Q4 2025' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... Ziggy listed as ALUMNI, stepped down Q4 2025' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Found crypto/fintech conference talks, blog posts on platform engineering at scale' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -2067,7 +2211,7 @@ const TIMELINE_ZIGGY_CHEN = [
   { t: 12500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 45 }},
   { t: 13000, action: 'log',      data: { agent: 'bloom-borg', text: 'Contract value: $1.4M ARR. Renewal risk flagged by account team' }},
   { t: 13000, action: 'setAgent', data: { id: 'bloom-borg', progress: 50 }},
-  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'CAB alumni record: "left citing lack of follow-through on commitments"' }},
+  { t: 13500, action: 'log',      data: { agent: 'deja-view', text: 'SAB alumni record: "left citing lack of follow-through on commitments"' }},
   { t: 13500, action: 'setAgent', data: { id: 'deja-view', progress: 70 }},
 
   // Critical flags
@@ -2075,11 +2219,11 @@ const TIMELINE_ZIGGY_CHEN = [
   { t: 15000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'Contract renewal May 2026 \u2014 $1.4M at risk. Engagement score 55 and declining.' }},
   { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'AWS Solution Architect embedded at Quantum Pretzel for 3 weeks' }},
   { t: 16500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'AWS Solution Architect embedded at Quantum Pretzel for 3 weeks. Active competitive displacement threat.' }},
-  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Ziggy left CAB citing broken promises \u2014 2 action items never delivered' }},
+  { t: 17000, action: 'log',      data: { agent: 'deja-view', text: 'Ziggy left SAB citing broken promises \u2014 2 action items never delivered' }},
   { t: 17000, action: 'setAgent', data: { id: 'deja-view', progress: 90 }},
-  { t: 17500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Ziggy left CAB citing broken promises \u2014 2 action items from 2025 never delivered.' }},
+  { t: 17500, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: 'Ziggy left SAB citing broken promises \u2014 2 action items from 2025 never delivered.' }},
   { t: 18000, action: 'log',      data: { agent: 'deja-view', text: 'Re-engagement signal: Ziggy hinted at returning if we demonstrate accountability' }},
-  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Re-engagement: Ziggy hinted at returning to CAB if we demonstrate accountability on past commitments.' }},
+  { t: 18500, action: 'addFlag',  data: { type: 'opportunity', icon: '\u{1F4A1}', label: 'OPPORTUNITY', text: 'Re-engagement: Ziggy hinted at returning to SAB if we demonstrate accountability on past commitments.' }},
   { t: 18500, action: 'setAgent', data: { id: 'deja-view', status: 'complete' }},
   { t: 18500, action: 'log',      data: { agent: 'deja-view', text: 'Cross-program analysis complete. 4 flags surfaced.' }},
 
@@ -2140,15 +2284,23 @@ const TIMELINE_ZIGGY_CHEN = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 38% success probability. Low confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'danger', icon: '\u{1F3B2}', label: '38%', text: 'The Oddsfather predicts 38% success. Trust deficit + active competitor + 2-month renewal = high risk. Recommend escalation to senior sponsor.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. WIN-BACK PROTOCOL.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -2161,7 +2313,7 @@ const TIMELINE_LUNA_WAVELENGTH = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Luna Wavelength, CIO, GalactiCorp Space Industries' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB Co-Vice-Chair confirmed. Sponsor: Roberto Vega, SVP Public Sector' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB Co-Vice-Chair confirmed. Sponsor: Roberto Vega, SVP Public Sector' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -2173,7 +2325,7 @@ const TIMELINE_LUNA_WAVELENGTH = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Luna Wavelength, CIO GalactiCorp Space Industries...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing GalactiCorp Space Industries financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Luna is CAB Co-Vice-Chair' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... Luna is SAB Co-Vice-Chair' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Former NASA engineer. Keynotes at aerospace conferences. Open-source advocate.' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -2193,7 +2345,7 @@ const TIMELINE_LUNA_WAVELENGTH = [
   // Critical flags
   { t: 14000, action: 'log',      data: { agent: 'deja-view', text: '\u{1F6A8} BLOCKER: CISO Colonel Drake blocking $8M expansion \u2014 NIST findings unresolved!' }},
   { t: 14000, action: 'addFlag',  data: { type: 'danger', icon: '\u{1F534}', label: 'DANGER', text: 'CISO Colonel Drake blocking $8M expansion \u2014 NIST compliance findings unresolved. Deal frozen.' }},
-  { t: 16000, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Luna is Platinum tier champion \u2014 engagement score 94, CAB Co-Vice-Chair. Strongest advocate in aerospace.' }},
+  { t: 16000, action: 'addFlag',  data: { type: 'positive', icon: '\u{1F7E2}', label: 'POSITIVE', text: 'Luna is Platinum tier champion \u2014 engagement score 94, SAB Co-Vice-Chair. Strongest advocate in aerospace.' }},
   { t: 16000, action: 'log',      data: { agent: 'deja-view', text: 'Platinum VVIP confirmed. Engagement score 94/100 \u2014 champion level' }},
   { t: 17000, action: 'addFlag',  data: { type: 'warning', icon: '\u{1F7E1}', label: 'WARNING', text: '3 NIST 800-171 compliance gaps found in security audit \u2014 remediation plan needed before deal can proceed.' }},
   { t: 17000, action: 'log',      data: { agent: 'deja-view', text: '3 NIST 800-171 compliance gaps \u2014 remediation plan critical' }},
@@ -2260,15 +2412,23 @@ const TIMELINE_LUNA_WAVELENGTH = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 82% success probability. High confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'positive', icon: '\u{1F3B2}', label: '82%', text: 'The Oddsfather predicts 82% success on relationship metrics. CISO blocker is the gating factor \u2014 dual-track briefing unlocks the $8M.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. PLATINUM PROTOCOL.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -2281,7 +2441,7 @@ const TIMELINE_MAX_BANDWIDTH = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Max Bandwidth, SVP Digital Transformation, Thunderbolt Logistics' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'CAB member confirmed. Sponsor: Diana Kim, VP Transportation & Logistics' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'SAB member confirmed. Sponsor: Diana Kim, VP Transportation & Logistics' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -2293,7 +2453,7 @@ const TIMELINE_MAX_BANDWIDTH = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Max Bandwidth, SVP Digital, Thunderbolt Logistics...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing Thunderbolt Logistics financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... Max contributed to AI/ML track discussion' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... Max contributed to AI/ML track discussion' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Former competitive gamer turned logistics exec. Supply chain conference speaker.' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -2380,15 +2540,23 @@ const TIMELINE_MAX_BANDWIDTH = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 67% success probability. Medium confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'positive', icon: '\u{1F3B2}', label: '67%', text: 'The Oddsfather predicts 67% success. Strong ROI proof (+15) but VP Operations resistance is a wildcard (-8). Arm Max with board-ready data.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 critical flags. BOARD AMMUNITION PROTOCOL.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -2401,7 +2569,7 @@ const TIMELINE_SAGE_CLOUDBERRY = [
   { t: 500,  action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 10 }},
   { t: 2000, action: 'log',       data: { agent: 'oprah-tor', text: 'Identified: Sage Cloudberry, CIO, WonderPaws Pet Wellness' }},
   { t: 2000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 30 }},
-  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'No CAB membership. No VVIP status. No executive sponsor assigned. First briefing.' }},
+  { t: 3500, action: 'log',       data: { agent: 'oprah-tor', text: 'No SAB membership. No VVIP status. No executive sponsor assigned. First briefing.' }},
   { t: 5000, action: 'log',       data: { agent: 'oprah-tor', text: 'Decomposing request into 5 sub-tasks...' }},
   { t: 5000, action: 'setAgent',  data: { id: 'oprah-tor', progress: 60 }},
   { t: 6500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching Phase 1: Sherlock Ohms, Bloom-borg, D\u00e9j\u00e0 View' }},
@@ -2413,7 +2581,7 @@ const TIMELINE_SAGE_CLOUDBERRY = [
   { t: 7500, action: 'setAgent',  data: { id: 'deja-view', status: 'working', progress: 10 }},
   { t: 8000, action: 'log',       data: { agent: 'sherlock-ohms', text: 'Searching web for Sage Cloudberry, CIO WonderPaws Pet Wellness...' }},
   { t: 8500, action: 'log',       data: { agent: 'bloom-borg', text: 'Analyzing WonderPaws Pet Wellness financials...' }},
-  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading cab-meeting-notes.md ... no records found for Sage Cloudberry' }},
+  { t: 9000, action: 'log',       data: { agent: 'deja-view', text: 'Reading sab-meeting-notes.md ... no records found for Sage Cloudberry' }},
   { t: 9000, action: 'setAgent',  data: { id: 'deja-view', progress: 25 }},
   { t: 10000, action: 'log',      data: { agent: 'sherlock-ohms', text: 'Former SRE. Open-source contributor. Writes about veterinary tech on Medium.' }},
   { t: 10000, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 25 }},
@@ -2500,16 +2668,38 @@ const TIMELINE_SAGE_CLOUDBERRY = [
   { t: 36500, action: 'deliverable', data: { id: 'engagement-log' }},
   { t: 36500, action: 'setAgent',   data: { id: 'alfred-bitworth', status: 'complete' }},
 
+  // Phase 3: The Oddsfather
+  { t: 37500, action: 'log',       data: { agent: 'oprah-tor', text: 'Dispatching final phase: The Oddsfather success prediction' }},
+  { t: 38000, action: 'setAgent',  data: { id: 'oddsfather', status: 'working', progress: 20 }},
+  { t: 38500, action: 'log',       data: { agent: 'oddsfather', text: 'Scoring relationship foundation, pipeline stakes, risk signals...' }},
+  { t: 39500, action: 'setAgent',  data: { id: 'oddsfather', progress: 60 }},
+  { t: 40000, action: 'log',       data: { agent: 'oddsfather', text: 'Analyzing briefing readiness and outcome alignment...' }},
+  { t: 40500, action: 'setAgent',  data: { id: 'oddsfather', progress: 90 }},
+  { t: 41000, action: 'log',       data: { agent: 'oddsfather', text: '\u{1F3B2} Verdict: 62% success probability. Medium confidence.' }},
+  { t: 41200, action: 'addFlag',   data: { type: 'opportunity', icon: '\u{1F3B2}', label: '62%', text: 'The Oddsfather predicts 62% success. First briefing is a clean slate \u2014 hands-on lab and SRE-to-SRE conversation move odds to 80%.' }},
+  { t: 41400, action: 'setAgent',  data: { id: 'oddsfather', status: 'complete' }},
+
   // Synthesis
-  { t: 37000, action: 'log',       data: { agent: 'oprah-tor', text: 'All agents complete. Validating outputs...' }},
-  { t: 37000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 80 }},
-  { t: 38500, action: 'log',       data: { agent: 'oprah-tor', text: 'Cross-referencing 8 deliverables. Consistency check passed.' }},
-  { t: 38500, action: 'setAgent',  data: { id: 'oprah-tor', progress: 90 }},
-  { t: 40000, action: 'log',       data: { agent: 'oprah-tor', text: 'Briefing package assembled. 8 deliverables, 4 flags. FIRST IMPRESSION PROTOCOL.' }},
-  { t: 41000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
-  { t: 41000, action: 'output',    data: {} },
-  { t: 41500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
+  { t: 42000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'working', progress: 95 }},
+  { t: 42500, action: 'log',       data: { agent: 'oprah-tor', text: 'All 7 agents complete. Briefing package + success probability assembled.' }},
+  { t: 43000, action: 'setAgent',  data: { id: 'oprah-tor', status: 'complete' }},
+  { t: 43000, action: 'output',    data: {} },
+  { t: 43500, action: 'log',       data: { agent: 'oprah-tor', text: '\u2705 Complete. The connective tissue between your programs \u2014 automated.' }},
 ];
+
+/* ═══════════════════════════════════════════════════════════
+   RISK PROFILES — per-contact, per-deliverable risk classification
+   ═══════════════════════════════════════════════════════════ */
+const RISK_PROFILES = {
+  'sarah-chen':     { 'exec-dossier': 'warning', 'backgrounder': 'warning', 'talking-points': 'warning', 'agenda': 'positive', 'convo-starters': 'positive', 'vvip-checklist': 'positive', 'sponsor-alert': 'warning', 'engagement-log': 'positive' },
+  'david-park':     { 'exec-dossier': 'danger',  'backgrounder': 'danger',  'talking-points': 'danger',  'agenda': 'warning',  'convo-starters': 'warning',  'vvip-checklist': 'warning',  'sponsor-alert': 'danger',  'engagement-log': 'warning'  },
+  'rachel-morrison':{ 'exec-dossier': 'danger',  'backgrounder': 'danger',  'talking-points': 'warning', 'agenda': 'warning',  'convo-starters': 'positive', 'vvip-checklist': 'positive', 'sponsor-alert': 'danger',  'engagement-log': 'warning'  },
+  'pepper-minton':  { 'exec-dossier': 'warning', 'backgrounder': 'warning', 'talking-points': 'positive','agenda': 'positive', 'convo-starters': 'positive', 'vvip-checklist': 'positive', 'sponsor-alert': 'warning', 'engagement-log': 'positive' },
+  'ziggy-chen':     { 'exec-dossier': 'danger',  'backgrounder': 'danger',  'talking-points': 'danger',  'agenda': 'warning',  'convo-starters': 'warning',  'vvip-checklist': 'warning',  'sponsor-alert': 'danger',  'engagement-log': 'warning'  },
+  'luna-wavelength':{ 'exec-dossier': 'warning', 'backgrounder': 'warning', 'talking-points': 'warning', 'agenda': 'positive', 'convo-starters': 'positive', 'vvip-checklist': 'positive', 'sponsor-alert': 'warning', 'engagement-log': 'warning'  },
+  'max-bandwidth':  { 'exec-dossier': 'positive','backgrounder': 'positive','talking-points': 'warning', 'agenda': 'positive', 'convo-starters': 'positive', 'vvip-checklist': 'positive', 'sponsor-alert': 'warning', 'engagement-log': 'positive' },
+  'sage-cloudberry':{ 'exec-dossier': 'positive','backgrounder': 'positive','talking-points': 'positive','agenda': 'positive', 'convo-starters': 'positive', 'vvip-checklist': 'warning',  'sponsor-alert': 'warning', 'engagement-log': 'positive' }
+};
 
 /* ═══════════════════════════════════════════════════════════
    SCENARIOS
@@ -2517,24 +2707,24 @@ const TIMELINE_SAGE_CLOUDBERRY = [
 const SCENARIOS = {
   'sarah-chen': {
     timeline: TIMELINE_SARAH_CHEN,
-    requestText: 'Briefing tomorrow: Sarah Chen, CIO, Meridian Health Systems. CAB member. Sponsor: Maria Torres, VP Engineering.',
+    requestText: 'Briefing tomorrow: Sarah Chen, CIO, Meridian Health Systems. SAB member. Sponsor: Maria Torres, VP Engineering.',
     contact: { name: 'Sarah Chen', title: 'CIO', org: 'Meridian Health Systems', tier: 'GOLD' }
   },
   'david-park': {
     timeline: TIMELINE_DAVID_PARK,
-    requestText: 'Briefing tomorrow: David Park, SVP Technology, Apex Financial Group. CAB member. Sponsor: James Kim, VP Financial Services.',
+    requestText: 'Briefing tomorrow: David Park, SVP Technology, Apex Financial Group. SAB member. Sponsor: James Kim, VP Financial Services.',
     contact: { name: 'David Park', title: 'SVP Technology', org: 'Apex Financial Group', tier: 'GOLD' }
   },
   'rachel-morrison': {
     timeline: TIMELINE_RACHEL_MORRISON,
-    requestText: 'Briefing tomorrow: Rachel Morrison, CTO, TerraScale Energy. CAB Co-Chair. Sponsor: Elena Vasquez, SVP Global Industries.',
+    requestText: 'Briefing tomorrow: Rachel Morrison, CTO, TerraScale Energy. SAB Co-Chair. Sponsor: Elena Vasquez, SVP Global Industries.',
     contact: { name: 'Rachel Morrison', title: 'CTO', org: 'TerraScale Energy', tier: 'PLATINUM' }
   },
   'pepper-minton': {
     name: 'Pepper Minton',
     title: 'CTO',
     company: 'SnackStack Technologies',
-    requestText: 'Briefing tomorrow: Pepper Minton, CTO, SnackStack Technologies. CAB member. Their recipe AI went viral and crashed production. Sponsor: Carlos Diaz, VP Developer Experience.',
+    requestText: 'Briefing tomorrow: Pepper Minton, CTO, SnackStack Technologies. SAB member. Their recipe AI went viral and crashed production. Sponsor: Carlos Diaz, VP Developer Experience.',
     timeline: TIMELINE_PEPPER_MINTON,
     contact: { name: 'Pepper Minton', title: 'CTO', org: 'SnackStack Technologies', tier: 'GOLD' }
   },
@@ -2542,7 +2732,7 @@ const SCENARIOS = {
     name: 'Ziggy Stardust-Chen',
     title: 'VP Platform Engineering',
     company: 'Quantum Pretzel Corp',
-    requestText: 'Briefing tomorrow: Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp. CAB alumni \u2014 left feeling ignored. AWS courting them. Contract renewal in 2 months. Sponsor: Aisha Patel.',
+    requestText: 'Briefing tomorrow: Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp. SAB alumni \u2014 left feeling ignored. AWS courting them. Contract renewal in 2 months. Sponsor: Aisha Patel.',
     timeline: TIMELINE_ZIGGY_CHEN,
     contact: { name: 'Ziggy Stardust-Chen', title: 'VP Platform Engineering', org: 'Quantum Pretzel Corp', tier: 'SILVER' }
   },
@@ -2550,7 +2740,7 @@ const SCENARIOS = {
     name: 'Luna Wavelength',
     title: 'Chief Innovation Officer',
     company: 'GalactiCorp Space Industries',
-    requestText: 'Briefing tomorrow: Luna Wavelength, CIO, GalactiCorp Space Industries. CAB Co-Vice-Chair, Platinum VVIP. $8M satellite edge deal blocked by CISO security audit. Sponsor: Roberto Vega, SVP Public Sector.',
+    requestText: 'Briefing tomorrow: Luna Wavelength, CIO, GalactiCorp Space Industries. SAB Co-Vice-Chair, Platinum VVIP. $8M satellite edge deal blocked by CISO security audit. Sponsor: Roberto Vega, SVP Public Sector.',
     timeline: TIMELINE_LUNA_WAVELENGTH,
     contact: { name: 'Luna Wavelength', title: 'CIO', org: 'GalactiCorp Space Industries', tier: 'PLATINUM' }
   },
@@ -2558,7 +2748,7 @@ const SCENARIOS = {
     name: 'Max Bandwidth',
     title: 'SVP Digital Transformation',
     company: 'Thunderbolt Logistics',
-    requestText: 'Briefing tomorrow: Max Bandwidth, SVP Digital Transformation, Thunderbolt Logistics. CAB member. AI pilot saved $4M/year but VP Operations blocking scale-up. Needs board ammunition. Sponsor: Diana Kim.',
+    requestText: 'Briefing tomorrow: Max Bandwidth, SVP Digital Transformation, Thunderbolt Logistics. SAB member. AI pilot saved $4M/year but VP Operations blocking scale-up. Needs board ammunition. Sponsor: Diana Kim.',
     timeline: TIMELINE_MAX_BANDWIDTH,
     contact: { name: 'Max Bandwidth', title: 'SVP Digital Transformation', org: 'Thunderbolt Logistics', tier: 'GOLD' }
   },
@@ -2566,7 +2756,7 @@ const SCENARIOS = {
     name: 'Sage Cloudberry',
     title: 'CIO',
     company: 'WonderPaws Pet Wellness',
-    requestText: 'First executive briefing: Sage Cloudberry, CIO, WonderPaws Pet Wellness. No CAB membership yet. Evaluating Red Hat vs VMware. Former SRE, very technical. No sponsor assigned \u2014 opportunity to assign one.',
+    requestText: 'First executive briefing: Sage Cloudberry, CIO, WonderPaws Pet Wellness. No SAB membership yet. Evaluating Red Hat vs VMware. Former SRE, very technical. No sponsor assigned \u2014 opportunity to assign one.',
     timeline: TIMELINE_SAGE_CLOUDBERRY,
     contact: { name: 'Sage Cloudberry', title: 'CIO', org: 'WonderPaws Pet Wellness', tier: 'STANDARD' }
   }
@@ -2596,7 +2786,7 @@ const DELIVERABLE_CONTENT = {
       </table>
 
       <h2>Relationship Summary</h2>
-      <p>Sarah Chen has been a CAB member since 2024 and is on an upward trajectory toward Champion status. She is a former developer turned CIO (since 2021) with a direct, data-driven communication style. Her engagement score of 92/100 is among the highest in the portfolio, and she consistently advocates for Red Hat solutions internally.</p>
+      <p>Sarah Chen has been a SAB member since 2024 and is on an upward trajectory toward Champion status. She is a former developer turned CIO (since 2021) with a direct, data-driven communication style. Her engagement score of 92/100 is among the highest in the portfolio, and she consistently advocates for Red Hat solutions internally.</p>
 
       <h2>Top 3 Priorities</h2>
       <ul>
@@ -2608,7 +2798,7 @@ const DELIVERABLE_CONTENT = {
       <h2>Critical Flags</h2>
       <table>
         <tr><th>Severity</th><th>Flag</th></tr>
-        <tr><td><span class="flag-badge danger">OVERDUE</span></td><td>AI governance reference architecture promised at Feb 2026 CAB &mdash; due March 1, still undelivered</td></tr>
+        <tr><td><span class="flag-badge danger">OVERDUE</span></td><td>AI governance reference architecture promised at Feb 2026 SAB &mdash; due March 1, still undelivered</td></tr>
         <tr><td><span class="flag-badge warning">OPEN</span></td><td>Healthcare customer reference for edge computing &mdash; promised Sept 2025, not yet delivered</td></tr>
         <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Engagement score 92/100 and improving &mdash; becoming a champion</td></tr>
         <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Dr. Priya Kapoor (CMIO) not yet engaged &mdash; clinical AI use case expansion</td></tr>
@@ -2634,7 +2824,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>11:00 AM</strong></td><td>Break</td><td>Refreshments. Informal Q&amp;A.</td></tr>
         <tr><td><strong>11:15 AM</strong></td><td>Edge Computing Roadmap</td><td>$800K edge opportunity across 12 clinics. Architecture walkthrough tailored to Meridian's network topology.</td></tr>
         <tr><td><strong>12:00 PM</strong></td><td>Working Lunch</td><td>Introduce Dr. Priya Kapoor engagement opportunity. Discuss clinical AI use case expansion.</td></tr>
-        <tr><td><strong>1:00 PM</strong></td><td>CAB Themes &amp; Feedback</td><td>Review upcoming CAB agenda items. Capture Sarah's input on hybrid cloud governance track.</td></tr>
+        <tr><td><strong>1:00 PM</strong></td><td>SAB Themes &amp; Feedback</td><td>Review upcoming SAB agenda items. Capture Sarah's input on hybrid cloud governance track.</td></tr>
         <tr><td><strong>2:00 PM</strong></td><td>Wrap-Up &amp; Next Steps</td><td>Confirm action items, owners, deadlines. Schedule 30-day follow-up check-in.</td></tr>
       </table>
     `
@@ -2694,7 +2884,7 @@ const DELIVERABLE_CONTENT = {
       </table>
 
       <h2>Relationship at Risk</h2>
-      <p>David Park has been a CAB member since Q1 2023. He is analytical, metrics-driven, and risk-averse. The relationship was severely damaged by a failed OpenShift migration in January 2026 that caused a 6-hour staging outage. David was publicly frustrated and has been evaluating Azure as an alternative. With contract renewal in 3 months and Azure presenting to the Apex board next week, this is a retention-critical briefing.</p>
+      <p>David Park has been a SAB member since Q1 2023. He is analytical, metrics-driven, and risk-averse. The relationship was severely damaged by a failed OpenShift migration in January 2026 that caused a 6-hour staging outage. David was publicly frustrated and has been evaluating Azure as an alternative. With contract renewal in 3 months and Azure presenting to the Apex board next week, this is a retention-critical briefing.</p>
 
       <h2>Critical Flags</h2>
       <table>
@@ -2746,7 +2936,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>VVIP Tier</strong></td><td><span class="flag-badge positive">PLATINUM</span> (Highest)</td></tr>
         <tr><td><strong>Engagement Score</strong></td><td>96/100 <span class="flag-badge positive">CHAMPION</span></td></tr>
         <tr><td><strong>Relationship Stage</strong></td><td>Champion (single highest-value individual)</td></tr>
-        <tr><td><strong>CAB Role</strong></td><td>Co-Chair</td></tr>
+        <tr><td><strong>SAB Role</strong></td><td>Co-Chair</td></tr>
         <tr><td><strong>Sponsor</strong></td><td>Elena Vasquez, SVP Global Industries</td></tr>
         <tr><td><strong>Pipeline</strong></td><td>$6.8M ($5M grid + $1.8M edge IoT)</td></tr>
       </table>
@@ -2786,7 +2976,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>11:30 AM</strong></td><td>Edge IoT Vision</td><td>$1.8M edge IoT for grid monitoring. Real-time sensor integration. Sustainability metrics dashboard concept.</td></tr>
         <tr><td><strong>12:15 PM</strong></td><td>Working Lunch</td><td>Sustainability innovation discussion. Net-zero 2035 technology roadmap alignment. Rachel's personal passion area.</td></tr>
         <tr><td><strong>1:15 PM</strong></td><td>Board Prep Session</td><td>Collaborative session to refine Rachel's May 2 board presentation. Provide slides, data, and talking points she can use directly.</td></tr>
-        <tr><td><strong>2:15 PM</strong></td><td>CAB Co-Chair Debrief</td><td>Upcoming CAB agenda items. Rachel's input on board direction and member engagement.</td></tr>
+        <tr><td><strong>2:15 PM</strong></td><td>SAB Co-Chair Debrief</td><td>Upcoming SAB agenda items. Rachel's input on board direction and member engagement.</td></tr>
         <tr><td><strong>3:00 PM</strong></td><td>Wrap-Up &amp; Partnership Commitment</td><td>Joint action plan with owners and dates. Reliability SLA commitment. Schedule weekly check-ins through May 2 board date.</td></tr>
       </table>
     `
@@ -2808,16 +2998,16 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>Meridian Health Systems</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>Minneapolis, MN / $4.2B / 28,000</td></tr>
         <tr><td><strong>Background</strong></td><td>Former developer turned CIO. Direct, data-driven communicator. Values open-source transparency and technical depth.</td></tr>
-        <tr><td><strong>CAB Membership</strong></td><td>Since 2024. Led AI Governance breakout session at Feb 2026 CAB.</td></tr>
+        <tr><td><strong>SAB Membership</strong></td><td>Since 2024. Led AI Governance breakout session at Feb 2026 SAB.</td></tr>
       </table>
 
       <h2>Company Intel</h2>
       <p>Meridian Health Systems is a $4.2B regional healthcare network headquartered in Minneapolis, operating 12 regional clinics and 3 hospital campuses. Sarah's IT strategy centers on three pillars: <strong>AI governance in regulated healthcare</strong> (HIPAA-compliant model deployment), <strong>edge computing</strong> for remote patient monitoring across regional clinics, and <strong>open-source transparency</strong> as a core architectural principle.</p>
-      <p>Meridian is currently running <strong>3 active AI projects</strong> on OpenShift AI, with 2 paused pending the governance framework Sarah requested at the Feb 2026 CAB. The paused projects represent $1.2M in expansion revenue that is blocked until we deliver.</p>
+      <p>Meridian is currently running <strong>3 active AI projects</strong> on OpenShift AI, with 2 paused pending the governance framework Sarah requested at the Feb 2026 SAB. The paused projects represent $1.2M in expansion revenue that is blocked until we deliver.</p>
 
       <h3>Strategic Priorities</h3>
       <ul>
-        <li><strong>AI Governance Framework:</strong> Sarah's top priority. She publicly advocated for responsible AI at the Feb 2026 CAB and needs a reference architecture for HIPAA-compliant deployments.</li>
+        <li><strong>AI Governance Framework:</strong> Sarah's top priority. She publicly advocated for responsible AI at the Feb 2026 SAB and needs a reference architecture for HIPAA-compliant deployments.</li>
         <li><strong>Edge Computing Expansion:</strong> $800K opportunity across 12 clinics for remote patient monitoring infrastructure.</li>
         <li><strong>Open-Source Transparency:</strong> Sarah evaluates all vendor solutions against open-source availability and model transparency. This is a core value, not a preference.</li>
       </ul>
@@ -2825,14 +3015,14 @@ const DELIVERABLE_CONTENT = {
       <h2>Relationship Arc</h2>
       <table>
         <tr><th>Stage</th><th>Timeline</th><th>Key Events</th></tr>
-        <tr><td>Aware</td><td>Early 2024</td><td>Initial CAB enrollment. Observing, not yet engaged.</td></tr>
+        <tr><td>Aware</td><td>Early 2024</td><td>Initial SAB enrollment. Observing, not yet engaged.</td></tr>
         <tr><td>Engaged</td><td>Mid 2024</td><td>First pilot project launched. Positive early signals.</td></tr>
         <tr><td>Trusted</td><td>Late 2025</td><td>Expanded to 3 AI projects. Engagement score rising.</td></tr>
-        <tr><td><strong>Champion (emerging)</strong></td><td>2026</td><td>Led CAB breakout. Advocating internally. Score: 92/100.</td></tr>
+        <tr><td><strong>Champion (emerging)</strong></td><td>2026</td><td>Led SAB breakout. Advocating internally. Score: 92/100.</td></tr>
       </table>
 
       <h2>Key Risk</h2>
-      <p><span class="flag-badge danger">OVERDUE</span> The AI governance reference architecture promised at the Feb 2026 CAB is past due (was due March 1). Sarah has not escalated yet, but this is the single biggest risk to her champion trajectory. <strong>Contract renewal: September 2026.</strong></p>
+      <p><span class="flag-badge danger">OVERDUE</span> The AI governance reference architecture promised at the Feb 2026 SAB is past due (was due March 1). Sarah has not escalated yet, but this is the single biggest risk to her champion trajectory. <strong>Contract renewal: September 2026.</strong></p>
     `
   },
   'sarah-chen/talking-points': {
@@ -2843,7 +3033,7 @@ const DELIVERABLE_CONTENT = {
       <p><strong>Visitor:</strong> Sarah Chen, CIO &nbsp;|&nbsp; <strong>Tone:</strong> Transparent, Technical</p>
 
       <h2>Context for Maria</h2>
-      <p>Sarah is on a strong upward trajectory from Trusted to Champion status (engagement score 92/100). However, the <strong>overdue AI governance reference architecture</strong> &mdash; promised at the Feb 2026 CAB and due March 1 &mdash; is a credibility risk. Sarah has not escalated yet, but she values follow-through. This briefing must address the gap before Sarah raises it.</p>
+      <p>Sarah is on a strong upward trajectory from Trusted to Champion status (engagement score 92/100). However, the <strong>overdue AI governance reference architecture</strong> &mdash; promised at the Feb 2026 SAB and due March 1 &mdash; is a credibility risk. Sarah has not escalated yet, but she values follow-through. This briefing must address the gap before Sarah raises it.</p>
 
       <h3>Recommended Topics</h3>
       <table>
@@ -2869,9 +3059,9 @@ const DELIVERABLE_CONTENT = {
       <h2>Personalized Ice-Breakers &mdash; Sarah Chen</h2>
       <p><em>Use these to build rapport in informal moments (breakfast, breaks, walking between sessions). Each connects to Sarah's known interests and recent activities.</em></p>
 
-      <h3>1. CAB Leadership on AI Governance</h3>
-      <p><strong>Context:</strong> Sarah led the AI Governance breakout session at the Feb 2026 CAB, facilitating a cross-industry discussion on responsible AI deployment in regulated industries. She was praised by multiple attendees for her structured approach.</p>
-      <p><strong>Opener:</strong> <em>"Your AI governance session at the last CAB generated a lot of follow-up conversations. Several members mentioned it shifted their thinking on model transparency in regulated environments. How are you seeing that translate inside Meridian?"</em></p>
+      <h3>1. SAB Leadership on AI Governance</h3>
+      <p><strong>Context:</strong> Sarah led the AI Governance breakout session at the Feb 2026 SAB, facilitating a cross-industry discussion on responsible AI deployment in regulated industries. She was praised by multiple attendees for her structured approach.</p>
+      <p><strong>Opener:</strong> <em>"Your AI governance session at the last SAB generated a lot of follow-up conversations. Several members mentioned it shifted their thinking on model transparency in regulated environments. How are you seeing that translate inside Meridian?"</em></p>
 
       <h3>2. Edge Computing for Remote Patient Monitoring</h3>
       <p><strong>Context:</strong> Meridian is piloting edge computing infrastructure across 12 regional clinics to enable real-time remote patient monitoring. Sarah sees this as a healthcare equity initiative &mdash; bringing advanced diagnostics to underserved communities.</p>
@@ -2901,8 +3091,8 @@ const DELIVERABLE_CONTENT = {
       <p>Maria,</p>
       <p>Sarah Chen's full-day briefing is scheduled for tomorrow. Here is what you need to know:</p>
       <ul>
-        <li><strong>Relationship Status:</strong> Sarah is trending toward Champion (engagement score 92/100). She led the AI Governance breakout at the Feb 2026 CAB and is actively advocating for Red Hat solutions internally.</li>
-        <li><strong>Critical Item:</strong> The AI governance reference architecture we committed to at the Feb CAB was due March 1 and remains undelivered. Sarah has not escalated yet, but we should lead with accountability on this &mdash; she values follow-through.</li>
+        <li><strong>Relationship Status:</strong> Sarah is trending toward Champion (engagement score 92/100). She led the AI Governance breakout at the Feb 2026 SAB and is actively advocating for Red Hat solutions internally.</li>
+        <li><strong>Critical Item:</strong> The AI governance reference architecture we committed to at the Feb SAB was due March 1 and remains undelivered. Sarah has not escalated yet, but we should lead with accountability on this &mdash; she values follow-through.</li>
         <li><strong>Talking Points:</strong> See attached sponsor prep sheet. Key topics: overdue deliverable acknowledgment, pilot-to-production path ($1.2M expansion), edge computing roadmap ($800K opportunity).</li>
         <li><strong>Your Role:</strong> Pre-brief alignment at 8:15 AM. Recommended coffee drop-in during the 11:00 AM break (~11:15 AM) for informal rapport-building.</li>
       </ul>
@@ -2968,7 +3158,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>Apex Financial Group</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>New York, NY / $11.6B / 42,000</td></tr>
         <tr><td><strong>Background</strong></td><td>Former trading floor technologist. Analytical, metrics-driven, low tolerance for excuses. Values reliability above all else.</td></tr>
-        <tr><td><strong>CAB Membership</strong></td><td>Since Q1 2023. Delivered candid hybrid cloud "reality check" presentation at Oct 2025 CAB.</td></tr>
+        <tr><td><strong>SAB Membership</strong></td><td>Since Q1 2023. Delivered candid hybrid cloud "reality check" presentation at Oct 2025 SAB.</td></tr>
       </table>
 
       <h2>Company Intel</h2>
@@ -3029,9 +3219,9 @@ const DELIVERABLE_CONTENT = {
       <h2>Personalized Ice-Breakers &mdash; David Park</h2>
       <p><em>Use selectively. David is not a small-talk executive &mdash; he values substance. These openers are designed to demonstrate respect for his expertise and signal that you have done your homework.</em></p>
 
-      <h3>1. CAB Hybrid Cloud "Reality Check"</h3>
-      <p><strong>Context:</strong> David delivered a candid, unscripted presentation at the Oct 2025 CAB on the gap between hybrid cloud marketing promises and operational reality. It was one of the most-discussed sessions and earned significant peer respect.</p>
-      <p><strong>Opener:</strong> <em>"Your hybrid cloud reality check at the last CAB clearly resonated &mdash; several other members referenced it in follow-up conversations. Has anything changed in your thinking since then, particularly after the past few months?"</em></p>
+      <h3>1. SAB Hybrid Cloud "Reality Check"</h3>
+      <p><strong>Context:</strong> David delivered a candid, unscripted presentation at the Oct 2025 SAB on the gap between hybrid cloud marketing promises and operational reality. It was one of the most-discussed sessions and earned significant peer respect.</p>
+      <p><strong>Opener:</strong> <em>"Your hybrid cloud reality check at the last SAB clearly resonated &mdash; several other members referenced it in follow-up conversations. Has anything changed in your thinking since then, particularly after the past few months?"</em></p>
 
       <h3>2. Fintech Platform Consolidation</h3>
       <p><strong>Context:</strong> David is driving a strategic initiative to consolidate from 4 container platforms to 1 across Apex's infrastructure. This is a board-level initiative tied to cost reduction and operational simplification.</p>
@@ -3166,7 +3356,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>TerraScale Energy</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>Houston, TX / $8.7B / 35,000</td></tr>
         <tr><td><strong>Background</strong></td><td>Open-source contributor (Apache Kafka committer). Technically deep, values engineering excellence. Net-zero champion.</td></tr>
-        <tr><td><strong>CAB Role</strong></td><td>Co-Chair. Highest-engagement member in the program.</td></tr>
+        <tr><td><strong>SAB Role</strong></td><td>Co-Chair. Highest-engagement member in the program.</td></tr>
       </table>
 
       <h2>Company Intel</h2>
@@ -3184,7 +3374,7 @@ const DELIVERABLE_CONTENT = {
       <h2>Relationship Arc</h2>
       <table>
         <tr><th>Stage</th><th>Timeline</th><th>Key Events</th></tr>
-        <tr><td>Champion</td><td>2024&ndash;Present</td><td>Became CAB Co-Chair. Engagement score 96/100. Keynote speaker at Energy Transition Summit.</td></tr>
+        <tr><td>Champion</td><td>2024&ndash;Present</td><td>Became SAB Co-Chair. Engagement score 96/100. Keynote speaker at Energy Transition Summit.</td></tr>
         <tr><td><strong>Under Stress</strong></td><td>March 2026</td><td>P1 outage shook confidence. Champion still, but credibility at stake for May board presentation.</td></tr>
       </table>
 
@@ -3200,7 +3390,7 @@ const DELIVERABLE_CONTENT = {
       <p><strong>Visitor:</strong> Rachel Morrison, CTO &nbsp;|&nbsp; <strong>Tone:</strong> Serious, Partnership-Oriented</p>
 
       <h2>Context for Elena</h2>
-      <p>Rachel Morrison is our highest-value individual relationship (engagement score 96/100, CAB Co-Chair, $6.8M pipeline). The March 28 P1 outage &mdash; 4 hours of grid monitoring disruption with $2.3M impact &mdash; has put her champion credibility at stake. She has a board presentation on May 2 where she will advocate for a $5M grid modernization expansion. She needs us to arm her with reliability assurances, a thorough RCA, and ROI data she can present directly.</p>
+      <p>Rachel Morrison is our highest-value individual relationship (engagement score 96/100, SAB Co-Chair, $6.8M pipeline). The March 28 P1 outage &mdash; 4 hours of grid monitoring disruption with $2.3M impact &mdash; has put her champion credibility at stake. She has a board presentation on May 2 where she will advocate for a $5M grid modernization expansion. She needs us to arm her with reliability assurances, a thorough RCA, and ROI data she can present directly.</p>
 
       <h3>Recommended Topics</h3>
       <table>
@@ -3299,7 +3489,7 @@ const DELIVERABLE_CONTENT = {
       <ul>
         <li><strong>P1 Outage Impact:</strong> The March 28 production outage caused a 4-hour grid monitoring disruption with an estimated $2.3M business impact. Rachel's engagement score remains at 96/100, but her confidence in platform reliability is shaken.</li>
         <li><strong>Board Presentation:</strong> Rachel is presenting to the TerraScale board on May 2, advocating for a $5M grid modernization expansion. She needs ROI data, reliability assurances, and RCA materials she can present directly. If her board loses confidence, we lose the deal.</li>
-        <li><strong>Champion at Risk:</strong> Rachel is our highest-value individual relationship and CAB Co-Chair. Internal skeptics at TerraScale will use the outage to argue against expansion. We need to arm Rachel to counter that narrative with data.</li>
+        <li><strong>Champion at Risk:</strong> Rachel is our highest-value individual relationship and SAB Co-Chair. Internal skeptics at TerraScale will use the outage to argue against expansion. We need to arm Rachel to counter that narrative with data.</li>
         <li><strong>CEO Drop-In:</strong> Confirmed, minimum 15 minutes. Personal acknowledgment of the outage is critical. Please coordinate with the CEO's office on messaging.</li>
         <li><strong>Your Role:</strong> Full engagement required. Lobby greeting at 8:25 AM. Pre-brief with senior leadership at 8:00 AM. Present throughout all key sessions.</li>
       </ul>
@@ -3371,7 +3561,7 @@ const DELIVERABLE_CONTENT = {
       </table>
 
       <h2>Relationship Summary</h2>
-      <p>Pepper Minton is a CAB member who leads the engineering team behind SnackStack's AI-powered recipe platform. After a TikTok-driven viral surge crashed production for 8 hours and affected 2M users, Pepper's confidence in platform resilience is shaken. She contributed actively to the Platform Engineering track at the last CAB. Known for a whiteboard-first, no-PowerPoint style.</p>
+      <p>Pepper Minton is a SAB member who leads the engineering team behind SnackStack's AI-powered recipe platform. After a TikTok-driven viral surge crashed production for 8 hours and affected 2M users, Pepper's confidence in platform resilience is shaken. She contributed actively to the Platform Engineering track at the last SAB. Known for a whiteboard-first, no-PowerPoint style.</p>
 
       <h2>Top 3 Priorities</h2>
       <ul>
@@ -3384,7 +3574,7 @@ const DELIVERABLE_CONTENT = {
       <table>
         <tr><th>Severity</th><th>Flag</th></tr>
         <tr><td><span class="flag-badge danger">DANGER</span></td><td>P1 production outage during TikTok viral surge &mdash; recipe engine down 8 hours, 2M users affected</td></tr>
-        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Scaling architecture review overdue &mdash; promised at last CAB, never delivered</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Scaling architecture review overdue &mdash; promised at last SAB, never delivered</td></tr>
         <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Pepper's team independently published case study praising OpenShift auto-scaling</td></tr>
         <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>SnackStack exploring edge computing for smart kitchen devices ($1.8M)</td></tr>
       </table>
@@ -3457,7 +3647,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>SnackStack Technologies</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>Austin, TX / $2.1B / 12,000</td></tr>
         <tr><td><strong>Background</strong></td><td>Former startup founder. Values speed over process. Whiteboard-first, no-PowerPoint communicator.</td></tr>
-        <tr><td><strong>CAB Membership</strong></td><td>Since Q3 2024. Contributed to Platform Engineering discussion.</td></tr>
+        <tr><td><strong>SAB Membership</strong></td><td>Since Q3 2024. Contributed to Platform Engineering discussion.</td></tr>
       </table>
 
       <h2>Company Intel</h2>
@@ -3474,13 +3664,13 @@ const DELIVERABLE_CONTENT = {
       <h2>Relationship Arc</h2>
       <table>
         <tr><th>Stage</th><th>Timeline</th><th>Key Events</th></tr>
-        <tr><td>Engaged</td><td>Q3 2024</td><td>Joined CAB. Contributed to Platform Engineering track.</td></tr>
+        <tr><td>Engaged</td><td>Q3 2024</td><td>Joined SAB. Contributed to Platform Engineering track.</td></tr>
         <tr><td>Trusted</td><td>Late 2025</td><td>Expanded product usage. Team published positive case study.</td></tr>
         <tr><td><strong>Under Stress</strong></td><td>2026</td><td>TikTok surge crashed production. Scaling architecture review overdue.</td></tr>
       </table>
 
       <h2>Key Risk</h2>
-      <p><span class="flag-badge warning">OVERDUE</span> Scaling architecture review was promised at the last CAB and never delivered. Pepper is a startup founder who expects speed &mdash; delays erode trust fast. <strong>Contract: $1.28M ARR.</strong></p>
+      <p><span class="flag-badge warning">OVERDUE</span> Scaling architecture review was promised at the last SAB and never delivered. Pepper is a startup founder who expects speed &mdash; delays erode trust fast. <strong>Contract: $1.28M ARR.</strong></p>
     `
   },
   'pepper-minton/talking-points': {
@@ -3491,7 +3681,7 @@ const DELIVERABLE_CONTENT = {
       <p><strong>Visitor:</strong> Pepper Minton, CTO &nbsp;|&nbsp; <strong>Tone:</strong> Fast-Paced, No Corporate Speak</p>
 
       <h2>Context for Carlos</h2>
-      <p>Pepper's TikTok viral moment turned into a crisis when the recipe platform crashed under 10x normal load. Production was down 8 hours, affecting 2M users. The scaling architecture review promised at the last CAB was never delivered. Pepper is frustrated and needs a concrete plan, not promises. She values speed and directness &mdash; no corporate jargon.</p>
+      <p>Pepper's TikTok viral moment turned into a crisis when the recipe platform crashed under 10x normal load. Production was down 8 hours, affecting 2M users. The scaling architecture review promised at the last SAB was never delivered. Pepper is frustrated and needs a concrete plan, not promises. She values speed and directness &mdash; no corporate jargon.</p>
 
       <h3>Recommended Topics</h3>
       <table>
@@ -3550,7 +3740,7 @@ const DELIVERABLE_CONTENT = {
       <p>Pepper Minton's briefing is tomorrow. Here is what you need to know:</p>
       <ul>
         <li><strong>TikTok Viral Surge:</strong> SnackStack's recipe AI went viral (47M views), generating a 10x traffic surge that crashed production for 8 hours. The P1 is still fresh in Pepper's mind.</li>
-        <li><strong>Scaling Architecture:</strong> Pepper needs a concrete auto-scaling plan &mdash; not a roadmap, but an architecture she can take back and implement. The scaling review promised at the last CAB was never delivered.</li>
+        <li><strong>Scaling Architecture:</strong> Pepper needs a concrete auto-scaling plan &mdash; not a roadmap, but an architecture she can take back and implement. The scaling review promised at the last SAB was never delivered.</li>
         <li><strong>Recommended Approach:</strong> Hands-on whiteboard session. NO POWERPOINT. Present auto-scaling patterns with load testing benchmarks. Offer a dedicated scaling workshop within 2 weeks.</li>
         <li><strong>Your Role:</strong> Coffee drop-in at 10:30 AM for informal rapport-building. Pepper is high-energy &mdash; match the pace.</li>
       </ul>
@@ -3619,7 +3809,7 @@ const DELIVERABLE_CONTENT = {
       </table>
 
       <h2>Relationship Summary</h2>
-      <p>Ziggy Stardust-Chen is a CAB alumni who stepped down in Q4 2025, citing a lack of follow-through on two committed action items. Engagement has declined to 55/100. AWS has embedded a Solution Architect at Quantum Pretzel for 3 weeks. Contract renewal is May 2026 &mdash; $1.4M at risk. However, Ziggy has hinted at returning to the CAB if we demonstrate accountability.</p>
+      <p>Ziggy Stardust-Chen is a SAB alumni who stepped down in Q4 2025, citing a lack of follow-through on two committed action items. Engagement has declined to 55/100. AWS has embedded a Solution Architect at Quantum Pretzel for 3 weeks. Contract renewal is May 2026 &mdash; $1.4M at risk. However, Ziggy has hinted at returning to the SAB if we demonstrate accountability.</p>
 
       <h2>Top 3 Priorities</h2>
       <ul>
@@ -3633,7 +3823,7 @@ const DELIVERABLE_CONTENT = {
         <tr><th>Severity</th><th>Flag</th></tr>
         <tr><td><span class="flag-badge danger">DANGER</span></td><td>Contract renewal May 2026 &mdash; $1.4M at risk. Engagement score 55 and declining.</td></tr>
         <tr><td><span class="flag-badge warning">WARNING</span></td><td>AWS Solution Architect embedded at Quantum Pretzel for 3 weeks</td></tr>
-        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Ziggy left CAB citing broken promises &mdash; 2 action items never delivered</td></tr>
+        <tr><td><span class="flag-badge warning">WARNING</span></td><td>Ziggy left SAB citing broken promises &mdash; 2 action items never delivered</td></tr>
         <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>Re-engagement: Ziggy hinted at returning if we demonstrate accountability</td></tr>
       </table>
 
@@ -3655,7 +3845,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>2:00 PM</strong></td><td>Technical Deep-Dive</td><td>Platform reliability for crypto trading workloads. Sub-millisecond latency architecture.</td></tr>
         <tr><td><strong>2:45 PM</strong></td><td>Break</td><td>Informal. Let Ziggy steer the conversation.</td></tr>
         <tr><td><strong>3:00 PM</strong></td><td>Roadmap &amp; Renewal</td><td>Only if trust has been re-established. Technical roadmap that makes staying worthwhile.</td></tr>
-        <tr><td><strong>3:45 PM</strong></td><td>Wrap-Up</td><td>Concrete next steps. CAB re-engagement invitation if appropriate.</td></tr>
+        <tr><td><strong>3:45 PM</strong></td><td>Wrap-Up</td><td>Concrete next steps. SAB re-engagement invitation if appropriate.</td></tr>
       </table>
     `
   },
@@ -3669,7 +3859,7 @@ const DELIVERABLE_CONTENT = {
       <strong>Re:</strong> Tomorrow's briefing with Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp</p>
 
       <h3>Situation</h3>
-      <p>Ziggy left the CAB in Q4 2025 citing broken promises. Engagement score has dropped to 55/100 and is declining. AWS has embedded a Solution Architect on-site for 3 weeks. Contract renewal is May 2026 &mdash; $1.4M ARR at risk.</p>
+      <p>Ziggy left the SAB in Q4 2025 citing broken promises. Engagement score has dropped to 55/100 and is declining. AWS has embedded a Solution Architect on-site for 3 weeks. Contract renewal is May 2026 &mdash; $1.4M ARR at risk.</p>
 
       <h3>What Ziggy Needs to Hear</h3>
       <ul>
@@ -3683,7 +3873,7 @@ const DELIVERABLE_CONTENT = {
       <ul>
         <li>Full engagement required. This is a win-back briefing, not a routine check-in.</li>
         <li>Open with the accountability review. Do not skip or delay it.</li>
-        <li>If Ziggy re-engages, extend the CAB re-invitation personally.</li>
+        <li>If Ziggy re-engages, extend the SAB re-invitation personally.</li>
         <li>Escalate to VP level if Ziggy signals intent to churn.</li>
       </ul>
     `
@@ -3703,16 +3893,16 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>Quantum Pretzel Corp</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>Miami, FL / $890M / FinTech &amp; Crypto Trading</td></tr>
         <tr><td><strong>Background</strong></td><td>Crypto trading platform processing $2B daily volume. No tolerance for corporate jargon. Blogs about platform engineering for high-frequency trading.</td></tr>
-        <tr><td><strong>CAB Membership</strong></td><td>Former member. Left Q4 2025 citing broken promises (2 action items never delivered).</td></tr>
+        <tr><td><strong>SAB Membership</strong></td><td>Former member. Left Q4 2025 citing broken promises (2 action items never delivered).</td></tr>
       </table>
 
       <h2>Company Intel</h2>
       <p>Quantum Pretzel Corp is an $890M FinTech company headquartered in Miami, operating a crypto trading platform that processes <strong>$2B in daily volume</strong>. Platform reliability at sub-millisecond latency is existential &mdash; any downtime directly impacts trading revenue. Ziggy's team has built significant Kubernetes operator expertise and contributes to open-source projects.</p>
-      <p>Ziggy left the CAB in Q4 2025 after two committed action items were never delivered. Engagement has declined to <strong>55/100</strong>. AWS has embedded a Solution Architect on-site for 3 weeks. Contract renewal is <strong>May 2026 &mdash; $1.4M at risk</strong>. This is a save-the-account briefing.</p>
+      <p>Ziggy left the SAB in Q4 2025 after two committed action items were never delivered. Engagement has declined to <strong>55/100</strong>. AWS has embedded a Solution Architect on-site for 3 weeks. Contract renewal is <strong>May 2026 &mdash; $1.4M at risk</strong>. This is a save-the-account briefing.</p>
 
       <h3>Strategic Context</h3>
       <ul>
-        <li><strong>Broken Trust:</strong> Two CAB action items promised and never delivered. Ziggy's departure was a direct consequence. Must be addressed head-on.</li>
+        <li><strong>Broken Trust:</strong> Two SAB action items promised and never delivered. Ziggy's departure was a direct consequence. Must be addressed head-on.</li>
         <li><strong>AWS Threat:</strong> AWS SA embedded for 3 weeks, pitching managed Kubernetes as a drop-in replacement. Active displacement effort.</li>
         <li><strong>Renewal Timeline:</strong> May 2026 &mdash; 2 months out. If trust is not re-established at this briefing, renewal is unlikely.</li>
       </ul>
@@ -3720,9 +3910,9 @@ const DELIVERABLE_CONTENT = {
       <h2>Relationship Arc</h2>
       <table>
         <tr><th>Stage</th><th>Timeline</th><th>Key Events</th></tr>
-        <tr><td>Engaged</td><td>2024</td><td>Active CAB member. Contributed to platform engineering discussions.</td></tr>
+        <tr><td>Engaged</td><td>2024</td><td>Active SAB member. Contributed to platform engineering discussions.</td></tr>
         <tr><td>Trusted</td><td>Mid 2025</td><td>Expanded platform usage. Strong technical engagement.</td></tr>
-        <tr><td><strong>Disengaged</strong></td><td>Q4 2025</td><td>Left CAB citing broken promises. 2 action items undelivered.</td></tr>
+        <tr><td><strong>Disengaged</strong></td><td>Q4 2025</td><td>Left SAB citing broken promises. 2 action items undelivered.</td></tr>
         <tr><td><strong>At Risk</strong></td><td>Current</td><td>Engagement 55/100. AWS embedded. Renewal in 2 months.</td></tr>
       </table>
 
@@ -3738,14 +3928,14 @@ const DELIVERABLE_CONTENT = {
       <p><strong>Visitor:</strong> Ziggy Stardust-Chen, VP Platform Engineering &nbsp;|&nbsp; <strong>Tone:</strong> No Jargon, No Excuses</p>
 
       <h2>Context for Aisha</h2>
-      <p>Ziggy left the CAB feeling ignored after two committed action items were never delivered. AWS has been embedded on-site for 3 weeks, aggressively pitching managed Kubernetes. Contract renewal is May 2026 &mdash; $1.4M at risk. Engagement score has dropped to 55/100. This is a win-back briefing that requires directness and accountability.</p>
+      <p>Ziggy left the SAB feeling ignored after two committed action items were never delivered. AWS has been embedded on-site for 3 weeks, aggressively pitching managed Kubernetes. Contract renewal is May 2026 &mdash; $1.4M at risk. Engagement score has dropped to 55/100. This is a win-back briefing that requires directness and accountability.</p>
 
       <h3>Recommended Topics</h3>
       <table>
         <tr><th>#</th><th>Topic</th><th>Guidance</th></tr>
         <tr><td><strong>1</strong></td><td>Acknowledge Dropped Commitments</td><td>Open with a direct acknowledgment of the two undelivered action items. Name them specifically. No excuses, no deflection. Ziggy values honesty above all else &mdash; anything less and they will disengage.</td></tr>
         <tr><td><strong>2</strong></td><td>Present Remediation Plan</td><td>Concrete remediation with specific dates, specific owners, and specific deliverables. Ziggy needs to see that this time is different. Include accountability checkpoints.</td></tr>
-        <tr><td><strong>3</strong></td><td>CAB Re-Invitation</td><td>Only after trust is re-established. Offer re-invitation with a personal guarantee of follow-through. If Ziggy declines, respect it &mdash; do not push.</td></tr>
+        <tr><td><strong>3</strong></td><td>SAB Re-Invitation</td><td>Only after trust is re-established. Offer re-invitation with a personal guarantee of follow-through. If Ziggy declines, respect it &mdash; do not push.</td></tr>
         <tr><td><strong>4</strong></td><td>Technical Differentiation vs AWS</td><td>Show we understand crypto trading platform requirements better than AWS. Sub-millisecond latency, Kubernetes operator depth, and on-premises flexibility for compliance.</td></tr>
       </table>
 
@@ -3783,7 +3973,7 @@ const DELIVERABLE_CONTENT = {
     html: `
       <h2>VVIP Protocol &mdash; SILVER Tier (Alumni)</h2>
       <p><strong>Visitor:</strong> Ziggy Stardust-Chen, VP Platform Engineering &nbsp;|&nbsp; <strong>Tier:</strong> SILVER (Alumni) &nbsp;|&nbsp; <strong>Sponsor:</strong> Aisha Patel</p>
-      <p><em><span class="flag-badge warning">NOTE</span> Re-engagement briefing. Ziggy left the CAB feeling ignored. Every detail must signal that we are taking this seriously. No corporate theater.</em></p>
+      <p><em><span class="flag-badge warning">NOTE</span> Re-engagement briefing. Ziggy left the SAB feeling ignored. Every detail must signal that we are taking this seriously. No corporate theater.</em></p>
 
       <h3>Pre-Visit (T-24h)</h3>
       <ul>
@@ -3805,7 +3995,7 @@ const DELIVERABLE_CONTENT = {
       <h3>Post-Visit (T+24h)</h3>
       <ul>
         <li>Remediation plan with dates and owners emailed within 4 hours.</li>
-        <li>CAB re-invitation (if appropriate) sent within 48 hours with personal guarantee.</li>
+        <li>SAB re-invitation (if appropriate) sent within 48 hours with personal guarantee.</li>
         <li>Renewal confidence assessment updated in CRM.</li>
         <li>AWS competitive response documented.</li>
       </ul>
@@ -3832,7 +4022,7 @@ const DELIVERABLE_CONTENT = {
         <tr><th>Commitment</th><th>Owner</th><th>Deadline</th><th>Status</th></tr>
         <tr><td>Remediation of dropped action item #1</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
         <tr><td>Remediation of dropped action item #2</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
-        <tr><td>CAB re-invitation (if appropriate)</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
+        <tr><td>SAB re-invitation (if appropriate)</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
         <tr><td>Technical deep-dive follow-up</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
       </table>
 
@@ -3851,7 +4041,7 @@ const DELIVERABLE_CONTENT = {
         <tr><th>Metric</th><th>Pre-Briefing</th><th>Post-Briefing</th></tr>
         <tr><td>Engagement Score</td><td>55/100 (declining)</td><td><em>[To be updated]</em></td></tr>
         <tr><td>Renewal Confidence</td><td>Low &mdash; AWS actively pitching</td><td><em>[To be assessed]</em></td></tr>
-        <tr><td>CAB Re-Engagement</td><td>Possible if accountability demonstrated</td><td><em>[To be assessed]</em></td></tr>
+        <tr><td>SAB Re-Engagement</td><td>Possible if accountability demonstrated</td><td><em>[To be assessed]</em></td></tr>
         <tr><td>Next Actions</td><td colspan="2"><em>[To be completed with hard deadlines]</em></td></tr>
       </table>
     `
@@ -3871,12 +4061,12 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Revenue / Employees</strong></td><td>$14.5B / 68,000</td></tr>
         <tr><td><strong>VVIP Tier</strong></td><td><span class="flag-badge positive">PLATINUM</span></td></tr>
         <tr><td><strong>Engagement Score</strong></td><td>94/100 (Champion)</td></tr>
-        <tr><td><strong>CAB Role</strong></td><td>Co-Vice-Chair</td></tr>
+        <tr><td><strong>SAB Role</strong></td><td>Co-Vice-Chair</td></tr>
         <tr><td><strong>Sponsor</strong></td><td>Roberto Vega, SVP Public Sector</td></tr>
       </table>
 
       <h2>Relationship Summary</h2>
-      <p>Luna Wavelength is a former NASA engineer, open-source advocate, and CAB Co-Vice-Chair with a 94/100 engagement score. She is our strongest champion in aerospace. However, CISO Colonel Drake is blocking an $8M satellite edge expansion due to 3 unresolved NIST 800-171 compliance gaps found in a security audit. Total pipeline at stake: $9.2M.</p>
+      <p>Luna Wavelength is a former NASA engineer, open-source advocate, and SAB Co-Vice-Chair with a 94/100 engagement score. She is our strongest champion in aerospace. However, CISO Colonel Drake is blocking an $8M satellite edge expansion due to 3 unresolved NIST 800-171 compliance gaps found in a security audit. Total pipeline at stake: $9.2M.</p>
 
       <h2>Top 3 Priorities</h2>
       <ul>
@@ -3889,7 +4079,7 @@ const DELIVERABLE_CONTENT = {
       <table>
         <tr><th>Severity</th><th>Flag</th></tr>
         <tr><td><span class="flag-badge danger">DANGER</span></td><td>CISO Colonel Drake blocking $8M expansion &mdash; NIST compliance findings unresolved</td></tr>
-        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Luna is Platinum champion &mdash; engagement 94, CAB Co-Vice-Chair</td></tr>
+        <tr><td><span class="flag-badge positive">POSITIVE</span></td><td>Luna is Platinum champion &mdash; engagement 94, SAB Co-Vice-Chair</td></tr>
         <tr><td><span class="flag-badge warning">WARNING</span></td><td>3 NIST 800-171 compliance gaps &mdash; remediation plan needed</td></tr>
         <tr><td><span class="flag-badge opportunity">OPPORTUNITY</span></td><td>$8M satellite + $1.2M air-gapped = $9.2M total pipeline</td></tr>
       </table>
@@ -3914,7 +4104,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>11:15 AM</strong></td><td>Break</td><td>Earl Grey refresh. Informal Q&amp;A.</td></tr>
         <tr><td><strong>11:30 AM</strong></td><td>Satellite Edge Roadmap</td><td>$8M ground station deployment architecture. Integration with existing GalactiCorp systems.</td></tr>
         <tr><td><strong>12:30 PM</strong></td><td>Working Lunch</td><td>Vegetarian. Discuss Colonel Drake engagement strategy and CISO meeting prep.</td></tr>
-        <tr><td><strong>1:30 PM</strong></td><td>CAB Themes</td><td>Co-Vice-Chair input on upcoming CAB agenda. Open-source track planning.</td></tr>
+        <tr><td><strong>1:30 PM</strong></td><td>SAB Themes</td><td>Co-Vice-Chair input on upcoming SAB agenda. Open-source track planning.</td></tr>
         <tr><td><strong>2:30 PM</strong></td><td>Wrap-Up &amp; Next Steps</td><td>NIST remediation milestones confirmed. Colonel Drake meeting scheduled. 2-week follow-up.</td></tr>
       </table>
     `
@@ -3966,7 +4156,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>GalactiCorp Space Industries</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>Denver, CO / $14.5B / 68,000</td></tr>
         <tr><td><strong>Background</strong></td><td>Former NASA JPL engineer. Apache committer. Values technical rigor and evidence-based decision-making.</td></tr>
-        <tr><td><strong>CAB Role</strong></td><td>Co-Vice-Chair. Among the highest-engagement members in the program.</td></tr>
+        <tr><td><strong>SAB Role</strong></td><td>Co-Vice-Chair. Among the highest-engagement members in the program.</td></tr>
       </table>
 
       <h2>Company Intel</h2>
@@ -3984,7 +4174,7 @@ const DELIVERABLE_CONTENT = {
       <h2>Relationship Arc</h2>
       <table>
         <tr><th>Stage</th><th>Timeline</th><th>Key Events</th></tr>
-        <tr><td>Champion</td><td>2024&ndash;Present</td><td>Became CAB Co-Vice-Chair. Engagement score 94/100. Keynote at SpaceTech Summit.</td></tr>
+        <tr><td>Champion</td><td>2024&ndash;Present</td><td>Became SAB Co-Vice-Chair. Engagement score 94/100. Keynote at SpaceTech Summit.</td></tr>
         <tr><td><strong>Blocked</strong></td><td>Current</td><td>CISO Colonel Drake blocking $8M after NIST findings. Luna is champion but cannot unblock alone.</td></tr>
       </table>
 
@@ -4000,7 +4190,7 @@ const DELIVERABLE_CONTENT = {
       <p><strong>Visitor:</strong> Luna Wavelength, Chief Innovation Officer &nbsp;|&nbsp; <strong>Tone:</strong> Technical, Evidence-Based</p>
 
       <h2>Context for Roberto</h2>
-      <p>Luna Wavelength is our strongest aerospace champion (engagement 94/100, CAB Co-Vice-Chair) with a $9.2M pipeline. However, CISO Colonel Drake is blocking the $8M satellite edge expansion after a security audit found 3 NIST 800-171 compliance gaps. Luna cannot override Colonel Drake on security matters &mdash; we need to arm her with evidence and also engage Colonel Drake directly.</p>
+      <p>Luna Wavelength is our strongest aerospace champion (engagement 94/100, SAB Co-Vice-Chair) with a $9.2M pipeline. However, CISO Colonel Drake is blocking the $8M satellite edge expansion after a security audit found 3 NIST 800-171 compliance gaps. Luna cannot override Colonel Drake on security matters &mdash; we need to arm her with evidence and also engage Colonel Drake directly.</p>
 
       <h3>Recommended Topics</h3>
       <table>
@@ -4058,9 +4248,9 @@ const DELIVERABLE_CONTENT = {
       <p>Roberto,</p>
       <p>Luna Wavelength's full-day PLATINUM briefing is tomorrow. This requires a dual-track approach. Here is what you need to know:</p>
       <ul>
-        <li><strong>Champion Status:</strong> Luna is our strongest aerospace champion (engagement 94/100, CAB Co-Vice-Chair). She is fully aligned with our technology vision.</li>
+        <li><strong>Champion Status:</strong> Luna is our strongest aerospace champion (engagement 94/100, SAB Co-Vice-Chair). She is fully aligned with our technology vision.</li>
         <li><strong>CISO Blocker:</strong> Colonel Drake is blocking the $8M satellite edge expansion after a security audit found 3 NIST 800-171 compliance gaps. Luna cannot override the CISO on security matters.</li>
-        <li><strong>Dual-Track Needed:</strong> We need a strategic briefing track with Luna (architecture, roadmap, CAB themes) AND a security deep-dive track for Colonel Drake. Recommend bringing our security engineering lead to brief Colonel Drake separately.</li>
+        <li><strong>Dual-Track Needed:</strong> We need a strategic briefing track with Luna (architecture, roadmap, SAB themes) AND a security deep-dive track for Colonel Drake. Recommend bringing our security engineering lead to brief Colonel Drake separately.</li>
         <li><strong>CEO Drop-In:</strong> Confirmed per Platinum protocol. Personal commitment to security investment is the key message.</li>
         <li><strong>Pipeline:</strong> $9.2M total ($8M satellite edge + $1.2M air-gapped). All blocked by CISO approval.</li>
       </ul>
@@ -4097,7 +4287,7 @@ const DELIVERABLE_CONTENT = {
         <li><em>[To be completed]</em> NIST remediation plan and timeline</li>
         <li><em>[To be completed]</em> Satellite edge architecture &mdash; 200+ ground stations</li>
         <li><em>[To be completed]</em> Air-gapped deployment for classified workloads</li>
-        <li><em>[To be completed]</em> CAB Co-Vice-Chair themes and open-source track</li>
+        <li><em>[To be completed]</em> SAB Co-Vice-Chair themes and open-source track</li>
       </ul>
 
       <h3>CISO Engagement Status</h3>
@@ -4139,7 +4329,7 @@ const DELIVERABLE_CONTENT = {
       </table>
 
       <h2>Relationship Summary</h2>
-      <p>Max Bandwidth is a former competitive gamer turned logistics executive and CAB member. His AI route optimization pilot has saved $4M/year, but VP Operations Helen Gearshift is actively blocking fleet-wide scale-up. Max needs board-ready ROI data to override internal resistance at the Q3 2026 board presentation. Total pipeline: $3.95M.</p>
+      <p>Max Bandwidth is a former competitive gamer turned logistics executive and SAB member. His AI route optimization pilot has saved $4M/year, but VP Operations Helen Gearshift is actively blocking fleet-wide scale-up. Max needs board-ready ROI data to override internal resistance at the Q3 2026 board presentation. Total pipeline: $3.95M.</p>
 
       <h2>Top 3 Priorities</h2>
       <ul>
@@ -4221,7 +4411,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td><strong>Organization</strong></td><td>Thunderbolt Logistics</td></tr>
         <tr><td><strong>HQ / Revenue / Employees</strong></td><td>Chicago, IL / $6.3B / 45,000</td></tr>
         <tr><td><strong>Background</strong></td><td>Former competitive gamer. Data-obsessed. Thinks in dashboards and real-time metrics. Fast-paced decision maker.</td></tr>
-        <tr><td><strong>CAB Membership</strong></td><td>Active member. Contributed to AI/ML track discussions.</td></tr>
+        <tr><td><strong>SAB Membership</strong></td><td>Active member. Contributed to AI/ML track discussions.</td></tr>
       </table>
 
       <h2>Company Intel</h2>
@@ -4475,7 +4665,7 @@ const DELIVERABLE_CONTENT = {
         <tr><td>Assign executive sponsor</td><td><em>[TBD]</em></td><td>Within 48 hours</td><td>Pending</td></tr>
         <tr><td>Send POC proposal</td><td><em>[TBD]</em></td><td><em>[TBD]</em></td><td>Pending</td></tr>
         <tr><td>Schedule 2-week follow-up</td><td><em>[TBD]</em></td><td>Before EOD</td><td>Pending</td></tr>
-        <tr><td>Evaluate for CAB nomination</td><td><em>[TBD]</em></td><td>Within 30 days</td><td>Pending</td></tr>
+        <tr><td>Evaluate for SAB nomination</td><td><em>[TBD]</em></td><td>Within 30 days</td><td>Pending</td></tr>
         <tr><td>Thank-you email (include therapy dog photo)</td><td><em>[TBD]</em></td><td>Within 4 hours</td><td>Pending</td></tr>
       </table>
     `
@@ -4597,7 +4787,7 @@ const DELIVERABLE_CONTENT = {
         <li>Thank-you email within 4 hours (include therapy dog photo if taken).</li>
         <li>POC proposal delivered within 48 hours.</li>
         <li>Sponsor assignment recommendation submitted within 48 hours.</li>
-        <li>Evaluate for future CAB nomination within 30 days.</li>
+        <li>Evaluate for future SAB nomination within 30 days.</li>
         <li>2-week follow-up scheduled before EOD.</li>
       </ul>
     `
@@ -4645,9 +4835,38 @@ const state = {
   flagCount: 0,
   infraStatus: { podman: 'checking', granite: 'checking', openclaw: 'checking', zeroclaw: 'static' },
   isLive: false,
+  isLocalOnly: false,
   activeConnections: new Set(),
   activeScenario: 'sarah-chen',
   currentDeliverable: null
+};
+
+/* ═══════════════════════════════════════════════════════════
+   TELEMETRY
+   ═══════════════════════════════════════════════════════════ */
+const TELEMETRY = {
+  events: [],
+  log(event, data) {
+    const entry = { t: Date.now(), event, data };
+    this.events.push(entry);
+    try {
+      const stored = JSON.parse(localStorage.getItem('briefingclaw-telemetry') || '[]');
+      stored.push(entry);
+      // Keep last 500 events
+      if (stored.length > 500) stored.splice(0, stored.length - 500);
+      localStorage.setItem('briefingclaw-telemetry', JSON.stringify(stored));
+    } catch (e) { /* localStorage may be disabled */ }
+  },
+  download() {
+    const data = JSON.stringify(this.events, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `briefingclaw-telemetry-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 };
 
 /* ═══════════════════════════════════════════════════════════
@@ -4675,6 +4894,7 @@ async function pollInfrastructure() {
   state.infraStatus.openclaw = openclawOk ? 'connected' : 'disconnected';
   state.infraStatus.podman = graniteOk ? 'connected' : 'disconnected';
   state.isLive = graniteOk && openclawOk;
+  state.isLocalOnly = graniteOk && !openclawOk;
 
   updateInfraUI();
   updateModeBadge();
@@ -4694,6 +4914,9 @@ function updateModeBadge() {
   if (state.isLive) {
     badge.className = 'mode-badge live';
     badge.textContent = 'LIVE';
+  } else if (state.isLocalOnly) {
+    badge.className = 'mode-badge partial';
+    badge.textContent = 'LOCAL ONLY';
   } else {
     badge.className = 'mode-badge simulated';
     badge.textContent = 'SIMULATED';
@@ -4893,6 +5116,14 @@ function completeDeliverable(delId) {
     card.classList.add('completed');
     state.deliverablesDone++;
     updateDeliverableCount();
+    // Apply risk badge
+    const profile = RISK_PROFILES[state.activeScenario];
+    if (profile && profile[delId]) {
+      const dot = card.querySelector('.risk-dot');
+      if (dot) {
+        dot.className = 'risk-dot ' + profile[delId];
+      }
+    }
   }
 }
 
@@ -4939,6 +5170,7 @@ function updateElapsed() {
    MODAL FUNCTIONS
    ═══════════════════════════════════════════════════════════ */
 function openModal(deliverableId) {
+  TELEMETRY.log('deliverable_view', { scenario: state.activeScenario, deliverable: deliverableId });
   state.currentDeliverable = deliverableId;
   const key = `${state.activeScenario}/${deliverableId}`;
   const content = DELIVERABLE_CONTENT[key];
@@ -5071,6 +5303,7 @@ function startDemo() {
   resetDemo();
   state.running = true;
   state.startTime = Date.now();
+  TELEMETRY.log('demo_start', { scenario: state.activeScenario });
 
   document.getElementById('btnStart').disabled = true;
   document.getElementById('elapsedDisplay').classList.add('active');
@@ -5094,6 +5327,7 @@ function startDemo() {
 }
 
 function resetDemo() {
+  TELEMETRY.log('demo_reset', {});
   state.running = false;
   state.startTime = null;
   state.deliverablesDone = 0;
@@ -5121,6 +5355,7 @@ function resetDemo() {
 
   // Clear deliverables
   document.querySelectorAll('.deliverable-card').forEach(c => c.classList.remove('completed'));
+  document.querySelectorAll('.risk-dot').forEach(d => d.className = 'risk-dot');
 
   // Clear activity feed
   document.getElementById('activityList').innerHTML = '';
@@ -5136,10 +5371,56 @@ function resetDemo() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   PDF EXPORT
+   ═══════════════════════════════════════════════════════════ */
+function exportPDF() {
+  if (state.deliverablesDone === 0) {
+    alert('No deliverables to export. Run the demo first.');
+    return;
+  }
+  const scenario = SCENARIOS[state.activeScenario];
+  const contactName = scenario.contact ? scenario.contact.name : (scenario.name || '');
+  const contactTitle = scenario.contact ? scenario.contact.title : (scenario.title || '');
+  const contactOrg = scenario.contact ? scenario.contact.org : (scenario.company || '');
+  const win = window.open('', '_blank');
+  let html = `<html><head><title>Briefing Package \u2014 ${contactName}</title>
+    <style>
+      body { font-family: -apple-system, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; color: #222; line-height: 1.6; }
+      h1 { font-size: 28px; border-bottom: 3px solid #EE0000; padding-bottom: 10px; }
+      h2 { font-size: 20px; margin-top: 32px; color: #333; }
+      h3 { font-size: 16px; margin-top: 20px; }
+      table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+      th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; font-size: 13px; }
+      th { background: #f5f5f5; font-weight: 600; }
+      .section { page-break-after: always; margin-bottom: 40px; }
+      .meta { color: #888; font-size: 11px; margin-bottom: 20px; font-family: monospace; }
+      .flag-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+      .flag-badge.danger { background: #fee; color: #c00; }
+      .flag-badge.warning { background: #fff8e1; color: #b86b00; }
+      .flag-badge.positive { background: #e8f5e9; color: #2e7d32; }
+      .flag-badge.opportunity { background: #e3f2fd; color: #1565c0; }
+    </style></head><body>
+    <h1>Briefing Package: ${contactName}</h1>
+    <div class="meta">${contactTitle} &middot; ${contactOrg} &middot; Generated by BriefingClaw</div>`;
+  for (const delId of DELIVERABLE_ORDER) {
+    const key = `${state.activeScenario}/${delId}`;
+    const content = DELIVERABLE_CONTENT[key];
+    if (content) {
+      html += `<div class="section"><h2>${content.title}</h2><div class="meta">Generated by ${content.agent}</div>${content.html}</div>`;
+    }
+  }
+  html += `</body></html>`;
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => win.print(), 500);
+}
+
+/* ═══════════════════════════════════════════════════════════
    CONTACT SELECTOR
    ═══════════════════════════════════════════════════════════ */
 function switchScenario(contactId) {
   if (!SCENARIOS[contactId]) return;
+  TELEMETRY.log('scenario_switch', { to: contactId });
   const wasRunning = state.running;
   if (wasRunning) {
     resetDemo();
@@ -5164,6 +5445,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Buttons
   document.getElementById('btnStart').addEventListener('click', startDemo);
   document.getElementById('btnReset').addEventListener('click', resetDemo);
+  document.getElementById('btnExport').addEventListener('click', exportPDF);
 
   // Contact selector
   document.getElementById('contactSelect').addEventListener('change', (e) => {
@@ -5221,8 +5503,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.code === 'KeyP') {
       e.preventDefault();
       document.body.classList.toggle('presentation-mode');
+      TELEMETRY.log('presentation_mode_toggle', {});
       // Re-resolve canvas connections after font size change
       setTimeout(() => pipelineCanvas.resolveConnections(), 200);
+    }
+    if (e.code === 'KeyT') {
+      e.preventDefault();
+      TELEMETRY.download();
     }
   });
 

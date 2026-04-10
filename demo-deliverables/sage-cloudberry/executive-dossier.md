@@ -28,9 +28,9 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Standard (first briefing) |
-| **CAB Member Since** | Not a member -- first briefing |
-| **CAB Board** | N/A |
-| **CAB Attendance (TTM)** | N/A |
+| **SAB Member Since** | Not a member -- first briefing |
+| **SAB Board** | N/A |
+| **SAB Attendance (TTM)** | N/A |
 | **Executive Sponsor** | Not yet assigned |
 | **Sponsor Last Touchpoint** | N/A |
 | **Engagement Score** | N/A (new account) |

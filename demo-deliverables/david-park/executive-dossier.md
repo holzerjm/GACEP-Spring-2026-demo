@@ -28,9 +28,9 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Gold |
-| **CAB Member Since** | Q1 2023 (3+ years) |
-| **CAB Board** | Strategic Technology Advisory Board |
-| **CAB Attendance (TTM)** | 3/4 (75%) |
+| **SAB Member Since** | Q1 2023 (3+ years) |
+| **SAB Board** | Strategic Technology Advisory Board |
+| **SAB Attendance (TTM)** | 3/4 (75%) |
 | **Executive Sponsor** | James Kim, VP Financial Services |
 | **Sponsor Last Touchpoint** | Jan 2026 (QBR attendance) |
 | **Engagement Score** | 68/100 |
@@ -43,7 +43,7 @@
 
 ### Top 3 Strategic Priorities
 
-1. **Hybrid Cloud Migration Recovery** -- Led the CAB discussion on migration reality gaps. Apex's core banking migration to OpenShift failed in January 2026, causing 6 hours of staging downtime and a rollback. David is publicly frustrated and quoted the failure as setting Apex "back three months." Needs a credible remediation plan before renewal.
+1. **Hybrid Cloud Migration Recovery** -- Led the SAB discussion on migration reality gaps. Apex's core banking migration to OpenShift failed in January 2026, causing 6 hours of staging downtime and a rollback. David is publicly frustrated and quoted the failure as setting Apex "back three months." Needs a credible remediation plan before renewal.
 
 2. **Platform Consolidation & Reliability** -- Apex runs three different internal platforms because teams never agreed on standards. David wants consolidation before investing further. Uptime and reliability are non-negotiable requirements given his trading floor background.
 
@@ -148,7 +148,7 @@ Support relationship is strained. Two incidents in two months, both contributing
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Meeting Notes, Support Escalation Logs*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Meeting Notes, Support Escalation Logs*
 *Data freshness: CRM export 2026-03-28 | VVIP roster 2026-03-15 | Support logs current*
 *Risk assessment: HIGH -- briefing is retention-critical*
 *Next refresh: Automated pre-briefing (T-24h)*

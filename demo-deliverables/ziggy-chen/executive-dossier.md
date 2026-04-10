@@ -28,9 +28,9 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Silver |
-| **CAB Member Since** | Q1 2024 (stepped down Q4 2025) |
-| **CAB Board** | Alumni -- Financial Services Advisory Board |
-| **CAB Attendance (TTM)** | 1/3 (declining before departure) |
+| **SAB Member Since** | Q1 2024 (stepped down Q4 2025) |
+| **SAB Board** | Alumni -- Financial Services Advisory Board |
+| **SAB Attendance (TTM)** | 1/3 (declining before departure) |
 | **Executive Sponsor** | Aisha Patel, Director Strategic Accounts |
 | **Sponsor Last Touchpoint** | Feb 2026 (Defensive call -- renewal risk) |
 | **Engagement Score** | 55/100 (declining) |
@@ -47,7 +47,7 @@
 
 2. **Cost Optimization Under Board Pressure** -- Crypto market volatility has squeezed margins. Board has mandated a 15% infrastructure cost reduction. Ziggy is actively evaluating vendor consolidation and exploring cheaper alternatives. This is the primary driver of the renewal risk.
 
-3. **Reduced Vendor Dependency** -- Ziggy has publicly stated in CAB meetings that "too many eggs in one basket" is a strategic risk. Interested in multi-vendor architectures and escape hatches. AWS is actively courting them with this narrative.
+3. **Reduced Vendor Dependency** -- Ziggy has publicly stated in SAB meetings that "too many eggs in one basket" is a strategic risk. Interested in multi-vendor architectures and escape hatches. AWS is actively courting them with this narrative.
 
 ---
 
@@ -71,8 +71,8 @@
 |----------|------|--------|
 | **HIGH** | Contract Renewal Risk | $1.4M ARR renewal May 15, 2026. 2 months out. Ziggy has not committed to renew. Aisha's Feb defensive call did not get a commitment. |
 | **HIGH** | Competitive Threat | AWS Solution Architect embedded at Quantum Pretzel for 3 weeks. Working on a migration proposal. This is a full-court press from AWS. |
-| **HIGH** | Departed CAB | Ziggy left CAB in Q4 2025 citing 2 undelivered commitments (platform cost calculator, multi-vendor reference architecture). Stated reason was "loss of trust." |
-| **OPPORTUNITY** | Re-engagement Signal | In the Feb defensive call, Ziggy hinted at returning to CAB "if we demonstrate accountability." This is the retention opening. |
+| **HIGH** | Departed SAB | Ziggy left SAB in Q4 2025 citing 2 undelivered commitments (platform cost calculator, multi-vendor reference architecture). Stated reason was "loss of trust." |
+| **OPPORTUNITY** | Re-engagement Signal | In the Feb defensive call, Ziggy hinted at returning to SAB "if we demonstrate accountability." This is the retention opening. |
 
 ---
 
@@ -114,7 +114,7 @@ Support relationship is strained. Ziggy's team is filing more tickets and less s
 **Key messages:**
 1. Present concrete remediation for both dropped commitments (platform cost calculator and multi-vendor reference architecture) -- completed or in-flight
 2. Present a clear retention offer with specific accountability structure (e.g., named executive owner with monthly check-ins)
-3. Offer a CAB re-invitation with a guaranteed charter for follow-through
+3. Offer a SAB re-invitation with a guaranteed charter for follow-through
 4. Address cost optimization directly with a credible pricing conversation, not a sales pitch
 5. Do not bring anyone from account management or sales enablement to this briefing. Engineers and executives only.
 
@@ -124,10 +124,10 @@ Support relationship is strained. Ziggy's team is filing more tickets and less s
 - Afternoon start time. Ziggy does not do mornings.
 - Direct accountability -- name the person who owns each commitment going forward.
 
-**Relationship goal:** Save the $1.4M renewal by demonstrating accountability. Secure at minimum a renewal intent letter by end of briefing. Stretch goal: return to CAB and unlock the $340K tier upgrade.
+**Relationship goal:** Save the $1.4M renewal by demonstrating accountability. Secure at minimum a renewal intent letter by end of briefing. Stretch goal: return to SAB and unlock the $340K tier upgrade.
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Alumni Notes, Renewal Risk Analysis, Engagement History*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Alumni Notes, Renewal Risk Analysis, Engagement History*
 *Data freshness: CRM export 2026-04-08 | VVIP roster 2026-03-15 | Renewal risk updated 2026-04-01*
 *Next refresh: Automated pre-briefing (T-24h)*

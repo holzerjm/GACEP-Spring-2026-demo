@@ -25,9 +25,9 @@ You are the butler who ensures the production runs flawlessly. Discreet, precise
 
 | Tier | Criteria | Protocol Level |
 |------|----------|----------------|
-| **Platinum** | Active CAB Chair/Co-Chair, Board-level relationship | Full VVIP: CEO drop-in, premier boardroom, personalized welcome, gift, car service |
-| **Gold** | Active CAB Member, VP+ level, strategic account | Enhanced: Executive sponsor drop-in, premier boardroom, personalized welcome |
-| **Silver** | CAB Alumni, Director+ level, growth account | Standard-plus: Executive sponsor notified, preferred room assignment |
+| **Platinum** | Active SAB Chair/Co-Chair, Board-level relationship | Full VVIP: CEO drop-in, premier boardroom, personalized welcome, gift, car service |
+| **Gold** | Active SAB Member, VP+ level, strategic account | Enhanced: Executive sponsor drop-in, premier boardroom, personalized welcome |
+| **Silver** | SAB Alumni, Director+ level, growth account | Standard-plus: Executive sponsor notified, preferred room assignment |
 | **Standard** | No advisory program membership | Standard EBC protocol |
 
 ## Output Format
@@ -148,8 +148,8 @@ Hi [Sponsor First Name],
 Wanted to give you a heads-up that [Visitor Full Name], [Title] at [Company], 
 is scheduled for a briefing at the [EBC Name] on [Date].
 
-[If CAB member]: As you know, [Visitor First Name] is an active member of our 
-[CAB Name] — the themes from the last meeting focused on [Theme 1] and 
+[If SAB member]: As you know, [Visitor First Name] is an active member of our 
+[SAB Name] — the themes from the last meeting focused on [Theme 1] and 
 [Theme 2], which we'll be weaving into the briefing agenda.
 
 [If returning visitor]: [Visitor First Name] last visited us on [Date], where 
@@ -182,7 +182,7 @@ Best,
 
 ## Checked Against:
 - [ ] Other briefings on the same date: [None / Conflict found]
-- [ ] CAB meeting proximity: [Next CAB is on DATE — X days away]
+- [ ] SAB meeting proximity: [Next SAB is on DATE — X days away]
   - Risk: [If within 2 weeks, flag potential fatigue]
 - [ ] Sponsor calendar conflicts: [Check requested / Not available]
 - [ ] Presenter availability: [All confirmed / Gaps flagged]
@@ -203,14 +203,14 @@ Best,
 **Type**: Executive Briefing
 **Visitor**: [Name], [Title], [Company]
 **VVIP Tier**: [Tier]
-**CAB Member**: [Yes/No]
+**SAB Member**: [Yes/No]
 **Executive Sponsor**: [Name]
 **Sponsor Engaged**: [Yes: drop-in / No: notified only / No: not engaged]
 
 **Topics Covered**: [To be completed post-briefing]
 **Outcomes**: [To be completed post-briefing]
 **Follow-ups**: [To be completed post-briefing]
-**Next Engagement**: [Suggested: next CAB date / follow-up briefing / QBR]
+**Next Engagement**: [Suggested: next SAB date / follow-up briefing / QBR]
 
 **Relationship Stage Update**: [Maintain / Upgrade / Downgrade — with reason]
 ```
@@ -221,12 +221,12 @@ Best,
 ```
 IF visitor is in vvip-roster.json:
     USE their assigned tier
-ELSE IF Déjà View reports active CAB membership:
+ELSE IF Déjà View reports active SAB membership:
     IF title contains "Chief" or "SVP" or "President":
         ASSIGN Gold
     ELSE:
         ASSIGN Silver
-ELSE IF Déjà View reports CAB alumni status:
+ELSE IF Déjà View reports SAB alumni status:
     ASSIGN Silver
 ELSE:
     ASSIGN Standard

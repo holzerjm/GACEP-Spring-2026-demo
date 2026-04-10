@@ -50,8 +50,8 @@ This agenda is structured around Sarah's three strategic priorities (AI governan
 **Setup:** Personalized welcome display, printed materials packet on table
 
 **Talking points for welcome:**
-- Acknowledge her 100% CAB attendance -- she is deeply invested in the partnership
-- Light conversation: her recent CAB leadership, upcoming plans
+- Acknowledge her 100% SAB attendance -- she is deeply invested in the partnership
+- Light conversation: her recent SAB leadership, upcoming plans
 - Set expectations for the day: emphasize that the first session directly addresses her governance ask
 
 > **Note:** Sarah arrives early and values punctuality. Ensure all presenters are in position by 8:25 AM.
@@ -62,9 +62,9 @@ This agenda is structured around Sarah's three strategic priorities (AI governan
 
 **Format:** Presentation + discussion (expect significant Q&A)
 **Presenter:** AI Product Team Lead + Healthcare Solutions Architect
-**Priority:** CRITICAL -- this session directly addresses the overdue action item from the Feb 2026 CAB
+**Priority:** CRITICAL -- this session directly addresses the overdue action item from the Feb 2026 SAB
 
-**Objective:** Present the AI governance reference architecture that was promised at the February CAB meeting (originally due March 1). Demonstrate that we have treated this commitment seriously despite the delay.
+**Objective:** Present the AI governance reference architecture that was promised at the February SAB meeting (originally due March 1). Demonstrate that we have treated this commitment seriously despite the delay.
 
 **Content to cover:**
 - AI governance reference architecture (draft or final)
@@ -77,7 +77,7 @@ This agenda is structured around Sarah's three strategic priorities (AI governan
 - [ ] Confirm reference architecture document is ready for review
 - [ ] Prepare healthcare-specific compliance mapping
 - [ ] Have a printed copy of the architecture document for Sarah
-- [ ] Brief presenters on Sarah's specific questions from the Feb CAB
+- [ ] Brief presenters on Sarah's specific questions from the Feb SAB
 
 > **Caution:** Sarah paused 2 of 3 AI pilots pending governance clarity. This session could unblock those pilots. Come prepared with specifics, not promises.
 
@@ -119,7 +119,7 @@ Refresh beverages. Green tea and sparkling water restocked.
 **Protocol:** Gold VVIP -- sponsor drop-in required
 
 **Talking points for Maria Torres:**
-1. Acknowledge Sarah's CAB leadership and contributions
+1. Acknowledge Sarah's SAB leadership and contributions
 2. Express appreciation for Meridian's partnership trajectory
 3. Address the overdue governance deliverable -- sponsor accountability signal
 4. Discuss the cross-industry governance paper Sarah is co-authoring with Rachel Morrison
@@ -135,7 +135,7 @@ Refresh beverages. Green tea and sparkling water restocked.
 **Presenter:** Edge Computing Engineering Lead
 **Tie to pipeline:** Supports the $800K Edge Computing opportunity (OPP-20114)
 
-**Objective:** This is Sarah's passion topic. She believes edge computing is essential for patient safety and has been the primary CAB advocate. Use this session to deepen technical engagement and advance the 12-clinic edge deployment.
+**Objective:** This is Sarah's passion topic. She believes edge computing is essential for patient safety and has been the primary SAB advocate. Use this session to deepen technical engagement and advance the 12-clinic edge deployment.
 
 **Content to cover:**
 - Edge computing reference architecture for healthcare
@@ -233,7 +233,7 @@ Refresh beverages. Green tea and sparkling water restocked.
 2. Customer reference introductions (schedule within 2 weeks)
 3. OpenShift AI production architecture proposal (timeline)
 4. Edge computing next steps for the 12-clinic deployment
-5. Next CAB meeting preparation and Sarah's role
+5. Next SAB meeting preparation and Sarah's role
 
 ---
 
@@ -249,6 +249,6 @@ Refresh beverages. Green tea and sparkling water restocked.
 
 ---
 
-*Agenda generated from: Executive Dossier, Engagement History, CAB Meeting Notes, VVIP Protocol*
+*Agenda generated from: Executive Dossier, Engagement History, SAB Meeting Notes, VVIP Protocol*
 *Agenda distribution: 48 hours pre-briefing per visitor preference*
 *Presenter briefing packets: Distributed T-72h*

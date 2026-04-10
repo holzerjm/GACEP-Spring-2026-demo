@@ -67,7 +67,7 @@ This is a dual-track Platinum briefing. Luna attends the strategic innovation tr
 **Escort:** Direct walk to Premier Boardroom via executive route
 
 **Talking points:**
-- Acknowledge Luna's CAB Co-Vice-Chair role and her recent Apache NiFi contributions
+- Acknowledge Luna's SAB Co-Vice-Chair role and her recent Apache NiFi contributions
 - Welcome Colonel Drake formally with security clearance verification
 - Set expectations: "Today we will address the compliance findings AND demonstrate air-gapped deployment"
 
@@ -141,7 +141,7 @@ This is a dual-track Platinum briefing. Luna attends the strategic innovation tr
 **Catering:** Formal vegetarian plated lunch (Luna is vegetarian), earl grey tea, sparkling water
 
 **CEO Talking Points:**
-1. Thank Luna personally for her CAB Co-Vice-Chair contributions
+1. Thank Luna personally for her SAB Co-Vice-Chair contributions
 2. Acknowledge Colonel Drake's security leadership and partnership
 3. Express commitment to closing the NIST findings (personal commitment from CEO)
 4. Discuss GalactiCorp's multi-year vision and Red Hat's partnership role
@@ -210,7 +210,7 @@ This is a dual-track Platinum briefing. Luna attends the strategic innovation tr
 1. NIST 800-171 remediation document final delivery
 2. Satellite ground station proposal advancement
 3. Air-gapped deployment decision timeline
-4. Next CAB meeting preparation (Luna is Co-Vice-Chair)
+4. Next SAB meeting preparation (Luna is Co-Vice-Chair)
 5. Joint engineering working group formation
 
 ---
@@ -228,6 +228,6 @@ This is a dual-track Platinum briefing. Luna attends the strategic innovation tr
 
 ---
 
-*Agenda generated from: Executive Dossier, Security Audit Report, CAB Meeting Notes, Platinum VVIP Protocol*
+*Agenda generated from: Executive Dossier, Security Audit Report, SAB Meeting Notes, Platinum VVIP Protocol*
 *Agenda distribution: 7 days pre-briefing (Platinum lead time)*
 *Presenter briefing packets: Distributed T-72h*

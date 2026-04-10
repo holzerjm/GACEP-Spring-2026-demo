@@ -28,9 +28,9 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Gold |
-| **CAB Member Since** | Q2 2024 |
-| **CAB Board** | Strategic Technology Advisory Board |
-| **CAB Attendance (TTM)** | 4/4 (100%) |
+| **SAB Member Since** | Q2 2024 |
+| **SAB Board** | Strategic Technology Advisory Board |
+| **SAB Attendance (TTM)** | 4/4 (100%) |
 | **Executive Sponsor** | Maria Torres, VP Engineering |
 | **Sponsor Last Touchpoint** | Dec 2025 (Dinner at Red Hat Summit) |
 | **Engagement Score** | 92/100 |
@@ -43,7 +43,7 @@
 
 ### Top 3 Strategic Priorities
 
-1. **AI Governance in Regulated Healthcare** -- Leading the CAB's governance discussion; piloting 3 AI projects but paused 2 pending governance frameworks. Needs auditability, explainability, and open-source transparency for clinical decision support.
+1. **AI Governance in Regulated Healthcare** -- Leading the SAB's governance discussion; piloting 3 AI projects but paused 2 pending governance frameworks. Needs auditability, explainability, and open-source transparency for clinical decision support.
 
 2. **Edge Computing for Remote Patient Monitoring** -- Passionate advocate; Meridian exploring edge deployments across 12 regional clinics. Believes edge is non-negotiable for patient safety use cases. Co-leading a cross-industry edge working group with Rachel Morrison.
 
@@ -69,7 +69,7 @@
 
 | Priority | Flag | Detail |
 |----------|------|--------|
-| **HIGH** | OVERDUE Commitment | AI governance reference architecture promised at Feb 2026 CAB. Due March 1. Now 5 weeks overdue. Sarah tracks every action item. |
+| **HIGH** | OVERDUE Commitment | AI governance reference architecture promised at Feb 2026 SAB. Due March 1. Now 5 weeks overdue. Sarah tracks every action item. |
 | **MEDIUM** | OPEN Customer Reference | Edge computing customer reference connection promised Sept 2025. Still open after 7 months. |
 | **HIGH** | Contract Renewal | $3.8M ARR renewal Sept 2026 -- 5 months out. AI platform expansion ($1.2M) decision expected Q2. |
 | **LOW** | Untapped Stakeholder | Dr. Priya Kapoor (CMIO) has never been engaged. Opportunity for clinical AI use case briefing. |
@@ -81,7 +81,7 @@
 | Opportunity | Stage | Value | Close Date | Notes |
 |-------------|-------|-------|------------|-------|
 | AI Platform Expansion | Proposal | $1.2M | Q2 2026 | Pilot to production. Decision imminent. |
-| Edge Computing -- Remote Patient Monitoring | Discovery | $800K | Q4 2026 | Tied to Sarah's CAB advocacy. 12 clinics. |
+| Edge Computing -- Remote Patient Monitoring | Discovery | $800K | Q4 2026 | Tied to Sarah's SAB advocacy. 12 clinics. |
 
 **Total pipeline at risk**: $2.0M
 
@@ -120,6 +120,6 @@ Support relationship is healthy. No open escalations.
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Meeting Notes, Engagement History*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Meeting Notes, Engagement History*
 *Data freshness: CRM export 2026-03-28 | VVIP roster 2026-03-15 | Engagement log current*
 *Next refresh: Automated pre-briefing (T-24h)*

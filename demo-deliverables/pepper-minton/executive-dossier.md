@@ -28,9 +28,9 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Gold |
-| **CAB Member Since** | Q3 2024 |
-| **CAB Board** | Developer Experience Advisory Board |
-| **CAB Attendance (TTM)** | 3/3 (100%) |
+| **SAB Member Since** | Q3 2024 |
+| **SAB Board** | Developer Experience Advisory Board |
+| **SAB Attendance (TTM)** | 3/3 (100%) |
 | **Executive Sponsor** | Carlos Diaz, VP Developer Experience |
 | **Sponsor Last Touchpoint** | Jan 2026 (Post-incident bridge call) |
 | **Engagement Score** | 78/100 |
@@ -70,7 +70,7 @@
 | Priority | Flag | Detail |
 |----------|------|--------|
 | **HIGH** | P1 Production Outage | Recipe engine down 8 hours during TikTok viral surge in March 2026. 2M users affected. Auto-scaling did not trigger fast enough. Pepper publicly frustrated. |
-| **MEDIUM** | Overdue Architecture Review | Scaling architecture review was promised at last CAB (Jan 2026). Still outstanding. Pepper noted it in her post-incident summary. |
+| **MEDIUM** | Overdue Architecture Review | Scaling architecture review was promised at last SAB (Jan 2026). Still outstanding. Pepper noted it in her post-incident summary. |
 | **POSITIVE** | Public Case Study | Pepper's team published a blog case study praising OpenShift auto-scaling pre-incident. Strong public advocate. Incident complicates the story but does not kill it. |
 | **OPPORTUNITY** | Edge Computing Pipeline | $1.8M edge computing opportunity for smart kitchen device line. Q4 2026 launch timeline. Platform selection decision expected by June 2026. |
 
@@ -127,6 +127,6 @@ Support relationship is recovering post-incident. Pepper wants engineering-to-en
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Meeting Notes, Incident Post-Mortem, Engagement History*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Meeting Notes, Incident Post-Mortem, Engagement History*
 *Data freshness: CRM export 2026-04-05 | VVIP roster 2026-03-15 | Incident data current*
 *Next refresh: Automated pre-briefing (T-24h)*

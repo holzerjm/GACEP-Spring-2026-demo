@@ -28,11 +28,11 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Platinum (highest) |
-| **CAB Member Since** | Q3 2024 |
-| **CAB Role** | **Co-Chair**, Strategic Technology Advisory Board |
-| **CAB Attendance (TTM)** | 4/4 (100%) |
+| **SAB Member Since** | Q3 2024 |
+| **SAB Role** | **Co-Chair**, Strategic Technology Advisory Board |
+| **SAB Attendance (TTM)** | 4/4 (100%) |
 | **Executive Sponsor** | Elena Vasquez, SVP Global Industries |
-| **Sponsor Last Touchpoint** | Feb 2026 (CAB meeting co-facilitation) |
+| **Sponsor Last Touchpoint** | Feb 2026 (SAB meeting co-facilitation) |
 | **Sponsor Cadence** | Monthly standing call |
 | **Engagement Score** | 96/100 -- Champion level |
 | **Relationship Stage** | Champion (at risk of regression) |
@@ -44,7 +44,7 @@
 
 ### Why Rachel Morrison Matters
 
-Rachel is our single highest-value individual relationship across the strategic account portfolio. As CAB Co-Chair with a Champion-level engagement score of 96, she is the kind of advocate companies spend years cultivating. She drives platform decisions personally, champions our technology to her board, and has a $5M expansion deal in pipeline that she is sponsoring internally.
+Rachel is our single highest-value individual relationship across the strategic account portfolio. As SAB Co-Chair with a Champion-level engagement score of 96, she is the kind of advocate companies spend years cultivating. She drives platform decisions personally, champions our technology to her board, and has a $5M expansion deal in pipeline that she is sponsoring internally.
 
 **The March 28 P1 outage puts all of this at risk.** Her trust has been damaged at the worst possible time -- weeks before a board presentation where she planned to advocate for the $5M expansion. If we lose Rachel's confidence, we lose far more than one deal.
 
@@ -117,9 +117,9 @@ TerraScale has the broadest product deployment of the three strategic accounts, 
 
 | Name | Title | Engagement | Notes |
 |------|-------|-----------|-------|
-| **Rachel Morrison** | CTO | 96/100 | Champion. CAB Co-Chair. Internal sponsor for $5M deal. Trust damaged by P1 outage. |
+| **Rachel Morrison** | CTO | 96/100 | Champion. SAB Co-Chair. Internal sponsor for $5M deal. Trust damaged by P1 outage. |
 | **Anil Desai** | VP Platform Engineering | 82/100 | Rachel's right hand. Running internal RCA. Technically rigorous -- needs root cause detail. |
-| **Lisa Chang** | VP Grid Technology | 60/100 | Owns the grid modernization business case. Attended last CAB as Rachel's guest. Key for $5M deal. |
+| **Lisa Chang** | VP Grid Technology | 60/100 | Owns the grid modernization business case. Attended last SAB as Rachel's guest. Key for $5M deal. |
 | **Frank Reeves** | CISO | 48/100 | Involved in P1 post-mortem. Concerned about certificate management. Not yet engaged broadly. |
 
 ---
@@ -144,15 +144,15 @@ No active competitor threat identified for TerraScale. Rachel is a committed cha
 ### Rachel's Community Contributions
 
 Rachel is not just a customer -- she is a community leader:
-- **CAB Co-Chair** -- co-facilitated Q4 2025 and Q1 2026 meetings
-- Proposed the AI Governance and Hybrid Cloud themes for Q1 2026 CAB
+- **SAB Co-Chair** -- co-facilitated Q4 2025 and Q1 2026 meetings
+- Proposed the AI Governance and Hybrid Cloud themes for Q1 2026 SAB
 - Offered to co-author a cross-industry governance framework paper with Sarah Chen
-- Shared TerraScale's OT container security reference architecture with the CAB
+- Shared TerraScale's OT container security reference architecture with the SAB
 - Offered to share TerraScale's migration playbook with David Park's team
 - Co-leading a cross-industry edge computing working group with Sarah Chen
-- Stays 90+ minutes after CAB meetings for strategic debrief with program leadership
+- Stays 90+ minutes after SAB meetings for strategic debrief with program leadership
 
-This level of investment in the community is extraordinary. Losing her engagement would damage the entire CAB program, not just the TerraScale account.
+This level of investment in the community is extraordinary. Losing her engagement would damage the entire SAB program, not just the TerraScale account.
 
 ---
 
@@ -169,11 +169,11 @@ This level of investment in the community is extraordinary. Losing her engagemen
 
 **Relationship goal:** Restore Rachel's confidence in the partnership and give her the evidence she needs to remain our champion at the board level. Protect the $5M deal and the $4.5M ARR renewal.
 
-**The stakes:** If Rachel walks back her advocacy, we lose a $5M deal, a $4.5M renewal, a CAB Co-Chair, and the most influential champion in our strategic account portfolio. Treat this briefing accordingly.
+**The stakes:** If Rachel walks back her advocacy, we lose a $5M deal, a $4.5M renewal, a SAB Co-Chair, and the most influential champion in our strategic account portfolio. Treat this briefing accordingly.
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Meeting Notes, Engagement History, P1 Escalation Logs*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Meeting Notes, Engagement History, P1 Escalation Logs*
 *Data freshness: CRM export 2026-03-28 | VVIP roster 2026-03-15 | P1 status live*
 *Risk assessment: CRITICAL -- Platinum VVIP, Champion at risk, $6.8M pipeline*
 *Next refresh: Automated pre-briefing (T-24h) + live P1 status monitor*

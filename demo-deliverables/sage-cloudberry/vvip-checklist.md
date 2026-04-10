@@ -226,7 +226,7 @@
 - [ ] **Establish engagement score baseline** in CRM
 - [ ] **Establish relationship stage** (moving from Aware to Favorable)
 - [ ] **Schedule next touchpoint** with Sage (within 2 weeks)
-- [ ] **Consider CAB membership invitation** if platform decision goes our way
+- [ ] **Consider SAB membership invitation** if platform decision goes our way
 
 ### NPS & Feedback (T+3 days)
 

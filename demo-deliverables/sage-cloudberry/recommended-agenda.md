@@ -196,7 +196,7 @@ This is WonderPaws's first executive briefing with Red Hat. Sage is a former SRE
 - Sponsor assignment recommendations (healthcare/life sciences vertical with engineering background)
 - Next steps for the platform evaluation decision
 - Timeline for the $850K initial investment decision
-- CAB membership opportunity (if platform decision goes our way)
+- SAB membership opportunity (if platform decision goes our way)
 - Follow-up cadence
 
 **Close-out checklist:**

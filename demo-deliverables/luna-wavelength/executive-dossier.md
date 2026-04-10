@@ -28,9 +28,9 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | PLATINUM |
-| **CAB Member Since** | Q4 2024 |
-| **CAB Role** | Co-Vice-Chair, Aerospace & Defense Advisory Board |
-| **CAB Attendance (TTM)** | 4/4 (100%) |
+| **SAB Member Since** | Q4 2024 |
+| **SAB Role** | Co-Vice-Chair, Aerospace & Defense Advisory Board |
+| **SAB Attendance (TTM)** | 4/4 (100%) |
 | **Executive Sponsor** | Roberto Vega, SVP Public Sector |
 | **Sponsor Last Touchpoint** | Mar 2026 (Security audit readout) |
 | **Engagement Score** | 94/100 |
@@ -81,7 +81,7 @@
 |----------|------|--------|
 | **HIGH** | Security Blocker | CISO Colonel Drake is blocking $8M expansion due to 3 unresolved NIST 800-171 compliance findings. Must be addressed during this briefing. |
 | **HIGH** | Compliance Gaps | 3 NIST 800-171 compliance gaps found in Q1 2026 security audit: (1) audit log retention policy, (2) encryption key rotation, (3) supply chain attestation. |
-| **POSITIVE** | Platinum Champion | Luna is Platinum tier, engagement score 94, CAB Co-Vice-Chair. Strongest champion in the CAB. Has personally endorsed us to 3 other aerospace customers. |
+| **POSITIVE** | Platinum Champion | Luna is Platinum tier, engagement score 94, SAB Co-Vice-Chair. Strongest champion in the SAB. Has personally endorsed us to 3 other aerospace customers. |
 | **OPPORTUNITY** | $9.2M Pipeline | Combined: $8M satellite ground station edge computing + $1.2M air-gapped cluster deployment. Both tied to this briefing. |
 
 ---
@@ -141,6 +141,6 @@ Support relationship is excellent. Luna's team gives consistently high CSAT scor
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Meeting Notes, Security Audit Report, Engagement History*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Meeting Notes, Security Audit Report, Engagement History*
 *Data freshness: CRM export 2026-04-08 | VVIP roster 2026-03-15 | Security audit 2026-03-15*
 *Next refresh: Automated pre-briefing (T-24h)*

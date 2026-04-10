@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Navigation</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06070A;
+  --bg-card: #0F1117;
+  --bg-card-hover: #161820;
+  --gold: #FFC600;
+  --gold-dim: #B8900A;
+  --gold-glow: rgba(255,198,0,0.15);
+  --frontier: #6E9BFF;
+  --local: #4ADE80;
+  --red: #EE0000;
+  --text: #E8E8EC;
+  --text-dim: #8B8FA3;
+  --text-muted: #5A5E72;
+  --border: #1E2030;
+  --border-glow: #2A2E42;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+/* ═══════════════════ HEADER ═══════════════════ */
+.header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  color: var(--text-dim);
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.session-badge {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--gold);
+  background: rgba(255,198,0,0.08);
+  border: 1px solid rgba(255,198,0,0.2);
+  padding: 6px 14px;
+  border-radius: 4px;
+}
+
+/* ═══════════════════ SECTION HEADERS ═══════════════════ */
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 56px 0 20px;
+  position: relative;
+}
+
+.section-label::before, .section-label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 80px;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-label::before { left: calc(50% - 180px); }
+.section-label::after { right: calc(50% - 180px); }
+
+/* ═══════════════════ NAV CARDS ═══════════════════ */
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 18px;
+}
+
+.nav-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 26px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.nav-card.featured {
+  background: linear-gradient(180deg, var(--gold-glow) 0%, var(--bg-card) 100%);
+  border-color: rgba(255,198,0,0.25);
+}
+
+.nav-card.featured:hover {
+  border-color: rgba(255,198,0,0.5);
+  box-shadow: 0 8px 32px rgba(255,198,0,0.12);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--text);
+  flex: 1;
+}
+
+.card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.card-tag.live { color: var(--gold); border-color: rgba(255,198,0,0.3); background: rgba(255,198,0,0.05); }
+.card-tag.new { color: var(--local); border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.05); }
+.card-tag.docs { color: var(--frontier); border-color: rgba(110,155,255,0.3); background: rgba(110,155,255,0.05); }
+
+.card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+
+.card-arrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: auto;
+}
+
+/* ═══════════════════ PERSONA GALLERY ═══════════════════ */
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.persona-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.persona-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+}
+
+.persona-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.persona-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.persona-tier {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.persona-tier.platinum { color: #E8E8EC; background: rgba(232,232,236,0.1); border: 1px solid rgba(232,232,236,0.3); }
+.persona-tier.gold { color: var(--gold); background: rgba(255,198,0,0.08); border: 1px solid rgba(255,198,0,0.25); }
+.persona-tier.silver { color: #A3A3A3; background: rgba(163,163,163,0.08); border: 1px solid rgba(163,163,163,0.25); }
+.persona-tier.standard { color: var(--text-dim); background: rgba(139,143,163,0.08); border: 1px solid rgba(139,143,163,0.25); }
+
+.persona-role {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.persona-drama {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.persona-link {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.persona-link a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gold);
+  text-decoration: none;
+  padding: 3px 8px;
+  border: 1px solid rgba(255,198,0,0.2);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.persona-link a:hover {
+  background: rgba(255,198,0,0.08);
+  border-color: rgba(255,198,0,0.5);
+}
+
+/* ═══════════════════ FOOTER ═══════════════════ */
+.footer {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.footer .red { color: var(--red); }
+
+.github-link {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,198,0,0.4);
+  padding-bottom: 1px;
+  transition: all 0.2s ease;
+}
+
+.github-link:hover {
+  border-bottom-color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+@media (max-width: 720px) {
+  h1 { font-size: 32px; }
+  .container { padding: 32px 20px; }
+  .section-label::before, .section-label::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-row">
+      <img class="logo-icon" src="jmhclaw.png" alt="BriefingClaw">
+      <span class="logo-text">BriefingClaw</span>
+    </div>
+    <h1>Multi-Agent Executive Briefing Intelligence</h1>
+    <p class="subtitle">
+      Eight specialized AI agents orchestrate to transform a single briefing request
+      into a complete intelligence package &mdash; in approximately 90 seconds.
+      The connective tissue between your programs, automated.
+    </p>
+    <div class="session-badge">GACEP Spring 2026 &middot; Red Hat CTO Office</div>
+  </header>
+
+  <!-- LIVE DEMOS -->
+  <div class="section-label">Live Demos</div>
+  <div class="nav-grid">
+
+    <a href="briefingclaw-dashboard.html" class="nav-card featured">
+      <div class="card-header">
+        <span class="card-icon">&#127919;</span>
+        <span class="card-title">Live Demo Dashboard</span>
+        <span class="card-tag live">Featured</span>
+      </div>
+      <div class="card-desc">
+        Animated multi-agent pipeline with all 8 contact scenarios. Watch the agents work in real time, see critical flags surface, click any deliverable to view full content. Original dark theme.
+      </div>
+      <div class="card-arrow">Open dashboard &rarr;</div>
+    </a>
+
+    <a href="briefingclaw-dashboard-redhat.html" class="nav-card featured">
+      <div class="card-header">
+        <span class="card-icon">&#127919;</span>
+        <span class="card-title">Live Demo &mdash; Red Hat Edition</span>
+        <span class="card-tag live">Featured</span>
+      </div>
+      <div class="card-desc">
+        Same functionality, reskinned with official Red Hat design language: Red Hat Display fonts, PatternFly dark theme, Red Hat Red accent. Use this version for Red Hat-affiliated presentations.
+      </div>
+      <div class="card-arrow">Open Red Hat dashboard &rarr;</div>
+    </a>
+
+    <a href="briefingclaw-architecture.html" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128208;</span>
+        <span class="card-title">Architecture Diagram</span>
+        <span class="card-tag">Static</span>
+      </div>
+      <div class="card-desc">
+        Static visualization of the 8-agent architecture, three-phase execution flow, and infrastructure stack. Useful as a visual aid during presentations.
+      </div>
+      <div class="card-arrow">View architecture &rarr;</div>
+    </a>
+
+  </div>
+
+  <!-- CONTACT SCENARIOS / PERSONA GALLERY -->
+  <div class="section-label">Demo Personas (8 Scenarios)</div>
+  <div class="persona-grid">
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Sarah Chen</span>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-role">CIO &middot; Meridian Health Systems</div>
+      <div class="persona-drama">Overdue AI governance commitment from Feb SAB. Trust-critical miss before briefing.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=sarah-chen">Open</a>
+        <a href="demo-deliverables/sarah-chen/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">David Park</span>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-role">SVP Technology &middot; Apex Financial Group</div>
+      <div class="persona-drama">Failed migration, Azure pitching, 3-month renewal at risk. Account in crisis.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=david-park">Open</a>
+        <a href="demo-deliverables/david-park/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Rachel Morrison</span>
+        <span class="persona-tier platinum">Platinum</span>
+      </div>
+      <div class="persona-role">CTO &middot; TerraScale Energy</div>
+      <div class="persona-drama">P1 outage damaged trust, board presentation in 30 days. Champion under stress.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=rachel-morrison">Open</a>
+        <a href="demo-deliverables/rachel-morrison/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Pepper Minton</span>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-role">CTO &middot; SnackStack Technologies</div>
+      <div class="persona-drama">Recipe AI went viral on TikTok. Production crashed under 10x load. NO POWERPOINT.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=pepper-minton">Open</a>
+        <a href="demo-deliverables/pepper-minton/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Ziggy Stardust-Chen</span>
+        <span class="persona-tier silver">Silver</span>
+      </div>
+      <div class="persona-role">VP Platform Eng &middot; Quantum Pretzel Corp</div>
+      <div class="persona-drama">Left SAB feeling ignored. AWS courting hard. Renewal in 2 months. Win-back briefing.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=ziggy-chen">Open</a>
+        <a href="demo-deliverables/ziggy-chen/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Luna Wavelength</span>
+        <span class="persona-tier platinum">Platinum</span>
+      </div>
+      <div class="persona-role">CIO &middot; GalactiCorp Space Industries</div>
+      <div class="persona-drama">$8M satellite deal blocked by CISO security audit. Champion needs unblock plan.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=luna-wavelength">Open</a>
+        <a href="demo-deliverables/luna-wavelength/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Max Bandwidth</span>
+        <span class="persona-tier gold">Gold</span>
+      </div>
+      <div class="persona-role">SVP Digital &middot; Thunderbolt Logistics</div>
+      <div class="persona-drama">AI pilot saved $4M/year. VP Operations blocking scale-up. Needs board ammunition.</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=max-bandwidth">Open</a>
+        <a href="demo-deliverables/max-bandwidth/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <div class="persona-header">
+        <span class="persona-name">Sage Cloudberry</span>
+        <span class="persona-tier standard">Standard</span>
+      </div>
+      <div class="persona-role">CIO &middot; WonderPaws Pet Wellness</div>
+      <div class="persona-drama">First briefing ever. Evaluating Red Hat vs VMware. Brings therapy dog "Kubernetes".</div>
+      <div class="persona-link">
+        <a href="briefingclaw-dashboard.html?contact=sage-cloudberry">Open</a>
+        <a href="demo-deliverables/sage-cloudberry/executive-dossier.md">Dossier</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DOCUMENTATION -->
+  <div class="section-label">Documentation</div>
+  <div class="nav-grid">
+
+    <a href="README.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128214;</span>
+        <span class="card-title">README</span>
+        <span class="card-tag docs">Overview</span>
+      </div>
+      <div class="card-desc">
+        Project overview, agent roster, demo scenarios, quick start, and links to all other documentation.
+      </div>
+      <div class="card-arrow">Read overview &rarr;</div>
+    </a>
+
+    <a href="USER-GUIDE.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128221;</span>
+        <span class="card-title">User Guide</span>
+        <span class="card-tag docs">How-to</span>
+      </div>
+      <div class="card-desc">
+        Practical guide for installing, configuring, and operating BriefingClaw. Includes troubleshooting and customization.
+      </div>
+      <div class="card-arrow">Open guide &rarr;</div>
+    </a>
+
+    <a href="docs/ARCHITECTURE.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128295;</span>
+        <span class="card-title">Architecture</span>
+        <span class="card-tag docs">Design</span>
+      </div>
+      <div class="card-desc">
+        Multi-agent system design, agent roster details, execution flow, infrastructure stack, and file structure.
+      </div>
+      <div class="card-arrow">View design &rarr;</div>
+    </a>
+
+    <a href="docs/BUILD-GUIDE.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128736;</span>
+        <span class="card-title">Build Guide</span>
+        <span class="card-tag docs">Setup</span>
+      </div>
+      <div class="card-desc">
+        Step-by-step instructions from prerequisites through conference-day checklist.
+      </div>
+      <div class="card-arrow">Build it &rarr;</div>
+    </a>
+
+    <a href="docs/DEMO-SCRIPT.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#127908;</span>
+        <span class="card-title">Demo Script</span>
+        <span class="card-tag docs">Presentation</span>
+      </div>
+      <div class="card-desc">
+        Beat-by-beat presentation script with timing marks, narrative cues, money lines, and contingency plans.
+      </div>
+      <div class="card-arrow">Read script &rarr;</div>
+    </a>
+
+    <a href="docs/ENTERPRISE-DEPLOYMENT.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#127970;</span>
+        <span class="card-title">Enterprise Deployment</span>
+        <span class="card-tag new">New</span>
+      </div>
+      <div class="card-desc">
+        How to take BriefingClaw from demo to production. CRM integration, security, model routing, and operational runbook.
+      </div>
+      <div class="card-arrow">Deploy at scale &rarr;</div>
+    </a>
+
+  </div>
+
+  <!-- AGENTS -->
+  <div class="section-label">The Eight Agents</div>
+  <div class="nav-grid">
+
+    <a href="agents/orchestrator/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#127919;</span>
+        <span class="card-title">Oprah-tor</span>
+        <span class="card-tag">Frontier</span>
+      </div>
+      <div class="card-desc">Orchestrator. Decomposes requests, dispatches the team, validates outputs, synthesizes the final package.</div>
+    </a>
+
+    <a href="agents/executive-research/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128269;</span>
+        <span class="card-title">Sherlock Ohms</span>
+        <span class="card-tag">Frontier</span>
+      </div>
+      <div class="card-desc">Executive Research. Deep person-level intelligence: career arc, recent activity, communication style.</div>
+    </a>
+
+    <a href="agents/account-intelligence/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#127970;</span>
+        <span class="card-title">Bloom-borg</span>
+        <span class="card-tag">Frontier</span>
+      </div>
+      <div class="card-desc">Account Intelligence. Company-level analysis: financials, tech stack, competitive landscape.</div>
+    </a>
+
+    <a href="agents/sab-historian/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128203;</span>
+        <span class="card-title">D&eacute;j&agrave; View</span>
+        <span class="card-tag">Local</span>
+      </div>
+      <div class="card-desc">SAB Historian. Cross-program memory: SAB membership, past briefings, engagement stage, open follow-ups.</div>
+    </a>
+
+    <a href="agents/briefing-architect/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#128196;</span>
+        <span class="card-title">Draft Punk</span>
+        <span class="card-tag">Local</span>
+      </div>
+      <div class="card-desc">Briefing Architect. Document assembly: dossier, backgrounder, talking points, agenda, conversation starters.</div>
+    </a>
+
+    <a href="agents/vvip-protocol/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#11088;</span>
+        <span class="card-title">Alfred Bitworth</span>
+        <span class="card-tag">Local</span>
+      </div>
+      <div class="card-desc">VVIP Protocol. Tier verification, checklist generation, sponsor alerts, scheduling, engagement logging.</div>
+    </a>
+
+    <a href="agents/sponsor-coach/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#129309;</span>
+        <span class="card-title">Sponsor Coach</span>
+        <span class="card-tag new">New</span>
+      </div>
+      <div class="card-desc">Readiness Check. Assesses whether the assigned sponsor is prepared for their role. Recommends a single pre-briefing action.</div>
+    </a>
+
+    <a href="agents/oddsfather/SKILL.md" class="nav-card">
+      <div class="card-header">
+        <span class="card-icon">&#127922;</span>
+        <span class="card-title">The Oddsfather</span>
+        <span class="card-tag new">New</span>
+      </div>
+      <div class="card-desc">Success Predictor. Final probability score on briefing outcome. Five-dimensional scoring with the three actions that move the odds.</div>
+    </a>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Built with open source &middot; Runs on your laptop &middot; <span class="red">Red Hat</span> CTO Office &middot; GACEP Spring 2026<br>
+    <a class="github-link" href="https://github.com/holzerjm/GACEP-Spring-2026-demo" target="_blank">github.com/holzerjm/GACEP-Spring-2026-demo</a>
+  </div>
+
+</div>
+
+</body>
+</html>

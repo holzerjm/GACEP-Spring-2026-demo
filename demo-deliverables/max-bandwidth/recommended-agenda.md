@@ -49,7 +49,7 @@ This briefing is engineered to produce a single tangible output: a board present
 **Setup:** Large primary display with live dashboard, whiteboards on wheels, multiple monitors for dashboard comparison
 
 **Talking points for welcome:**
-- Acknowledge his 100% CAB attendance and the validated $4M pilot ROI
+- Acknowledge his 100% SAB attendance and the validated $4M pilot ROI
 - Light conversation: Chicago sports, his StarCraft gaming days, his dashboard obsession
 - Set expectations: "Today is data-first. Everything you see is live, not a screenshot."
 
@@ -181,12 +181,12 @@ This briefing is engineered to produce a single tangible output: a board present
 
 **Talking points for Diana Kim:**
 1. Acknowledge Max's pilot success and the validated ROI
-2. Express appreciation for his CAB contributions
+2. Express appreciation for his SAB contributions
 3. Discuss the board approval timeline and how Red Hat can support
 4. Address Helen Gearshift's resistance strategically
 5. Contract renewal conversation (November 2026)
 
-> **Prep for Diana:** Brief her on the $4M pilot ROI numbers so she can congratulate Max credibly. She was at the Chicago CAB dinner in Feb -- reference that warm relationship.
+> **Prep for Diana:** Brief her on the $4M pilot ROI numbers so she can congratulate Max credibly. She was at the Chicago SAB dinner in Feb -- reference that warm relationship.
 
 ---
 
@@ -251,7 +251,7 @@ This briefing is engineered to produce a single tangible output: a board present
 
 ---
 
-*Agenda generated from: Executive Dossier, Pilot ROI Data, CAB Meeting Notes, VVIP Protocol*
+*Agenda generated from: Executive Dossier, Pilot ROI Data, SAB Meeting Notes, VVIP Protocol*
 *Agenda distribution: 48 hours pre-briefing*
 *Presenter briefing packets: Distributed T-72h*
 *Board presentation kit: Pre-assembled T-48h*

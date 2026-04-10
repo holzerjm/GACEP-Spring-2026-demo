@@ -6,7 +6,7 @@
       "title": "Chief Information Officer",
       "company": "Meridian Health Systems",
       "tier": "Gold",
-      "tier_reason": "Active CAB Member, C-level, Strategic Account",
+      "tier_reason": "Active SAB Member, C-level, Strategic Account",
       "member_since": "2024-06-15",
       "cab_board": "Strategic Technology Advisory Board",
       "executive_sponsor": {
@@ -41,7 +41,7 @@
       "title": "SVP Technology",
       "company": "Apex Financial Group",
       "tier": "Gold",
-      "tier_reason": "Active CAB Member, SVP level, Strategic Account",
+      "tier_reason": "Active SAB Member, SVP level, Strategic Account",
       "member_since": "2023-03-01",
       "cab_board": "Strategic Technology Advisory Board",
       "executive_sponsor": {
@@ -78,7 +78,7 @@
       "title": "CTO",
       "company": "TerraScale Energy",
       "tier": "Platinum",
-      "tier_reason": "CAB Co-Chair, C-level, Board-level relationship",
+      "tier_reason": "SAB Co-Chair, C-level, Board-level relationship",
       "member_since": "2024-09-01",
       "cab_board": "Strategic Technology Advisory Board",
       "executive_sponsor": {
@@ -87,7 +87,7 @@
         "email": "evasquez@redhat.com",
         "sponsor_since": "2024-09-15",
         "last_touchpoint": "2026-02-12",
-        "last_touchpoint_type": "CAB meeting co-facilitation",
+        "last_touchpoint_type": "SAB meeting co-facilitation",
         "engagement_level": "Highly Active"
       },
       "protocol_requirements": {
@@ -108,7 +108,7 @@
         "scheduling": "Flexible but prefers full-day engagements when she travels. Will fly in the night before for morning starts. Prefers 8:00 AM starts with working breakfast.",
         "meeting_format": "Prefers interactive workshop format over presentations. Include hands-on technical content whenever possible. She has been known to open a laptop and test things live during briefings.",
         "travel": "Flies from Houston. Prefers Raleigh EBC for in-person. Will attend Boston or NYC for multi-day events. Always books an extra day for 1:1 follow-ups.",
-        "notes": "Former Apache Kafka committer — deeply embedded in open source community. Respects engineering rigor above all. Currently the strongest champion in the CAB — treat with highest care. After the March 28 P1 outage, she needs to see genuine accountability and a credible RCA before her board presentation in May. Do NOT send junior engineers to present to her. She remembers every commitment made and follows up on all action items. Has a standing monthly call with Elena Vasquez."
+        "notes": "Former Apache Kafka committer — deeply embedded in open source community. Respects engineering rigor above all. Currently the strongest champion in the SAB — treat with highest care. After the March 28 P1 outage, she needs to see genuine accountability and a credible RCA before her board presentation in May. Do NOT send junior engineers to present to her. She remembers every commitment made and follows up on all action items. Has a standing monthly call with Elena Vasquez."
       }
     },
     {
@@ -116,7 +116,7 @@
       "title": "CTO",
       "company": "SnackStack Technologies",
       "tier": "Gold",
-      "tier_reason": "Active CAB Member, C-level, Strategic Account",
+      "tier_reason": "Active SAB Member, C-level, Strategic Account",
       "member_since": "2024-09-01",
       "cab_board": "Strategic Technology Advisory Board",
       "executive_sponsor": {
@@ -152,7 +152,7 @@
       "title": "VP Platform Engineering",
       "company": "Quantum Pretzel Corp",
       "tier": "Silver",
-      "tier_reason": "CAB Alumni (stepped down Q4 2025), VP level, Growth Account",
+      "tier_reason": "SAB Alumni (stepped down Q4 2025), VP level, Growth Account",
       "member_since": "2024-01-15",
       "member_until": "2025-12-01",
       "cab_status": "Alumni — departed Q4 2025",
@@ -182,7 +182,7 @@
         "communication_style": "Remote-first. Prefers video calls over in-person. Allergic to corporate jargon — be direct and technical. Night owl — absolutely no meetings before noon.",
         "scheduling": "Afternoon or evening only. No meetings before 12:00 PM. Prefers 2:00-5:00 PM ET window. Will accept late evening calls (up to 9 PM).",
         "meeting_format": "Video calls with screen sharing. Prefers technical deep-dives over executive overviews. Wants to see real product, not roadmap slides.",
-        "notes": "Left the CAB after feeling that feedback was not being acted on — specifically frustrated about support response times for FinTech-specific workloads. Wants to feel valued as a partner, not just a customer. Competitor AWS is actively courting with an EKS migration package. Contract renewal in 2 months — re-engagement is time-critical. Do NOT lead with a sales pitch — lead with listening."
+        "notes": "Left the SAB after feeling that feedback was not being acted on — specifically frustrated about support response times for FinTech-specific workloads. Wants to feel valued as a partner, not just a customer. Competitor AWS is actively courting with an EKS migration package. Contract renewal in 2 months — re-engagement is time-critical. Do NOT lead with a sales pitch — lead with listening."
       }
     },
     {
@@ -190,7 +190,7 @@
       "title": "Chief Innovation Officer",
       "company": "GalactiCorp Space Industries",
       "tier": "Platinum",
-      "tier_reason": "CAB Co-Vice-Chair, C-level, Strategic Account, $8M pipeline",
+      "tier_reason": "SAB Co-Vice-Chair, C-level, Strategic Account, $8M pipeline",
       "member_since": "2025-03-01",
       "cab_board": "Strategic Technology Advisory Board",
       "executive_sponsor": {
@@ -228,7 +228,7 @@
       "title": "SVP Digital Transformation",
       "company": "Thunderbolt Logistics",
       "tier": "Gold",
-      "tier_reason": "Active CAB Member, SVP level, Strategic Account",
+      "tier_reason": "Active SAB Member, SVP level, Strategic Account",
       "member_since": "2025-01-15",
       "cab_board": "Strategic Technology Advisory Board",
       "executive_sponsor": {
@@ -293,14 +293,14 @@
         "communication_style": "Casual, technical, hands-on. Former SRE who still reviews pull requests. Will ask deeply technical questions but in a friendly, collaborative tone. Does not stand on ceremony — first-name basis, casual dress.",
         "scheduling": "Prefers morning meetings (8:00-10:00 AM start). Energy drops after lunch. Avoid afternoon-heavy agendas.",
         "meeting_format": "Hands-on demos are essential. Sage will want to see a live OpenShift environment. Include a comparison framework (Red Hat vs. VMware) but make it objective, not a sales pitch. Sage will see through bias instantly.",
-        "notes": "First executive briefing ever — this is a land-and-expand opportunity. If it goes well, CAB nomination follows. Sage is evaluating Red Hat vs. VMware for their container platform. Former SRE with deep Kubernetes expertise — do not oversimplify. Brings golden retriever Biscuit to all meetings. Casual dress code. Small but fast-growing company with big ambitions in veterinary AI. No sponsor assigned yet — recommend assigning someone from the healthcare vertical."
+        "notes": "First executive briefing ever — this is a land-and-expand opportunity. If it goes well, SAB nomination follows. Sage is evaluating Red Hat vs. VMware for their container platform. Former SRE with deep Kubernetes expertise — do not oversimplify. Brings golden retriever Biscuit to all meetings. Casual dress code. Small but fast-growing company with big ambitions in veterinary AI. No sponsor assigned yet — recommend assigning someone from the healthcare vertical."
       }
     }
   ],
   "tier_definitions": {
-    "Platinum": "CAB Chair/Co-Chair, Board-level relationship. Full VVIP protocol.",
-    "Gold": "Active CAB Member, VP+ level, strategic account. Enhanced protocol.",
-    "Silver": "CAB Alumni, Director+ level, growth account. Standard-plus protocol.",
+    "Platinum": "SAB Chair/Co-Chair, Board-level relationship. Full VVIP protocol.",
+    "Gold": "Active SAB Member, VP+ level, strategic account. Enhanced protocol.",
+    "Silver": "SAB Alumni, Director+ level, growth account. Standard-plus protocol.",
     "Standard": "No advisory program membership. Standard EBC protocol."
   },
   "last_updated": "2026-03-15T09:00:00Z"

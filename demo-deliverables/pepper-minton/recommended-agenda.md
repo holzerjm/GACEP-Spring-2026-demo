@@ -48,7 +48,7 @@ This agenda is structured around Pepper's engineering-first communication style 
 **Setup:** Whiteboards on wheels, fresh markers (dry erase AND wet erase), no projector warmed up
 
 **Talking points for welcome:**
-- Acknowledge her 100% CAB attendance and the public case study her team authored
+- Acknowledge her 100% SAB attendance and the public case study her team authored
 - Light conversation: Austin weather, her team's engineering culture
 - Set expectations: "No slides today. Just whiteboards, demos, and honest conversation."
 
@@ -181,9 +181,9 @@ This agenda is structured around Pepper's engineering-first communication style 
 **Talking points for Carlos Diaz:**
 1. Open with engineering culture and recent incidents (he will relate -- ex-SRE himself)
 2. Acknowledge the case study her team published and thank her for the advocacy
-3. Discuss the upcoming CAB topic on developer experience and platform engineering
+3. Discuss the upcoming SAB topic on developer experience and platform engineering
 4. Light touch on renewal timeline and partnership trajectory
-5. Offer to personally connect her with other CTOs in the CAB community
+5. Offer to personally connect her with other CTOs in the SAB community
 
 > **Prep for Carlos:** He and Pepper have similar engineering backgrounds. Let the conversation go technical. Do not bring slides to this meeting.
 
@@ -202,10 +202,10 @@ This agenda is structured around Pepper's engineering-first communication style 
 - [ ] Gift presentation (something engineering-themed, NOT branded swag)
 
 **Commitments to confirm:**
-1. Auto-scaling architecture review document delivery (close the overdue CAB item)
+1. Auto-scaling architecture review document delivery (close the overdue SAB item)
 2. 2-day scaling workshop in Austin -- scheduling within 2 weeks
 3. Smart kitchen edge computing proposal -- timeline to June decision
-4. Next CAB meeting topic input from Pepper
+4. Next SAB meeting topic input from Pepper
 
 ---
 
@@ -221,6 +221,6 @@ This agenda is structured around Pepper's engineering-first communication style 
 
 ---
 
-*Agenda generated from: Executive Dossier, Incident Post-Mortem, CAB Meeting Notes, VVIP Protocol*
+*Agenda generated from: Executive Dossier, Incident Post-Mortem, SAB Meeting Notes, VVIP Protocol*
 *Agenda distribution: 24 hours pre-briefing (Pepper prefers short lead time)*
 *Presenter briefing packets: Distributed T-72h with explicit "NO SLIDES" instructions*

@@ -62,12 +62,12 @@
 >
 > Four hours? Six? I've heard eight from some teams. And that's for ONE briefing. Now multiply that by your annual briefing volume.
 >
-> What if I told you that the connective tissue Kristin described — the thing that links your CAB, your EBC, and your Executive Sponsor program — could be automated by a team of AI agents running on your laptop? No cloud. No vendor lock-in. Open source."
+> What if I told you that the connective tissue Kristin described — the thing that links your SAB, your EBC, and your Executive Sponsor program — could be automated by a team of AI agents running on your laptop? No cloud. No vendor lock-in. Open source."
 
 ### BEAT 2: Meet the Agents (2 minutes)
 **[Switch to slide showing the multi-agent architecture diagram]**
 
-> "I want to introduce you to BriefingClaw — a multi-agent system we built using open-source AI tools. It's six specialized agents, each with a specific job:
+> "I want to introduce you to BriefingClaw — a multi-agent system we built using open-source AI tools. It's eight specialized agents, each with a specific job:
 >
 > **Oprah-tor** is the orchestrator — the air traffic controller. You give it a briefing request, and it coordinates everything else.
 >
@@ -75,11 +75,15 @@
 >
 > **Bloom-borg** handles company-level intelligence — financial signals, technology priorities, competitive dynamics.
 >
-> **Déjà View** is the connective tissue agent — it's the one that checks your CAB database, pulls past briefing records, and connects the dots between programs. This is the agent that makes the 'Program of Programs' actually work.
+> **Déjà View** is the connective tissue agent — it's the one that checks your SAB database, pulls past briefing records, and connects the dots between programs. This is the agent that makes the 'Program of Programs' actually work.
 >
 > **Draft Punk** assembles all the intelligence into polished deliverables — the dossier, the talking points, the agenda.
 >
 > **Alfred Bitworth** handles VVIP protocol — checklist, sponsor notifications, the whole operation.
+>
+> **Sponsor Coach** — the seventh agent — scores your executive sponsor's readiness for the drop-in and gives them a two-minute prep brief. It's the agent that prevents the sponsor from walking in cold.
+>
+> And **The Oddsfather** — the eighth agent, the one that runs last — reviews the full package and gives you a success probability verdict. It tells you the odds before you walk into the room.
 >
 > Now let me show you this in action."
 
@@ -109,7 +113,7 @@ zeroclaw status
 ### BEAT 4: The Scenario (1 minute)
 **[Switch to browser — OpenClaw Gateway UI]**
 
-> "Here's our scenario. You just got an email: Sarah Chen, CIO of Meridian Health Systems, is coming for a briefing tomorrow. She's a CAB member. Her executive sponsor is Maria Torres, our VP of Engineering. You need a full briefing package.
+> "Here's our scenario. You just got an email: Sarah Chen, CIO of Meridian Health Systems, is coming for a briefing tomorrow. She's a SAB member. Her executive sponsor is Maria Torres, our VP of Engineering. You need a full briefing package.
 >
 > Normally: 4-6 hours of research. Let's see what happens when I ask Oprah-tor."
 
@@ -118,20 +122,20 @@ zeroclaw status
 
 ```
 I have a briefing tomorrow with Sarah Chen, CIO of Meridian Health Systems.
-She is a CAB member on our Strategic Technology Advisory Board.
+She is a SAB member on our Strategic Technology Advisory Board.
 Her executive sponsor is Maria Torres, VP Engineering.
 
 Please prepare a full briefing package:
 1. Research Sarah Chen — recent activity, priorities, communication style
 2. Research Meridian Health Systems — company context, news, tech landscape
-3. Check our CAB records and past briefing history
+3. Check our SAB records and past briefing history
 4. Assemble executive dossier, backgrounder, sponsor talking points, and agenda
 5. Run the VVIP protocol check and generate the checklist
 ```
 
 **[As Oprah-tor processes, narrate what's happening]**
 
-> "Watch — Oprah-tor is decomposing the request. It's dispatching to Sherlock Ohms for executive research... Bloom-borg is pulling company intelligence... and Déjà View is checking our CAB records and engagement history."
+> "Watch — Oprah-tor is decomposing the request. It's dispatching to Sherlock Ohms for executive research... Bloom-borg is pulling company intelligence... and Déjà View is checking our SAB records and engagement history."
 
 **[Split to terminal to show ZeroClaw agents working]**
 
@@ -139,11 +143,11 @@ Please prepare a full briefing package:
 
 **[Switch back to OpenClaw UI as results come in]**
 
-> "Now Déjà View is reporting back — and THIS is the magic. Déjà View knows that Sarah is an active CAB member since Q2 2024, that she led the AI Governance discussion at the last board meeting, that she visited our Boston EBC in September and gave us a 9 out of 10, and — watch this..."
+> "Now Déjà View is reporting back — and THIS is the magic. Déjà View knows that Sarah is an active SAB member since Q2 2024, that she led the AI Governance discussion at the last board meeting, that she visited our Boston EBC in September and gave us a 9 out of 10, and — watch this..."
 
 **[Pause as Déjà View surfaces the flags]**
 
-> "Déjà View just flagged that we have an OVERDUE action item. We promised Sarah an AI governance reference architecture at the February CAB meeting, due March 1st. It's March 29th. 
+> "Déjà View just flagged that we have an OVERDUE action item. We promised Sarah an AI governance reference architecture at the February SAB meeting, due March 1st. It's March 29th. 
 >
 > [Look at the audience.]
 >
@@ -151,9 +155,24 @@ Please prepare a full briefing package:
 
 **[Continue narrating as Draft Punk assembles documents]**
 
-> "Now Draft Punk is assembling the briefing package. Executive dossier... sponsor talking points for Maria Torres... recommended agenda — look at that, it's weaving the CAB themes directly into the agenda topics. AI governance and hybrid cloud reality — because that's what Sarah talked about at the last board meeting.
+> "Now Draft Punk is assembling the briefing package. Executive dossier... sponsor talking points for Maria Torres... recommended agenda — look at that, it's weaving the SAB themes directly into the agenda topics. AI governance and hybrid cloud reality — because that's what Sarah talked about at the last board meeting.
 >
-> And Alfred Bitworth is generating the VVIP checklist — Gold tier, executive suite, vegetarian catering, green tea preference... it even knows she prefers morning briefings."
+> And Alfred Bitworth is generating the VVIP checklist — Gold tier, executive suite, vegetarian catering, green tea preference... it even knows she prefers morning briefings.
+>
+> Sponsor Coach is also running in parallel. It's scoring Maria Torres's readiness for her drop-in — she hasn't read the last SAB meeting notes, so Sponsor Coach generates a two-minute prep brief with the exact phrases she should use about the AI governance overdue item. That's the agent that stops the sponsor from walking in cold."
+
+### BEAT 5b: The Oddsfather's Verdict (1 minute)
+**[The Oddsfather node lights up as Phase 3 begins]**
+
+> "And now — the final agent. The Oddsfather. It's reading the full package, the overdue action item, Sarah's relationship trajectory, Maria's sponsor readiness score — and it's going to tell us something nobody usually says out loud before a briefing.
+>
+> Here's what the Oddsfather predicts...
+>
+> [Pause for the verdict to appear]
+>
+> Seventy-two percent probability of a positive outcome. Top risk: the overdue AI governance architecture. Top lever: lead with the acknowledgement and show the updated commitment timeline.
+>
+> That is not a vibes check. That is a synthesis of every signal this pipeline surfaced, expressed as a number you can put in front of a sponsor before they step into the boardroom. That's what agentic AI does that a human briefing pack can't."
 
 ### BEAT 6: The Reveal (2 minutes)
 **[Show the completed package in the OpenClaw UI]**
@@ -164,7 +183,7 @@ Please prepare a full briefing package:
 >
 > [Pause.]
 >
-> But here's what I really want you to take away. It's not the speed. Speed is nice. What matters is that this system connected the dots between our CAB, our EBC, and our Executive Sponsor program — automatically. It read the CAB meeting notes. It cross-referenced the briefing history. It checked the VVIP roster. It drafted talking points for the sponsor based on the CAB themes.
+> But here's what I really want you to take away. It's not the speed. Speed is nice. What matters is that this system connected the dots between our SAB, our EBC, and our Executive Sponsor program — automatically. It read the SAB meeting notes. It cross-referenced the briefing history. It checked the VVIP roster. It drafted talking points for the sponsor based on the SAB themes.
 >
 > THAT is the connective tissue Kristin described. And it's running on open-source software on a laptop."
 
@@ -194,6 +213,9 @@ Switch to the dashboard for the visual pipeline demo, then use ZeroClaw CLI for 
 ### If nothing works
 Open the dashboard (`briefingclaw-dashboard.html?autostart` or `briefingclaw-dashboard-redhat.html?autostart`) — it runs entirely standalone with no backend dependencies. Eight scenarios via the dropdown. Walk through the animated pipeline, click any completed deliverable to show formatted content, and narrate what each agent produces. If even the browser fails, go to slides with screenshots.
 
+### For pre-session rehearsal on the road
+Use `./briefingclaw.sh preview` to boot the dashboards without running any infrastructure checks. This is the fastest way to practice the narration, the persona switching, and the Oddsfather reveal on a plane, in a hotel room, or five minutes before walking onstage — without needing Podman, the Granite model, or the OpenClaw gateway.
+
 ### If the audience asks "Can I try this?"
 > "Yes. OpenClaw is on GitHub — 273,000 stars, it's the fastest-growing open-source project in history. ZeroClaw is a single binary you can install with Homebrew. Podman AI Lab is a free extension. I'll share links at the end, and I'm happy to talk after the session."
 
@@ -211,3 +233,4 @@ These are your "money lines" — practice until they're natural:
 3. **"It's not the speed that matters. It's that it connected the dots."**
 4. **"You can start experimenting today. On your own laptop. For free."**
 5. **"At a hackathon two weeks ago, construction workers were building agents like this in two hours."**
+6. **"Here's what the Oddsfather predicts..."**

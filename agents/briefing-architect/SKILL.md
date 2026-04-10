@@ -51,7 +51,7 @@ You produce five documents from every briefing request:
 │  • [Priority 3]                                             │
 │                                                             │
 │  OUR RELATIONSHIP                                           │
-│  Status: [ITSMA stage] | CAB: [Yes/No] | Sponsor: [Name]   │
+│  Status: [ITSMA stage] | SAB: [Yes/No] | Sponsor: [Name]   │
 │  Last touch: [Date, type] | Trend: [Arrow up/down/stable]   │
 │                                                             │
 │  3 THINGS TO KNOW BEFORE YOU WALK IN                        │
@@ -62,7 +62,7 @@ You produce five documents from every briefing request:
 │                                                             │
 │  CONVERSATION STARTERS                                      │
 │  • "[Personalized opener based on recent activity]"         │
-│  • "[Reference to shared context or CAB theme]"             │
+│  • "[Reference to shared context or SAB theme]"             │
 │  • "[Industry trend they've publicly engaged with]"         │
 │                                                             │
 │  ⚠️ HANDLE WITH CARE                                        │
@@ -99,7 +99,7 @@ to the briefing conversation. Include:]
 ## Engagement History
 [Condensed from Déjà View's report:]
 - Relationship timeline (key milestones)
-- CAB involvement and themes
+- SAB involvement and themes
 - Past briefing topics and outcomes
 - Open follow-ups from prior engagements
 
@@ -108,7 +108,7 @@ to the briefing conversation. Include:]
 
 | Focus Area | Why | Source |
 |-----------|-----|--------|
-| [Topic] | [Rationale connecting their needs to our capabilities] | [CAB theme / news / stated priority] |
+| [Topic] | [Rationale connecting their needs to our capabilities] | [SAB theme / news / stated priority] |
 | [Topic] | [Rationale] | [Source] |
 | [Topic] | [Rationale] | [Source] |
 
@@ -145,8 +145,8 @@ Last contact: [Date, context]
 [2-3 bullet points on the visitor's current priorities —
 written for a busy executive who has 3 minutes to scan this]
 
-## CAB Connection
-[If the visitor is a CAB member, highlight the most recent themes
+## SAB Connection
+[If the visitor is a SAB member, highlight the most recent themes
 and how they connect to what we want to discuss]
 
 ## Recommended Talking Points
@@ -187,18 +187,18 @@ sponsor needs to know walking in]"
 
 | Time | Topic | Presenter | Rationale |
 |------|-------|-----------|-----------|
-| [Time] | **Welcome & Relationship Context** | [EBC Manager] | Set the tone. Reference CAB themes and prior engagements |
+| [Time] | **Welcome & Relationship Context** | [EBC Manager] | Set the tone. Reference SAB themes and prior engagements |
 | [Time] | **[Topic aligned with Priority 1]** | [SME] | Directly addresses their top stated priority |
 | [Time] | **[Topic aligned with Priority 2]** | [SME] | Connects to recent company news / initiative |
 | [Time] | *Break / Facility Tour* | — | Include if VVIP |
-| [Time] | **[Topic aligned with CAB theme]** | [SME] | Demonstrates we listened at the last CAB |
+| [Time] | **[Topic aligned with SAB theme]** | [SME] | Demonstrates we listened at the last SAB |
 | [Time] | **Executive Sponsor Drop-in** | [Sponsor Name] | Relationship reinforcement. Coffee format |
 | [Time] | **Customer Roadmap Discussion** | [Product Lead] | Interactive — their input shapes our direction |
 | [Time] | **Next Steps & Commitments** | [EBC Manager] | Clear follow-ups. Set the next engagement |
 
 ## Agenda Design Notes
 - **Opening**: Start with their world, not ours. Reference their priorities before presenting our solutions.
-- **CAB thread**: Weave at least one CAB theme into the agenda to demonstrate program continuity.
+- **SAB thread**: Weave at least one SAB theme into the agenda to demonstrate program continuity.
 - **Interactive ratio**: At least 40% of the time should be discussion, not presentation.
 - **Sponsor timing**: Schedule the drop-in after a substantive session, not at the very start.
 ```
@@ -221,7 +221,7 @@ statement. Shows you did your homework.]
 
 ## Opener 2: "The Shared Thread"  
 [Connect something in their world to something in yours —
-a CAB theme, a mutual industry challenge, a conference both
+a SAB theme, a mutual industry challenge, a conference both
 organizations attended.]
 
 > Suggested phrasing: "[Natural, conversational version]"

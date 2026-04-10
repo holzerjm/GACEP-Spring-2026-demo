@@ -43,6 +43,8 @@ You need at minimum:
 - **One frontier LLM provider** — Anthropic (Claude), OpenAI (GPT), or Google (Gemini)
 - **Tavily API key** — for web search capabilities used by Sherlock Ohms and Bloom-borg
 
+> **Tip:** After cloning, open `index.html` in a browser to navigate between all demo pages and resources. It's the fastest way to get oriented.
+
 Sign up for keys at:
 - Anthropic: https://console.anthropic.com
 - OpenAI: https://platform.openai.com
@@ -177,6 +179,8 @@ Check that the OpenClaw config references are correct:
 ./briefingclaw.sh status
 ```
 
+For quick rehearsal without booting infrastructure: `./briefingclaw.sh preview`. This opens the dashboards in a browser and lets you rehearse the demo beats against the animated simulation. It skips all the Podman/model/OpenClaw health checks and is ideal for practicing narration, timing, and persona switching at your desk or on a plane.
+
 ### Option B — Manual startup
 
 ```bash
@@ -216,7 +220,7 @@ curl -s http://127.0.0.1:18789/health | jq .
 
 ```
 I have a briefing tomorrow with Sarah Chen, CIO of Meridian Health Systems.
-She is a CAB member. Her executive sponsor is Maria Torres.
+She is a SAB member. Her executive sponsor is Maria Torres.
 ```
 
 4. Oprah-tor will:
@@ -259,12 +263,13 @@ open "briefingclaw-dashboard.html?autostart"
 
 | Section | Description |
 |---------|-------------|
-| **Pipeline Visualization** | Top section. Shows all 6 agents as animated nodes with particle flow along connection paths. Agents glow when working and get a green checkmark when complete. |
-| **Control Bar** | Pre-populated briefing request, "Start Demo" and "Reset" buttons, elapsed timer. |
+| **Pipeline Visualization** | Top section. Shows all 8 agents as animated nodes with particle flow along connection paths. Agents glow when working and get a green checkmark when complete. |
+| **Control Bar** | Pre-populated briefing request, "Start Demo" and "Reset" buttons, elapsed timer, mode badge (LIVE / LOCAL ONLY / SIMULATED), and PDF Export button. |
 | **Infrastructure Status** | Bottom-left panel. Pulsing status dots for Podman, Granite 8B, OpenClaw, and ZeroClaw. Green = connected, red = disconnected. |
 | **Agent Activity** | Bottom-right panel. Scrolling log with typewriter animation showing each agent's work in real time. |
-| **Deliverables** | 8 cards that light up gold as each document is completed (0/8 to 8/8). |
+| **Deliverables** | Cards that light up gold as each document is completed. Completed cards show risk badges summarizing the outcome and are clickable to open the full formatted document. |
 | **Critical Flags** | Slide-in alerts for overdue action items, open follow-ups, and opportunities. |
+| **Footer** | Contains a GitHub repository link for attendees who want to try the system themselves. |
 
 ### Keyboard Shortcuts
 
@@ -273,15 +278,39 @@ open "briefingclaw-dashboard.html?autostart"
 | Space / Enter | Start the demo simulation |
 | Escape | Reset to initial state |
 | F | Toggle fullscreen (ideal for projectors) |
+| T | Download telemetry JSON for the current session |
 
-### Live vs. Simulated Mode
+### Risk Badges on Deliverable Cards
 
-The dashboard polls `http://127.0.0.1:8001` (Granite model) and `http://127.0.0.1:18789` (OpenClaw gateway) every 5 seconds.
+Completed deliverable cards show a coloured badge summarising the outcome so the audience can read the story at a glance without opening each card:
 
-- **LIVE** (green badge): Both services are responding. Infrastructure dots show green.
-- **SIMULATED** (gold badge): Services are not running. Infrastructure dots show red.
+| Badge colour | Meaning |
+|--------------|---------|
+| Red | Critical — an overdue commitment, escalation, or blocker surfaced in the briefing |
+| Amber | Warning — an open follow-up, unresolved risk, or stress signal |
+| Green | Positive — strong relationship signals, untapped opportunities, champion momentum |
 
-The animated simulation runs identically in both modes. It is a scripted 42-second sequence sourced from the real demo data files, designed to match the timing of the live demo script.
+Badges appear as each card completes and carry the same colour into the PDF export.
+
+### PDF Export
+
+A **PDF Export** button in the control bar produces a printable briefing package for the currently selected persona. The export includes the executive dossier, backgrounder, talking points, agenda, VVIP protocol checklist, sponsor readiness brief, and the Oddsfather's success verdict. Use this to hand a polished artefact to attendees who ask to take the output home.
+
+### Mode Badge: LIVE / LOCAL ONLY / SIMULATED
+
+The dashboard polls `http://127.0.0.1:8001` (Granite model) and `http://127.0.0.1:18789` (OpenClaw gateway) every 5 seconds and shows one of three mode badges in the header:
+
+| Badge | Meaning |
+|-------|---------|
+| **LIVE** (green) | Both the Granite 8B model and the OpenClaw gateway are responding. Full stack available. |
+| **LOCAL ONLY** (amber) | Granite 8B is reachable but the OpenClaw gateway is down. Local agents (Deja View, Draft Punk, Alfred Bitworth, Sponsor Coach, The Oddsfather) can still run via direct model calls; frontier agents are unavailable. |
+| **SIMULATED** (gold) | Neither service is responding. The animated scripted sequence runs standalone with no backend. |
+
+The animated simulation runs identically in all three modes. It is a scripted 42-second sequence sourced from the real demo data files, designed to match the timing of the live demo script.
+
+### Telemetry Logging
+
+Every session event — button clicks, persona switches, phase transitions, mode changes, PDF exports — is captured to the browser's `localStorage` as a rolling telemetry log. Press **T** at any time to download the full session log as JSON. This is useful for debugging a rehearsal that went sideways, for comparing timing across venues, and for post-session instrumentation reviews.
 
 ### Contact Dropdown
 
@@ -293,7 +322,7 @@ The dashboard includes a dropdown selector to switch between three demo scenario
 | David Park | Apex Financial Group | Gold | Retention crisis, Azure competitor, failed migration |
 | Rachel Morrison | TerraScale Energy | Platinum | P1 outage, champion under stress, board presentation |
 | Pepper Minton | SnackStack Technologies | Gold | Viral TikTok scaling crisis, production crashed |
-| Ziggy Stardust-Chen | Quantum Pretzel Corp | Silver | CAB alumni win-back, AWS courting, renewal at risk |
+| Ziggy Stardust-Chen | Quantum Pretzel Corp | Silver | SAB alumni win-back, AWS courting, renewal at risk |
 | Luna Wavelength | GalactiCorp Space Industries | Platinum | $8M deal blocked by CISO security audit |
 | Max Bandwidth | Thunderbolt Logistics | Gold | AI pilot $4M savings, VP Ops blocking scale-up |
 | Sage Cloudberry | WonderPaws Pet Wellness | Standard | First briefing, evaluating Red Hat vs VMware |
@@ -333,6 +362,7 @@ The `briefingclaw.sh` script provides an interactive menu for managing the entir
 | `./briefingclaw.sh stop` | Stops the OpenClaw container and optionally the model server. |
 | `./briefingclaw.sh status` | Displays system health: Podman status, model serving, API key configuration, container state. |
 | `./briefingclaw.sh demo` | Sets up the full demo environment with pre-configured terminal tabs and browser window. |
+| `./briefingclaw.sh preview` | Rehearsal mode. Opens the dashboards without running any infrastructure checks, so you can practise narration, timing, and persona switching against the animated simulation. |
 | `./briefingclaw.sh preflight` | Conference-day checklist. Run 30 minutes before your session. Validates all components. |
 | `./briefingclaw.sh sherlock "<query>"` | Run Sherlock Ohms standalone for executive research. |
 | `./briefingclaw.sh bloomborg "<query>"` | Run Bloom-borg standalone for company research. |
@@ -378,12 +408,12 @@ zeroclaw agent -p bloom-borg
 
 Produces: company brief with business overview, financials, recent news, technology landscape, competitive dynamics, and briefing relevance.
 
-### Deja View (CAB Historian)
+### Deja View (SAB Historian)
 
 Runs inside the OpenClaw container. Accessed through the Oprah-tor orchestrator or directly via the OpenClaw gateway API.
 
 Reads from workspace files:
-- `cab-meeting-notes.md`
+- `sab-meeting-notes.md`
 - `engagement-history.md`
 - `crm-export.json`
 - `vvip-roster.json`
@@ -395,6 +425,14 @@ Runs inside the OpenClaw container. Receives synthesized intelligence from Oprah
 ### Alfred Bitworth (VVIP Protocol)
 
 Runs inside the OpenClaw container. Reads VVIP roster and engagement history to generate protocol checklists and sponsor alerts.
+
+### Sponsor Coach
+
+Runs inside the OpenClaw container. Scores the executive sponsor's readiness for the drop-in, flags coaching gaps, and produces a short prep brief the sponsor can read in under two minutes.
+
+### The Oddsfather
+
+Runs inside the OpenClaw container during Phase 3. Reviews the full deliverable package and the critical flags to generate a success probability verdict with the top risks and top levers that could shift the outcome.
 
 ---
 
@@ -410,7 +448,7 @@ A complete briefing package contains the following deliverables:
 | **Briefing Backgrounder** | Comprehensive prep document weaving executive research, company intel, and engagement history | 2 pages |
 | **Sponsor Talking Points** | Prep sheet for the executive sponsor's drop-in, with context, relationship notes, and suggested topics | 1 page |
 | **Recommended Agenda** | Time-blocked agenda with rationale for each session, informed by visitor interests and engagement history | 1 page |
-| **Conversation Starters** | Three personalized, non-generic openers drawn from recent activity, shared interests, or CAB themes | Short list |
+| **Conversation Starters** | Three personalized, non-generic openers drawn from recent activity, shared interests, or SAB themes | Short list |
 
 ### From Alfred Bitworth
 
@@ -419,6 +457,18 @@ A complete briefing package contains the following deliverables:
 | **VVIP Protocol Checklist** | Actionable checklist with assignees and deadlines covering pre-briefing setup, day-of arrival, and post-briefing follow-up |
 | **Sponsor Alert Draft** | Email template for notifying the executive sponsor with context and talking points reference |
 | **Engagement Log Entry** | Structured record of the upcoming briefing for future cross-program reference |
+
+### From Sponsor Coach
+
+| Deliverable | Description |
+|-------------|-------------|
+| **Sponsor Readiness Brief** | Short coaching brief with the sponsor's readiness score, what to review before the drop-in, what to avoid, and the exact phrases that should show up in the conversation |
+
+### From The Oddsfather
+
+| Deliverable | Description |
+|-------------|-------------|
+| **Success Probability Verdict** | Percentage likelihood of a successful briefing outcome, plain-language verdict, top 3 risks, and top 3 levers that could shift the outcome |
 
 ### Critical Flags
 
@@ -445,14 +495,14 @@ The repository includes simulated data for eight demo scenarios — three seriou
 | David Park | Apex Financial | Financial Services | Gold | Failed migration, Azure threat, renewal at risk |
 | Rachel Morrison | TerraScale Energy | Energy/Utilities | Platinum | P1 outage, champion credibility at stake |
 | Pepper Minton | SnackStack Technologies | Food Tech | Gold | Viral TikTok crash, scaling crisis |
-| Ziggy Stardust-Chen | Quantum Pretzel Corp | FinTech/Crypto | Silver | CAB alumni, AWS courting, broken promises |
+| Ziggy Stardust-Chen | Quantum Pretzel Corp | FinTech/Crypto | Silver | SAB alumni, AWS courting, broken promises |
 | Luna Wavelength | GalactiCorp Space Industries | Aerospace | Platinum | $8M deal blocked by CISO |
 | Max Bandwidth | Thunderbolt Logistics | Supply Chain | Gold | AI champion vs internal politics |
 | Sage Cloudberry | WonderPaws Pet Wellness | Veterinary | Standard | First briefing, greenfield opportunity |
 
 ### Data Files
 
-**cab-meeting-notes.md** — Q1 2026 and Q4 2025 board meetings with 8 contacts. Sarah led AI Governance, David led Hybrid Cloud, Rachel co-chairs, Pepper/Luna/Max contributed. Includes alumni roster (Ziggy).
+**sab-meeting-notes.md** — Q1 2026 and Q4 2025 Strategic Advisory Board meetings with 8 contacts. Sarah led AI Governance, David led Hybrid Cloud, Rachel co-chairs, Pepper/Luna/Max contributed. Includes alumni roster (Ziggy).
 
 **crm-export.json** — Eight account records with 20+ contacts, open opportunities, and support escalations. Ranges from $780M (WonderPaws) to $14.5B (GalactiCorp).
 
@@ -481,7 +531,7 @@ To adapt the demo for a different scenario, edit the files in `demo-data/`. The 
 
 Key consistency rules:
 - Names and companies must match across all four data files
-- CAB meeting dates in `cab-meeting-notes.md` should align with entries in `engagement-history.md`
+- SAB meeting dates in `sab-meeting-notes.md` should align with entries in `engagement-history.md`
 - VVIP roster entries should reference contacts that exist in `crm-export.json`
 - Each contact should have distinct relationship challenges and engagement history
 - Overdue action items, open follow-ups, and escalations provide the "dramatic tension"
@@ -609,9 +659,9 @@ Edit `config/.env` to switch providers. Then update the model references:
 ### Modifying VVIP tiers
 
 Edit `demo-data/vvip-roster.json`. The four tiers are:
-- **Platinum** — CAB Chair/Co-Chair, board-level executives
-- **Gold** — Active CAB members, VP+ at strategic accounts
-- **Silver** — CAB alumni, Director+ at growth accounts
+- **Platinum** — SAB Chair/Co-Chair, board-level executives
+- **Gold** — Active SAB members, VP+ at strategic accounts
+- **Silver** — SAB alumni, Director+ at growth accounts
 - **Standard** — No advisory membership
 
 Each tier maps to a specific protocol level in Alfred Bitworth's checklist generation.

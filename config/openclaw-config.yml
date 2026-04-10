@@ -60,7 +60,7 @@ routing:
   
   # Per-skill overrides: data agents use local model
   overrides:
-    cab-historian: "local"        # Déjà View — reads local CAB files
+    sab-historian: "local"        # Déjà View — reads local SAB files
     briefing-architect: "local"   # Draft Punk — assembles from existing intel
     vvip-protocol: "local"        # Alfred Bitworth — checklist from local roster
 
@@ -85,11 +85,11 @@ skills:
       priority: 1
       model: "frontier"        # Complex orchestration logic
     
-    - name: "cab-historian"
-      file: "cab-historian.md"
+    - name: "sab-historian"
+      file: "sab-historian.md"
       priority: 2
       model: "local"           # Private data — stays on device
-      triggers: ["CAB", "advisory board", "engagement history", "past briefing"]
+      triggers: ["SAB", "advisory board", "engagement history", "past briefing"]
     
     - name: "briefing-architect"
       file: "briefing-architect.md"
@@ -109,8 +109,8 @@ skills:
 workspace:
   directory: "/app/workspace"
   files:
-    - path: "cab-meeting-notes.md"
-      description: "CAB meeting records and themes"
+    - path: "sab-meeting-notes.md"
+      description: "SAB meeting records and themes"
     - path: "crm-export.json"
       description: "CRM account data, contacts, opportunities"
     - path: "vvip-roster.json"

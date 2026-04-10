@@ -8,7 +8,7 @@
 ---
 
 **Visitor:** Ziggy Stardust-Chen, VP Platform Engineering, Quantum Pretzel Corp
-**VVIP Tier:** Silver (CAB Alumni)
+**VVIP Tier:** Silver (SAB Alumni)
 **Date:** TBD (pending scheduling -- afternoon only)
 **Location:** Raleigh Executive Briefing Center -- Casual Meeting Room (OR remote, visitor's choice)
 **Executive Sponsor:** Aisha Patel, Director Strategic Accounts
@@ -18,7 +18,7 @@
 
 ### Agenda Overview
 
-This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 months out and AWS has an SA embedded at Quantum Pretzel. The entire day is organized around one goal: rebuilding accountability. The briefing opens with direct acknowledgment of the two dropped CAB commitments and presents a concrete remediation plan. Every session is designed to demonstrate reliability, not to pitch. Afternoon-only format respects Ziggy's schedule (night owl, no morning meetings). Remote attendance is offered as an equal option.
+This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 months out and AWS has an SA embedded at Quantum Pretzel. The entire day is organized around one goal: rebuilding accountability. The briefing opens with direct acknowledgment of the two dropped SAB commitments and presents a concrete remediation plan. Every session is designed to demonstrate reliability, not to pitch. Afternoon-only format respects Ziggy's schedule (night owl, no morning meetings). Remote attendance is offered as an equal option.
 
 ---
 
@@ -48,7 +48,7 @@ This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 month
 - Do NOT open with "how was your flight" -- Ziggy may be remote
 - Light conversation about the crypto market, engineering culture, open-source projects
 - Do NOT pitch anything during lunch. This is relationship time, not sales time.
-- Acknowledge Ziggy's past CAB contributions sincerely (without over-praising)
+- Acknowledge Ziggy's past SAB contributions sincerely (without over-praising)
 
 > **Critical:** Offer remote attendance at briefing confirmation. If Ziggy chooses remote, the full agenda runs via video with the same materials.
 
@@ -66,7 +66,7 @@ This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 month
 - **Commitment #1: Platform Cost Calculator** -- Present the finished tool (or working beta). Demo it live. Hand over access credentials.
 - **Commitment #2: Multi-Vendor Reference Architecture** -- Present the completed reference architecture. Acknowledge this was promised Q2 2025 and is now late. Explain what caused the delay. Do not make excuses.
 - **New accountability structure:** Named executive owner (Aisha or named replacement) with monthly check-ins, tracked publicly in shared doc
-- **CAB re-invitation offer:** With a guaranteed charter for follow-through on all future commitments
+- **SAB re-invitation offer:** With a guaranteed charter for follow-through on all future commitments
 
 **Preparation requirements:**
 - [ ] Platform cost calculator must be working end-to-end (demo it live)
@@ -133,9 +133,9 @@ This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 month
 **Protocol:** Silver VVIP -- sponsor drop-in for retention conversation
 
 **Talking points for Aisha Patel:**
-1. Open with direct apology for the dropped CAB commitments -- personal accountability
+1. Open with direct apology for the dropped SAB commitments -- personal accountability
 2. Confirm the new accountability structure and your personal ownership
-3. Discuss what it would take for Ziggy to return to CAB
+3. Discuss what it would take for Ziggy to return to SAB
 4. Ask directly: "What do you need from us to renew?"
 5. Do not leave without a clear answer or a clear next step
 
@@ -152,7 +152,7 @@ This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 month
 - [ ] Confirm three things in writing before Ziggy leaves:
   1. The new accountability charter with named owners
   2. The renewal conversation timeline (decision by when?)
-  3. The CAB re-invitation next steps
+  3. The SAB re-invitation next steps
 - [ ] Short handshake and goodbye
 - [ ] NO gift presentation (Silver alumni tier does not require it and Ziggy would find it awkward given the circumstances)
 - [ ] Send all materials digitally within 24 hours
@@ -165,13 +165,13 @@ This is a retention briefing, not a sales briefing. The $1.4M renewal is 2 month
 |--------|--------|
 | Dropped commitments closed | 2/2 (cost calculator + multi-vendor arch) |
 | Renewal intent | Verbal renewal intent confirmed or clear blocker identified |
-| CAB re-engagement | Explicit interest in returning |
+| SAB re-engagement | Explicit interest in returning |
 | AWS competitive threat | Neutralized or contained |
 | Relationship stage | Halt decline; establish clear path forward |
 
 ---
 
-*Agenda generated from: Executive Dossier, CAB Alumni Notes, Renewal Risk Analysis, Competitive Intelligence*
+*Agenda generated from: Executive Dossier, SAB Alumni Notes, Renewal Risk Analysis, Competitive Intelligence*
 *Agenda distribution: 48 hours pre-briefing*
 *Presenter briefing packets: Distributed T-72h with explicit "NO SALES LANGUAGE" instructions*
 *Remote attendance option: Offered at scheduling, equal quality experience guaranteed*

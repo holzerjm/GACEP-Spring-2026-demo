@@ -35,7 +35,7 @@
           "stage": "Discovery",
           "value": "$800K",
           "close_date": "2026-Q4",
-          "notes": "Edge deployment for 12 regional clinics. Tied to Sarah Chen's edge computing advocacy at CAB."
+          "notes": "Edge deployment for 12 regional clinics. Tied to Sarah Chen's edge computing advocacy at SAB."
         }
       ],
       "recent_support_escalations": [
@@ -60,7 +60,7 @@
           "cab_member": true,
           "executive_sponsor": "Maria Torres, VP Engineering",
           "last_activity": "2026-02-12",
-          "last_activity_type": "CAB Meeting",
+          "last_activity_type": "SAB Meeting",
           "preferred_communication": "Email, then in-person",
           "notes": "Strong advocate. Technical background (former developer). Values transparency and open source. Direct communicator — appreciates candor over polish."
         },
@@ -154,7 +154,7 @@
           "cab_member": true,
           "executive_sponsor": "James Kim, VP Financial Services",
           "last_activity": "2026-02-12",
-          "last_activity_type": "CAB Meeting",
+          "last_activity_type": "SAB Meeting",
           "preferred_communication": "Phone, then in-person. Does not respond well to long emails.",
           "notes": "Pragmatic decision-maker. Former Wall Street infrastructure lead. Intensely focused on uptime and reliability. Currently frustrated with failed migration — needs confidence rebuild. Competitor Azure presenting to Apex board next week."
         },
@@ -279,8 +279,8 @@
           "engagement_score": 60,
           "cab_member": false,
           "last_activity": "2026-02-12",
-          "last_activity_type": "CAB Meeting (observer)",
-          "notes": "Owns the grid modernization business case. Attended last CAB as Rachel's guest to observe. Key stakeholder for the $5M deal."
+          "last_activity_type": "SAB Meeting (observer)",
+          "notes": "Owns the grid modernization business case. Attended last SAB as Rachel's guest to observe. Key stakeholder for the $5M deal."
         },
         {
           "contact_id": "CON-9304",
@@ -404,7 +404,7 @@
           "stage": "Negotiation",
           "value": "$1.4M",
           "close_date": "2026-06-15",
-          "notes": "Contract renewal with proposed expansion. At risk — Ziggy Stardust-Chen stepped down from CAB in Q4 2025 and competitor AWS is aggressively pitching EKS migration. Renewal is the immediate priority."
+          "notes": "Contract renewal with proposed expansion. At risk — Ziggy Stardust-Chen stepped down from SAB in Q4 2025 and competitor AWS is aggressively pitching EKS migration. Renewal is the immediate priority."
         }
       ],
       "recent_support_escalations": [
@@ -441,7 +441,7 @@
           "last_activity": "2026-02-10",
           "last_activity_type": "Support Escalation",
           "preferred_communication": "Video call only — no meetings before noon (night owl). Allergic to corporate jargon — be direct and technical.",
-          "notes": "Remote-first advocate. Former CAB member who left feeling ignored. Competitor AWS is actively courting with EKS migration offer. Contract renewal in 2 months. Wants to feel valued — re-engagement is possible but requires genuine effort, not a sales pitch."
+          "notes": "Remote-first advocate. Former SAB member who left feeling ignored. Competitor AWS is actively courting with EKS migration offer. Contract renewal in 2 months. Wants to feel valued — re-engagement is possible but requires genuine effort, not a sales pitch."
         },
         {
           "contact_id": "CON-9602",
@@ -695,7 +695,7 @@
           "last_activity": "2026-03-28",
           "last_activity_type": "Introductory Call",
           "preferred_communication": "Prefers morning meetings (before 10 AM). Casual style. Brings their golden retriever Biscuit to all meetings (therapy dog).",
-          "notes": "Former SRE — deeply technical CIO who still reviews pull requests. Vegan, drinks matcha lattes. First executive briefing ever with Red Hat. Evaluating us vs. VMware. Very hands-on — will want to see a live OpenShift demo. No executive sponsor assigned yet — opportunity to assign one. If briefing goes well, CAB nomination follows."
+          "notes": "Former SRE — deeply technical CIO who still reviews pull requests. Vegan, drinks matcha lattes. First executive briefing ever with Red Hat. Evaluating us vs. VMware. Very hands-on — will want to see a live OpenShift demo. No executive sponsor assigned yet — opportunity to assign one. If briefing goes well, SAB nomination follows."
         },
         {
           "contact_id": "CON-9902",

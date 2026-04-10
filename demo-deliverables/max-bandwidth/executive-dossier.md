@@ -28,11 +28,11 @@
 | Field | Detail |
 |-------|--------|
 | **VVIP Tier** | Gold |
-| **CAB Member Since** | Q1 2025 |
-| **CAB Board** | Transportation & Logistics Advisory Board |
-| **CAB Attendance (TTM)** | 4/4 (100%) |
+| **SAB Member Since** | Q1 2025 |
+| **SAB Board** | Transportation & Logistics Advisory Board |
+| **SAB Attendance (TTM)** | 4/4 (100%) |
 | **Executive Sponsor** | Diana Kim, VP Transportation & Logistics |
-| **Sponsor Last Touchpoint** | Feb 2026 (CAB dinner in Chicago) |
+| **Sponsor Last Touchpoint** | Feb 2026 (SAB dinner in Chicago) |
 | **Engagement Score** | 81/100 (improving) |
 | **Relationship Stage** | Trusted |
 | **Role in Buying Center** | Economic Buyer + Executive Sponsor Internal |
@@ -139,6 +139,6 @@ Support relationship is healthy. Max's team engages directly with support engine
 
 ---
 
-*Compiled from: CRM (Salesforce), VVIP Roster, CAB Meeting Notes, Pilot ROI Data, Engagement History*
+*Compiled from: CRM (Salesforce), VVIP Roster, SAB Meeting Notes, Pilot ROI Data, Engagement History*
 *Data freshness: CRM export 2026-04-08 | VVIP roster 2026-03-15 | Pilot data current as of 2026-04-01*
 *Next refresh: Automated pre-briefing (T-24h)*

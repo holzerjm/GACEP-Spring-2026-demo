@@ -51,7 +51,7 @@ services:
     volumes:
       # Skill files — mounted read-only
       - ./agents/orchestrator/SKILL.md:/app/skills/orchestrator/SKILL.md:ro
-      - ./agents/cab-historian/SKILL.md:/app/skills/cab-historian/SKILL.md:ro
+      - ./agents/sab-historian/SKILL.md:/app/skills/sab-historian/SKILL.md:ro
       - ./agents/briefing-architect/SKILL.md:/app/skills/briefing-architect/SKILL.md:ro
       - ./agents/vvip-protocol/SKILL.md:/app/skills/vvip-protocol/SKILL.md:ro
       

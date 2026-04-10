@@ -190,7 +190,7 @@ cmd_setup() {
   cp -f "${SCRIPT_DIR}"/demo-data/* "${WORKSPACE_DIR}/"
   cp -f "${SCRIPT_DIR}"/demo-data/* "${ZC_WORKSPACE}/"
   cp -f "${SCRIPT_DIR}"/agents/orchestrator/SKILL.md "${SKILLS_DIR}/orchestrator.md"
-  cp -f "${SCRIPT_DIR}"/agents/cab-historian/SKILL.md "${SKILLS_DIR}/cab-historian.md"
+  cp -f "${SCRIPT_DIR}"/agents/sab-historian/SKILL.md "${SKILLS_DIR}/sab-historian.md"
   cp -f "${SCRIPT_DIR}"/agents/briefing-architect/SKILL.md "${SKILLS_DIR}/briefing-architect.md"
   cp -f "${SCRIPT_DIR}"/agents/vvip-protocol/SKILL.md "${SKILLS_DIR}/vvip-protocol.md"
   success "Demo data and skill files copied"
@@ -235,12 +235,14 @@ cmd_status() {
 
   # Agent Readiness
   echo -e "  ${BOLD}Agent Roster${NC}"
-  echo -e "  ├─ 🎯 Oprah-tor        (Orchestrator)      ${DIM}→ Frontier model${NC}"
-  echo -e "  ├─ 🔍 Sherlock Ohms    (Exec Research)     ${DIM}→ Frontier model${NC}"
-  echo -e "  ├─ 🏢 Bloom-borg       (Account Intel)     ${DIM}→ Frontier model${NC}"
-  echo -e "  ├─ 📋 Déjà View        (CAB Historian)     ${DIM}→ Local Granite${NC}"
+  echo -e "  ├─ 🎯 Oprah-tor        (Orchestrator)       ${DIM}→ Frontier model${NC}"
+  echo -e "  ├─ 🔍 Sherlock Ohms    (Exec Research)      ${DIM}→ Frontier model${NC}"
+  echo -e "  ├─ 🏢 Bloom-borg       (Account Intel)      ${DIM}→ Frontier model${NC}"
+  echo -e "  ├─ 📋 Déjà View        (SAB Historian)      ${DIM}→ Local Granite${NC}"
   echo -e "  ├─ 📄 Draft Punk       (Briefing Architect) ${DIM}→ Local Granite${NC}"
-  echo -e "  └─ ⭐ Alfred Bitworth  (VVIP Protocol)     ${DIM}→ Local Granite${NC}"
+  echo -e "  ├─ ⭐ Alfred Bitworth  (VVIP Protocol)      ${DIM}→ Local Granite${NC}"
+  echo -e "  ├─ 🤝 Sponsor Coach    (Readiness Check)    ${DIM}→ Local Granite${NC}"
+  echo -e "  └─ 🎲 The Oddsfather   (Success Predictor)  ${DIM}→ Local Granite${NC}"
   echo ""
 
   # Model routing summary
@@ -481,14 +483,14 @@ EOF
   echo -e "  ${DIM}─────────────────────────────────────────────────────${NC}"
   cat <<'PROMPT'
   I have a briefing tomorrow with Sarah Chen, CIO of Meridian 
-  Health Systems. She is a CAB member on our Strategic Technology 
+  Health Systems. She is a SAB member on our Strategic Technology 
   Advisory Board. Her executive sponsor is Maria Torres, VP 
   Engineering.
 
   Please prepare a full briefing package:
   1. Research Sarah Chen — recent activity, priorities, style
   2. Research Meridian Health Systems — company context and news
-  3. Check our CAB records and past briefing history
+  3. Check our SAB records and past briefing history
   4. Assemble executive dossier, backgrounder, sponsor talking 
      points, and recommended agenda
   5. Run the VVIP protocol check and generate the checklist
@@ -606,7 +608,7 @@ cmd_preflight() {
   echo -e "  ${BOLD}Demo Assets${NC}"
   
   echo -ne "  ├─ Demo data in workspace .. "
-  if [[ -f "${WORKSPACE_DIR}/cab-meeting-notes.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingclaw.sh setup"; fi
+  if [[ -f "${WORKSPACE_DIR}/sab-meeting-notes.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingclaw.sh setup"; fi
   
   echo -ne "  ├─ Skill files installed ... "
   if [[ -f "${SKILLS_DIR}/orchestrator.md" ]]; then echo -e "${GREEN}GO${NC}"; else echo -e "${RED}NO-GO${NC} → Run: ./briefingclaw.sh setup"; fi
@@ -630,7 +632,7 @@ cmd_preflight() {
   if is_model_serving; then
     curl -s --max-time 10 "${LOCAL_MODEL_URL}/chat/completions" \
       -H "Content-Type: application/json" \
-      -d '{"model":"granite-8b","messages":[{"role":"user","content":"Summarize the key themes from the last CAB meeting."}],"max_tokens":50}' \
+      -d '{"model":"granite-8b","messages":[{"role":"user","content":"Summarize the key themes from the last SAB meeting."}],"max_tokens":50}' \
       > /dev/null 2>&1 && success "Local model warm and responsive" || warn "Local model slow — give it another minute"
   fi
   
@@ -639,7 +641,40 @@ cmd_preflight() {
   echo ""
 }
 
-# ── 10. HELP ─────────────────────────────────────────────────────
+# ── 10. PREVIEW (rehearsal mode — no infrastructure required) ──
+cmd_preview() {
+  banner
+  step "Preview / Rehearsal Mode"
+  echo ""
+  info "Opening dashboards in pure simulation mode."
+  info "No infrastructure check, no service polling — just the animated demo."
+  echo ""
+
+  local dashboard="${SCRIPT_DIR}/briefingclaw-dashboard.html"
+  local rh_dashboard="${SCRIPT_DIR}/briefingclaw-dashboard-redhat.html"
+  local nav="${SCRIPT_DIR}/index.html"
+
+  if [[ -f "${nav}" ]]; then
+    info "Opening navigation page..."
+    open "file://${nav}" 2>/dev/null || xdg-open "file://${nav}" 2>/dev/null || true
+  elif [[ -f "${dashboard}" ]]; then
+    info "Opening original dashboard..."
+    open "file://${dashboard}?autostart" 2>/dev/null || xdg-open "file://${dashboard}?autostart" 2>/dev/null || true
+  fi
+
+  echo ""
+  success "Preview mode launched. No services needed."
+  echo ""
+  echo -e "  ${BOLD}Tips:${NC}"
+  echo -e "    • Press ${CYAN}P${NC} for projector-ready font sizes"
+  echo -e "    • Press ${CYAN}F${NC} for fullscreen"
+  echo -e "    • Press ${CYAN}Space/Enter${NC} to start the simulation"
+  echo -e "    • Press ${CYAN}Escape${NC} to reset"
+  echo -e "    • Click any completed deliverable card to view its full content"
+  echo ""
+}
+
+# ── 11. HELP ─────────────────────────────────────────────────────
 cmd_help() {
   banner
   echo -e "  ${BOLD}Commands:${NC}"
@@ -649,6 +684,7 @@ cmd_help() {
   echo -e "    ${CYAN}stop${NC}        Stop OpenClaw container"
   echo -e "    ${CYAN}status${NC}      Show system status and agent readiness"
   echo -e "    ${CYAN}demo${NC}        Launch the full demo environment (browser + terminals)"
+  echo -e "    ${CYAN}preview${NC}     Rehearsal mode — open dashboards without infrastructure checks"
   echo -e "    ${CYAN}preflight${NC}   Conference-day checklist (run 30 min before session)"
   echo -e "    ${CYAN}sherlock${NC}    Run Sherlock Ohms standalone (executive research)"
   echo -e "    ${CYAN}bloomborg${NC}   Run Bloom-borg standalone (account intelligence)"
@@ -722,6 +758,7 @@ main() {
     stop)        cmd_stop "$@" ;;
     status)      cmd_status "$@" ;;
     demo)        cmd_demo "$@" ;;
+    preview)     cmd_preview "$@" ;;
     preflight)   cmd_preflight "$@" ;;
     sherlock)    cmd_sherlock "$@" ;;
     bloomborg)   cmd_bloomborg "$@" ;;
