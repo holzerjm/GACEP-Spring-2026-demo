@@ -72,7 +72,7 @@ body::before {
   margin: 0 auto;
   height: 100vh;
   display: grid;
-  grid-template-rows: 56px minmax(280px, 340px) 52px 1fr auto;
+  grid-template-rows: 56px minmax(340px, 420px) 52px 1fr auto;
   padding: 0 24px;
   gap: 0;
 }
@@ -97,15 +97,14 @@ body::before {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.logo-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 10px var(--gold-glow);
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: contain;
 }
 
 .logo-text {
@@ -152,7 +151,7 @@ body::before {
    ═══════════════════════════════════════════════════════════ */
 .pipeline-section {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .pipeline-canvas {
@@ -1201,11 +1200,10 @@ body.presentation-mode .pmode-indicator { display: block; }
   <header class="header">
     <div class="header-left">
       <div class="logo">
-        <span class="logo-dot"></span>
-        <span class="logo-dot"></span>
+        <img class="logo-icon" src="jmhclaw.png" alt="BriefingClaw">
         <span class="logo-text">BriefingClaw</span>
       </div>
-      <span class="header-title">Live Demo Dashboard</span>
+      <span class="header-title">Live Demo Dashboard &mdash; BriefingClaw GACEP Edition</span>
     </div>
     <div id="modeBadge" class="mode-badge simulated">SIMULATED</div>
   </header>
