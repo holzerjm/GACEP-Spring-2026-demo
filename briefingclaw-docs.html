@@ -1,0 +1,3371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06070A;
+  --bg-card: #0F1117;
+  --bg-card-hover: #161820;
+  --bg-code: #0A0B10;
+  --gold: #FFC600;
+  --gold-dim: #B8900A;
+  --gold-glow: rgba(255,198,0,0.15);
+  --frontier: #6E9BFF;
+  --local: #4ADE80;
+  --red: #EE0000;
+  --text: #E8E8EC;
+  --text-dim: #8B8FA3;
+  --text-muted: #5A5E72;
+  --border: #1E2030;
+  --border-glow: #2A2E42;
+  --status-red: #EF4444;
+  --status-amber: #F59E0B;
+  --status-green: #4ADE80;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  line-height: 1.65;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════ LAYOUT ═══════════════════ */
+.layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ═══════════════════ SIDEBAR ═══════════════════ */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 28px 22px;
+  border-right: 1px solid var(--border);
+  background: rgba(6,7,10,0.85);
+  backdrop-filter: blur(8px);
+}
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.sidebar-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-title .brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.sidebar-title .label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.sidebar-section {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  padding: 16px 8px 6px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-link:hover {
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+}
+
+.sidebar-link.active {
+  background: rgba(255,198,0,0.06);
+  color: var(--gold);
+  border-left-color: var(--gold);
+}
+
+.sidebar-link .icon {
+  font-size: 15px;
+  width: 18px;
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.sidebar-footer .red { color: var(--red); }
+
+.sidebar-footer a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,198,0,0.4);
+}
+
+/* ═══════════════════ CONTENT ═══════════════════ */
+.content {
+  padding: 36px 56px 72px;
+  max-width: 920px;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  .content { padding: 24px; }
+}
+
+/* Top nav bar (for back-to-index link) */
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topnav-left {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: var(--gold);
+  border-color: rgba(255,198,0,0.3);
+  background: rgba(255,198,0,0.05);
+}
+
+.nav-btn.raw {
+  color: var(--text-muted);
+}
+
+.nav-btn.raw:hover {
+  color: var(--frontier);
+  border-color: rgba(110,155,255,0.3);
+  background: rgba(110,155,255,0.05);
+}
+
+/* ═══════════════════ DOC SECTIONS ═══════════════════ */
+.doc {
+  display: none;
+  animation: fade-in 0.3s ease;
+}
+
+.doc.active { display: block; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography */
+.doc h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 38px;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.2;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--gold);
+  display: inline-block;
+}
+
+.doc h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--text);
+  margin: 38px 0 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.doc h2:first-of-type { border-top: none; padding-top: 0; margin-top: 24px; }
+
+.doc h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--gold);
+  margin: 26px 0 10px;
+}
+
+.doc h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  margin: 20px 0 8px;
+}
+
+.doc p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  margin: 10px 0;
+  line-height: 1.7;
+}
+
+.doc p.lead, .doc blockquote p {
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.doc blockquote {
+  border-left: 3px solid var(--gold);
+  background: rgba(255,198,0,0.04);
+  padding: 10px 16px;
+  margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.doc blockquote p {
+  font-style: italic;
+  margin: 4px 0;
+}
+
+.doc a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,198,0,0.4);
+  transition: all 0.2s ease;
+}
+
+.doc a:hover { border-bottom-color: var(--gold); }
+
+.doc strong { color: var(--text); font-weight: 700; }
+.doc em { color: var(--text-dim); }
+
+.doc code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--gold);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.doc pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold-dim);
+  border-radius: 8px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 14px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.doc pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.doc pre::-webkit-scrollbar { height: 6px; }
+.doc pre::-webkit-scrollbar-track { background: transparent; }
+.doc pre::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
+
+.doc ul, .doc ol {
+  padding-left: 0;
+  margin: 10px 0;
+  list-style: none;
+}
+
+.doc ul li, .doc ol li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  padding: 4px 0 4px 22px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.doc ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 4px;
+  color: var(--gold-dim);
+  font-weight: 700;
+}
+
+.doc ol { counter-reset: list-counter; }
+.doc ol li {
+  counter-increment: list-counter;
+}
+.doc ol li::before {
+  content: counter(list-counter) '.';
+  position: absolute;
+  left: 0;
+  color: var(--gold-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 12px;
+  width: 20px;
+}
+
+.doc li > ul, .doc li > ol {
+  margin: 4px 0;
+}
+
+.doc li ul li::before { content: '◦'; color: var(--text-muted); }
+
+/* Tables */
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.doc thead { background: rgba(255,198,0,0.04); }
+
+.doc th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--gold);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.doc td {
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(30,32,48,0.6);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  vertical-align: top;
+}
+
+.doc tbody tr:last-child td { border-bottom: none; }
+.doc tbody tr:hover { background: var(--bg-card-hover); }
+
+.doc td code { font-size: 11px; }
+
+/* Horizontal rule */
+.doc hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 28px 0;
+}
+
+/* Task lists (GitHub-style checkboxes) */
+.doc ul.task-list { list-style: none; }
+.doc ul.task-list li { padding-left: 24px; }
+.doc ul.task-list li::before { content: ''; }
+.doc ul.task-list input[type="checkbox"] {
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--gold);
+}
+
+/* Emphasized doc notice box */
+.doc .notice {
+  background: rgba(110,155,255,0.04);
+  border: 1px solid rgba(110,155,255,0.2);
+  border-left: 3px solid var(--frontier);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.doc .notice strong { color: var(--frontier); }
+
+/* Doc meta bar (update date etc.) */
+.doc-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
+/* On-page TOC (right side) - hide for now, keep simple */
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img class="sidebar-logo" src="jmhclaw.png" alt="BriefingClaw">
+      <div class="sidebar-title">
+        <span class="brand">BriefingClaw</span>
+        <span class="label">Documentation</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">Overview</div>
+    <a class="sidebar-link" data-doc="readme" href="#readme"><span class="icon">&#128214;</span>README</a>
+    <a class="sidebar-link" data-doc="user-guide" href="#user-guide"><span class="icon">&#128221;</span>User Guide</a>
+    <a class="sidebar-link" data-doc="changelog" href="#changelog"><span class="icon">&#128203;</span>Changelog</a>
+
+    <div class="sidebar-section">Technical Docs</div>
+    <a class="sidebar-link" data-doc="architecture" href="#architecture"><span class="icon">&#128295;</span>Architecture</a>
+    <a class="sidebar-link" data-doc="build-guide" href="#build-guide"><span class="icon">&#128736;</span>Build Guide</a>
+    <a class="sidebar-link" data-doc="demo-script" href="#demo-script"><span class="icon">&#127908;</span>Demo Script</a>
+    <a class="sidebar-link" data-doc="enterprise" href="#enterprise"><span class="icon">&#127970;</span>Enterprise Deployment</a>
+
+    <div class="sidebar-section">Navigation</div>
+    <a class="sidebar-link" href="index.html"><span class="icon">&#127968;</span>Back to Home</a>
+    <a class="sidebar-link" href="briefingclaw-dashboard.html"><span class="icon">&#127919;</span>Live Dashboard</a>
+    <a class="sidebar-link" href="briefingclaw-personas.html"><span class="icon">&#128101;</span>Persona Gallery</a>
+
+    <div class="sidebar-footer">
+      Built with open source &middot; <span class="red">Red Hat</span> CTO Office<br>
+      GACEP Spring 2026<br><br>
+      <a href="https://github.com/holzerjm/GACEP-Spring-2026-demo" target="_blank">View on GitHub</a>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════ CONTENT ═══════════════════ -->
+  <main class="content">
+
+    <div class="topnav">
+      <div class="topnav-left">
+        <a class="nav-btn" href="index.html">&larr; Home</a>
+      </div>
+      <a class="nav-btn raw" id="rawMdLink" href="README.md" target="_blank">View Raw Markdown &rarr;</a>
+    </div>
+
+    <!-- All documents embedded as sections -->
+    <div class="doc" id="doc-readme" data-md="README.md">
+      <h1>BriefingClaw &mdash; Multi-Agent Executive Briefing Intelligence</h1>
+
+      <blockquote><p><em>"The connective tissue between your programs &mdash; automated."</em></p></blockquote>
+
+      <p>BriefingClaw is a multi-agent AI system that automates executive briefing preparation. Eight specialized agents orchestrate in parallel to transform a single briefing request into a complete intelligence package &mdash; executive dossier, company brief, sponsor talking points, recommended agenda, VVIP protocol checklist, sponsor readiness assessment, success probability verdict, and engagement log &mdash; in approximately 90 seconds.</p>
+
+      <p>Built for the <strong>GACEP Spring 2026 Conference</strong> session: <em>"One Customer, Many Doors: Aligning EBC, Advisory &amp; Executive Programs for Maximum Impact"</em></p>
+
+      <p><strong>Presenters</strong>: Jan Mark Holzer (Red Hat CTO Office) &amp; Kristin Waitkus</p>
+
+      <hr>
+
+      <h2>Getting Started</h2>
+
+      <p>Open <code>index.html</code> in a browser to navigate between all demo pages and resources. The navigation landing page links to both dashboards (original and Red Hat branded), the architecture diagram, the standalone persona gallery, the multi-contact briefing mode, the post-briefing feedback loop, the documentation set, and the enterprise deployment guide. It is the recommended entry point for first-time users and for orienting an audience at the start of a presentation.</p>
+
+      <hr>
+
+      <h2>Table of Contents</h2>
+
+      <ul>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#why-briefingclaw">Why BriefingClaw</a></li>
+        <li><a href="#architecture-overview">Architecture Overview</a></li>
+        <li><a href="#the-eight-agents">The Eight Agents</a></li>
+        <li><a href="#execution-flow">Execution Flow</a></li>
+        <li><a href="#model-routing">Model Routing</a></li>
+        <li><a href="#technology-stack">Technology Stack</a></li>
+        <li><a href="#repository-structure">Repository Structure</a></li>
+        <li><a href="#demo-scenario">Demo Scenario</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#documentation">Documentation</a></li>
+        <li><a href="#session-context">Session Context</a></li>
+      </ul>
+
+      <hr>
+
+      <h2>Why BriefingClaw</h2>
+
+      <p>Executive briefing preparation typically requires 4-6 hours of manual work per visitor: researching the executive, analyzing the company, reviewing past engagement history across disconnected systems (CRM, SAB records, EBC logs, ESP tracking), assembling documents, and coordinating VVIP protocol. Information silos between programs mean critical context gets lost &mdash; overdue commitments, unmet promises, relationship history.</p>
+
+      <p>BriefingClaw demonstrates that agentic AI can:</p>
+
+      <ul>
+        <li><strong>Collapse that 4-6 hour workflow into ~90 seconds</strong></li>
+        <li><strong>Connect the dots across programs</strong> that humans routinely miss (the "connective tissue")</li>
+        <li><strong>Surface risk signals</strong> like overdue action items before they become trust-destroying moments</li>
+        <li><strong>Run entirely on a laptop</strong> with no data leaving the device for sensitive operations</li>
+      </ul>
+
+      <p>The system is not just about speed &mdash; it is about cross-program awareness that no single human consistently achieves across Executive Briefing Centers (EBC), Strategic Advisory Boards (SAB), and Executive Sponsorship Programs (ESP).</p>
+
+      <hr>
+
+      <h2>Architecture Overview</h2>
+
+      <p>BriefingClaw uses a hub-and-spoke multi-agent architecture. A central orchestrator decomposes requests and dispatches work to seven specialized agents across three execution phases.</p>
+
+      <blockquote><p><strong>Interactive diagram:</strong> Open <a href="briefingclaw-architecture.html"><code>briefingclaw-architecture.html</code></a> in a browser for a detailed, interactive visualization of the architecture, execution flow, and infrastructure stack.</p></blockquote>
+
+      <p><img src="docs/images/architecture-diagram.png" alt="BriefingClaw Multi-Agent Architecture"></p>
+
+      <pre><code>                          +-----------------+
+                          |   Briefing      |
+                          |   Request       |
+                          +--------+--------+
+                                   |
+                          Phase 0: Trigger
+                                   |
+                          +--------v--------+
+                          |   Oprah-tor     |
+                          |  (Orchestrator) |
+                          +--------+--------+
+                                   |
+                 Phase 1: Intelligence Gathering (parallel)
+                    /              |              \
+          +--------v---+   +------v------+   +----v--------+
+          | Sherlock    |   | Bloom-borg  |   | Deja View   |
+          | Ohms        |   | (Account    |   | (SAB        |
+          | (Executive  |   |  Intel)     |   |  Historian) |
+          |  Research)  |   +------+------+   +----+--------+
+          +--------+---+          |                |
+                    \             |               /
+                     +------------+-------------+
+                                  |
+                 Phase 2: Assembly (parallel)
+                /                  |                  \
+    +----------v------+   +--------v-------+   +-------v--------+
+    |  Draft Punk     |   | Alfred         |   | Sponsor Coach  |
+    |  (Briefing      |   | Bitworth       |   | (Readiness     |
+    |   Architect)    |   | (VVIP Protocol)|   |  Assessment)   |
+    +----------+------+   +--------+-------+   +-------+--------+
+                \                  |                  /
+                 +-----------------+-----------------+
+                                   |
+                          Phase 3: Synthesis
+                                   |
+                          +--------v--------+
+                          |  The Oddsfather |
+                          |  (Success       |
+                          |   Prediction)   |
+                          +--------+--------+
+                                   |
+                          +--------v--------+
+                          |   Complete      |
+                          |   Briefing      |
+                          |   Package       |
+                          +-----------------+
+</code></pre>
+
+      <hr>
+
+      <h2>The Eight Agents</h2>
+
+      <table>
+        <thead>
+          <tr><th>#</th><th>Agent</th><th>Codename</th><th>Role</th><th>Model</th><th>Framework</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Orchestrator</td><td><strong>Oprah-tor</strong></td><td>Decomposes requests, dispatches agents, validates outputs, synthesizes final package. Enforces 25s hard timeouts on research agents with graceful degradation</td><td>Frontier (cloud)</td><td>OpenClaw Gateway</td></tr>
+          <tr><td>2</td><td>Executive Research</td><td><strong>Sherlock Ohms</strong></td><td>Deep person-level intelligence: career arc, recent activity, communication style, tech priorities</td><td>Frontier (cloud)</td><td>ZeroClaw CLI</td></tr>
+          <tr><td>3</td><td>Account Intelligence</td><td><strong>Bloom-borg</strong></td><td>Company-level intelligence: financials, tech stack, competitive landscape, strategic priorities</td><td>Frontier (cloud)</td><td>ZeroClaw CLI</td></tr>
+          <tr><td>4</td><td>SAB Historian</td><td><strong>Deja View</strong></td><td>Cross-program memory: SAB membership, past briefings, engagement stage, open follow-ups, SAB theme trend analysis</td><td>Local (Granite 8B)</td><td>OpenClaw Skill</td></tr>
+          <tr><td>5</td><td>Briefing Architect</td><td><strong>Draft Punk</strong></td><td>Document assembly: dossier, backgrounder, talking points, agenda, conversation starters</td><td>Local (Granite 8B)</td><td>OpenClaw Skill</td></tr>
+          <tr><td>6</td><td>VVIP Protocol</td><td><strong>Alfred Bitworth</strong></td><td>Operational protocol: VVIP tier, checklist, sponsor alerts, scheduling, engagement logging</td><td>Local (Granite 8B)</td><td>OpenClaw Skill</td></tr>
+          <tr><td>7</td><td>Sponsor Coach</td><td><strong>Sponsor Coach</strong></td><td>Readiness assessment micro-agent: scores sponsor preparation, flags coaching gaps, generates talking-point drills</td><td>Local (Granite 8B)</td><td>OpenClaw Skill</td></tr>
+          <tr><td>8</td><td>Success Prediction</td><td><strong>The Oddsfather</strong></td><td>Phase 3 synthesis: calculates briefing success probability, surfaces the verdict, identifies outcome risks and levers</td><td>Local (Granite 8B)</td><td>OpenClaw Skill</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Agent Details</h3>
+
+      <p><strong>Oprah-tor (Orchestrator)</strong> &mdash; The air traffic controller. Parses incoming briefing requests, extracts key entities (visitor name, company, date, sponsor), dispatches work to the seven specialist agents in the correct phase order, enforces a 25-second hard timeout on the research agents with graceful degradation when the frontier network is flaky, validates that returned data meets quality thresholds, and synthesizes the final deliverable package.</p>
+
+      <p><strong>Sherlock Ohms (Executive Research)</strong> &mdash; Performs deep web research on the visiting executive. Produces a profile covering career arc, recent public activity (last 6 months prioritized), technology priorities, communication style indicators, and personalized conversation starters. Every claim is sourced and confidence-rated.</p>
+
+      <p><strong>Bloom-borg (Account Intelligence)</strong> &mdash; Researches the visitor's company. Delivers a structured brief covering business overview, financial highlights, recent news (last 90 days), technology landscape (derived from job postings and announcements), competitive dynamics, and strategic opportunities with briefing relevance.</p>
+
+      <p><strong>Deja View (SAB Historian)</strong> &mdash; The "connective tissue" agent and the critical differentiator. Reads from internal program data (SAB meeting notes, CRM records, engagement history, VVIP roster) to build a cross-program relationship view. Identifies SAB membership, past briefing outcomes, overdue commitments, open follow-ups, and relationship stage progression. This agent catches what humans miss.</p>
+
+      <p><strong>Draft Punk (Briefing Architect)</strong> &mdash; Synthesizes intelligence from all agents into five polished deliverables: (1) Executive Dossier (1-page quick reference), (2) Briefing Backgrounder (2-page comprehensive prep), (3) Sponsor Talking Points (for executive sponsor drop-in), (4) Recommended Agenda (time-blocked with rationales), (5) Conversation Starters (3 personalized openers).</p>
+
+      <p><strong>Alfred Bitworth (VVIP Protocol)</strong> &mdash; Handles the operational layer. Determines VVIP tier (Platinum/Gold/Silver/Standard), generates a protocol checklist with assignees and deadlines, drafts a sponsor alert email, performs scheduling conflict checks, and creates an engagement log entry for future reference.</p>
+
+      <p><strong>Sponsor Coach</strong> &mdash; A readiness assessment micro-agent that runs in parallel with Draft Punk and Alfred Bitworth. Scores the executive sponsor's preparation state (awareness of open commitments, familiarity with the visitor's recent moves, comfort with the SAB themes) and produces a short coaching brief: what to review, what to avoid, and the exact phrases that should show up in the sponsor drop-in. Designed to prevent the common failure mode where the sponsor walks in cold.</p>
+
+      <p><strong>The Oddsfather (Success Prediction)</strong> &mdash; Phase 3 synthesis agent that runs after all Phase 2 deliverables are assembled. Reviews the full package, the critical flags, the engagement history trend, and the sponsor readiness score to generate a success probability verdict for the briefing (expressed as a percentage and a plain-language call). Surfaces the top three outcome risks and the top three levers that could shift the outcome. The Oddsfather's verdict is the final money moment of the pipeline.</p>
+
+      <hr>
+
+      <h2>Execution Flow</h2>
+
+      <p><strong>Input example:</strong></p>
+      <pre><code>I have a briefing tomorrow with Sarah Chen, CIO of Meridian Health Systems.
+She is a SAB member. Her sponsor is Maria Torres.
+</code></pre>
+
+      <p><strong>Phase 0 &mdash; Trigger:</strong> Request enters the OpenClaw Gateway (port 18789).</p>
+
+      <p><strong>Phase 1 &mdash; Intelligence Gathering (parallel):</strong></p>
+      <ul>
+        <li>Sherlock Ohms researches Sarah Chen via web (frontier model + Tavily search)</li>
+        <li>Bloom-borg researches Meridian Health Systems via web (frontier model + Tavily search)</li>
+        <li>Deja View queries internal data files for SAB records, past briefings, CRM data, VVIP status (local Granite model)</li>
+      </ul>
+
+      <p><strong>Phase 2 &mdash; Assembly (parallel):</strong></p>
+      <ul>
+        <li>Draft Punk synthesizes all Phase 1 outputs into five documents (local Granite model)</li>
+        <li>Alfred Bitworth generates protocol checklist and sponsor alert (local Granite model)</li>
+        <li>Sponsor Coach produces the sponsor readiness score and coaching brief (local Granite model)</li>
+      </ul>
+
+      <p><strong>Phase 3 &mdash; Synthesis:</strong></p>
+      <ul>
+        <li>The Oddsfather reviews the full package and generates the success probability verdict (local Granite model)</li>
+        <li>Oprah-tor validates all outputs and assembles the final briefing package</li>
+      </ul>
+
+      <p><strong>Output:</strong> Complete briefing package with 10 deliverables plus critical flags and the success verdict:</p>
+      <ul>
+        <li>Executive Dossier</li>
+        <li>Briefing Backgrounder</li>
+        <li>Sponsor Talking Points</li>
+        <li>Recommended Agenda</li>
+        <li>Conversation Starters</li>
+        <li>VVIP Protocol Checklist</li>
+        <li>Sponsor Alert Draft</li>
+        <li>Engagement Log Entry</li>
+        <li>Sponsor Readiness Brief (Sponsor Coach)</li>
+        <li>Success Probability Verdict (The Oddsfather)</li>
+      </ul>
+
+      <hr>
+
+      <h2>Model Routing</h2>
+
+      <p>BriefingClaw uses a dual-model strategy that balances capability with data privacy:</p>
+
+      <table>
+        <thead>
+          <tr><th>Tier</th><th>Model</th><th>Agents</th><th>Rationale</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Frontier (cloud)</strong></td><td>Claude / GPT / Gemini (configurable)</td><td>Oprah-tor, Sherlock Ohms, Bloom-borg</td><td>Complex reasoning, web search, multi-step research</td></tr>
+          <tr><td><strong>Local (on-device)</strong></td><td>IBM Granite 8B (via Podman AI Lab)</td><td>Deja View, Draft Punk, Alfred Bitworth, Sponsor Coach, The Oddsfather</td><td>Private data never leaves the laptop; structured tasks that fit a smaller model</td></tr>
+        </tbody>
+      </table>
+
+      <p>This split ensures that sensitive customer data (SAB records, CRM exports, VVIP preferences, engagement history) is processed exclusively by the local model. The frontier model only handles publicly available information gathered via web search.</p>
+
+      <hr>
+
+      <h2>Technology Stack</h2>
+
+      <table>
+        <thead>
+          <tr><th>Component</th><th>Technology</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Local Model</td><td>IBM Granite 8B</td><td>Open-source LLM served locally via Podman AI Lab</td></tr>
+          <tr><td>Agent Framework (container)</td><td>OpenClaw</td><td>Gateway + skill-based agents (Oprah-tor, Deja View, Draft Punk, Alfred Bitworth)</td></tr>
+          <tr><td>Agent Framework (native)</td><td>ZeroClaw</td><td>Lightweight CLI agents (Sherlock Ohms, Bloom-borg) &mdash; ~3.4 MB binary</td></tr>
+          <tr><td>Containers</td><td>Podman</td><td>Rootless, daemonless container engine (Docker-compatible)</td></tr>
+          <tr><td>Web Search</td><td>Tavily API</td><td>Real-time web research for frontier agents</td></tr>
+          <tr><td>Enterprise Path</td><td>Red Hat OpenShift AI</td><td>Production-scale deployment (referenced, not required for demo)</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Key properties:</strong></p>
+      <ul>
+        <li><strong>Fully open source</strong> &mdash; every component from model to runtime</li>
+        <li><strong>Laptop-portable</strong> &mdash; runs on a MacBook Pro with 16 GB RAM</li>
+        <li><strong>Air-gap capable</strong> &mdash; local agents work without internet</li>
+        <li><strong>No data exfiltration</strong> &mdash; sensitive data processed only by the on-device model</li>
+      </ul>
+
+      <hr>
+
+      <h2>Repository Structure</h2>
+
+      <pre><code>gacep-demo/
+|
++-- index.html                              Navigation landing page with persona gallery
++-- briefingclaw.sh                         Interactive CLI for demo management
++-- briefingclaw-dashboard.html            Live demo dashboard (original dark theme, improved readability)
++-- briefingclaw-dashboard-redhat.html     Live demo dashboard (Red Hat branded, improved readability)
++-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
++-- briefingclaw-personas.html              Standalone filterable persona gallery (8 personas)
++-- briefingclaw-multicontact.html          Multi-contact group briefing mode (pick 2-5 of 9 contacts)
++-- briefingclaw-postbriefing.html          Post-briefing feedback loop with Oddsfather calibration
++-- README.md                              This file
+|
++-- agents/                                Agent skill definitions
+|   +-- orchestrator/SKILL.md              Oprah-tor: request decomposition &amp; synthesis
+|   +-- executive-research/SKILL.md        Sherlock Ohms: person-level web research
+|   +-- account-intelligence/SKILL.md      Bloom-borg: company-level web research
+|   +-- sab-historian/SKILL.md             Deja View: cross-program history lookup
+|   +-- briefing-architect/SKILL.md        Draft Punk: document assembly
+|   +-- vvip-protocol/SKILL.md             Alfred Bitworth: protocol &amp; notifications
+|   +-- sponsor-coach/SKILL.md             Sponsor Coach: readiness assessment
+|   +-- oddsfather/SKILL.md                The Oddsfather: success probability verdict
+|
++-- config/                                Infrastructure configuration
+|   +-- env.example                        API key template (copy to .env)
+|   +-- openclaw-config.yml                OpenClaw gateway &amp; skill routing
+|   +-- zeroclaw-config.toml               ZeroClaw agent profiles
+|   +-- podman-compose.yml                 Container orchestration manifest
+|
++-- demo-data/                             Simulated data for eight contact scenarios
+|   +-- sab-meeting-notes.md               SAB meeting records (Q1 2026, Q4 2025, 8 contacts)
+|   +-- crm-export.json                    CRM records (8 accounts, 20+ contacts)
+|   +-- vvip-roster.json                   VVIP tiers &amp; full preferences (8 contacts)
+|   +-- engagement-history.md              Engagement timelines (8 complete narratives)
+|
++-- demo-deliverables/                     Sample markdown reference files (7 files)
+|   +-- sarah-chen/                        Dossier, agenda, VVIP checklist
+|   +-- david-park/                        Dossier, agenda
+|   +-- rachel-morrison/                   Dossier, agenda
+|   Note: Key deliverables for all 8 contacts are embedded in the dashboards
+|
++-- docs/                                  Extended documentation
+    +-- ARCHITECTURE.md                    System design document
+    +-- BUILD-GUIDE.md                     Step-by-step setup instructions
+    +-- DEMO-SCRIPT.md                     Beat-by-beat presentation script
+    +-- ENTERPRISE-DEPLOYMENT.md           Scaling from laptop to OpenShift AI
+</code></pre>
+
+      <h3>Key Files Explained</h3>
+
+      <p><strong><code>index.html</code></strong> &mdash; Navigation landing page. Central launch point with a persona gallery (all 8 scenarios with thumbnails and tension summaries) and direct links to both dashboards, the architecture diagram, the documentation set, the enterprise deployment guide, and the GitHub repository. Open this first when demonstrating the system to someone new.</p>
+
+      <p><strong><code>briefingclaw.sh</code></strong> &mdash; Interactive CLI wrapper for the entire demo lifecycle. Provides commands for setup, infrastructure startup, demo environment configuration, system health checks, preflight validation, standalone agent runs, rehearsal preview mode, and backup video recording. Designed so a non-technical presenter can operate the system.</p>
+
+      <p><strong><code>briefingclaw-dashboard.html</code></strong> &mdash; Live demo dashboard with animated pipeline visualization (original dark theme). Optimized for projector readability with larger fonts and generous spacing between agent nodes. Features a contact dropdown selector with 8 scenarios (3 serious + 5 fun personas) and unique simulation timelines per contact. Risk badges appear on completed deliverable cards (red = critical, amber = warning, green = positive) so the audience can scan the outcome at a glance. Key deliverables for all 8 contacts are embedded as clickable modal content &mdash; click any completed card to view the full formatted document. Includes a PDF export button that produces a printable briefing package for any selected persona. A three-state mode badge in the header shows <strong>LIVE</strong> (all infrastructure responding), <strong>LOCAL ONLY</strong> (Granite 8B reachable but the OpenClaw gateway is not), or <strong>SIMULATED</strong> (no services responding). Session events are captured to localStorage telemetry &mdash; press <strong>T</strong> to download the full JSON log. The footer includes a GitHub repository link. Polls live infrastructure when running, falls back to animated simulation. <code>?autostart</code> URL parameter for hands-free launch. Keyboard: Space/Enter start, Escape reset, F fullscreen, T download telemetry.</p>
+
+      <p><strong><code>briefingclaw-dashboard-redhat.html</code></strong> &mdash; Red Hat branded edition with identical functionality. Reskinned with Red Hat Display/Text/Mono fonts, PatternFly dark theme surfaces (#151515/#1F1F1F/#292929), Red Hat Red (#EE0000) primary accent, PatternFly blue for frontier agents, PatternFly teal for local agents. Same readability improvements, risk badges, PDF export, LIVE/LOCAL ONLY/SIMULATED mode detection, telemetry logging (T key), GitHub footer link, all 8 contact scenarios, and embedded deliverables. Use this version for Red Hat-affiliated presentations.</p>
+
+      <p><strong><code>briefingclaw-architecture.html</code></strong> &mdash; Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the four-phase pipeline (Phase 1 intelligence gathering; Phase 2 assembly; Phase 3 three-column assembly including Sponsor Coach; Phase 4 The Oddsfather synthesis), model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.</p>
+
+      <p><strong><code>briefingclaw-personas.html</code></strong> &mdash; Standalone persona gallery. Filterable card view of all 8 personas with tier and type filters, rich stat cards, color-coded drama callouts, top-3 priorities per persona, and action buttons (Run Demo to launch the dashboard for that persona, Open Dossier to jump straight to the deliverable view). Designed as a warm-up or reference page that attendees can browse before the main demo.</p>
+
+      <p><strong><code>briefingclaw-multicontact.html</code></strong> &mdash; Multi-contact briefing mode. Pick 2-5 contacts from 9 total across 3 companies (Sarah Chen / Tom Richards / Dr. Priya Kapoor at Meridian, David Park / Karen Wu / Marcus Thompson at Apex, Rachel Morrison / Anil Desai / Frank Reeves at TerraScale). Outputs a shared company context, a buying center role matrix (economic / champion / technical / blocker / influencer), cross-contact dynamics (alignments / tensions / conflicts), a recommended briefing order (blocker first, champion last), a unified agenda, coordination risks, and The Oddsfather's group verdict with coordination adjustments. Self-contained with no backend.</p>
+
+      <p><strong><code>briefingclaw-postbriefing.html</code></strong> &mdash; Post-briefing feedback loop. Form for logging briefing outcomes: contact dropdown, NPS score buttons (0-10), commitments list, actual outcome, relationship stage signal, and debrief notes. A live analysis panel on the right shows The Oddsfather's prediction calibration (predicted vs actual with drift classification), Deja View's relationship stage update preview, and recent submission history. Submissions persist to browser <code>localStorage</code> under the <code>briefingclaw-feedback</code> key (capped at 50 entries) so rehearsal data survives between sessions without any server.</p>
+
+      <p><strong><a href="#enterprise"><code>docs/ENTERPRISE-DEPLOYMENT.md</code></a></strong> &mdash; Guide for scaling BriefingClaw from the laptop prototype shown in the demo to an enterprise deployment on Red Hat OpenShift AI. Covers reference architecture, multi-tenant considerations, governance controls, integration patterns with existing CRM and EBC tooling, and the migration path from OpenClaw/ZeroClaw to production agent runtimes.</p>
+
+      <p><strong><code>config/env.example</code></strong> &mdash; Template for API keys. Supports multiple frontier providers (Anthropic, OpenAI, Google) and the Tavily web search API. The local Granite model requires no API key. Copy to <code>.env</code> and fill in your keys.</p>
+
+      <p><strong><code>config/openclaw-config.yml</code></strong> &mdash; Configures the OpenClaw gateway: which skills to load, model routing overrides (frontier vs. local per agent), workspace file mounts, external agent invocation (ZeroClaw subprocesses), and tool permissions.</p>
+
+      <p><strong><code>config/zeroclaw-config.toml</code></strong> &mdash; Configures ZeroClaw agent profiles for Sherlock Ohms and Bloom-borg: model provider, skill file path, iteration limits, and web search parameters.</p>
+
+      <p><strong><code>config/podman-compose.yml</code></strong> &mdash; Container manifest for the OpenClaw service. Mounts agent skill files and demo data as read-only volumes, exposes the gateway on port 18789, and connects to the Granite model served by Podman AI Lab on port 8001.</p>
+
+      <hr>
+
+      <h2>Demo Scenarios</h2>
+
+      <p>The system includes eight demo scenarios, each showcasing different relationship challenges and cross-program intelligence patterns:</p>
+
+      <table>
+        <thead>
+          <tr><th>Scenario</th><th>Contact</th><th>Company</th><th>Tier</th><th>Key Drama</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Overdue Commitments</strong></td><td>Sarah Chen, CIO</td><td>Meridian Health Systems</td><td>Gold</td><td>AI governance architecture overdue from Feb SAB</td></tr>
+          <tr><td><strong>Retention Crisis</strong></td><td>David Park, SVP Technology</td><td>Apex Financial Group</td><td>Gold</td><td>Failed migration, Azure pitching, 3-month renewal</td></tr>
+          <tr><td><strong>Champion Under Stress</strong></td><td>Rachel Morrison, CTO</td><td>TerraScale Energy</td><td>Platinum</td><td>P1 outage damaged trust, board presentation in 30 days</td></tr>
+          <tr><td><strong>Viral Scaling Crisis</strong></td><td>Pepper Minton, CTO</td><td>SnackStack Technologies</td><td>Gold</td><td>Recipe AI went viral on TikTok, crashed production</td></tr>
+          <tr><td><strong>Win-Back / Re-engagement</strong></td><td>Ziggy Stardust-Chen, VP Platform Eng</td><td>Quantum Pretzel Corp</td><td>Silver</td><td>Left SAB feeling ignored, AWS courting, renewal at risk</td></tr>
+          <tr><td><strong>Security Blocker</strong></td><td>Luna Wavelength, CIO</td><td>GalactiCorp Space Industries</td><td>Platinum</td><td>$8M satellite deal blocked by CISO security audit</td></tr>
+          <tr><td><strong>Internal Politics</strong></td><td>Max Bandwidth, SVP Digital</td><td>Thunderbolt Logistics</td><td>Gold</td><td>AI pilot saved $4M but VP Ops blocking scale-up</td></tr>
+          <tr><td><strong>First Briefing</strong></td><td>Sage Cloudberry, CIO</td><td>WonderPaws Pet Wellness</td><td>Standard</td><td>Greenfield opportunity, evaluating Red Hat vs VMware</td></tr>
+        </tbody>
+      </table>
+
+      <p>Each scenario demonstrates cross-program intelligence across SAB records, EBC history, CRM data, support escalations, and VVIP protocol. The dashboard includes a contact dropdown to switch between all eight scenarios during a live demo.</p>
+
+      <hr>
+
+      <h2>Quick Start</h2>
+
+      <blockquote><p>Full step-by-step instructions: <a href="#build-guide">Build Guide</a></p></blockquote>
+
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>macOS with Homebrew</li>
+        <li>16 GB RAM minimum, 30 GB free disk</li>
+        <li>API key for at least one frontier provider (Anthropic, OpenAI, or Google)</li>
+        <li>Tavily API key for web search</li>
+      </ul>
+
+      <h3>Steps</h3>
+
+      <pre><code># 1. Install dependencies
+brew install podman podman-compose jq
+
+# 2. Install Podman Desktop + AI Lab extension, download Granite 8B
+
+# 3. Install ZeroClaw
+curl -fsSL https://install.zeroclaw.dev | sh
+
+# 4. Clone and configure
+cp config/env.example config/.env
+# Edit config/.env with your API keys
+
+# 5. Start infrastructure
+./briefingclaw.sh start
+
+# 6. Run the demo
+./briefingclaw.sh demo
+# Or open http://127.0.0.1:18789 and type your briefing request
+</code></pre>
+
+      <p>Alternatively, use the automated setup:</p>
+      <pre><code>./briefingclaw.sh setup    # First-time configuration wizard
+./briefingclaw.sh start    # Launch all infrastructure
+./briefingclaw.sh demo     # Set up the demo environment
+</code></pre>
+
+      <hr>
+
+      <h2>Documentation</h2>
+
+      <table>
+        <thead>
+          <tr><th>Document</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="#architecture">Architecture</a></td><td>Multi-agent system design, agent roster, execution flow, infrastructure stack</td></tr>
+          <tr><td><a href="#build-guide">Build Guide</a></td><td>Complete setup instructions from prerequisites through conference-day checklist</td></tr>
+          <tr><td><a href="#demo-script">Demo Script</a></td><td>Beat-by-beat presentation script with timing, narrative cues, and contingency plans</td></tr>
+          <tr><td><a href="#enterprise">Enterprise Deployment</a></td><td>Scaling from laptop prototype to Red Hat OpenShift AI production deployment</td></tr>
+          <tr><td><a href="#user-guide">User Guide</a></td><td>Practical guide for operating BriefingClaw: installation, configuration, running demos, troubleshooting</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Session Context</h2>
+
+      <p>This system was designed for the <strong>GACEP Spring 2026 Conference</strong> session demonstrating how agentic AI can operationalize the "Program of Programs" framework &mdash; connecting Executive Briefing Centers, Strategic Advisory Boards, and Executive Sponsorship Programs through automated intelligence and cross-program awareness.</p>
+
+      <p>The demo shows that the tooling to build this kind of multi-agent system exists today, runs on commodity hardware, and uses entirely open-source components. The path from laptop prototype to enterprise deployment runs through Red Hat OpenShift AI.</p>
+
+      <hr>
+
+      <p><em>Built with open source. Runs on your laptop. No data leaves the building.</em></p>
+    </div>
+
+    <div class="doc" id="doc-user-guide" data-md="USER-GUIDE.md">
+      <h1>BriefingClaw User Guide</h1>
+
+      <p>A practical guide for installing, configuring, and operating the BriefingClaw multi-agent executive briefing system.</p>
+
+      <hr>
+
+      <h2>Table of Contents</h2>
+
+      <ol>
+        <li><a href="#1-prerequisites">Prerequisites</a></li>
+        <li><a href="#2-installation">Installation</a></li>
+        <li><a href="#3-configuration">Configuration</a></li>
+        <li><a href="#4-starting-the-system">Starting the System</a></li>
+        <li><a href="#5-running-a-briefing-request">Running a Briefing Request</a></li>
+        <li><a href="#6-using-the-dashboard">Using the Dashboard</a>
+          <ul>
+            <li><a href="#additional-views--modes">Additional Views &amp; Modes</a>
+              <ul>
+                <li><a href="#multi-contact-briefing-mode">Multi-Contact Briefing Mode</a></li>
+                <li><a href="#persona-gallery">Persona Gallery</a></li>
+                <li><a href="#post-briefing-feedback">Post-Briefing Feedback</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#7-using-the-cli-briefingclawsh">Using the CLI (briefingclaw.sh)</a></li>
+        <li><a href="#8-running-individual-agents">Running Individual Agents</a></li>
+        <li><a href="#9-understanding-the-output">Understanding the Output</a></li>
+        <li><a href="#10-demo-data-reference">Demo Data Reference</a></li>
+        <li><a href="#11-conference-day-checklist">Conference Day Checklist</a></li>
+        <li><a href="#12-troubleshooting">Troubleshooting</a></li>
+        <li><a href="#13-customization">Customization</a></li>
+      </ol>
+
+      <hr>
+
+      <h2>1. Prerequisites</h2>
+
+      <h3>Hardware</h3>
+      <ul>
+        <li>MacBook Pro (Apple Silicon or Intel)</li>
+        <li>16 GB RAM minimum (Granite 8B requires ~6 GB)</li>
+        <li>30 GB free disk space (model weights, containers, and workspace)</li>
+        <li>USB-C adapter for venue projection (if presenting live)</li>
+      </ul>
+
+      <h3>Software (installed in Section 2)</h3>
+      <ul>
+        <li>macOS with Homebrew</li>
+        <li>Podman Desktop with Podman CLI</li>
+        <li>Podman AI Lab extension</li>
+        <li>ZeroClaw CLI</li>
+        <li>OpenClaw container image</li>
+        <li>jq (JSON processor)</li>
+      </ul>
+
+      <h3>API Keys</h3>
+      <p>You need at minimum:</p>
+      <ul>
+        <li><strong>One frontier LLM provider</strong> &mdash; Anthropic (Claude), OpenAI (GPT), or Google (Gemini)</li>
+        <li><strong>Tavily API key</strong> &mdash; for web search capabilities used by Sherlock Ohms and Bloom-borg</li>
+      </ul>
+
+      <blockquote><p><strong>Tip:</strong> After cloning, open <code>index.html</code> in a browser to navigate between all demo pages and resources. It's the fastest way to get oriented.</p></blockquote>
+
+      <p>Sign up for keys at:</p>
+      <ul>
+        <li>Anthropic: <a href="https://console.anthropic.com">https://console.anthropic.com</a></li>
+        <li>OpenAI: <a href="https://platform.openai.com">https://platform.openai.com</a></li>
+        <li>Google AI: <a href="https://aistudio.google.com">https://aistudio.google.com</a></li>
+        <li>Tavily: <a href="https://tavily.com">https://tavily.com</a></li>
+      </ul>
+
+      <hr>
+
+      <h2>2. Installation</h2>
+
+      <h3>Step 2.1 &mdash; Install core tools</h3>
+
+      <pre><code># Install Homebrew if not present
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Podman and utilities
+brew install podman podman-compose jq
+</code></pre>
+
+      <h3>Step 2.2 &mdash; Install Podman Desktop and AI Lab</h3>
+
+      <ol>
+        <li>Download Podman Desktop from <a href="https://podman-desktop.io">https://podman-desktop.io</a></li>
+        <li>Open Podman Desktop and complete the initial setup</li>
+        <li>Go to <strong>Extensions</strong> and install <strong>Podman AI Lab</strong></li>
+        <li>In AI Lab, download the <strong>IBM Granite 8B Instruct</strong> model</li>
+        <li>Start the model service &mdash; it will serve on <code>http://127.0.0.1:8001/v1</code></li>
+      </ol>
+
+      <p>Verify the model is running:</p>
+      <pre><code>curl -s http://127.0.0.1:8001/v1/models | jq '.data[0].id'
+</code></pre>
+      <p>You should see the Granite model ID in the output.</p>
+
+      <h3>Step 2.3 &mdash; Install ZeroClaw</h3>
+
+      <pre><code>curl -fsSL https://install.zeroclaw.dev | sh
+</code></pre>
+
+      <p>Verify:</p>
+      <pre><code>zeroclaw --version
+</code></pre>
+
+      <h3>Step 2.4 &mdash; Install OpenClaw</h3>
+
+      <p>Pull the OpenClaw container image:</p>
+      <pre><code>podman pull openclaw/openclaw:latest
+</code></pre>
+
+      <h3>Step 2.5 &mdash; Clone this repository</h3>
+
+      <pre><code>git clone https://github.com/&lt;your-account&gt;/GACEP-Spring-2026-demo.git
+cd GACEP-Spring-2026-demo
+</code></pre>
+
+      <hr>
+
+      <h2>3. Configuration</h2>
+
+      <h3>Step 3.1 &mdash; Set up API keys</h3>
+
+      <pre><code>cp config/env.example config/.env
+</code></pre>
+
+      <p>Edit <code>config/.env</code> and add your API keys:</p>
+
+      <pre><code># Choose ONE frontier provider (uncomment the one you're using):
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+# OPENAI_API_KEY=sk-your-key-here
+# GOOGLE_API_KEY=your-key-here
+
+# Web search (required for Sherlock Ohms and Bloom-borg):
+TAVILY_API_KEY=tvly-your-key-here
+</code></pre>
+
+      <p>The local Granite model does not require an API key.</p>
+
+      <h3>Step 3.2 &mdash; Configure ZeroClaw</h3>
+
+      <pre><code>mkdir -p ~/.config/zeroclaw
+cp config/zeroclaw-config.toml ~/.config/zeroclaw/config.toml
+</code></pre>
+
+      <p>The ZeroClaw config defines two agent profiles:</p>
+      <ul>
+        <li><strong>sherlock-ohms</strong> &mdash; Executive research agent (uses frontier model + web search)</li>
+        <li><strong>bloom-borg</strong> &mdash; Account intelligence agent (uses frontier model + web search)</li>
+      </ul>
+
+      <p>Both profiles point to their respective <code>SKILL.md</code> files and use the Tavily API for web search.</p>
+
+      <h3>Step 3.3 &mdash; Set up the workspace</h3>
+
+      <p>Create the workspace directory structure that OpenClaw expects:</p>
+
+      <pre><code>mkdir -p ~/briefingclaw/agents
+mkdir -p ~/briefingclaw/workspace
+
+# Copy agent skill files
+cp -r agents/* ~/briefingclaw/agents/
+
+# Copy demo data to workspace
+cp demo-data/* ~/briefingclaw/workspace/
+</code></pre>
+
+      <h3>Step 3.4 &mdash; Verify configuration</h3>
+
+      <p>Check that the OpenClaw config references are correct:</p>
+      <ul>
+        <li><code>config/openclaw-config.yml</code> &mdash; skill directories and workspace paths</li>
+        <li><code>config/podman-compose.yml</code> &mdash; volume mounts match your local paths</li>
+      </ul>
+
+      <hr>
+
+      <h2>4. Starting the System</h2>
+
+      <h3>Option A &mdash; Using the CLI wrapper (recommended)</h3>
+
+      <pre><code># First-time setup (interactive wizard)
+./briefingclaw.sh setup
+
+# Start all infrastructure
+./briefingclaw.sh start
+
+# Check system health
+./briefingclaw.sh status
+</code></pre>
+
+      <p>For quick rehearsal without booting infrastructure: <code>./briefingclaw.sh preview</code>. This opens the dashboards in a browser and lets you rehearse the demo beats against the animated simulation. It skips all the Podman/model/OpenClaw health checks and is ideal for practicing narration, timing, and persona switching at your desk or on a plane.</p>
+
+      <h3>Option B &mdash; Manual startup</h3>
+
+      <pre><code># 1. Start Podman machine (if not running)
+podman machine start
+
+# 2. Ensure Granite 8B is serving via Podman AI Lab
+#    (Open Podman Desktop &gt; AI Lab &gt; Models &gt; Start)
+
+# 3. Start OpenClaw container
+cd config
+podman-compose up -d
+
+# 4. Verify OpenClaw is healthy
+curl -s http://127.0.0.1:18789/health | jq .
+</code></pre>
+
+      <h3>Verifying the stack</h3>
+
+      <table>
+        <thead>
+          <tr><th>Component</th><th>How to check</th><th>Expected result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Podman</td><td><code>podman machine info</code></td><td>Machine running</td></tr>
+          <tr><td>Granite 8B</td><td><code>curl -s http://127.0.0.1:8001/v1/models</code></td><td>Model ID returned</td></tr>
+          <tr><td>OpenClaw</td><td><code>curl -s http://127.0.0.1:18789/health</code></td><td><code>{"status": "healthy"}</code></td></tr>
+          <tr><td>ZeroClaw</td><td><code>zeroclaw --version</code></td><td>Version string</td></tr>
+          <tr><td>API keys</td><td><code>./briefingclaw.sh status</code></td><td>Keys configured</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>5. Running a Briefing Request</h2>
+
+      <h3>Via the OpenClaw Gateway UI</h3>
+
+      <ol>
+        <li>Open your browser to <code>http://127.0.0.1:18789</code></li>
+        <li>You will see the Oprah-tor orchestrator chat interface</li>
+        <li>Type (or paste) a briefing request:</li>
+      </ol>
+
+      <pre><code>I have a briefing tomorrow with Sarah Chen, CIO of Meridian Health Systems.
+She is a SAB member. Her executive sponsor is Maria Torres.
+</code></pre>
+
+      <ol start="4">
+        <li>Oprah-tor will:
+          <ul>
+            <li>Parse the request and identify key entities</li>
+            <li>Dispatch Sherlock Ohms, Bloom-borg, and Deja View in parallel (Phase 1)</li>
+            <li>Validate returned intelligence</li>
+            <li>Dispatch Draft Punk and Alfred Bitworth (Phase 2)</li>
+            <li>Synthesize and deliver the final briefing package</li>
+          </ul>
+        </li>
+        <li>The complete output appears in the chat as structured markdown documents</li>
+      </ol>
+
+      <h3>Via the CLI</h3>
+
+      <pre><code># Full demo environment (opens terminal tabs + browser)
+./briefingclaw.sh demo
+
+# Or run a quick request directly through the CLI
+./briefingclaw.sh sherlock "Sarah Chen CIO Meridian Health Systems"
+./briefingclaw.sh bloomborg "Meridian Health Systems"
+</code></pre>
+
+      <hr>
+
+      <h2>6. Using the Dashboard</h2>
+
+      <p>The interactive dashboard (<code>briefingclaw-dashboard.html</code>) provides an animated visualization of the entire agent pipeline. It is designed for conference presentations and works both as a live monitoring tool and as a standalone animated simulation.</p>
+
+      <h3>Opening the Dashboard</h3>
+
+      <pre><code># Open in your default browser
+open briefingclaw-dashboard.html
+
+# Or with autostart (simulation begins immediately)
+open "briefingclaw-dashboard.html?autostart"
+</code></pre>
+
+      <h3>Dashboard Layout</h3>
+
+      <table>
+        <thead>
+          <tr><th>Section</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Pipeline Visualization</strong></td><td>Top section. Shows all 8 agents as animated nodes with particle flow along connection paths. Agents glow when working and get a green checkmark when complete.</td></tr>
+          <tr><td><strong>Control Bar</strong></td><td>Pre-populated briefing request, "Start Demo" and "Reset" buttons, elapsed timer, mode badge (LIVE / LOCAL ONLY / SIMULATED), and PDF Export button.</td></tr>
+          <tr><td><strong>Infrastructure Status</strong></td><td>Bottom-left panel. Pulsing status dots for Podman, Granite 8B, OpenClaw, and ZeroClaw. Green = connected, red = disconnected.</td></tr>
+          <tr><td><strong>Agent Activity</strong></td><td>Bottom-right panel. Scrolling log with typewriter animation showing each agent's work in real time.</td></tr>
+          <tr><td><strong>Deliverables</strong></td><td>Cards that light up gold as each document is completed. Completed cards show risk badges summarizing the outcome and are clickable to open the full formatted document.</td></tr>
+          <tr><td><strong>Critical Flags</strong></td><td>Slide-in alerts for overdue action items, open follow-ups, and opportunities.</td></tr>
+          <tr><td><strong>Footer</strong></td><td>Contains a GitHub repository link for attendees who want to try the system themselves.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Keyboard Shortcuts</h3>
+
+      <table>
+        <thead>
+          <tr><th>Key</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Space / Enter</td><td>Start the demo simulation</td></tr>
+          <tr><td>Escape</td><td>Reset to initial state</td></tr>
+          <tr><td>F</td><td>Toggle fullscreen (ideal for projectors)</td></tr>
+          <tr><td>T</td><td>Download telemetry JSON for the current session</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Risk Badges on Deliverable Cards</h3>
+
+      <p>Completed deliverable cards show a coloured badge summarising the outcome so the audience can read the story at a glance without opening each card:</p>
+
+      <table>
+        <thead>
+          <tr><th>Badge colour</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Red</td><td>Critical &mdash; an overdue commitment, escalation, or blocker surfaced in the briefing</td></tr>
+          <tr><td>Amber</td><td>Warning &mdash; an open follow-up, unresolved risk, or stress signal</td></tr>
+          <tr><td>Green</td><td>Positive &mdash; strong relationship signals, untapped opportunities, champion momentum</td></tr>
+        </tbody>
+      </table>
+
+      <p>Badges appear as each card completes and carry the same colour into the PDF export.</p>
+
+      <h3>PDF Export</h3>
+
+      <p>A <strong>PDF Export</strong> button in the control bar produces a printable briefing package for the currently selected persona. The export includes the executive dossier, backgrounder, talking points, agenda, VVIP protocol checklist, sponsor readiness brief, and the Oddsfather's success verdict. Use this to hand a polished artefact to attendees who ask to take the output home.</p>
+
+      <h3>Mode Badge: LIVE / LOCAL ONLY / SIMULATED</h3>
+
+      <p>The dashboard polls <code>http://127.0.0.1:8001</code> (Granite model) and <code>http://127.0.0.1:18789</code> (OpenClaw gateway) every 5 seconds and shows one of three mode badges in the header:</p>
+
+      <table>
+        <thead>
+          <tr><th>Badge</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>LIVE</strong> (green)</td><td>Both the Granite 8B model and the OpenClaw gateway are responding. Full stack available.</td></tr>
+          <tr><td><strong>LOCAL ONLY</strong> (amber)</td><td>Granite 8B is reachable but the OpenClaw gateway is down. Local agents (Deja View, Draft Punk, Alfred Bitworth, Sponsor Coach, The Oddsfather) can still run via direct model calls; frontier agents are unavailable.</td></tr>
+          <tr><td><strong>SIMULATED</strong> (gold)</td><td>Neither service is responding. The animated scripted sequence runs standalone with no backend.</td></tr>
+        </tbody>
+      </table>
+
+      <p>The animated simulation runs identically in all three modes. It is a scripted 42-second sequence sourced from the real demo data files, designed to match the timing of the live demo script.</p>
+
+      <h3>Telemetry Logging</h3>
+
+      <p>Every session event &mdash; button clicks, persona switches, phase transitions, mode changes, PDF exports &mdash; is captured to the browser's <code>localStorage</code> as a rolling telemetry log. Press <strong>T</strong> at any time to download the full session log as JSON. This is useful for debugging a rehearsal that went sideways, for comparing timing across venues, and for post-session instrumentation reviews.</p>
+
+      <h3>Contact Dropdown</h3>
+
+      <p>The dashboard includes a dropdown selector to switch between three demo scenarios:</p>
+
+      <table>
+        <thead>
+          <tr><th>Contact</th><th>Company</th><th>Tier</th><th>Scenario</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sarah Chen</td><td>Meridian Health Systems</td><td>Gold</td><td>Overdue commitments, approaching champion</td></tr>
+          <tr><td>David Park</td><td>Apex Financial Group</td><td>Gold</td><td>Retention crisis, Azure competitor, failed migration</td></tr>
+          <tr><td>Rachel Morrison</td><td>TerraScale Energy</td><td>Platinum</td><td>P1 outage, champion under stress, board presentation</td></tr>
+          <tr><td>Pepper Minton</td><td>SnackStack Technologies</td><td>Gold</td><td>Viral TikTok scaling crisis, production crashed</td></tr>
+          <tr><td>Ziggy Stardust-Chen</td><td>Quantum Pretzel Corp</td><td>Silver</td><td>SAB alumni win-back, AWS courting, renewal at risk</td></tr>
+          <tr><td>Luna Wavelength</td><td>GalactiCorp Space Industries</td><td>Platinum</td><td>$8M deal blocked by CISO security audit</td></tr>
+          <tr><td>Max Bandwidth</td><td>Thunderbolt Logistics</td><td>Gold</td><td>AI pilot $4M savings, VP Ops blocking scale-up</td></tr>
+          <tr><td>Sage Cloudberry</td><td>WonderPaws Pet Wellness</td><td>Standard</td><td>First briefing, evaluating Red Hat vs VMware</td></tr>
+        </tbody>
+      </table>
+
+      <p>Select a contact from the dropdown, then click "Start Demo". Each scenario has its own timeline with distinct activity feed messages, critical flags, and narrative arc.</p>
+
+      <h3>Clickable Deliverables</h3>
+
+      <p>After the simulation completes (or while running), all 8 completed deliverable cards are clickable. Clicking opens a formatted modal viewer with complete HTML content for that deliverable. Key deliverables for all 8 contacts are embedded in the dashboard with clickable modal content. Close the modal with the X button, clicking the overlay, or pressing Escape.</p>
+
+      <blockquote><p><strong>Red Hat variant:</strong> For Red Hat-affiliated presentations, use <code>briefingclaw-dashboard-redhat.html</code> instead. It has identical functionality with Red Hat Display/Text/Mono fonts, PatternFly dark theme, and Red Hat Red accents.</p></blockquote>
+
+      <h3>Key Moments in the Simulation</h3>
+
+      <p>All eight scenarios follow the same phase structure but surface different intelligence:</p>
+
+      <table>
+        <thead>
+          <tr><th>Time</th><th>Event</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0-7s</td><td>Oprah-tor parses the request and dispatches Phase 1 agents</td></tr>
+          <tr><td>7-20s</td><td>Sherlock, Bloom-borg, and Deja View work in parallel</td></tr>
+          <tr><td>~15s</td><td>Deja View flags the <strong>critical issue</strong> (varies by contact)</td></tr>
+          <tr><td>21-37s</td><td>Draft Punk and Alfred Bitworth produce deliverables progressively</td></tr>
+          <tr><td>38-42s</td><td>Oprah-tor synthesizes the final package (8/8 deliverables)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Additional Views &amp; Modes</h3>
+
+      <p>Three standalone HTML pages extend the dashboard experience with specialized workflows. All three are self-contained (no backend required) and can be opened directly from <code>index.html</code>:</p>
+
+      <table>
+        <thead>
+          <tr><th>Page</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>briefingclaw-personas.html</code></td><td>Standalone filterable persona gallery</td></tr>
+          <tr><td><code>briefingclaw-multicontact.html</code></td><td>Multi-contact group briefing mode</td></tr>
+          <tr><td><code>briefingclaw-postbriefing.html</code></td><td>Post-briefing feedback loop with Oddsfather calibration</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Multi-Contact Briefing Mode</h4>
+
+      <p>Open <code>briefingclaw-multicontact.html</code> to run a <strong>group briefing</strong> scenario where multiple stakeholders from the same company attend together. This is the mode to use when the audience asks "what if there's more than one person in the room?"</p>
+
+      <p><strong>How to use:</strong></p>
+
+      <ol>
+        <li>Open <code>briefingclaw-multicontact.html</code> (or click its card on the <code>index.html</code> landing page).</li>
+        <li>Pick <strong>2 to 5 contacts</strong> from the picker. The picker shows 9 contacts across 3 companies:
+          <ul>
+            <li><strong>Meridian Health Systems</strong> &mdash; Sarah Chen, Tom Richards, Dr. Priya Kapoor</li>
+            <li><strong>Apex Financial Group</strong> &mdash; David Park, Karen Wu, Marcus Thompson</li>
+            <li><strong>TerraScale Energy</strong> &mdash; Rachel Morrison, Anil Desai, Frank Reeves</li>
+          </ul>
+        </li>
+        <li>The <strong>Start</strong> button enables once at least 2 contacts are selected and disables again if you exceed 5.</li>
+        <li>Click Start to generate the group briefing.</li>
+      </ol>
+
+      <p><strong>What outputs to expect:</strong></p>
+
+      <table>
+        <thead>
+          <tr><th>Panel</th><th>Contents</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Shared Company Context</strong></td><td>One unified company brief (not repeated per contact) &mdash; business overview, recent news, strategic priorities</td></tr>
+          <tr><td><strong>Buying Center Role Matrix</strong></td><td>Each contact mapped to a role: <em>economic</em>, <em>champion</em>, <em>technical</em>, <em>blocker</em>, or <em>influencer</em>. This is how to interpret the group dynamics &mdash; the blocker is usually the hardest conversation, the champion is the one with the budget conviction</td></tr>
+          <tr><td><strong>Cross-Contact Dynamics</strong></td><td>Alignments (who agrees with whom), tensions (friction points surfaced by SAB history), and outright conflicts (directly opposing agendas)</td></tr>
+          <tr><td><strong>Recommended Briefing Order</strong></td><td>A suggested agenda sequence &mdash; conventionally <strong>blocker first, champion last</strong>, so the blocker's objections get addressed before the champion closes the room</td></tr>
+          <tr><td><strong>Unified Agenda</strong></td><td>A single time-blocked agenda tuned to the group, not a per-person agenda</td></tr>
+          <tr><td><strong>Coordination Risks</strong></td><td>Things that can derail a group briefing &mdash; scheduling conflicts, awkward hierarchy moments, topics one person should not hear in front of another</td></tr>
+          <tr><td><strong>Oddsfather Group Verdict</strong></td><td>Success probability expressed as a percentage with <strong>coordination adjustments</strong> layered on top of the per-person verdicts &mdash; a low coordination score can drop the group probability even when every individual would score well</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>How to interpret the role matrix and group verdict:</strong> A briefing with a champion plus a blocker is harder than a briefing with two champions, even if the individual relationship stages look strong, because the blocker's veto power is the constraint. The Oddsfather's group verdict already accounts for this &mdash; a drop of 15+ percentage points between the individual and group numbers is the signal that coordination, not content, is the problem to solve.</p>
+
+      <h4>Persona Gallery</h4>
+
+      <p>Open <code>briefingclaw-personas.html</code> for a <strong>standalone filterable persona gallery</strong> that shows all 8 personas as rich cards. Use this as a warm-up view before the main demo or as a reference whenever you need to remember which contact has which drama.</p>
+
+      <p><strong>How to use:</strong></p>
+
+      <ol>
+        <li>Open <code>briefingclaw-personas.html</code> (or click the Persona Gallery card on <code>index.html</code>).</li>
+        <li>Use the <strong>tier filter</strong> to narrow by VVIP tier (Platinum, Gold, Silver, Standard).</li>
+        <li>Use the <strong>type filter</strong> to narrow by scenario type (serious enterprise vs. fun persona).</li>
+        <li>Each card shows: stat block (tier, industry, relationship stage), a color-coded drama callout (the hook of the scenario), and the contact's top-3 priorities.</li>
+      </ol>
+
+      <p><strong>Action buttons</strong> on each card:</p>
+
+      <table>
+        <thead>
+          <tr><th>Button</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Run Demo</strong></td><td>Launches the dashboard pre-loaded with that persona (passes the persona through the query string)</td></tr>
+          <tr><td><strong>Open Dossier</strong></td><td>Jumps directly to the deliverable modal for that persona without running the pipeline animation</td></tr>
+        </tbody>
+      </table>
+
+      <p>This page is the fastest way to answer "can you show me the Rachel Morrison one?" without scrolling through a dropdown.</p>
+
+      <h4>Post-Briefing Feedback</h4>
+
+      <p>Open <code>briefingclaw-postbriefing.html</code> to log a briefing outcome after the room is cleared. This is the <strong>feedback loop that makes Deja View smarter over time</strong>: every logged outcome becomes input that Deja View and The Oddsfather can use to recalibrate their predictions on the next briefing with the same contact.</p>
+
+      <p><strong>Submit workflow:</strong></p>
+
+      <ol>
+        <li>Open <code>briefingclaw-postbriefing.html</code>.</li>
+        <li>On the left, fill in the debrief form:
+          <ul>
+            <li><strong>Contact dropdown</strong> &mdash; pick which contact the feedback is for.</li>
+            <li><strong>NPS score buttons (0-10)</strong> &mdash; click a single button for the visitor's net promoter score.</li>
+            <li><strong>Commitments list</strong> &mdash; what did we promise in the room? One per line.</li>
+            <li><strong>Actual outcome</strong> &mdash; what actually happened? (Plain text.)</li>
+            <li><strong>Relationship stage signal</strong> &mdash; did the briefing move the relationship forward, hold it, or regress it?</li>
+            <li><strong>Debrief notes</strong> &mdash; anything else worth capturing.</li>
+          </ul>
+        </li>
+        <li>Click <strong>Submit</strong>.</li>
+      </ol>
+
+      <p><strong>What the live analysis panel shows (right side):</strong></p>
+
+      <table>
+        <thead>
+          <tr><th>Card</th><th>Contents</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Oddsfather Calibration</strong></td><td>Shows The Oddsfather's <strong>predicted</strong> success probability against the <strong>actual</strong> outcome, with a drift classification &mdash; <em>well calibrated</em>, <em>optimistic drift</em>, <em>pessimistic drift</em>, or <em>severe miss</em>. This is how you catch a model that's systematically wrong about a persona and need to correct it.</td></tr>
+          <tr><td><strong>Deja View Stage Update Preview</strong></td><td>A preview of how Deja View would move the relationship stage based on the feedback (e.g., "would advance from Trusted to Champion").</td></tr>
+          <tr><td><strong>Recent Submissions</strong></td><td>A scrolling history of the most recently logged outcomes.</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>What localStorage stores:</strong> All submissions persist to browser <code>localStorage</code> under the key <code>briefingclaw-feedback</code>, capped at <strong>50 entries</strong> (the oldest entries are evicted when the cap is reached). There is no server and no network call &mdash; rehearsal data stays on the laptop and survives between sessions until the browser storage is cleared.</p>
+
+      <p><strong>How The Oddsfather uses the calibration:</strong> Each new feedback entry gets folded into the drift calculation. If The Oddsfather predicted 72% and the actual outcome was a clear loss, the calibration card highlights the miss and &mdash; in the production vision &mdash; the next briefing with the same contact would start with a shifted prior. For the demo, the calibration card is the artefact that shows "this is a learning loop, not a one-shot prediction."</p>
+
+      <hr>
+
+      <h2>7. Using the CLI (briefingclaw.sh)</h2>
+
+      <p>The <code>briefingclaw.sh</code> script provides an interactive menu for managing the entire demo lifecycle.</p>
+
+      <h3>Available Commands</h3>
+
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>./briefingclaw.sh setup</code></td><td>First-time configuration wizard. Creates directories, copies files, prompts for API keys.</td></tr>
+          <tr><td><code>./briefingclaw.sh start</code></td><td>Launches Podman machine, AI Lab model server, and OpenClaw container.</td></tr>
+          <tr><td><code>./briefingclaw.sh stop</code></td><td>Stops the OpenClaw container and optionally the model server.</td></tr>
+          <tr><td><code>./briefingclaw.sh status</code></td><td>Displays system health: Podman status, model serving, API key configuration, container state.</td></tr>
+          <tr><td><code>./briefingclaw.sh demo</code></td><td>Sets up the full demo environment with pre-configured terminal tabs and browser window.</td></tr>
+          <tr><td><code>./briefingclaw.sh preview</code></td><td>Rehearsal mode. Opens the dashboards without running any infrastructure checks, so you can practise narration, timing, and persona switching against the animated simulation.</td></tr>
+          <tr><td><code>./briefingclaw.sh preflight</code></td><td>Conference-day checklist. Run 30 minutes before your session. Validates all components.</td></tr>
+          <tr><td><code>./briefingclaw.sh sherlock "&lt;query&gt;"</code></td><td>Run Sherlock Ohms standalone for executive research.</td></tr>
+          <tr><td><code>./briefingclaw.sh bloomborg "&lt;query&gt;"</code></td><td>Run Bloom-borg standalone for company research.</td></tr>
+          <tr><td><code>./briefingclaw.sh record</code></td><td>Guides recording a backup demo video (fallback if live demo fails).</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Typical workflow</h3>
+
+      <pre><code># Day before the conference
+./briefingclaw.sh setup          # Configure if not done yet
+./briefingclaw.sh start          # Start everything
+./briefingclaw.sh status         # Verify all green
+./briefingclaw.sh record         # Record backup video
+
+# 30 minutes before your session
+./briefingclaw.sh preflight      # Run the full checklist
+
+# Showtime
+./briefingclaw.sh demo           # Launch the demo environment
+</code></pre>
+
+      <hr>
+
+      <h2>8. Running Individual Agents</h2>
+
+      <p>Each agent can be run independently for testing or targeted research.</p>
+
+      <h3>Sherlock Ohms (Executive Research)</h3>
+
+      <pre><code>zeroclaw agent -p sherlock-ohms
+# Then type: "Research Sarah Chen, CIO of Meridian Health Systems"
+</code></pre>
+
+      <p>Produces: executive profile with career arc, recent activity, tech priorities, communication style, and conversation starters.</p>
+
+      <h3>Bloom-borg (Account Intelligence)</h3>
+
+      <pre><code>zeroclaw agent -p bloom-borg
+# Then type: "Research Meridian Health Systems"
+</code></pre>
+
+      <p>Produces: company brief with business overview, financials, recent news, technology landscape, competitive dynamics, and briefing relevance.</p>
+
+      <h3>Deja View (SAB Historian)</h3>
+
+      <p>Runs inside the OpenClaw container. Accessed through the Oprah-tor orchestrator or directly via the OpenClaw gateway API.</p>
+
+      <p>Reads from workspace files:</p>
+      <ul>
+        <li><code>sab-meeting-notes.md</code></li>
+        <li><code>engagement-history.md</code></li>
+        <li><code>crm-export.json</code></li>
+        <li><code>vvip-roster.json</code></li>
+      </ul>
+
+      <h3>Draft Punk (Briefing Architect)</h3>
+
+      <p>Runs inside the OpenClaw container. Receives synthesized intelligence from Oprah-tor and assembles the five document deliverables.</p>
+
+      <h3>Alfred Bitworth (VVIP Protocol)</h3>
+
+      <p>Runs inside the OpenClaw container. Reads VVIP roster and engagement history to generate protocol checklists and sponsor alerts.</p>
+
+      <h3>Sponsor Coach</h3>
+
+      <p>Runs inside the OpenClaw container. Scores the executive sponsor's readiness for the drop-in, flags coaching gaps, and produces a short prep brief the sponsor can read in under two minutes.</p>
+
+      <h3>The Oddsfather</h3>
+
+      <p>Runs inside the OpenClaw container during Phase 3. Reviews the full deliverable package and the critical flags to generate a success probability verdict with the top risks and top levers that could shift the outcome.</p>
+
+      <hr>
+
+      <h2>9. Understanding the Output</h2>
+
+      <p>A complete briefing package contains the following deliverables:</p>
+
+      <h3>From Draft Punk</h3>
+
+      <table>
+        <thead>
+          <tr><th>Deliverable</th><th>Description</th><th>Length</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Executive Dossier</strong></td><td>Quick-reference card with visitor snapshot, key talking points, and critical flags</td><td>1 page</td></tr>
+          <tr><td><strong>Briefing Backgrounder</strong></td><td>Comprehensive prep document weaving executive research, company intel, and engagement history</td><td>2 pages</td></tr>
+          <tr><td><strong>Sponsor Talking Points</strong></td><td>Prep sheet for the executive sponsor's drop-in, with context, relationship notes, and suggested topics</td><td>1 page</td></tr>
+          <tr><td><strong>Recommended Agenda</strong></td><td>Time-blocked agenda with rationale for each session, informed by visitor interests and engagement history</td><td>1 page</td></tr>
+          <tr><td><strong>Conversation Starters</strong></td><td>Three personalized, non-generic openers drawn from recent activity, shared interests, or SAB themes</td><td>Short list</td></tr>
+        </tbody>
+      </table>
+
+      <h3>From Alfred Bitworth</h3>
+
+      <table>
+        <thead>
+          <tr><th>Deliverable</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>VVIP Protocol Checklist</strong></td><td>Actionable checklist with assignees and deadlines covering pre-briefing setup, day-of arrival, and post-briefing follow-up</td></tr>
+          <tr><td><strong>Sponsor Alert Draft</strong></td><td>Email template for notifying the executive sponsor with context and talking points reference</td></tr>
+          <tr><td><strong>Engagement Log Entry</strong></td><td>Structured record of the upcoming briefing for future cross-program reference</td></tr>
+        </tbody>
+      </table>
+
+      <h3>From Sponsor Coach</h3>
+
+      <table>
+        <thead>
+          <tr><th>Deliverable</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Sponsor Readiness Brief</strong></td><td>Short coaching brief with the sponsor's readiness score, what to review before the drop-in, what to avoid, and the exact phrases that should show up in the conversation</td></tr>
+        </tbody>
+      </table>
+
+      <h3>From The Oddsfather</h3>
+
+      <table>
+        <thead>
+          <tr><th>Deliverable</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Success Probability Verdict</strong></td><td>Percentage likelihood of a successful briefing outcome, plain-language verdict, top 3 risks, and top 3 levers that could shift the outcome</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Critical Flags</h3>
+
+      <p>The system surfaces flags that require immediate attention:</p>
+
+      <table>
+        <thead>
+          <tr><th>Flag</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Red / OVERDUE</td><td>A commitment or action item has passed its deadline</td></tr>
+          <tr><td>Yellow / OPEN</td><td>An unresolved follow-up from a past engagement</td></tr>
+          <tr><td>Green / POSITIVE</td><td>Strong relationship signals (high NPS, engagement score, champion trajectory)</td></tr>
+          <tr><td>Blue / OPPORTUNITY</td><td>Untapped potential (new stakeholder, unengaged contact, adjacent use case)</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>10. Demo Data Reference</h2>
+
+      <p>The repository includes simulated data for eight demo scenarios &mdash; three serious enterprise contacts and five fun personas with whimsical names but realistic relationship dynamics.</p>
+
+      <h3>Contact Scenarios</h3>
+
+      <table>
+        <thead>
+          <tr><th>Contact</th><th>Company</th><th>Industry</th><th>Tier</th><th>Key Tension</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sarah Chen</td><td>Meridian Health</td><td>Healthcare</td><td>Gold</td><td>Overdue AI governance commitment</td></tr>
+          <tr><td>David Park</td><td>Apex Financial</td><td>Financial Services</td><td>Gold</td><td>Failed migration, Azure threat, renewal at risk</td></tr>
+          <tr><td>Rachel Morrison</td><td>TerraScale Energy</td><td>Energy/Utilities</td><td>Platinum</td><td>P1 outage, champion credibility at stake</td></tr>
+          <tr><td>Pepper Minton</td><td>SnackStack Technologies</td><td>Food Tech</td><td>Gold</td><td>Viral TikTok crash, scaling crisis</td></tr>
+          <tr><td>Ziggy Stardust-Chen</td><td>Quantum Pretzel Corp</td><td>FinTech/Crypto</td><td>Silver</td><td>SAB alumni, AWS courting, broken promises</td></tr>
+          <tr><td>Luna Wavelength</td><td>GalactiCorp Space Industries</td><td>Aerospace</td><td>Platinum</td><td>$8M deal blocked by CISO</td></tr>
+          <tr><td>Max Bandwidth</td><td>Thunderbolt Logistics</td><td>Supply Chain</td><td>Gold</td><td>AI champion vs internal politics</td></tr>
+          <tr><td>Sage Cloudberry</td><td>WonderPaws Pet Wellness</td><td>Veterinary</td><td>Standard</td><td>First briefing, greenfield opportunity</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Data Files</h3>
+
+      <p><strong>sab-meeting-notes.md</strong> &mdash; Q1 2026 and Q4 2025 Strategic Advisory Board meetings with 8 contacts. Sarah led AI Governance, David led Hybrid Cloud, Rachel co-chairs, Pepper/Luna/Max contributed. Includes alumni roster (Ziggy).</p>
+
+      <p><strong>crm-export.json</strong> &mdash; Eight account records with 20+ contacts, open opportunities, and support escalations. Ranges from $780M (WonderPaws) to $14.5B (GalactiCorp).</p>
+
+      <p><strong>vvip-roster.json</strong> &mdash; Full VVIP profiles for all eight contacts with comprehensive preferences and protocol requirements across all tiers (Platinum, Gold, Silver, Standard).</p>
+
+      <p><strong>engagement-history.md</strong> &mdash; Eight complete engagement timelines with relationship stage progression, open items, and flags. Ranges from multi-year champion relationships to first-time briefings.</p>
+
+      <h3>Demo Deliverables</h3>
+
+      <p>The <code>demo-deliverables/</code> directory contains 7 sample markdown reference files for the original 3 contacts. Key deliverables for all 8 contacts (3 per contact) are embedded directly in both HTML dashboards as formatted modal content. The markdown files serve as templates for customization.</p>
+
+      <table>
+        <thead>
+          <tr><th>Deliverable Type</th><th>Agent</th><th>All 3 Contacts</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Executive Dossier</td><td>Draft Punk</td><td>Embedded</td></tr>
+          <tr><td>Briefing Backgrounder</td><td>Draft Punk</td><td>Embedded</td></tr>
+          <tr><td>Sponsor Talking Points</td><td>Draft Punk</td><td>Embedded</td></tr>
+          <tr><td>Recommended Agenda</td><td>Draft Punk</td><td>Embedded</td></tr>
+          <tr><td>Conversation Starters</td><td>Draft Punk</td><td>Embedded</td></tr>
+          <tr><td>VVIP Protocol Checklist</td><td>Alfred Bitworth</td><td>Embedded</td></tr>
+          <tr><td>Sponsor Alert Email</td><td>Alfred Bitworth</td><td>Embedded</td></tr>
+          <tr><td>Engagement Log Entry</td><td>Alfred Bitworth</td><td>Embedded</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Customizing demo data</h3>
+
+      <p>To adapt the demo for a different scenario, edit the files in <code>demo-data/</code>. The agents read these files at runtime, so changes take effect immediately (restart the OpenClaw container if it caches workspace files).</p>
+
+      <p>Key consistency rules:</p>
+      <ul>
+        <li>Names and companies must match across all four data files</li>
+        <li>SAB meeting dates in <code>sab-meeting-notes.md</code> should align with entries in <code>engagement-history.md</code></li>
+        <li>VVIP roster entries should reference contacts that exist in <code>crm-export.json</code></li>
+        <li>Each contact should have distinct relationship challenges and engagement history</li>
+        <li>Overdue action items, open follow-ups, and escalations provide the "dramatic tension"</li>
+      </ul>
+
+      <hr>
+
+      <h2>11. Conference Day Checklist</h2>
+
+      <h3>30 minutes before your session</h3>
+
+      <pre><code>./briefingclaw.sh preflight
+</code></pre>
+
+      <p>This checks:</p>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Podman machine is running</li>
+        <li><input type="checkbox" disabled> Granite 8B model is serving and responsive</li>
+        <li><input type="checkbox" disabled> OpenClaw container is healthy</li>
+        <li><input type="checkbox" disabled> ZeroClaw binary is available</li>
+        <li><input type="checkbox" disabled> API keys are configured and valid</li>
+        <li><input type="checkbox" disabled> Demo data files are in the workspace</li>
+        <li><input type="checkbox" disabled> Gateway UI loads at http://127.0.0.1:18789</li>
+        <li><input type="checkbox" disabled> Wi-Fi is connected (for frontier model agents)</li>
+        <li><input type="checkbox" disabled> Backup video is accessible and tested</li>
+        <li><input type="checkbox" disabled> Dashboard loads: <code>open briefingclaw-dashboard.html</code> (or <code>briefingclaw-dashboard-redhat.html</code> for Red Hat branding)</li>
+        <li><input type="checkbox" disabled> <strong>Verify all three new pages load:</strong> <code>open briefingclaw-personas.html</code>, <code>open briefingclaw-multicontact.html</code>, <code>open briefingclaw-postbriefing.html</code> &mdash; all three should render cleanly without broken elements</li>
+      </ul>
+
+      <h3>5 minutes before demo</h3>
+
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Terminal tabs are arranged (use <code>./briefingclaw.sh demo</code>)</li>
+        <li><input type="checkbox" disabled> Browser is open to the gateway UI</li>
+        <li><input type="checkbox" disabled> Dashboard tab open as fallback (briefingclaw-dashboard.html)</li>
+        <li><input type="checkbox" disabled> Font size is large enough for projection</li>
+        <li><input type="checkbox" disabled> Briefing request text is ready to paste</li>
+        <li><input type="checkbox" disabled> Backup video is one click away</li>
+      </ul>
+
+      <h3>If things go wrong</h3>
+
+      <table>
+        <thead>
+          <tr><th>Problem</th><th>Fallback</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Model is slow</td><td>Switch to the dashboard (<code>briefingclaw-dashboard.html?autostart</code> or <code>briefingclaw-dashboard-redhat.html?autostart</code>)</td></tr>
+          <tr><td>OpenClaw crashes</td><td>Use the dashboard for visual demo, ZeroClaw CLI for live research</td></tr>
+          <tr><td>Web search fails</td><td>Sherlock and Bloom-borg will note limited results; Deja View and local agents still work</td></tr>
+          <tr><td>Wi-Fi down</td><td>Local agents (Deja View, Draft Punk, Alfred Bitworth) still function; skip frontier agents</td></tr>
+          <tr><td>Everything fails</td><td>Switch to slides with screenshots of the output</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>12. Troubleshooting</h2>
+
+      <h3>Common Issues</h3>
+
+      <p><strong>"Cannot connect to Podman machine"</strong></p>
+      <pre><code>podman machine start
+podman machine info    # Verify status
+</code></pre>
+
+      <p><strong>"Model not responding on port 8001"</strong></p>
+      <ul>
+        <li>Open Podman Desktop &gt; AI Lab &gt; Models</li>
+        <li>Verify Granite 8B is downloaded and the service is started</li>
+        <li>Check with: <code>curl -s http://127.0.0.1:8001/v1/models</code></li>
+      </ul>
+
+      <p><strong>"OpenClaw container won't start"</strong></p>
+      <pre><code>cd config
+podman-compose logs openclaw    # Check error output
+podman-compose down
+podman-compose up -d            # Restart
+</code></pre>
+
+      <p><strong>"ZeroClaw profile not found"</strong></p>
+      <pre><code># Verify config file location
+ls ~/.config/zeroclaw/config.toml
+
+# Test profiles
+zeroclaw agent -p sherlock-ohms --dry-run
+zeroclaw agent -p bloom-borg --dry-run
+</code></pre>
+
+      <p><strong>"Tavily API key invalid"</strong></p>
+      <ul>
+        <li>Verify the key in <code>config/.env</code></li>
+        <li>Test directly: <code>curl -s https://api.tavily.com/search -d '{"api_key":"YOUR_KEY","query":"test"}'</code></li>
+      </ul>
+
+      <p><strong>"Gateway UI shows blank page"</strong></p>
+      <ul>
+        <li>Verify the container is running: <code>podman ps</code></li>
+        <li>Check the health endpoint: <code>curl -s http://127.0.0.1:18789/health</code></li>
+        <li>Inspect container logs: <code>podman logs &lt;container-id&gt;</code></li>
+      </ul>
+
+      <p><strong>"Agents return empty or incomplete results"</strong></p>
+      <ul>
+        <li>Check that workspace files are mounted: verify volume mounts in <code>podman-compose.yml</code></li>
+        <li>Confirm demo data files exist in <code>~/briefingclaw/workspace/</code></li>
+        <li>Review agent logs in the OpenClaw gateway for error messages</li>
+      </ul>
+
+      <h3>System Resource Issues</h3>
+
+      <p><strong>High memory usage:</strong></p>
+      <ul>
+        <li>Granite 8B uses approximately 6 GB of RAM</li>
+        <li>Close unnecessary applications before running the demo</li>
+        <li>Monitor with: <code>top -l 1 | head -15</code></li>
+      </ul>
+
+      <p><strong>Slow model responses:</strong></p>
+      <ul>
+        <li>First request after model startup is slower (cold start)</li>
+        <li>Run a warmup request before the demo: <code>./briefingclaw.sh preflight</code></li>
+        <li>Apple Silicon Macs will run significantly faster than Intel</li>
+      </ul>
+
+      <hr>
+
+      <h2>13. Customization</h2>
+
+      <h3>Using a different frontier model provider</h3>
+
+      <p>Edit <code>config/.env</code> to switch providers. Then update the model references:</p>
+      <ul>
+        <li>In <code>config/zeroclaw-config.toml</code>: change the <code>[providers.frontier]</code> section</li>
+        <li>In <code>config/openclaw-config.yml</code>: change the <code>model_providers.frontier</code> section</li>
+      </ul>
+
+      <h3>Adding new agent skills</h3>
+
+      <ol>
+        <li>Create a new directory under <code>agents/</code> with a <code>SKILL.md</code> file</li>
+        <li>Follow the format of existing skill files (identity, methodology, output format, rules)</li>
+        <li>Register the skill in <code>config/openclaw-config.yml</code> under the <code>skills.active</code> section</li>
+        <li>Add a volume mount in <code>config/podman-compose.yml</code></li>
+        <li>Rebuild the OpenClaw container</li>
+      </ol>
+
+      <h3>Modifying VVIP tiers</h3>
+
+      <p>Edit <code>demo-data/vvip-roster.json</code>. The four tiers are:</p>
+      <ul>
+        <li><strong>Platinum</strong> &mdash; SAB Chair/Co-Chair, board-level executives</li>
+        <li><strong>Gold</strong> &mdash; Active SAB members, VP+ at strategic accounts</li>
+        <li><strong>Silver</strong> &mdash; SAB alumni, Director+ at growth accounts</li>
+        <li><strong>Standard</strong> &mdash; No advisory membership</li>
+      </ul>
+
+      <p>Each tier maps to a specific protocol level in Alfred Bitworth's checklist generation.</p>
+
+      <h3>Adapting for a different use case</h3>
+
+      <p>The agent architecture is generalizable beyond executive briefings. To adapt:</p>
+      <ol>
+        <li>Replace the agent <code>SKILL.md</code> files with domain-specific instructions</li>
+        <li>Replace the demo data with your domain's data sources</li>
+        <li>Adjust the orchestrator's dispatch logic for your workflow phases</li>
+        <li>Update the config files to reflect new skill names and triggers</li>
+      </ol>
+
+      <p>The core pattern &mdash; orchestrator dispatching specialist agents with a mix of web research and local data lookup &mdash; applies to any multi-source intelligence synthesis task.</p>
+
+      <hr>
+
+      <p><em>For architecture details, see <a href="#architecture">Architecture</a>. For the presentation script, see <a href="#demo-script">Demo Script</a>. For build instructions, see <a href="#build-guide">Build Guide</a>.</em></p>
+    </div>
+
+    <div class="doc" id="doc-changelog" data-md="CHANGELOG.md">
+      <h1>Changelog</h1>
+
+      <p>All notable changes to the BriefingClaw project will be documented in this file.</p>
+
+      <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>.</p>
+
+      <h2>[1.0.0] - 2026-04-06</h2>
+
+      <h3>Added</h3>
+      <ul>
+        <li>Eight-agent multi-agent system for executive briefing preparation
+          <ul>
+            <li>Oprah-tor (orchestrator) &mdash; request decomposition and synthesis, with 25s hard timeouts and graceful degradation on research agents</li>
+            <li>Sherlock Ohms (executive research) &mdash; person-level web intelligence</li>
+            <li>Bloom-borg (account intelligence) &mdash; company-level web intelligence</li>
+            <li>Deja View (SAB historian) &mdash; cross-program history, engagement tracking, SAB theme trend analysis</li>
+            <li>Draft Punk (briefing architect) &mdash; document assembly (dossier, backgrounder, talking points, agenda)</li>
+            <li>Alfred Bitworth (VVIP protocol) &mdash; protocol checklists, sponsor alerts, engagement logging</li>
+            <li>Sponsor Coach &mdash; readiness assessment micro-agent that scores sponsor preparation and produces a coaching brief</li>
+            <li>The Oddsfather &mdash; Phase 3 success probability agent that generates the briefing outcome verdict with top risks and levers</li>
+          </ul>
+        </li>
+        <li>Dual-model routing: frontier (cloud) for research agents, local Granite 8B for data agents</li>
+        <li>Configuration for OpenClaw gateway and ZeroClaw CLI agents</li>
+        <li>Podman Compose manifest for container orchestration</li>
+        <li>Simulated demo data with eight contact scenarios (3 enterprise + 5 fun personas):
+          <ul>
+            <li>Sarah Chen / Meridian Health &mdash; overdue commitments, champion trajectory</li>
+            <li>David Park / Apex Financial &mdash; retention crisis, Azure threat</li>
+            <li>Rachel Morrison / TerraScale Energy &mdash; P1 outage, champion under stress</li>
+            <li>Pepper Minton / SnackStack Technologies &mdash; viral TikTok scaling crisis</li>
+            <li>Ziggy Stardust-Chen / Quantum Pretzel Corp &mdash; SAB alumni win-back</li>
+            <li>Luna Wavelength / GalactiCorp Space Industries &mdash; $8M deal blocked by CISO</li>
+            <li>Max Bandwidth / Thunderbolt Logistics &mdash; AI champion vs internal politics</li>
+            <li>Sage Cloudberry / WonderPaws Pet Wellness &mdash; first briefing, greenfield</li>
+            <li>SAB meeting notes, CRM (8 accounts, 20+ contacts), VVIP roster, engagement histories</li>
+          </ul>
+        </li>
+        <li>Key deliverables for all 8 contacts embedded as clickable HTML modal content in dashboards; 7 sample markdown files in demo-deliverables/ for reference</li>
+        <li>Interactive CLI wrapper (<code>briefingclaw.sh</code>) for demo management</li>
+        <li>New <code>./briefingclaw.sh preview</code> command &mdash; rehearsal mode that opens the dashboards without running any infrastructure checks, ideal for practising narration and timing</li>
+        <li>Navigation landing page (<code>index.html</code>) with persona gallery and links to all demo pages, dashboards, docs, and the GitHub repository</li>
+        <li>Enterprise deployment guide (<a href="#enterprise"><code>docs/ENTERPRISE-DEPLOYMENT.md</code></a>) covering the path from laptop prototype to Red Hat OpenShift AI production</li>
+        <li>Live demo dashboard (<code>briefingclaw-dashboard.html</code>) with improved readability (larger fonts, wider agent spacing):
+          <ul>
+            <li>Contact dropdown selector to switch between eight scenarios</li>
+            <li>Unique simulation timeline per contact with distinct narrative arcs</li>
+            <li>Animated agent pipeline with canvas particle effects</li>
+            <li>Real-time activity feed, deliverable tracking, critical flag alerts</li>
+            <li>Risk badges on completed deliverable cards (red = critical, amber = warning, green = positive)</li>
+            <li>PDF export button that produces a printable briefing package for the selected persona</li>
+            <li>Key deliverables for all 8 contacts clickable with embedded HTML modal content</li>
+            <li>Improved three-state mode detection: LIVE (full stack), LOCAL ONLY (Granite reachable but OpenClaw down), SIMULATED (no services)</li>
+            <li>Telemetry logging of all session events to localStorage; press <strong>T</strong> to download the JSON log</li>
+            <li>GitHub repository link in the footer</li>
+            <li>Persistent logging of run history across sessions</li>
+          </ul>
+        </li>
+        <li>Red Hat branded dashboard (<code>briefingclaw-dashboard-redhat.html</code>): identical functionality (risk badges, PDF export, LIVE/LOCAL ONLY/SIMULATED, telemetry, GitHub footer link) with Red Hat Display/Text/Mono fonts, PatternFly dark theme, Red Hat Red (#EE0000) accent</li>
+        <li>Interactive HTML architecture visualization (<code>briefingclaw-architecture.html</code>)</li>
+        <li>Complete documentation: architecture guide, build guide, demo script, user guide, enterprise deployment guide</li>
+        <li>Initial release for GACEP Spring 2026 Conference</li>
+      </ul>
+
+      <h3>Changed</h3>
+      <ul>
+        <li>Renamed "Customer Advisory Board" to "Strategic Advisory Board" (CAB &rarr; SAB) across all content, skill files, demo data, dashboards, and documentation</li>
+        <li>Agent directory rename: <code>agents/cab-historian/</code> &rarr; <code>agents/sab-historian/</code></li>
+        <li>Demo data rename: <code>demo-data/cab-meeting-notes.md</code> &rarr; <code>demo-data/sab-meeting-notes.md</code></li>
+        <li>Deja View now performs SAB theme trend analysis across the last four board meetings</li>
+        <li>Oprah-tor now enforces a 25-second hard timeout on research agents (Sherlock Ohms and Bloom-borg) with graceful degradation when a frontier call stalls or the network is flaky</li>
+      </ul>
+
+      <h3>Later in 1.0.0</h3>
+      <ul>
+        <li><strong><code>briefingclaw-multicontact.html</code></strong> &mdash; multi-contact group briefing mode. Pick 2-5 contacts from 9 total across 3 companies (Meridian, Apex, TerraScale). Outputs shared company context, buying center role matrix (economic / champion / technical / blocker / influencer), cross-contact dynamics (alignments / tensions / conflicts), recommended briefing order (blocker first, champion last), unified agenda, coordination risks, and The Oddsfather's group verdict with coordination adjustments.</li>
+        <li><strong><code>briefingclaw-personas.html</code></strong> &mdash; standalone filterable persona gallery. Card view of all 8 personas with tier and type filters, rich stat cards, color-coded drama callouts, top-3 priorities, and action buttons (Run Demo / Open Dossier). Designed as a warm-up or reference page before the main demo.</li>
+        <li><strong><code>briefingclaw-postbriefing.html</code></strong> &mdash; post-briefing feedback loop with Oddsfather calibration and <code>localStorage</code> persistence. Form for logging briefing outcomes (contact, NPS 0-10, commitments, actual outcome, relationship stage signal, debrief notes). Live analysis panel shows Oddsfather predicted-vs-actual with drift classification, Deja View stage update preview, and recent submission history. Submissions persist to browser <code>localStorage</code> under the <code>briefingclaw-feedback</code> key (capped at 50 entries).</li>
+        <li><strong>Architecture HTML fix</strong> &mdash; <code>briefingclaw-architecture.html</code> now correctly shows Sponsor Coach in <strong>Phase 3</strong> (three-column assembly alongside Draft Punk and Alfred Bitworth) and <strong>The Oddsfather</strong> in a new <strong>Phase 4</strong> for success probability synthesis, matching the documented execution flow.</li>
+      </ul>
+    </div>
+
+    <div class="doc" id="doc-architecture" data-md="docs/ARCHITECTURE.md">
+      <h1>BriefingClaw: Multi-Agent Executive Engagement Intelligence System</h1>
+
+      <h2>Architecture Overview</h2>
+
+      <p>BriefingClaw is a multi-agent system built on OpenClaw and ZeroClaw that automates executive briefing preparation by orchestrating eight specialized agents. Each agent handles a distinct domain of the briefing preparation workflow, coordinated by a central Orchestrator.</p>
+
+      <pre><code>                    ┌─────────────────────────────┐
+                    │     BRIEFING REQUEST         │
+                    │  (Slack / CLI / CRM Trigger) │
+                    └──────────────┬──────────────┘
+                                   │
+                    ┌──────────────▼──────────────┐
+                    │     🎯 OPRAH-TOR             │
+                    │     Orchestrator              │
+                    │  Task decomposition &amp;         │
+                    │  result synthesis             │
+                    │  25s timeout + degradation    │
+                    │  ☁️  FRONTIER MODEL            │
+                    └──┬───┬───┬───┬───┬──────────┘
+                       │   │   │   │   │
+          ┌────────────┘   │   │   │   └────────────┐
+          │                │   │   │                 │
+    ┌─────▼─────┐   ┌─────▼───▼─────┐   ┌──────────▼──────────┐
+    │ 🔍 SHERLOCK│   │ 🏢 BLOOM-BORG │   │ 📋 DÉJÀ VIEW        │
+    │ OHMS       │   │               │   │                     │
+    │ Exec       │   │ Account       │   │ SAB Historian        │
+    │ Research   │   │ Intelligence  │   │ + Theme Trend        │
+    │ ☁️ FRONTIER │   │ ☁️ FRONTIER    │   │ 💻 LOCAL MODEL       │
+    └─────┬─────┘   └──────┬────────┘   └──────────┬──────────┘
+          │                │                        │
+          └────────┬───────┘────────────────────────┘
+                   │
+           Phase 2: Assembly (parallel)
+         /         │          \
+  ┌──────▼───┐ ┌───▼──────┐ ┌──▼──────────┐
+  │ 📄 DRAFT │ │ ⭐ ALFRED │ │ 🎤 SPONSOR  │
+  │ PUNK     │ │ BITWORTH │ │ COACH       │
+  │ Briefing │ │ VVIP     │ │ Readiness   │
+  │ Architect│ │ Protocol │ │ Assessment  │
+  │ 💻 LOCAL │ │ 💻 LOCAL │ │ 💻 LOCAL    │
+  └──────┬───┘ └───┬──────┘ └──┬──────────┘
+         │         │            │
+         └─────────┼────────────┘
+                   │
+         Phase 3: Synthesis
+                   │
+          ┌────────▼────────┐
+          │ 🎲 THE          │
+          │ ODDSFATHER       │
+          │ Success          │
+          │ Probability      │
+          │ 💻 LOCAL MODEL   │
+          └────────┬────────┘
+                   │
+          ┌────────▼────────┐
+          │  FINAL BRIEFING  │
+          │  PACKAGE         │
+          └─────────────────┘
+</code></pre>
+
+      <h2>Agent Roster</h2>
+
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Codename</th><th>Role</th><th>Model</th><th>Framework</th><th>Runs On</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Orchestrator</td><td><strong>Oprah-tor</strong></td><td>Decomposes briefing requests, dispatches tasks to specialists, enforces 25s hard timeouts on research agents with graceful degradation, synthesizes final package</td><td>☁️ Frontier (Claude/GPT/Gemini)</td><td>OpenClaw (Gateway)</td><td>Podman container</td></tr>
+          <tr><td>Executive Research</td><td><strong>Sherlock Ohms</strong></td><td>Deep research on visiting executive: career, news, social, conference appearances</td><td>☁️ Frontier (Claude/GPT/Gemini)</td><td>ZeroClaw (CLI)</td><td>Native binary</td></tr>
+          <tr><td>Account Intelligence</td><td><strong>Bloom-borg</strong></td><td>Company-level intelligence: financials, news, tech stack, competitive landscape</td><td>☁️ Frontier (Claude/GPT/Gemini)</td><td>ZeroClaw (CLI)</td><td>Native binary</td></tr>
+          <tr><td>SAB Historian</td><td><strong>Déjà View</strong></td><td>Cross-references SAB membership, retrieves past themes, flags relationship history, analyses SAB theme trends across the last four board meetings</td><td>💻 Local (Granite 8B)</td><td>OpenClaw (Skill)</td><td>Podman container</td></tr>
+          <tr><td>Briefing Architect</td><td><strong>Draft Punk</strong></td><td>Assembles all intelligence into formatted deliverables: dossier, talking points, agenda</td><td>💻 Local (Granite 8B)</td><td>OpenClaw (Skill)</td><td>Podman container</td></tr>
+          <tr><td>VVIP Protocol</td><td><strong>Alfred Bitworth</strong></td><td>Checks VVIP status, generates protocol checklist, drafts sponsor notifications</td><td>💻 Local (Granite 8B)</td><td>OpenClaw (Skill)</td><td>Podman container</td></tr>
+          <tr><td>Sponsor Coach</td><td><strong>Sponsor Coach</strong></td><td>Scores executive sponsor readiness, produces a coaching brief with review items and talking-point drills</td><td>💻 Local (Granite 8B)</td><td>OpenClaw (Skill)</td><td>Podman container</td></tr>
+          <tr><td>Success Prediction</td><td><strong>The Oddsfather</strong></td><td>Phase 3 synthesis: generates briefing success probability verdict with top risks and top levers</td><td>💻 Local (Granite 8B)</td><td>OpenClaw (Skill)</td><td>Podman container</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Execution Flow</h2>
+
+      <h3>Phase 1: Intake &amp; Decomposition (Oprah-tor)</h3>
+      <pre><code>INPUT: "Briefing tomorrow with Sarah Chen, CIO of Meridian Health Systems.
+        SAB member. Executive Sponsor: VP Engineering Maria Torres."
+
+ACE decomposes into parallel tasks:
+  → SHERLOCK OHMS: Research Sarah Chen (person-level) ☁️ Frontier
+  → BLOOM-BORG: Research Meridian Health Systems (company-level) ☁️ Frontier
+  → DÉJÀ VIEW: Check SAB membership, pull last 2 SAB meeting themes 💻 Local
+</code></pre>
+
+      <h3>Phase 2: Intelligence Gathering (Sherlock Ohms + Bloom-borg + Déjà View &mdash; parallel)</h3>
+      <pre><code>SHERLOCK OHMS returns (via frontier model):
+  - Executive dossier (career arc, recent news, conference appearances)
+  - Communication style indicators
+  - Known technology priorities
+
+BLOOM-BORG returns (via frontier model):
+  - Company snapshot (revenue, headcount, industry position)
+  - Recent earnings/news highlights
+  - Technology stack signals
+  - Competitive dynamics
+
+DÉJÀ VIEW returns (via local Granite model):
+  - SAB membership confirmed (since Q2 2024)
+  - Last SAB themes: "AI governance," "hybrid cloud migration timeline"
+  - Previous briefing: March 2025, topics: OpenShift migration, security posture
+  - Relationship stage: "Trusted" (ITSMA scale)
+</code></pre>
+
+      <h3>Phase 3: Package Assembly (Draft Punk + Alfred Bitworth + Sponsor Coach &mdash; parallel, local model)</h3>
+      <pre><code>DRAFT PUNK receives all intelligence and generates:
+  1. Executive Dossier (1-page PDF)
+  2. Briefing Backgrounder (2-page summary)
+  3. Sponsor Talking Points (for Maria Torres's coffee drop-in)
+  4. Recommended Agenda (based on SAB themes + company priorities)
+  5. Conversation Starters (personalized ice-breakers)
+
+ALFRED BITWORTH checks VVIP status and:
+  1. Generates VVIP Protocol Checklist (premier boardroom, CEO drop-in, etc.)
+  2. Drafts Sponsor Alert email to Maria Torres
+  3. Flags any scheduling conflicts with other engagement programs
+  4. Logs the briefing in the engagement tracker
+
+SPONSOR COACH runs in parallel and returns:
+  1. Sponsor readiness score (0-100)
+  2. Coaching brief: what to review, what to avoid
+  3. Specific phrases for the sponsor drop-in
+  4. Coaching gaps flagged for the program team
+</code></pre>
+
+      <h3>Phase 4: Success Probability Verdict (The Oddsfather &mdash; local model)</h3>
+      <pre><code>THE ODDSFATHER reviews the full assembled package and returns:
+  1. Success probability percentage + plain-language verdict
+  2. Top 3 risks that could derail the briefing
+  3. Top 3 levers that could shift the outcome
+  4. Confidence in the prediction given the engagement signals
+</code></pre>
+
+      <h3>Phase 5: Synthesis &amp; Delivery (Oprah-tor)</h3>
+      <pre><code>OPRAH-TOR assembles the complete briefing package:
+  - Validates all outputs for consistency
+  - Creates the final deliverable bundle
+  - Posts summary to Slack/Teams channel
+  - Stores package in workspace for retrieval
+  - Applied 25s hard timeouts to Phase 2 research agents with graceful degradation
+    if the frontier network is flaky (downgrades to partial intelligence flagged as such)
+</code></pre>
+
+      <h2>Infrastructure Stack</h2>
+
+      <pre><code>┌─────────────────────────────────────────────────────┐
+│                    MacBook Pro                       │
+│                                                     │
+│  ┌─────────────────────────────────────────────┐    │
+│  │           Podman Desktop                     │    │
+│  │                                              │    │
+│  │  ┌──────────────────┐  ┌──────────────────┐ │    │
+│  │  │  Podman AI Lab   │  │  OpenClaw         │ │    │
+│  │  │  ─────────────   │  │  Container        │ │    │
+│  │  │  Granite 8B      │  │  ─────────────    │ │    │
+│  │  │  (llama.cpp)     │  │  Oprah-tor   ☁️   │ │    │
+│  │  │                  │  │  Déjà View   💻   │ │    │
+│  │  │  Port: 8001      │  │  Draft Punk  💻   │ │    │
+│  │  │  💻 LOCAL MODEL  │  │  Alfred      💻   │ │    │
+│  │  │                  │  │  Sponsor C.  💻   │ │    │
+│  │  │                  │  │  Oddsfather  💻   │ │    │
+│  │  └──────────────────┘  └──────────────────┘ │    │
+│  └─────────────────────────────────────────────┘    │
+│                                                     │
+│  ┌─────────────────────────────────────────────┐    │
+│  │  Native Binaries                             │    │
+│  │  ┌──────────────────┐  ┌──────────────────┐ │    │
+│  │  │  ZeroClaw         │  │  ZeroClaw        │ │    │
+│  │  │  "Sherlock Ohms"  │  │  "Bloom-borg"    │ │    │
+│  │  │  3.4 MB   ☁️     │  │  3.4 MB   ☁️    │ │    │
+│  │  └──────────────────┘  └──────────────────┘ │    │
+│  └─────────────────────────────────────────────┘    │
+│                                                     │
+│  ☁️ = Frontier model (Anthropic / OpenAI / Gemini)  │
+│  💻 = Local Granite via Podman AI Lab               │
+│                                                     │
+│  Research data → cloud (public web info)             │
+│  Customer data → NEVER leaves the laptop             │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+
+      <h2>File Structure</h2>
+
+      <pre><code>briefingclaw/
+├── index.html                         # Navigation landing page with persona gallery
+├── briefingclaw-dashboard.html        # Live demo dashboard (8 scenarios, embedded deliverables, improved readability)
+├── briefingclaw-dashboard-redhat.html # Red Hat branded variant (identical functionality)
+├── briefingclaw-architecture.html     # Static architecture diagram (Phase 3 Sponsor Coach + Phase 4 Oddsfather)
+├── briefingclaw-personas.html         # Standalone filterable persona gallery (8 personas)
+├── briefingclaw-multicontact.html     # Multi-contact group briefing mode (2-5 of 9 contacts)
+├── briefingclaw-postbriefing.html     # Post-briefing feedback loop (Oddsfather calibration + localStorage)
+├── briefingclaw.sh                    # Interactive CLI for demo management
+├── agents/
+│   ├── orchestrator/          # Oprah-tor — the coordinator
+│   │   └── SKILL.md
+│   ├── executive-research/    # Sherlock Ohms — person-level research
+│   │   └── SKILL.md
+│   ├── account-intelligence/  # Bloom-borg — company-level intel
+│   │   └── SKILL.md
+│   ├── sab-historian/         # Déjà View — program cross-reference + theme trend analysis
+│   │   └── SKILL.md
+│   ├── briefing-architect/    # Draft Punk — document assembly
+│   │   └── SKILL.md
+│   ├── vvip-protocol/         # Alfred Bitworth — protocol &amp; notifications
+│   │   └── SKILL.md
+│   ├── sponsor-coach/         # Sponsor Coach — readiness assessment micro-agent
+│   │   └── SKILL.md
+│   └── oddsfather/            # The Oddsfather — Phase 3 success probability
+│       └── SKILL.md
+├── config/
+│   ├── podman-compose.yml     # Container orchestration
+│   ├── openclaw-config.yml    # OpenClaw gateway config
+│   └── zeroclaw-config.toml   # ZeroClaw native config
+├── demo-data/                     # 8 accounts, 8 contacts, cross-program data
+│   ├── sab-meeting-notes.md   # Strategic Advisory Board meetings (Q1 2026, Q4 2025, 8 contacts)
+│   ├── crm-export.json        # CRM data (8 accounts, 20+ contacts)
+│   ├── vvip-roster.json       # VVIP tiers &amp; preferences (8 profiles)
+│   └── engagement-history.md  # Engagement timelines (8 narratives)
+├── demo-deliverables/             # Sample markdown reference files (7 files)
+│   ├── sarah-chen/            # Key deliverables for all 8 contacts
+│   ├── david-park/            # are embedded in the HTML dashboards;
+│   └── rachel-morrison/       # these markdowns are for reference only
+└── docs/
+    ├── ARCHITECTURE.md        # This file
+    ├── DEMO-SCRIPT.md         # Step-by-step demo script
+    ├── BUILD-GUIDE.md         # How to build &amp; configure
+    └── ENTERPRISE-DEPLOYMENT.md # Scaling to Red Hat OpenShift AI
+</code></pre>
+
+      <h2>Standalone Interfaces</h2>
+
+      <p>Alongside the two live dashboards, three additional HTML pages provide specialized workflows. All three are <strong>self-contained</strong> &mdash; no backend required, no calls to the OpenClaw gateway or the Granite model &mdash; and they render entirely from static assets:</p>
+
+      <table>
+        <thead>
+          <tr><th>Page</th><th>Purpose</th><th>Persistence</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>briefingclaw-personas.html</code></td><td>Standalone filterable persona gallery with tier/type filters and per-card Run Demo / Open Dossier actions</td><td>None (stateless view)</td></tr>
+          <tr><td><code>briefingclaw-multicontact.html</code></td><td>Multi-contact group briefing mode &mdash; pick 2-5 of 9 contacts across Meridian, Apex, and TerraScale; outputs shared company context, buying center role matrix, cross-contact dynamics, recommended briefing order, unified agenda, coordination risks, and the Oddsfather's group verdict</td><td>None (stateless view)</td></tr>
+          <tr><td><code>briefingclaw-postbriefing.html</code></td><td>Post-briefing feedback loop with NPS scoring, commitments, actual outcome, and live Oddsfather calibration (predicted vs actual with drift classification) and Déjà View stage update preview</td><td>Browser <code>localStorage</code> under <code>briefingclaw-feedback</code> key, capped at 50 entries</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Architectural note:</strong> These three pages deliberately do not depend on the agent runtime. They act as either pre-demo warm-ups (persona gallery), advanced-scenario extensions (multi-contact), or closing feedback artefacts (post-briefing) that can run on any laptop in any room &mdash; including on a plane with no Wi-Fi. The post-briefing page uses <code>localStorage</code> (not a server) so rehearsal data survives between sessions without any deployment footprint. In the enterprise deployment vision, the post-briefing feedback would flow into a real datastore that Déjà View can query, but for the demo and for local rehearsal the browser-side persistence is sufficient and keeps the "runs on a laptop with no data leaving the building" promise intact.</p>
+    </div>
+
+    <div class="doc" id="doc-build-guide" data-md="docs/BUILD-GUIDE.md">
+      <h1>BriefingClaw Build Guide</h1>
+
+      <h2>How to Set Up the Multi-Agent Demo for GACEP Spring 2026</h2>
+
+      <p>This guide walks you through building and configuring the entire BriefingClaw multi-agent system on a MacBook Pro. Estimated setup time: 2-3 hours (most of which is model download time).</p>
+
+      <blockquote><p><strong>See also:</strong> <a href="#user-guide">User Guide</a> for day-to-day operation, troubleshooting, and customization.</p></blockquote>
+
+      <hr>
+
+      <h2>Prerequisites</h2>
+
+      <h3>Hardware</h3>
+      <ul>
+        <li>MacBook Pro with Apple Silicon (M1/M2/M3/M4)</li>
+        <li>16 GB RAM minimum (32 GB recommended for smooth model serving)</li>
+        <li>30 GB free disk space (model + containers + workspace)</li>
+        <li>USB-C to HDMI adapter for conference projector</li>
+      </ul>
+
+      <h3>Software (install in order)</h3>
+
+      <h4>1. Homebrew</h4>
+      <pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+</code></pre>
+
+      <h4>2. Podman Desktop + CLI</h4>
+      <pre><code>brew install --cask podman-desktop
+brew install podman
+</code></pre>
+
+      <p>After installation:</p>
+      <ul>
+        <li>Open Podman Desktop</li>
+        <li>Create a Podman machine: Settings &rarr; Resources &rarr; Create New
+          <ul>
+            <li>CPUs: 4</li>
+            <li>Memory: 12 GB</li>
+            <li>Disk: 60 GB</li>
+          </ul>
+        </li>
+        <li>Start the machine</li>
+      </ul>
+
+      <h4>3. Podman AI Lab Extension</h4>
+      <ul>
+        <li>In Podman Desktop: Extensions &rarr; Install &rarr; Search "AI Lab" &rarr; Install</li>
+        <li>Restart Podman Desktop</li>
+      </ul>
+
+      <h4>4. ZeroClaw</h4>
+      <pre><code>brew install zeroclaw
+</code></pre>
+      <p>Verify: <code>zeroclaw --version</code></p>
+
+      <h4>5. OpenClaw</h4>
+      <pre><code>git clone https://github.com/openclaw/openclaw.git ~/openclaw
+cd ~/openclaw
+</code></pre>
+
+      <h4>6. jq (for JSON parsing in demo)</h4>
+      <pre><code>brew install jq
+</code></pre>
+
+      <hr>
+
+      <h2>Step 1: Start the Model Service</h2>
+
+      <h3>Download and Serve Granite 8B via Podman AI Lab</h3>
+
+      <ol>
+        <li>Open Podman Desktop &rarr; AI Lab &rarr; Models Catalog</li>
+        <li>Find <strong>Granite 8B Instruct</strong> (or <code>granite-8b-code-instruct</code> for code-heavy tasks)</li>
+        <li>Click "Download" &mdash; this will take 10-20 minutes depending on connection</li>
+        <li>Once downloaded, click "Start Inference Server"</li>
+        <li>Note the port (default: 8001)</li>
+      </ol>
+
+      <h3>Verify Model Service</h3>
+      <pre><code># Test the model endpoint
+curl -s http://127.0.0.1:8001/v1/models | jq .
+
+# Test a completion
+curl -s http://127.0.0.1:8001/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "granite-8b",
+    "messages": [{"role": "user", "content": "Hello, who are you?"}],
+    "max_tokens": 100
+  }' | jq .choices[0].message.content
+</code></pre>
+
+      <p>You should see a response from the model. If not, check that the Podman machine is running and AI Lab has the model loaded.</p>
+
+      <hr>
+
+      <h2>Step 2: Configure OpenClaw (Oprah-tor + Déjà View + Draft Punk + Alfred Bitworth + Sponsor Coach + The Oddsfather)</h2>
+
+      <h3>Build the OpenClaw Container</h3>
+      <pre><code>cd ~/openclaw
+
+# Build the container image
+podman build -t openclaw:briefingclaw -f Dockerfile .
+</code></pre>
+
+      <h3>Copy Demo Data to OpenClaw Workspace</h3>
+      <pre><code># Create workspace directory
+mkdir -p ~/.openclaw/workspace
+
+# Copy demo data files
+cp ~/briefingclaw/demo-data/* ~/.openclaw/workspace/
+</code></pre>
+
+      <h3>Copy Skill Files</h3>
+      <pre><code># Create skills directory
+mkdir -p ~/.openclaw/skills
+
+# Copy all agent skills
+cp ~/briefingclaw/agents/orchestrator/SKILL.md ~/.openclaw/skills/orchestrator.md
+cp ~/briefingclaw/agents/sab-historian/SKILL.md ~/.openclaw/skills/sab-historian.md
+cp ~/briefingclaw/agents/briefing-architect/SKILL.md ~/.openclaw/skills/briefing-architect.md
+cp ~/briefingclaw/agents/vvip-protocol/SKILL.md ~/.openclaw/skills/vvip-protocol.md
+cp ~/briefingclaw/agents/sponsor-coach/SKILL.md ~/.openclaw/skills/sponsor-coach.md
+cp ~/briefingclaw/agents/oddsfather/SKILL.md ~/.openclaw/skills/oddsfather.md
+</code></pre>
+
+      <h3>Run the Onboarding Wizard</h3>
+      <pre><code># Start OpenClaw container with workspace and skills mounted
+podman run -d \
+  --name briefingclaw-openclaw \
+  -p 18789:18789 \
+  -v ~/.openclaw/workspace:/app/workspace:ro \
+  -v ~/.openclaw/skills:/app/skills:ro \
+  -v openclaw-memory:/data/memory \
+  -e GATEWAY_ENABLED=true \
+  -e GATEWAY_PORT=18789 \
+  openclaw:briefingclaw
+
+# Run onboarding to connect to local model
+podman exec -it briefingclaw-openclaw \
+  node dist/index.js onboard \
+  --non-interactive \
+  --custom-base-url "http://host.containers.internal:8001/v1" \
+  --custom-model-id "granite-8b" \
+  --custom-api-key "not-needed" \
+  --custom-compatibility openai
+
+# Set agent name
+podman exec -it briefingclaw-openclaw \
+  node dist/index.js config set agent.name "Oprah-tor"
+</code></pre>
+
+      <h3>Verify OpenClaw</h3>
+      <pre><code># Check container is running
+podman ps | grep briefingclaw
+
+# Open the Gateway UI
+open http://127.0.0.1:18789
+
+# You should see the OpenClaw chat interface
+# Type "Hello, Oprah-tor" — you should get a response
+</code></pre>
+
+      <hr>
+
+      <h2>Step 3: Configure ZeroClaw (Sherlock Ohms + Bloom-borg)</h2>
+
+      <h3>Install Configuration</h3>
+      <pre><code># Create ZeroClaw config directory
+mkdir -p ~/.zeroclaw
+
+# Copy the config file
+cp ~/briefingclaw/config/zeroclaw-config.toml ~/.zeroclaw/config.toml
+
+# Create output directories
+mkdir -p ~/.zeroclaw/output/sherlock
+mkdir -p ~/.zeroclaw/output/sentinel
+mkdir -p ~/.zeroclaw/workspace
+
+# Copy demo data to ZeroClaw workspace
+cp ~/briefingclaw/demo-data/* ~/.zeroclaw/workspace/
+</code></pre>
+
+      <h3>Set Up Search API Key</h3>
+      <p>ZeroClaw needs a web search API for Sherlock Ohms and Bloom-borg. Get a free Tavily API key:</p>
+
+      <ol>
+        <li>Go to <a href="https://tavily.com">https://tavily.com</a></li>
+        <li>Sign up for a free account (1000 searches/month free)</li>
+        <li>Copy your API key</li>
+      </ol>
+
+      <pre><code># Set the API key
+export TAVILY_API_KEY="tvly-your-key-here"
+
+# Add to shell profile for persistence
+echo 'export TAVILY_API_KEY="tvly-your-key-here"' &gt;&gt; ~/.zshrc
+</code></pre>
+
+      <h3>Test ZeroClaw Profiles</h3>
+      <pre><code># Test Sherlock Ohms
+ZEROCLAW_PROFILE=sherlock zeroclaw agent \
+  -m "Research Satya Nadella, CEO of Microsoft. Brief profile only."
+
+# Test Bloom-borg
+ZEROCLAW_PROFILE=sentinel zeroclaw agent \
+  -m "Quick snapshot of Microsoft Corporation. Revenue and recent news only."
+</code></pre>
+
+      <p>Both should produce structured output within 30-60 seconds.</p>
+
+      <hr>
+
+      <h2>Step 4: Wire the Multi-Agent Communication</h2>
+
+      <h3>Option A: Manual Orchestration (Simplest for Demo)</h3>
+      <p>For the live demo, the simplest approach is to run Oprah-tor in the OpenClaw UI and manually trigger Sherlock Ohms/Bloom-borg in terminal tabs. Oprah-tor's skill files tell it what to expect from each agent, and you paste the results.</p>
+
+      <p>This is recommended for the GACEP demo because:</p>
+      <ul>
+        <li>It gives you full control of timing</li>
+        <li>You can narrate each agent's work as it happens</li>
+        <li>If one agent is slow, you can switch to the others</li>
+      </ul>
+
+      <h3>Option B: Automated Inter-Agent Communication</h3>
+      <p>For a more sophisticated setup, configure OpenClaw's Agent-to-Agent messaging:</p>
+
+      <pre><code># In OpenClaw, register ZeroClaw agents as external tools
+podman exec -it briefingclaw-openclaw \
+  node dist/index.js tools register \
+  --name "sherlock" \
+  --type "command" \
+  --command "zeroclaw agent -p sherlock -m '{{input}}'" \
+  --description "Executive research agent — researches a specific person"
+
+podman exec -it briefingclaw-openclaw \
+  node dist/index.js tools register \
+  --name "sentinel" \
+  --type "command" \
+  --command "zeroclaw agent -p sentinel -m '{{input}}'" \
+  --description "Account intelligence agent — researches a specific company"
+</code></pre>
+
+      <h3>Option C: MCP Server Integration (Most Enterprise-Ready)</h3>
+      <p>Set up each agent as an MCP (Model Context Protocol) server that Oprah-tor can call:</p>
+
+      <pre><code># ZeroClaw supports MCP server mode
+ZEROCLAW_PROFILE=sherlock zeroclaw mcp-server --port 3001
+ZEROCLAW_PROFILE=sentinel zeroclaw mcp-server --port 3002
+
+# Register MCP servers with OpenClaw
+podman exec -it briefingclaw-openclaw \
+  node dist/index.js config set mcp.servers.sherlock "http://host.containers.internal:3001"
+podman exec -it briefingclaw-openclaw \
+  node dist/index.js config set mcp.servers.sentinel "http://host.containers.internal:3002"
+</code></pre>
+
+      <hr>
+
+      <h2>Step 5: Full System Test</h2>
+
+      <h3>The Rehearsal Run</h3>
+      <p>Run the exact demo scenario end-to-end:</p>
+
+      <pre><code># Terminal 1: Start Sherlock Ohms
+ZEROCLAW_PROFILE=sherlock zeroclaw agent \
+  -m "Research Sarah Chen, CIO of Meridian Health Systems. \
+      Compile: career arc, recent public activity, technology priorities, \
+      communication style. Return as structured executive profile."
+
+# Terminal 2: Start Bloom-borg
+ZEROCLAW_PROFILE=sentinel zeroclaw agent \
+  -m "Analyze Meridian Health Systems. \
+      Compile: company snapshot, recent news, technology landscape, \
+      competitive dynamics. Return as structured company brief."
+
+# Browser: In OpenClaw UI, type the full briefing request from the demo script
+</code></pre>
+
+      <h3>Timing Benchmarks</h3>
+      <p>Record how long each phase takes on YOUR hardware:</p>
+      <ul>
+        <li>Model cold start: _____ seconds</li>
+        <li>Sherlock Ohms research: _____ seconds</li>
+        <li>Bloom-borg research: _____ seconds</li>
+        <li>Déjà View lookup: _____ seconds (should be &lt;5s &mdash; it's reading local files)</li>
+        <li>Draft Punk assembly: _____ seconds</li>
+        <li>Alfred Bitworth protocol: _____ seconds</li>
+        <li>Total end-to-end: _____ seconds</li>
+      </ul>
+
+      <p><strong>Target</strong>: Under 2 minutes total. If it's consistently over 3 minutes, consider:</p>
+      <ul>
+        <li>Using a smaller model (Granite 3B or a quantized 8B)</li>
+        <li>Pre-warming the model with a test query before the demo</li>
+        <li>Pre-caching some results</li>
+      </ul>
+
+      <hr>
+
+      <h2>Step 5b: CLI commands reference</h2>
+
+      <p>The <code>briefingclaw.sh</code> wrapper provides all the day-to-day commands you'll need. The commands most relevant during build and rehearsal:</p>
+
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>./briefingclaw.sh setup</code></td><td>First-time configuration wizard</td></tr>
+          <tr><td><code>./briefingclaw.sh start</code></td><td>Start Podman, model server, and OpenClaw</td></tr>
+          <tr><td><code>./briefingclaw.sh stop</code></td><td>Stop the OpenClaw container</td></tr>
+          <tr><td><code>./briefingclaw.sh status</code></td><td>Show system health for all components</td></tr>
+          <tr><td><code>./briefingclaw.sh demo</code></td><td>Launch the full demo environment</td></tr>
+          <tr><td><code>./briefingclaw.sh preview</code></td><td><strong>Rehearsal mode</strong> &mdash; opens the dashboards without running any infrastructure checks. Ideal for practising narration and timing at a desk or on a plane.</td></tr>
+          <tr><td><code>./briefingclaw.sh preflight</code></td><td>Conference-day checklist</td></tr>
+          <tr><td><code>./briefingclaw.sh sherlock "&lt;query&gt;"</code></td><td>Run Sherlock Ohms standalone</td></tr>
+          <tr><td><code>./briefingclaw.sh bloomborg "&lt;query&gt;"</code></td><td>Run Bloom-borg standalone</td></tr>
+          <tr><td><code>./briefingclaw.sh record</code></td><td>Guide for recording a backup video</td></tr>
+        </tbody>
+      </table>
+
+      <p>See the <a href="#user-guide">User Guide</a> for full command descriptions.</p>
+
+      <hr>
+
+      <h2>Step 6: Test the Dashboard</h2>
+
+      <p>The interactive dashboard (<code>briefingclaw-dashboard.html</code>) provides an animated visualization of the full agent pipeline. It works without any live services running, making it a reliable fallback for conference presentations.</p>
+
+      <pre><code># Open in your browser
+open briefingclaw-dashboard.html
+
+# Or with autostart (simulation begins automatically)
+open "briefingclaw-dashboard.html?autostart"
+</code></pre>
+
+      <p>Test both dashboard variants with all eight contacts:</p>
+
+      <pre><code>open briefingclaw-dashboard.html          # Original dark theme
+open briefingclaw-dashboard-redhat.html   # Red Hat branded variant
+</code></pre>
+
+      <p><strong>For the dashboard variant you will present, test at least 3 contacts from the dropdown (8 available):</strong></p>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> The dashboard loads with improved readability (larger fonts, wider agent spacing)</li>
+        <li><input type="checkbox" disabled> Contact dropdown switches between all eight scenarios</li>
+        <li><input type="checkbox" disabled> Clicking "Start Demo" runs the full 42-second simulation for that contact</li>
+        <li><input type="checkbox" disabled> All 8 agent nodes (including Sponsor Coach and The Oddsfather) animate through idle/working/complete states</li>
+        <li><input type="checkbox" disabled> Deliverables count reaches the full expected total</li>
+        <li><input type="checkbox" disabled> Risk badges appear on completed deliverable cards with the correct colour (red / amber / green)</li>
+        <li><input type="checkbox" disabled> PDF Export button produces a printable briefing package for the selected persona</li>
+        <li><input type="checkbox" disabled> Mode badge shows the correct state: <strong>LIVE</strong> (full stack), <strong>LOCAL ONLY</strong> (Granite reachable, OpenClaw down), or <strong>SIMULATED</strong> (no services)</li>
+        <li><input type="checkbox" disabled> Test LOCAL ONLY mode specifically: stop OpenClaw while the model is still serving and confirm the badge switches to LOCAL ONLY</li>
+        <li><input type="checkbox" disabled> Press <strong>T</strong> and confirm the telemetry JSON downloads with the expected session events</li>
+        <li><input type="checkbox" disabled> GitHub repository link in the footer opens the public repo</li>
+        <li><input type="checkbox" disabled> Critical flags appear specific to the selected contact (~15 seconds)</li>
+        <li><input type="checkbox" disabled> Completed deliverable cards are clickable &mdash; modal opens with formatted HTML content</li>
+        <li><input type="checkbox" disabled> Modal closes via X button, clicking overlay, or Escape key</li>
+        <li><input type="checkbox" disabled> "Reset" button returns everything to initial state</li>
+        <li><input type="checkbox" disabled> Pressing F toggles fullscreen mode</li>
+      </ul>
+
+      <p>The dashboard automatically detects whether live services are running and displays "LIVE", "LOCAL ONLY", or "SIMULATED" accordingly.</p>
+
+      <h3>Standalone Pages &mdash; Persona Gallery, Multi-Contact, Post-Briefing</h3>
+
+      <p>Three additional HTML pages extend the demo experience. All three are self-contained (no backend required) and should be tested independently of the main dashboard.</p>
+
+      <pre><code>open briefingclaw-personas.html
+open briefingclaw-multicontact.html
+open briefingclaw-postbriefing.html
+</code></pre>
+
+      <p><strong><code>briefingclaw-personas.html</code> (Persona Gallery):</strong></p>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Page loads and renders all 8 persona cards</li>
+        <li><input type="checkbox" disabled> Tier filter works (Platinum / Gold / Silver / Standard narrow the gallery correctly)</li>
+        <li><input type="checkbox" disabled> Type filter works (serious enterprise vs fun persona narrow the gallery correctly)</li>
+        <li><input type="checkbox" disabled> Each card renders the stat block, color-coded drama callout, and top-3 priorities</li>
+        <li><input type="checkbox" disabled> <strong>Run Demo</strong> action button links correctly to the dashboard with the persona preloaded</li>
+        <li><input type="checkbox" disabled> <strong>Open Dossier</strong> action button links correctly to the deliverable view for the selected persona</li>
+        <li><input type="checkbox" disabled> Removing filters restores all 8 cards</li>
+      </ul>
+
+      <p><strong><code>briefingclaw-postbriefing.html</code> (Post-Briefing Feedback):</strong></p>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Page loads with the form on the left and the analysis panel on the right</li>
+        <li><input type="checkbox" disabled> Contact dropdown populates with the expected contacts</li>
+        <li><input type="checkbox" disabled> NPS buttons (0-10) work &mdash; clicking a single button selects it and deselects the others</li>
+        <li><input type="checkbox" disabled> Form submits without errors</li>
+        <li><input type="checkbox" disabled> The Oddsfather calibration card updates after submission with predicted-vs-actual and a drift classification</li>
+        <li><input type="checkbox" disabled> Déjà View stage update preview renders after submission</li>
+        <li><input type="checkbox" disabled> Submission persists to browser <code>localStorage</code> under the <code>briefingclaw-feedback</code> key &mdash; verify via DevTools <code>Application</code> tab</li>
+        <li><input type="checkbox" disabled> Recent submissions list shows the new entry immediately after submit</li>
+        <li><input type="checkbox" disabled> Submissions survive a page refresh (localStorage persistence)</li>
+        <li><input type="checkbox" disabled> Verify the 50-entry cap by submitting rapidly or inspecting the cap logic in DevTools</li>
+      </ul>
+
+      <p><strong><code>briefingclaw-multicontact.html</code> (Multi-Contact Briefing Mode):</strong></p>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Page loads the contact picker with 9 contacts across 3 companies (Meridian: Sarah Chen / Tom Richards / Dr. Priya Kapoor; Apex: David Park / Karen Wu / Marcus Thompson; TerraScale: Rachel Morrison / Anil Desai / Frank Reeves)</li>
+        <li><input type="checkbox" disabled> Contact picker allows selection of 2-5 contacts (more than 5 should be blocked or the Start button disabled)</li>
+        <li><input type="checkbox" disabled> <strong>Start</strong> button is disabled when 0 or 1 contacts are selected</li>
+        <li><input type="checkbox" disabled> <strong>Start</strong> button enables at 2+ selected contacts</li>
+        <li><input type="checkbox" disabled> Clicking Start renders <strong>all 6 result panels</strong>:
+          <ul class="task-list">
+            <li><input type="checkbox" disabled> Shared Company Context</li>
+            <li><input type="checkbox" disabled> Buying Center Role Matrix (economic / champion / technical / blocker / influencer)</li>
+            <li><input type="checkbox" disabled> Cross-Contact Dynamics (alignments / tensions / conflicts)</li>
+            <li><input type="checkbox" disabled> Recommended Briefing Order (blocker first, champion last)</li>
+            <li><input type="checkbox" disabled> Unified Agenda</li>
+            <li><input type="checkbox" disabled> Coordination Risks</li>
+          </ul>
+        </li>
+        <li><input type="checkbox" disabled> <strong>Oddsfather Group Verdict</strong> renders with success probability and coordination adjustments</li>
+        <li><input type="checkbox" disabled> Switching the selection and re-running produces different results that reflect the new contact mix</li>
+      </ul>
+
+      <hr>
+
+      <h2>Step 7: Record the Backup Video</h2>
+
+      <p>The night before the session (at the hotel):</p>
+
+      <ol>
+        <li>Connect to a reliable network</li>
+        <li>Open QuickTime Player &rarr; File &rarr; New Screen Recording</li>
+        <li>Run the full demo from Beat 3 through Beat 6</li>
+        <li>Save as <code>briefingclaw-demo-backup.mp4</code></li>
+        <li>Test playback at presentation resolution</li>
+        <li>Keep the video file accessible &mdash; NOT buried in folders</li>
+      </ol>
+
+      <hr>
+
+      <h2>Step 8: Conference Day Checklist</h2>
+
+      <h3>30 Minutes Before Session</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Connect to projector, verify display</li>
+        <li><input type="checkbox" disabled> Start Podman machine</li>
+        <li><input type="checkbox" disabled> Start model service (Podman AI Lab &rarr; Granite &rarr; Start)</li>
+        <li><input type="checkbox" disabled> Verify model endpoint: <code>curl http://127.0.0.1:8001/v1/models</code></li>
+        <li><input type="checkbox" disabled> Start OpenClaw container: <code>podman start briefingclaw-openclaw</code></li>
+        <li><input type="checkbox" disabled> Verify OpenClaw UI: <code>open http://127.0.0.1:18789</code></li>
+        <li><input type="checkbox" disabled> Warm up model with a test query (gets it into memory)</li>
+        <li><input type="checkbox" disabled> Set terminal font size to 18pt+</li>
+        <li><input type="checkbox" disabled> Set browser zoom to 125-150%</li>
+        <li><input type="checkbox" disabled> Open backup video &mdash; test play, then pause at frame 1</li>
+        <li><input type="checkbox" disabled> Open dashboard in a browser tab: <code>open briefingclaw-dashboard.html</code> (or <code>briefingclaw-dashboard-redhat.html</code>)</li>
+        <li><input type="checkbox" disabled> Test mobile hotspot (fallback network)</li>
+        <li><input type="checkbox" disabled> Mute all notifications (Do Not Disturb mode)</li>
+      </ul>
+
+      <h3>5 Minutes Before Demo Segment</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Arrange terminal layout (Sherlock Ohms left, Bloom-borg right, browser bottom)</li>
+        <li><input type="checkbox" disabled> Dashboard tab ready as visual fallback</li>
+        <li><input type="checkbox" disabled> Pre-type the demo prompt in a text editor (ready to paste)</li>
+        <li><input type="checkbox" disabled> Confirm model is still responsive: quick test query</li>
+        <li><input type="checkbox" disabled> Deep breath. You've got this.</li>
+      </ul>
+
+      <hr>
+
+      <h2>Troubleshooting</h2>
+
+      <table>
+        <thead>
+          <tr><th>Problem</th><th>Solution</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Model not responding</td><td>Check Podman machine is running. Restart AI Lab model server.</td></tr>
+          <tr><td>OpenClaw container won't start</td><td>Check port 18789 isn't in use: <code>lsof -i :18789</code>. Kill conflicting process.</td></tr>
+          <tr><td>ZeroClaw can't find config</td><td>Verify <code>~/.zeroclaw/config.toml</code> exists. Check <code>ZEROCLAW_PROFILE</code> env var.</td></tr>
+          <tr><td>Slow responses</td><td>Model needs warm-up. Send a test query. Or switch to smaller model.</td></tr>
+          <tr><td>Web search failing</td><td>Check Tavily API key. Verify network connectivity. Demo data in workspace is the fallback.</td></tr>
+          <tr><td>Container can't reach model</td><td>Use <code>host.containers.internal</code> not <code>localhost</code> from inside containers.</td></tr>
+          <tr><td>"Permission denied" errors</td><td>Check volume mount permissions. May need <code>:Z</code> flag for SELinux.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc" id="doc-demo-script" data-md="docs/DEMO-SCRIPT.md">
+      <h1>BriefingClaw Demo Script &mdash; GACEP Spring 2026</h1>
+
+      <h2>Session: "One Customer, Many Doors"</h2>
+      <h2>Presenter: Jan Mark Holzer</h2>
+      <h2>Duration: 15-20 minutes within the 90-minute session</h2>
+      <h2>Position: After the Engagement Engine framework presentation (around minute 15-35)</h2>
+
+      <blockquote><p><strong>See also:</strong> <a href="#user-guide">User Guide</a> for system operation and troubleshooting. <a href="#build-guide">Build Guide</a> for initial setup.</p></blockquote>
+
+      <hr>
+
+      <h2>Pre-Demo Setup (30 minutes before session)</h2>
+
+      <h3>Hardware Checklist</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> MacBook Pro connected to projector (HDMI or USB-C adapter)</li>
+        <li><input type="checkbox" disabled> External monitor resolution matched to projector (test text readability)</li>
+        <li><input type="checkbox" disabled> Terminal font size: 18pt minimum (audience needs to read it)</li>
+        <li><input type="checkbox" disabled> Browser zoom: 125-150%</li>
+        <li><input type="checkbox" disabled> Mobile hotspot as backup network (tested)</li>
+        <li><input type="checkbox" disabled> Power cable connected</li>
+      </ul>
+
+      <h3>Software Checklist</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Podman Desktop running with AI Lab</li>
+        <li><input type="checkbox" disabled> Granite 8B model loaded and serving on port 8001</li>
+        <li><input type="checkbox" disabled> Verify model: <code>curl -s http://127.0.0.1:8001/v1/models | jq .</code></li>
+        <li><input type="checkbox" disabled> OpenClaw container running: <code>podman ps | grep briefingclaw</code></li>
+        <li><input type="checkbox" disabled> OpenClaw UI accessible: <code>open http://127.0.0.1:18789</code></li>
+        <li><input type="checkbox" disabled> ZeroClaw installed: <code>zeroclaw --version</code></li>
+        <li><input type="checkbox" disabled> Demo data files in workspace: <code>ls ~/.openclaw/workspace/</code></li>
+        <li><input type="checkbox" disabled> Dashboard tested: <code>open briefingclaw-dashboard.html</code> (works without live agents)</li>
+        <li><input type="checkbox" disabled> Backup video loaded in media player (DON'T minimize &mdash; keep it one click away)</li>
+      </ul>
+
+      <h3>Terminal Layout</h3>
+      <pre><code>┌──────────────────────────┬──────────────────────────┐
+│                          │                          │
+│    Terminal Tab 1        │    Terminal Tab 2         │
+│    "Sherlock Ohms"            │    "Bloom-borg"             │
+│    (Executive Research)  │    (Account Intel)        │
+│                          │                          │
+├──────────────────────────┴──────────────────────────┤
+│                                                     │
+│              Browser: OpenClaw Gateway UI            │
+│              http://127.0.0.1:18789                  │
+│              "Oprah-tor" Orchestrator                       │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+
+      <hr>
+
+      <h2>Demo Script</h2>
+
+      <h3>BEAT 0 (optional warm-up): Persona Gallery Browse</h3>
+      <p><strong>[Before the session begins, while attendees are filing in]</strong></p>
+
+      <p>If the room is already seated and there are a few idle minutes before the official start, throw <code>briefingclaw-personas.html</code> on the projector. This is the standalone filterable persona gallery. Say something like:</p>
+
+      <blockquote><p>"While we're getting started &mdash; this is a gallery of the 8 personas we could have picked for the demo. Each one has a different drama: an overdue commitment, a renewal at risk, a champion under stress, a viral TikTok crisis. You can filter by tier or by scenario type. The one we're going to run in a few minutes is Sarah Chen &mdash; overdue commitments &mdash; but if anyone wants to see a different one at the end, just tell me which card and we'll run it live."</p></blockquote>
+
+      <p>This is a low-risk opener that gets the audience oriented without burning any of the main demo time.</p>
+
+      <hr>
+
+      <h3>BEAT 1: The Setup (2 minutes)</h3>
+      <p><strong>[Slides still visible. Jan Mark at the podium.]</strong></p>
+
+      <blockquote>
+        <p>"So Kristin just walked us through the Engagement Engine &mdash; the three gears, the connective tissue, the flywheel. Beautiful framework. But here's the thing &mdash; frameworks don't execute themselves.</p>
+        <p>Show of hands: how many hours does your team spend preparing a backgrounder for a VIP briefing?</p>
+        <p>[Pause. Let hands go up. React to answers.]</p>
+        <p>Four hours? Six? I've heard eight from some teams. And that's for ONE briefing. Now multiply that by your annual briefing volume.</p>
+        <p>What if I told you that the connective tissue Kristin described &mdash; the thing that links your SAB, your EBC, and your Executive Sponsor program &mdash; could be automated by a team of AI agents running on your laptop? No cloud. No vendor lock-in. Open source."</p>
+      </blockquote>
+
+      <h3>BEAT 2: Meet the Agents (2 minutes)</h3>
+      <p><strong>[Switch to slide showing the multi-agent architecture diagram]</strong></p>
+
+      <blockquote>
+        <p>"I want to introduce you to BriefingClaw &mdash; a multi-agent system we built using open-source AI tools. It's eight specialized agents, each with a specific job:</p>
+        <p><strong>Oprah-tor</strong> is the orchestrator &mdash; the air traffic controller. You give it a briefing request, and it coordinates everything else.</p>
+        <p><strong>Sherlock Ohms</strong> does executive research &mdash; think of it as your executive research analyst who reads everything and never sleeps.</p>
+        <p><strong>Bloom-borg</strong> handles company-level intelligence &mdash; financial signals, technology priorities, competitive dynamics.</p>
+        <p><strong>Déjà View</strong> is the connective tissue agent &mdash; it's the one that checks your SAB database, pulls past briefing records, and connects the dots between programs. This is the agent that makes the 'Program of Programs' actually work.</p>
+        <p><strong>Draft Punk</strong> assembles all the intelligence into polished deliverables &mdash; the dossier, the talking points, the agenda.</p>
+        <p><strong>Alfred Bitworth</strong> handles VVIP protocol &mdash; checklist, sponsor notifications, the whole operation.</p>
+        <p><strong>Sponsor Coach</strong> &mdash; the seventh agent &mdash; scores your executive sponsor's readiness for the drop-in and gives them a two-minute prep brief. It's the agent that prevents the sponsor from walking in cold.</p>
+        <p>And <strong>The Oddsfather</strong> &mdash; the eighth agent, the one that runs last &mdash; reviews the full package and gives you a success probability verdict. It tells you the odds before you walk into the room.</p>
+        <p>Now let me show you this in action."</p>
+      </blockquote>
+
+      <h3>BEAT 3: Boot the Stack &mdash; The "Wow" Moment (2 minutes)</h3>
+      <p><strong>[Switch to terminal. Full screen.]</strong></p>
+
+      <blockquote><p>"First, let me show you what's running on this laptop right now."</p></blockquote>
+
+      <pre><code># Show Podman containers
+podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+</code></pre>
+
+      <blockquote><p>"There's our model server &mdash; IBM Granite 8B, an open-source model running locally through Podman. And there's OpenClaw, our agent framework, also in a container. No data leaves this laptop."</p></blockquote>
+
+      <pre><code># Show ZeroClaw's footprint
+zeroclaw status
+</code></pre>
+
+      <blockquote>
+        <p>"And ZeroClaw &mdash; our lightweight agent runtime. Look at that: 4.2 megabytes of RAM. The entire agent binary is 3.4 megabytes. That's smaller than a PowerPoint template."</p>
+        <p>[Pause for reaction. This usually gets a laugh or a "wow."]</p>
+        <p>"Two weeks ago, I was at a hackathon in Boston where construction workers and project managers &mdash; not developers &mdash; were building agents like this in two hours. This is no longer a developer tool. It's a professional tool."</p>
+      </blockquote>
+
+      <h3>BEAT 4: The Scenario (1 minute)</h3>
+      <p><strong>[Switch to browser &mdash; OpenClaw Gateway UI]</strong></p>
+
+      <blockquote>
+        <p>"Here's our scenario. You just got an email: Sarah Chen, CIO of Meridian Health Systems, is coming for a briefing tomorrow. She's a SAB member. Her executive sponsor is Maria Torres, our VP of Engineering. You need a full briefing package.</p>
+        <p>Normally: 4-6 hours of research. Let's see what happens when I ask Oprah-tor."</p>
+      </blockquote>
+
+      <h3>BEAT 5: Fire the Request (8-10 minutes)</h3>
+      <p><strong>[Type into OpenClaw UI &mdash; or have it pre-typed and paste]</strong></p>
+
+      <pre><code>I have a briefing tomorrow with Sarah Chen, CIO of Meridian Health Systems.
+She is a SAB member on our Strategic Technology Advisory Board.
+Her executive sponsor is Maria Torres, VP Engineering.
+
+Please prepare a full briefing package:
+1. Research Sarah Chen — recent activity, priorities, communication style
+2. Research Meridian Health Systems — company context, news, tech landscape
+3. Check our SAB records and past briefing history
+4. Assemble executive dossier, backgrounder, sponsor talking points, and agenda
+5. Run the VVIP protocol check and generate the checklist
+</code></pre>
+
+      <p><strong>[As Oprah-tor processes, narrate what's happening]</strong></p>
+
+      <blockquote><p>"Watch &mdash; Oprah-tor is decomposing the request. It's dispatching to Sherlock Ohms for executive research... Bloom-borg is pulling company intelligence... and Déjà View is checking our SAB records and engagement history."</p></blockquote>
+
+      <p><strong>[Split to terminal to show ZeroClaw agents working]</strong></p>
+
+      <blockquote><p>"Over here in the terminal, you can see Sherlock Ohms searching the web for Sarah Chen's recent activity. It's pulling news articles, conference appearances, published content. And Bloom-borg is doing the same for Meridian Health Systems &mdash; financial data, technology signals, competitive dynamics."</p></blockquote>
+
+      <p><strong>[Switch back to OpenClaw UI as results come in]</strong></p>
+
+      <blockquote><p>"Now Déjà View is reporting back &mdash; and THIS is the magic. Déjà View knows that Sarah is an active SAB member since Q2 2024, that she led the AI Governance discussion at the last board meeting, that she visited our Boston EBC in September and gave us a 9 out of 10, and &mdash; watch this..."</p></blockquote>
+
+      <p><strong>[Pause as Déjà View surfaces the flags]</strong></p>
+
+      <blockquote>
+        <p>"Déjà View just flagged that we have an OVERDUE action item. We promised Sarah an AI governance reference architecture at the February SAB meeting, due March 1st. It's March 29th.</p>
+        <p>[Look at the audience.]</p>
+        <p>How many of you have walked into a briefing with an overdue commitment you didn't know about? That's a trust-destroying moment. Déjà View just saved us from it."</p>
+      </blockquote>
+
+      <p><strong>[Continue narrating as Draft Punk assembles documents]</strong></p>
+
+      <blockquote>
+        <p>"Now Draft Punk is assembling the briefing package. Executive dossier... sponsor talking points for Maria Torres... recommended agenda &mdash; look at that, it's weaving the SAB themes directly into the agenda topics. AI governance and hybrid cloud reality &mdash; because that's what Sarah talked about at the last board meeting.</p>
+        <p>And Alfred Bitworth is generating the VVIP checklist &mdash; Gold tier, executive suite, vegetarian catering, green tea preference... it even knows she prefers morning briefings.</p>
+        <p>Sponsor Coach is also running in parallel. It's scoring Maria Torres's readiness for her drop-in &mdash; she hasn't read the last SAB meeting notes, so Sponsor Coach generates a two-minute prep brief with the exact phrases she should use about the AI governance overdue item. That's the agent that stops the sponsor from walking in cold."</p>
+      </blockquote>
+
+      <h3>BEAT 5b: The Oddsfather's Verdict (1 minute)</h3>
+      <p><strong>[The Oddsfather node lights up as Phase 3 begins]</strong></p>
+
+      <blockquote>
+        <p>"And now &mdash; the final agent. The Oddsfather. It's reading the full package, the overdue action item, Sarah's relationship trajectory, Maria's sponsor readiness score &mdash; and it's going to tell us something nobody usually says out loud before a briefing.</p>
+        <p>Here's what the Oddsfather predicts...</p>
+        <p>[Pause for the verdict to appear]</p>
+        <p>Seventy-two percent probability of a positive outcome. Top risk: the overdue AI governance architecture. Top lever: lead with the acknowledgement and show the updated commitment timeline.</p>
+        <p>That is not a vibes check. That is a synthesis of every signal this pipeline surfaced, expressed as a number you can put in front of a sponsor before they step into the boardroom. That's what agentic AI does that a human briefing pack can't."</p>
+      </blockquote>
+
+      <h3>BEAT 6: The Reveal (2 minutes)</h3>
+      <p><strong>[Show the completed package in the OpenClaw UI]</strong></p>
+
+      <blockquote>
+        <p>"So. Let's count. Executive dossier &mdash; done. Briefing backgrounder &mdash; done. Sponsor talking points &mdash; done. Recommended agenda &mdash; done. VVIP protocol checklist &mdash; done. Sponsor alert email draft &mdash; done. And two critical flags that would have blindsided us.</p>
+        <p>Time elapsed: about 90 seconds.</p>
+        <p>[Pause.]</p>
+        <p>But here's what I really want you to take away. It's not the speed. Speed is nice. What matters is that this system connected the dots between our SAB, our EBC, and our Executive Sponsor program &mdash; automatically. It read the SAB meeting notes. It cross-referenced the briefing history. It checked the VVIP roster. It drafted talking points for the sponsor based on the SAB themes.</p>
+        <p>THAT is the connective tissue Kristin described. And it's running on open-source software on a laptop."</p>
+      </blockquote>
+
+      <h3>BEAT 6b (extension): Advanced Scenario &mdash; Multi-Contact Briefing</h3>
+      <p><strong>[Optional. Trigger when the audience asks about group briefings.]</strong></p>
+
+      <p>If the audience asks the natural follow-up &mdash; <em>"what if there's more than one person in the room?"</em> &mdash; switch to <code>briefingclaw-multicontact.html</code> and pick a group. A strong default is <strong>Sarah Chen + Tom Richards + Dr. Priya Kapoor</strong> at Meridian, because it stretches across an economic buyer, a technical champion, and a clinical stakeholder.</p>
+
+      <blockquote>
+        <p>"Great question. Let me show you what happens when the room isn't one person. This is the multi-contact mode. I'm picking Sarah Chen, Tom Richards, and Dr. Priya Kapoor &mdash; three different people at Meridian, each with their own agenda.</p>
+        <p>[Click Start.]</p>
+        <p>You get one shared company context instead of three redundant company briefs. Then the role matrix: Sarah is the economic buyer, Tom is the technical champion, Priya is the clinical blocker. That's the buying center &mdash; and the buying center is usually where deals actually die.</p>
+        <p>Now look at the recommended briefing order: blocker first, champion last. You don't want Priya's objections ambushing you in the closing minutes. Address them up front, then let Tom close the room.</p>
+        <p>And the Oddsfather &mdash; notice how the group verdict is lower than any individual verdict would be. That's the coordination adjustment. A group briefing with a blocker is harder than the sum of its parts, and the agent tells you that before you walk in."</p>
+      </blockquote>
+
+      <p>Use this as an advanced scenario only if the audience signals interest &mdash; do not force it into the main narrative, because the main demo's Sarah Chen story has cleaner dramatic beats.</p>
+
+      <h3>BEAT 7: The Enterprise Bridge (1 minute)</h3>
+
+      <blockquote>
+        <p>"Everything you just saw: the model is IBM Granite, open source. The agent frameworks are OpenClaw and ZeroClaw, open source. The container runtime is Podman, open source. If you wanted to scale this for your whole EBC team &mdash; across multiple centers, integrated with your CRM, with guardrails and governance &mdash; that's what Red Hat's OpenShift AI platform does.</p>
+        <p>But the point is: you can start experimenting today. On your own laptop. For free."</p>
+      </blockquote>
+
+      <h3>BEAT 7b (closing): The Feedback Loop &mdash; Post-Briefing</h3>
+      <p><strong>[Optional but recommended as the final beat before handing off]</strong></p>
+
+      <p>Open <code>briefingclaw-postbriefing.html</code> for the closer. This is the feedback loop that makes Deja View smarter over time.</p>
+
+      <blockquote>
+        <p>"One last thing before I hand back. Every briefing ends &mdash; and most organizations throw away the debrief. This is where we capture it. NPS, commitments made, actual outcome, relationship stage shift.</p>
+        <p>[Fill in a quick example &mdash; NPS 9, one commitment, outcome positive.]</p>
+        <p>Watch the Oddsfather calibration card: we predicted 72%, the actual outcome was strong positive &mdash; the calibration says we were well calibrated. But if we had predicted 72% and walked into a disaster, this card would flag it as an <em>optimistic drift</em> and the next briefing with Sarah Chen would start from a shifted prior.</p>
+        <p><strong>This is the feedback loop that makes Deja View smarter over time.</strong> It's not a one-shot prediction &mdash; it's a learning system. And everything you see here is persisted locally to browser storage, so nothing leaves the laptop."</p>
+      </blockquote>
+
+      <h3>BEAT 8: Hand Back to Kristin (30 seconds)</h3>
+
+      <blockquote><p>"Kristin, I believe you have an ecosystem mapping exercise for us?"</p></blockquote>
+
+      <hr>
+
+      <h2>Contingency Plans</h2>
+
+      <h3>If the model is slow (&gt;30 seconds per response)</h3>
+      <p>Switch to the interactive dashboard immediately. Don't wait. Say:</p>
+      <blockquote><p>"Let me switch to the pipeline visualization so you can see the full flow."</p></blockquote>
+
+      <p>Open <code>briefingclaw-dashboard.html</code> or <code>briefingclaw-dashboard-redhat.html</code> (depending on your audience) and click "Start Demo" (or press Space). Use the contact dropdown to pick the scenario that fits your narrative. The 42-second simulation shows the full agent pipeline with activity feed, critical flags, and deliverables clickable with formatted HTML content for all 8 contacts. If the dashboard is also not available, fall back to the pre-recorded video.</p>
+
+      <h3>If OpenClaw crashes</h3>
+      <p>Switch to the dashboard for the visual pipeline demo, then use ZeroClaw CLI for live research. Run Sherlock Ohms's research command live &mdash; it's fast and visual. The dashboard shows the orchestration flow; ZeroClaw shows real agent output.</p>
+
+      <h3>If nothing works</h3>
+      <p>Open the dashboard (<code>briefingclaw-dashboard.html?autostart</code> or <code>briefingclaw-dashboard-redhat.html?autostart</code>) &mdash; it runs entirely standalone with no backend dependencies. Eight scenarios via the dropdown. Walk through the animated pipeline, click any completed deliverable to show formatted content, and narrate what each agent produces. If even the browser fails, go to slides with screenshots.</p>
+
+      <h3>For pre-session rehearsal on the road</h3>
+      <p>Use <code>./briefingclaw.sh preview</code> to boot the dashboards without running any infrastructure checks. This is the fastest way to practice the narration, the persona switching, and the Oddsfather reveal on a plane, in a hotel room, or five minutes before walking onstage &mdash; without needing Podman, the Granite model, or the OpenClaw gateway.</p>
+
+      <h3>If the audience asks "Can I try this?"</h3>
+      <blockquote><p>"Yes. OpenClaw is on GitHub &mdash; 273,000 stars, it's the fastest-growing open-source project in history. ZeroClaw is a single binary you can install with Homebrew. Podman AI Lab is a free extension. I'll share links at the end, and I'm happy to talk after the session."</p></blockquote>
+
+      <h3>If someone asks about data privacy / security</h3>
+      <blockquote><p>"Great question. Everything I showed runs locally &mdash; no API calls to external services during the demo. In an enterprise deployment, you'd add guardrails: model governance through OpenShift AI, data classification policies, audit logging. ZeroClaw has built-in OS-level sandboxing. But the key architectural choice is that the AI runs where your data lives, not the other way around."</p></blockquote>
+
+      <hr>
+
+      <h2>Key Lines to Memorize</h2>
+
+      <p>These are your "money lines" &mdash; practice until they're natural:</p>
+
+      <ol>
+        <li><strong>"The connective tissue between your programs &mdash; automated."</strong></li>
+        <li><strong>"Déjà View just saved us from a trust-destroying moment."</strong></li>
+        <li><strong>"It's not the speed that matters. It's that it connected the dots."</strong></li>
+        <li><strong>"You can start experimenting today. On your own laptop. For free."</strong></li>
+        <li><strong>"At a hackathon two weeks ago, construction workers were building agents like this in two hours."</strong></li>
+        <li><strong>"Here's what the Oddsfather predicts..."</strong></li>
+      </ol>
+    </div>
+
+    <div class="doc" id="doc-enterprise" data-md="docs/ENTERPRISE-DEPLOYMENT.md">
+      <h1>Enterprise Deployment Guide</h1>
+
+      <p>How to take BriefingClaw from a conference demo to a production deployment in your organization.</p>
+
+      <blockquote><p>This guide is for teams who saw the GACEP demo and want to operationalize the system for real executive briefing workflows.</p></blockquote>
+
+      <hr>
+
+      <h2>Table of Contents</h2>
+
+      <ol>
+        <li><a href="#1-what-youre-deploying">What You're Deploying</a></li>
+        <li><a href="#2-architecture-decisions">Architecture Decisions</a></li>
+        <li><a href="#3-connecting-your-crm">Connecting Your CRM</a></li>
+        <li><a href="#4-loading-your-sab-data">Loading Your SAB Data</a></li>
+        <li><a href="#5-customizing-agent-personas">Customizing Agent Personas</a></li>
+        <li><a href="#6-model-routing-for-your-environment">Model Routing for Your Environment</a></li>
+        <li><a href="#7-integration-points">Integration Points</a></li>
+        <li><a href="#8-security-considerations">Security Considerations</a></li>
+        <li><a href="#9-operational-runbook">Operational Runbook</a></li>
+        <li><a href="#10-production-checklist">Production Checklist</a></li>
+      </ol>
+
+      <hr>
+
+      <h2>1. What You're Deploying</h2>
+
+      <p>The reference architecture demonstrated at GACEP is the same one you can deploy in production:</p>
+
+      <table>
+        <thead>
+          <tr><th>Component</th><th>Demo</th><th>Production</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Orchestrator agent</td><td>Oprah-tor (OpenClaw)</td><td>OpenClaw on OpenShift</td></tr>
+          <tr><td>Research agents</td><td>Sherlock Ohms, Bloom-borg (ZeroClaw native)</td><td>ZeroClaw on dedicated nodes or OpenShift sidecars</td></tr>
+          <tr><td>Local data agents</td><td>Déjà View, Draft Punk, Alfred Bitworth (OpenClaw)</td><td>OpenClaw on OpenShift, scaled by load</td></tr>
+          <tr><td>The Oddsfather</td><td>OpenClaw skill</td><td>Same</td></tr>
+          <tr><td>Local model</td><td>Granite 8B via Podman AI Lab</td><td>Granite served by OpenShift AI</td></tr>
+          <tr><td>Frontier model</td><td>Anthropic / OpenAI / Google (cloud)</td><td>Same &mdash; but consider OpenShift AI's own model serving for sovereign deployments</td></tr>
+        </tbody>
+      </table>
+
+      <p>The shift from "laptop demo" to "production" is mostly about <strong>scale, governance, and integration</strong> &mdash; the agent architecture stays the same.</p>
+
+      <hr>
+
+      <h2>2. Architecture Decisions</h2>
+
+      <p>Before deploying, decide:</p>
+
+      <h3>2.1 Where do the agents run?</h3>
+      <ul>
+        <li><strong>Single-tenant cluster</strong>: All agents on your own OpenShift cluster. Best for regulated industries.</li>
+        <li><strong>Hybrid</strong>: Local agents on your cluster, frontier agents call out to cloud APIs. Most common.</li>
+        <li><strong>Fully cloud</strong>: Local agents also call cloud-hosted Granite via OpenShift AI. Lowest ops burden.</li>
+      </ul>
+
+      <h3>2.2 Where does the data live?</h3>
+      <ul>
+        <li><strong>Workspace files</strong> (current demo approach): Markdown and JSON files mounted into containers. Simplest, but stale unless refreshed.</li>
+        <li><strong>API integration</strong> (recommended for production): Déjà View queries CRM, calendar, email, and SAB systems live.</li>
+        <li><strong>Hybrid</strong>: API for fresh data (CRM, calendar) + workspace files for slow-changing context (SAB notes).</li>
+      </ul>
+
+      <h3>2.3 Who triggers a briefing?</h3>
+      <ul>
+        <li>Manual: A user types a request into the OpenClaw gateway UI</li>
+        <li>Calendar-driven: System auto-detects an upcoming briefing and prepares a package 24 hours in advance</li>
+        <li>Slack/Teams bot: User says "@briefingclaw prep for Sarah Chen tomorrow" in chat</li>
+      </ul>
+
+      <hr>
+
+      <h2>3. Connecting Your CRM</h2>
+
+      <p>The demo reads from <code>demo-data/crm-export.json</code>. In production, replace this with a live CRM connector.</p>
+
+      <h3>Salesforce Example</h3>
+
+      <p>Add a CRM adapter to Déjà View. Modify <code>agents/sab-historian/SKILL.md</code> to reference an external tool:</p>
+
+      <pre><code># In config/openclaw-config.yml
+tools:
+  crm_query:
+    enabled: true
+    type: api
+    base_url: ${SFDC_INSTANCE_URL}
+    auth:
+      type: oauth2
+      token_endpoint: ${SFDC_TOKEN_URL}
+      client_id: ${SFDC_CLIENT_ID}
+      client_secret: ${SFDC_CLIENT_SECRET}
+    schema_mapping:
+      account_name: Name
+      annual_revenue: AnnualRevenue
+      employees: NumberOfEmployees
+      health_score: Account_Health__c
+      contracts: Opportunities
+</code></pre>
+
+      <p>Déjà View's prompt then references the tool: <em>"Query CRM for the visitor's account record. Use the <code>crm_query</code> tool with parameters: <code>name=${visitor_name}, company=${company_name}</code>."</em></p>
+
+      <h3>HubSpot, Microsoft Dynamics, etc.</h3>
+      <p>Same pattern &mdash; define a tool wrapper, map your fields to the schema BriefingClaw expects.</p>
+
+      <h3>Schema Requirements</h3>
+      <p>At minimum, your CRM data must provide:</p>
+      <ul>
+        <li>Account: name, industry, revenue, employees, headquarters, health score</li>
+        <li>Contact: name, title, email, role type, engagement score, last activity, executive sponsor</li>
+        <li>Opportunities: name, stage, value, close date, notes</li>
+        <li>Support escalations: severity, summary, status</li>
+      </ul>
+
+      <p>If your CRM has different field names, the schema mapping config above translates them.</p>
+
+      <hr>
+
+      <h2>4. Loading Your SAB Data</h2>
+
+      <p>The demo uses <code>demo-data/sab-meeting-notes.md</code> and <code>demo-data/engagement-history.md</code>. For production:</p>
+
+      <h3>Option A: Markdown sync (simplest)</h3>
+      <p>Keep your SAB notes in markdown (Notion, Obsidian, GitHub) and sync them to the workspace volume nightly. No code changes needed.</p>
+
+      <h3>Option B: Database integration</h3>
+      <p>If your SABs are tracked in a database (Confluence, Airtable, custom CMS), add a tool wrapper similar to the CRM example.</p>
+
+      <h3>Option C: Calendar + meeting transcript pipeline</h3>
+      <ul>
+        <li>Calendar API tells you when an SAB meeting happens</li>
+        <li>Meeting transcript service (Otter, Zoom AI, Granola) provides the transcript</li>
+        <li>A pre-processor agent extracts themes, contributions, action items</li>
+        <li>Output is written to the workspace as structured markdown</li>
+      </ul>
+
+      <p>This gets you live SAB intelligence with zero manual logging.</p>
+
+      <hr>
+
+      <h2>5. Customizing Agent Personas</h2>
+
+      <p>The 6 agent personas (Oprah-tor, Sherlock Ohms, Bloom-borg, Déjà View, Draft Punk, Alfred Bitworth) plus The Oddsfather and Sponsor Coach are templates. You can:</p>
+
+      <h3>Rename them</h3>
+      <p>Edit <code>agents/&lt;agent&gt;/SKILL.md</code> and change the identity section. If your culture prefers more formal naming, replace "Oprah-tor" with "Orchestrator" and so on. The functionality is identical.</p>
+
+      <h3>Adjust their methodology</h3>
+      <p>Each SKILL.md has a "Methodology" section. Tune it to your reality:</p>
+      <ul>
+        <li>Your Sherlock Ohms might need to query LinkedIn Sales Navigator instead of Tavily</li>
+        <li>Your Bloom-borg might pull from Bloomberg Terminal instead of generic web search</li>
+        <li>Your Alfred Bitworth might need to integrate with your room booking system</li>
+      </ul>
+
+      <h3>Add new agents</h3>
+      <p>The architecture is extensible. Examples of agents you might add:</p>
+      <ul>
+        <li><strong>Compliance Officer</strong>: Checks if briefing topics raise regulatory concerns (relevant for healthcare, finance, defense)</li>
+        <li><strong>Translation Assistant</strong>: For international visitors, generates briefing materials in their native language</li>
+        <li><strong>Diversity Advocate</strong>: Suggests diverse presenters and perspectives for the briefing panel</li>
+        <li><strong>Calendar Coordinator</strong>: Pulls actual calendar availability for sponsor and CEO drop-ins</li>
+      </ul>
+
+      <p>Add a new directory under <code>agents/</code>, write a SKILL.md, register it in <code>config/openclaw-config.yml</code>.</p>
+
+      <hr>
+
+      <h2>6. Model Routing for Your Environment</h2>
+
+      <p>The demo uses dual-model routing: frontier (cloud) for research, local (Granite 8B) for data agents.</p>
+
+      <h3>Production options</h3>
+
+      <table>
+        <thead>
+          <tr><th>Deployment Model</th><th>Local Agents</th><th>Research Agents</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sovereign / air-gapped</td><td>Granite 8B on OpenShift AI</td><td>Granite 13B on OpenShift AI (no web search)</td><td>Slowest research, highest privacy</td></tr>
+          <tr><td>Hybrid (default)</td><td>Granite 8B on OpenShift AI</td><td>Claude / GPT / Gemini API</td><td>Balance of capability and privacy</td></tr>
+          <tr><td>Cloud-only</td><td>Granite 8B on OpenShift AI cloud</td><td>Frontier API</td><td>Lowest ops burden</td></tr>
+          <tr><td>Custom</td><td>Your fine-tuned model</td><td>Your fine-tuned model</td><td>If you've trained your own Granite variant on company data</td></tr>
+        </tbody>
+      </table>
+
+      <p>Configure the routing in <code>config/openclaw-config.yml</code> under <code>routing.overrides</code>.</p>
+
+      <hr>
+
+      <h2>7. Integration Points</h2>
+
+      <p>A production BriefingClaw should connect to:</p>
+
+      <table>
+        <thead>
+          <tr><th>System</th><th>Integration</th><th>Direction</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CRM (Salesforce, HubSpot)</td><td>API</td><td>Read</td></tr>
+          <tr><td>Calendar (Google, Outlook)</td><td>API</td><td>Read (briefings, sponsor availability)</td></tr>
+          <tr><td>Email</td><td>Send via SMTP / Gmail API</td><td>Write (sponsor alerts)</td></tr>
+          <tr><td>Slack / Teams</td><td>Bot framework</td><td>Bidirectional (trigger + notify)</td></tr>
+          <tr><td>Document storage (SharePoint, Drive, Box)</td><td>API</td><td>Write (PDF deliverables)</td></tr>
+          <tr><td>Meeting notes (Otter, Zoom AI)</td><td>API</td><td>Read (post-briefing transcripts)</td></tr>
+          <tr><td>EBC scheduling system</td><td>API</td><td>Read (room bookings, catering)</td></tr>
+          <tr><td>SAB management system</td><td>API or markdown sync</td><td>Read</td></tr>
+        </tbody>
+      </table>
+
+      <p>Each integration is an OpenClaw or ZeroClaw "tool" added to the agent that needs it.</p>
+
+      <hr>
+
+      <h2>8. Security Considerations</h2>
+
+      <p>Production deployments must address:</p>
+
+      <h3>Data classification</h3>
+      <p>Customer data flowing through BriefingClaw is highly sensitive. Decide which model tier each data class can touch:</p>
+      <ul>
+        <li><strong>Public data</strong> (company news, financials): OK for frontier APIs</li>
+        <li><strong>Internal data</strong> (CRM, account health, opportunities): Local model only</li>
+        <li><strong>Regulated data</strong> (PII, financial, medical): Local model + audit logging required</li>
+      </ul>
+
+      <h3>API key rotation</h3>
+      <p>The demo uses <code>.env</code> files. In production:</p>
+      <ul>
+        <li>Use OpenShift Secrets or external vault (HashiCorp Vault, AWS Secrets Manager)</li>
+        <li>Rotate keys quarterly</li>
+        <li>Use service accounts, not personal keys</li>
+      </ul>
+
+      <h3>Audit logging</h3>
+      <p>Every agent invocation should be logged with:</p>
+      <ul>
+        <li>Who triggered it (user identity)</li>
+        <li>What was requested (briefing for whom)</li>
+        <li>Which data sources were queried</li>
+        <li>Which model was called</li>
+        <li>What was returned (or a hash of it for sensitive data)</li>
+      </ul>
+
+      <p>OpenShift AI provides this out of the box.</p>
+
+      <h3>Network egress controls</h3>
+      <p>The frontier agents make outbound calls. Lock down:</p>
+      <ul>
+        <li>Allowed domains (api.anthropic.com, api.openai.com, etc.)</li>
+        <li>Block all other outbound traffic from agent containers</li>
+        <li>Monitor for unexpected traffic patterns</li>
+      </ul>
+
+      <hr>
+
+      <h2>9. Operational Runbook</h2>
+
+      <h3>Daily operations</h3>
+      <ul>
+        <li>Verify model health: <code>/health</code> endpoint on OpenShift AI</li>
+        <li>Verify agent gateway: <code>curl https://briefingclaw.your-domain.com/health</code></li>
+        <li>Review yesterday's audit log for anomalies</li>
+      </ul>
+
+      <h3>Weekly operations</h3>
+      <ul>
+        <li>Refresh SAB workspace files (if using markdown sync)</li>
+        <li>Review Sponsor Coach recommendations that were dismissed</li>
+        <li>Calibrate The Oddsfather: compare predicted vs. actual briefing outcomes</li>
+      </ul>
+
+      <h3>Monthly operations</h3>
+      <ul>
+        <li>Review agent prompt drift (are responses still high quality?)</li>
+        <li>Rotate any expiring API keys</li>
+        <li>Update demo-data templates if your relationship structure has evolved</li>
+      </ul>
+
+      <h3>Quarterly operations</h3>
+      <ul>
+        <li>Full agent prompt review with stakeholders</li>
+        <li>Re-train any custom model variants on new data</li>
+        <li>Compliance audit of data flows</li>
+      </ul>
+
+      <hr>
+
+      <h2>10. Production Checklist</h2>
+
+      <p>Before going live:</p>
+
+      <h3>Infrastructure</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> OpenShift cluster provisioned with adequate compute (8 vCPU minimum per agent pod)</li>
+        <li><input type="checkbox" disabled> OpenShift AI installed and Granite model deployed</li>
+        <li><input type="checkbox" disabled> Network policies configured (egress controls)</li>
+        <li><input type="checkbox" disabled> Persistent storage for workspace volumes</li>
+        <li><input type="checkbox" disabled> Backup strategy for workspace data</li>
+      </ul>
+
+      <h3>Configuration</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Frontier API keys stored in vault, injected via OpenShift Secrets</li>
+        <li><input type="checkbox" disabled> CRM API credentials configured and tested</li>
+        <li><input type="checkbox" disabled> Calendar API integrated</li>
+        <li><input type="checkbox" disabled> Email/Slack integrations tested with non-prod accounts first</li>
+        <li><input type="checkbox" disabled> Logging pipeline running (Splunk, ELK, OpenShift Logging)</li>
+      </ul>
+
+      <h3>Agents</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> All 8 agent SKILL.md files reviewed and customized</li>
+        <li><input type="checkbox" disabled> Agent personas renamed if needed</li>
+        <li><input type="checkbox" disabled> Sponsor Coach calibrated to your sponsor cadence expectations</li>
+        <li><input type="checkbox" disabled> The Oddsfather scoring weights tuned to your sales motion</li>
+      </ul>
+
+      <h3>Data</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Real CRM data flowing into Déjà View</li>
+        <li><input type="checkbox" disabled> SAB notes synced from your source of truth</li>
+        <li><input type="checkbox" disabled> Engagement history imported (or starting fresh from launch date)</li>
+        <li><input type="checkbox" disabled> VVIP roster validated against current org chart</li>
+      </ul>
+
+      <h3>Testing</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> End-to-end test with a real upcoming briefing (in staging)</li>
+        <li><input type="checkbox" disabled> Failure mode testing: model down, API down, slow response</li>
+        <li><input type="checkbox" disabled> Load test: 5 concurrent briefings</li>
+        <li><input type="checkbox" disabled> User acceptance: 3 EBC managers and 1 sponsor have tested it</li>
+      </ul>
+
+      <h3>Governance</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" disabled> Data classification policy documented</li>
+        <li><input type="checkbox" disabled> Model usage policy approved by legal/compliance</li>
+        <li><input type="checkbox" disabled> User training plan in place</li>
+        <li><input type="checkbox" disabled> Feedback loop for agent improvement defined</li>
+      </ul>
+
+      <hr>
+
+      <h2>Support</h2>
+
+      <p>For help adapting BriefingClaw to your environment:</p>
+      <ul>
+        <li>Open an issue: <a href="https://github.com/holzerjm/GACEP-Spring-2026-demo/issues">https://github.com/holzerjm/GACEP-Spring-2026-demo/issues</a></li>
+        <li>Reference the agent SKILL.md files &mdash; they're the source of truth for what each agent does</li>
+        <li>The demo data files are good templates for what your production data should look like</li>
+      </ul>
+
+      <hr>
+
+      <p><em>BriefingClaw is open source under the MIT license. Use it, modify it, deploy it.</em></p>
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+// ═══════════════════ NAVIGATION ═══════════════════
+function showDoc(docId) {
+  document.querySelectorAll('.doc').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link[data-doc]').forEach(l => l.classList.remove('active'));
+
+  const target = document.getElementById('doc-' + docId);
+  const link = document.querySelector('.sidebar-link[data-doc="' + docId + '"]');
+  if (target) target.classList.add('active');
+  if (link) link.classList.add('active');
+
+  // Update the "view raw" link to point to the correct md
+  const mdPath = target ? target.dataset.md : 'README.md';
+  document.getElementById('rawMdLink').href = mdPath;
+
+  // Scroll to top of content
+  document.querySelector('.content').scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+// Handle hash-based navigation
+function handleHashChange() {
+  const hash = window.location.hash.replace('#', '') || 'readme';
+  showDoc(hash);
+}
+
+document.querySelectorAll('.sidebar-link[data-doc]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const docId = link.dataset.doc;
+    if (docId) {
+      e.preventDefault();
+      window.location.hash = docId;
+    }
+  });
+});
+
+window.addEventListener('hashchange', handleHashChange);
+document.addEventListener('DOMContentLoaded', handleHashChange);
+</script>
+
+</body>
+</html>
