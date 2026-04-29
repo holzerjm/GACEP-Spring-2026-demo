@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw on TankOS — Live Demo Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;900&family=Red+Hat+Text:wght@400;500;600;700&family=Red+Hat+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0B0F14;
+  --bg-card: #131922;
+  --bg-card-hover: #1B2330;
+
+  --rh-red: #EE0000;
+  --rh-red-dark: #A60000;
+  --rh-red-glow: rgba(238,0,0,0.15);
+
+  /* TankOS teal — primary brand for this variant */
+  --tankos: #2BD9C7;
+  --tankos-dim: #11A597;
+  --tankos-glow: rgba(43,217,199,0.15);
+
+  /* Per-provider colours (must match the architecture HTML) */
+  --frontier-a: #6E9BFF;          /* Anthropic */
+  --frontier-a-bg: rgba(110,155,255,0.10);
+  --frontier-a-border: rgba(110,155,255,0.32);
+
+  --frontier-g: #C084FC;          /* Gemini */
+  --frontier-g-bg: rgba(192,132,252,0.10);
+  --frontier-g-border: rgba(192,132,252,0.32);
+
+  --local-q: #4ADE80;             /* Qwen 3 */
+  --local-q-bg: rgba(74,222,128,0.10);
+  --local-q-border: rgba(74,222,128,0.32);
+
+  --local-g: #FB923C;             /* Gemma 4 */
+  --local-g-bg: rgba(251,146,60,0.10);
+  --local-g-border: rgba(251,146,60,0.32);
+
+  --status-green: #63993D;
+  --status-red: #F0561D;
+  --status-amber: #DCA614;
+
+  --text: #E0E0E0;
+  --text-dim: #A3A3A3;
+  --text-muted: #707070;
+
+  --border: #2A323F;
+  --border-glow: #3D4757;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Red Hat Text', sans-serif; background: var(--bg); color: var(--text); }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(43,217,199,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43,217,199,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+.dashboard {
+  position: relative; z-index: 1;
+  max-width: 1440px; margin: 0 auto;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 56px auto 52px 1fr auto;
+  padding: 0 24px; gap: 0;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4px; border-bottom: 1px solid var(--border);
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 44px; height: 44px; border-radius: 8px; object-fit: contain; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+.logo-text .logo-main { font-family: 'Red Hat Display', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.5px; }
+.logo-text .logo-main .white  { color: #FFFFFF; }
+.logo-text .logo-main .teal   { color: var(--tankos); }
+.logo-text .logo-sub  { font-family: 'Red Hat Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.5px; }
+.header-title { font-family: 'Red Hat Display', sans-serif; font-weight: 600; font-size: 17px; color: var(--text-dim); }
+
+.mode-badge {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 4px 12px; border-radius: 4px;
+  transition: all 0.4s ease;
+}
+.mode-badge.live      { background: rgba(99,153,61,0.15);   color: var(--status-green); border: 1px solid rgba(99,153,61,0.3); }
+.mode-badge.simulated { background: rgba(43,217,199,0.10);  color: var(--tankos);       border: 1px solid var(--tankos-dim); }
+.mode-badge.partial   { background: rgba(220,166,20,0.12);  color: var(--status-amber); border: 1px solid rgba(220,166,20,0.3); }
+
+/* ── Pipeline ───────────────────────────────────────── */
+.pipeline-section { position: relative; overflow: hidden; min-height: 360px; }
+.pipeline-canvas { position: absolute; inset: 0; z-index: 1; }
+.pipeline-overlay {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: space-evenly;
+  padding: 12px 0; min-height: 360px;
+}
+.pipeline-row { display: flex; align-items: center; justify-content: center; gap: 24px; width: 100%; }
+.pipeline-row.phase-label-row { gap: 4px; }
+.phase-label {
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-muted); padding: 2px 0;
+}
+
+/* Agent nodes */
+.agent-node {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-width: 160px; max-width: 200px;
+  text-align: center;
+  transition: all 0.4s ease;
+  opacity: 0.45;
+}
+.agent-node[data-status="idle"]    { opacity: 0.45; }
+.agent-node[data-status="working"] { opacity: 1; transform: translateY(-1px); }
+.agent-node[data-status="complete"]{ opacity: 1; }
+
+.agent-node.fa { background: linear-gradient(180deg, var(--frontier-a-bg) 0%, var(--bg-card) 100%); border-color: var(--frontier-a-border); }
+.agent-node.fg { background: linear-gradient(180deg, var(--frontier-g-bg) 0%, var(--bg-card) 100%); border-color: var(--frontier-g-border); }
+.agent-node.lq { background: linear-gradient(180deg, var(--local-q-bg)    0%, var(--bg-card) 100%); border-color: var(--local-q-border); }
+.agent-node.lg { background: linear-gradient(180deg, var(--local-g-bg)    0%, var(--bg-card) 100%); border-color: var(--local-g-border); }
+.agent-node.orchestrator {
+  background: linear-gradient(180deg, var(--frontier-a-bg) 0%, var(--bg-card) 100%);
+  border-color: var(--frontier-a-border);
+  min-width: 180px;
+}
+.agent-node .model-badge {
+  position: absolute; top: 6px; right: 6px;
+  font-family: 'Red Hat Mono', monospace;
+  font-size: 9px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  padding: 1px 6px; border-radius: 3px;
+}
+.agent-node.fa .model-badge { background: var(--frontier-a-bg); color: var(--frontier-a); border: 1px solid var(--frontier-a-border); }
+.agent-node.fg .model-badge { background: var(--frontier-g-bg); color: var(--frontier-g); border: 1px solid var(--frontier-g-border); }
+.agent-node.lq .model-badge { background: var(--local-q-bg);    color: var(--local-q);    border: 1px solid var(--local-q-border); }
+.agent-node.lg .model-badge { background: var(--local-g-bg);    color: var(--local-g);    border: 1px solid var(--local-g-border); }
+
+.agent-node .agent-emoji { font-size: 22px; display: block; margin-bottom: 2px; }
+.agent-node .agent-name  { font-family: 'Red Hat Display', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 1px; }
+.agent-node .agent-role  { font-family: 'Red Hat Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-muted); }
+.agent-node .agent-model { font-family: 'Red Hat Mono', monospace; font-size: 9px; margin-top: 4px; opacity: 0.8; }
+.agent-node.fa .agent-model { color: var(--frontier-a); }
+.agent-node.fg .agent-model { color: var(--frontier-g); }
+.agent-node.lq .agent-model { color: var(--local-q); }
+.agent-node.lg .agent-model { color: var(--local-g); }
+
+.agent-node .progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 2px; border-radius: 0 0 12px 12px;
+  width: 0%; transition: width 0.3s linear;
+}
+.agent-node.fa .progress-bar { background: var(--frontier-a); }
+.agent-node.fg .progress-bar { background: var(--frontier-g); }
+.agent-node.lq .progress-bar { background: var(--local-q); }
+.agent-node.lg .progress-bar { background: var(--local-g); }
+
+.agent-node.fa[data-status="working"] { box-shadow: 0 0 16px rgba(110,155,255,0.20), 0 0 32px rgba(110,155,255,0.06); animation: pulse-fa 2s ease-in-out infinite; }
+.agent-node.fg[data-status="working"] { box-shadow: 0 0 16px rgba(192,132,252,0.20), 0 0 32px rgba(192,132,252,0.06); animation: pulse-fg 2s ease-in-out infinite; }
+.agent-node.lq[data-status="working"] { box-shadow: 0 0 16px rgba(74,222,128,0.20),  0 0 32px rgba(74,222,128,0.06);  animation: pulse-lq 2s ease-in-out infinite; }
+.agent-node.lg[data-status="working"] { box-shadow: 0 0 16px rgba(251,146,60,0.20),  0 0 32px rgba(251,146,60,0.06);  animation: pulse-lg 2s ease-in-out infinite; }
+
+.agent-node[data-status="complete"]::after {
+  content: '\2713';
+  position: absolute; top: -6px; right: -6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--status-green); color: #000;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+
+/* Trigger / output nodes */
+.trigger-node, .output-node {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 6px 18px; text-align: center;
+  transition: all 0.4s ease;
+}
+.trigger-node { opacity: 0.5; border-color: var(--border-glow); }
+.trigger-node[data-status="active"] { opacity: 1; border-color: var(--tankos-dim); }
+.output-node  { opacity: 0.4; }
+.output-node[data-status="complete"] {
+  opacity: 1; border-color: var(--tankos-dim);
+  background: linear-gradient(135deg, rgba(43,217,199,0.08) 0%, var(--bg-card) 100%);
+}
+.trigger-node .node-label, .output-node .node-label {
+  font-family: 'Red Hat Mono', monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
+}
+.trigger-node .node-text { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+.output-node .deliverable-count {
+  font-family: 'Red Hat Mono', monospace; font-size: 16px; font-weight: 500;
+  color: var(--tankos); margin-top: 2px;
+}
+
+/* ── Control bar ────────────────────────────────────── */
+.control-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 4px; border-bottom: 1px solid var(--border);
+}
+.contact-select {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px;
+  font-family: 'Red Hat Text', sans-serif; font-size: 13px; color: var(--text);
+  outline: none; cursor: pointer;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A3A3A3' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+}
+.contact-select:focus { border-color: var(--tankos); }
+
+.btn {
+  font-family: 'Red Hat Display', sans-serif;
+  font-weight: 600; font-size: 13px;
+  padding: 8px 20px; border-radius: 8px; border: none;
+  cursor: pointer; transition: all 0.3s ease; letter-spacing: 0.3px;
+}
+.btn-primary { background: var(--tankos); color: #001A18; }
+.btn-primary:hover { background: #3DEAD7; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(43,217,199,0.25); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { background: var(--bg-card); color: var(--text-dim); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--bg-card-hover); border-color: var(--border-glow); color: var(--text); }
+.elapsed-display {
+  font-family: 'Red Hat Mono', monospace; font-size: 20px; font-weight: 500;
+  color: var(--tankos); min-width: 60px; text-align: right;
+  opacity: 0.6; transition: opacity 0.3s ease;
+}
+.elapsed-display.active { opacity: 1; }
+
+/* ── Panels ─────────────────────────────────────────── */
+.panels-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px; padding: 12px 0;
+  overflow: hidden;
+}
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-shrink: 0; }
+.panel-title { font-family: 'Red Hat Display', sans-serif; font-weight: 600; font-size: 15px; color: var(--text); }
+.panel-badge {
+  font-family: 'Red Hat Mono', monospace; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
+  background: rgba(255,255,255,0.03); padding: 2px 8px; border-radius: 4px;
+}
+.panel-content { flex: 1; overflow-y: auto; overflow-x: hidden; }
+.panel-content::-webkit-scrollbar { width: 4px; }
+.panel-content::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 2px; }
+
+/* Infrastructure panel */
+.infra-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0; border-bottom: 1px solid rgba(56,56,56,0.5);
+}
+.infra-row:last-child { border-bottom: none; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; transition: background 0.4s ease; }
+.status-dot.connected    { background: var(--status-green); box-shadow: 0 0 8px rgba(99,153,61,0.4); animation: status-pulse 2s ease-in-out infinite; }
+.status-dot.disconnected { background: var(--status-red);   box-shadow: 0 0 6px rgba(240,86,29,0.3); }
+.status-dot.checking     { background: var(--status-amber); animation: status-pulse 1s ease-in-out infinite; }
+.status-dot.static       { background: var(--status-green); opacity: 0.6; }
+.infra-name { font-family: 'Red Hat Text', sans-serif; font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+.infra-detail { font-family: 'Red Hat Mono', monospace; font-size: 10px; color: var(--text-muted); }
+
+/* Activity feed */
+.activity-feed { display: flex; flex-direction: column; gap: 2px; }
+.activity-entry { display: flex; gap: 8px; padding: 4px 0; animation: fade-in 0.3s ease; align-items: flex-start; }
+.activity-time  { font-family: 'Red Hat Mono', monospace; font-size: 11px; color: var(--text-muted); flex-shrink: 0; min-width: 36px; padding-top: 1px; }
+.activity-agent { font-family: 'Red Hat Display', sans-serif; font-weight: 600; font-size: 11px; flex-shrink: 0; min-width: 100px; padding-top: 1px; }
+.activity-agent.fa-text { color: var(--frontier-a); }
+.activity-agent.fg-text { color: var(--frontier-g); }
+.activity-agent.lq-text { color: var(--local-q); }
+.activity-agent.lg-text { color: var(--local-g); }
+.activity-agent.orch-text { color: var(--tankos); }
+.activity-message { font-family: 'Red Hat Mono', monospace; font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+
+/* Deliverables grid */
+.deliverables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.deliverable-card {
+  position: relative;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(56,56,56,0.5);
+  border-radius: 8px; padding: 8px 10px;
+  opacity: 0.35; transition: all 0.4s ease;
+}
+.risk-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 8px; height: 8px; border-radius: 50%;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.deliverable-card.completed .risk-dot { opacity: 1; }
+.risk-dot.danger   { background: var(--status-red);   box-shadow: 0 0 6px rgba(240,86,29,0.5); }
+.risk-dot.warning  { background: var(--status-amber); box-shadow: 0 0 6px rgba(220,166,20,0.5); }
+.risk-dot.positive { background: var(--status-green); box-shadow: 0 0 6px rgba(99,153,61,0.5); }
+
+.deliverable-card.completed {
+  opacity: 1;
+  background: rgba(43,217,199,0.06);
+  border-color: var(--tankos-border, rgba(43,217,199,0.25));
+  animation: deliverable-complete 0.6s ease-out;
+  cursor: pointer;
+}
+.deliverable-card.completed:hover {
+  background: rgba(43,217,199,0.10);
+  border-color: rgba(43,217,199,0.4);
+  transform: translateY(-1px);
+}
+.deliverable-card .del-icon { font-size: 18px; margin-bottom: 2px; }
+.deliverable-card .del-name { font-family: 'Red Hat Text', sans-serif; font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.deliverable-card .del-agent { font-family: 'Red Hat Mono', monospace; font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+.deliverable-counter { font-family: 'Red Hat Mono', monospace; font-size: 11px; color: var(--tankos); }
+
+/* Flags */
+.flags-list { display: flex; flex-direction: column; gap: 6px; }
+.flag-entry {
+  display: flex; gap: 8px; align-items: flex-start;
+  padding: 8px 10px; border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(56,56,56,0.5);
+  animation: slide-in-flag 0.5s ease-out;
+}
+.flag-entry.danger      { border-color: rgba(240,86,29,0.25); background: rgba(240,86,29,0.05); }
+.flag-entry.warning     { border-color: rgba(220,166,20,0.25); background: rgba(220,166,20,0.05); }
+.flag-entry.positive    { border-color: rgba(99,153,61,0.25);  background: rgba(99,153,61,0.05); }
+.flag-entry.opportunity { border-color: rgba(110,155,255,0.25);background: rgba(110,155,255,0.05); }
+.flag-icon { font-size: 16px; flex-shrink: 0; padding-top: 1px; }
+.flag-text { font-family: 'Red Hat Text', sans-serif; font-size: 12px; color: var(--text); line-height: 1.4; }
+.flag-label { font-family: 'Red Hat Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.flag-entry.danger      .flag-label { color: var(--status-red); }
+.flag-entry.warning     .flag-label { color: var(--status-amber); }
+.flag-entry.positive    .flag-label { color: var(--status-green); }
+.flag-entry.opportunity .flag-label { color: var(--frontier-a); }
+.flags-empty { font-family: 'Red Hat Text', sans-serif; font-size: 11px; color: var(--text-muted); text-align: center; padding: 20px 0; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(11,15,20,0.92);
+  z-index: 100;
+  display: none; align-items: center; justify-content: center;
+  animation: fade-in 0.2s ease;
+}
+.modal-overlay.active { display: flex; }
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 14px;
+  max-width: 700px; width: 90%; max-height: 80vh;
+  overflow: hidden; display: flex; flex-direction: column;
+  animation: modal-slide-up 0.25s ease-out;
+}
+.modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-title { font-family: 'Red Hat Display', sans-serif; font-weight: 700; font-size: 15px; color: var(--tankos); }
+.modal-agent { font-family: 'Red Hat Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-hover); color: var(--text-dim);
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.modal-close:hover { background: rgba(255,255,255,0.08); color: var(--tankos); border-color: var(--border-glow); }
+.modal-body { padding: 20px; overflow-y: auto; font-size: 12px; line-height: 1.6; color: var(--text-dim); }
+.modal-body h2 { font-family: 'Red Hat Display', sans-serif; font-weight: 700; font-size: 14px; color: var(--tankos); margin: 16px 0 8px 0; }
+.modal-body h2:first-child { margin-top: 0; }
+.modal-body h3 { font-family: 'Red Hat Display', sans-serif; font-weight: 600; font-size: 12px; color: var(--tankos-dim); margin: 12px 0 6px 0; }
+.modal-body p { margin: 6px 0; }
+.modal-body strong { color: var(--text); font-weight: 600; }
+.modal-body ul { margin: 6px 0; padding-left: 18px; }
+.modal-body li { margin: 4px 0; }
+.modal-body table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 11px; }
+.modal-body table th { text-align: left; padding: 6px 10px; background: rgba(43,217,199,0.10); border: 1px solid var(--border); font-family: 'Red Hat Display', sans-serif; font-weight: 600; font-size: 10px; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
+.modal-body table td { padding: 6px 10px; border: 1px solid var(--border); color: var(--text-dim); }
+.modal-body table tr:nth-child(even) td { background: var(--bg-card-hover); }
+.modal-body .flag-badge { display: inline-block; font-family: 'Red Hat Mono', monospace; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px; margin: 2px 0; }
+.modal-body .flag-badge.danger      { background: rgba(240,86,29,0.12); color: var(--status-red); border: 1px solid rgba(240,86,29,0.25); }
+.modal-body .flag-badge.warning     { background: rgba(220,166,20,0.12); color: var(--status-amber); border: 1px solid rgba(220,166,20,0.25); }
+.modal-body .flag-badge.positive    { background: rgba(99,153,61,0.12); color: var(--status-green); border: 1px solid rgba(99,153,61,0.25); }
+.modal-body .flag-badge.opportunity { background: rgba(110,155,255,0.12); color: var(--frontier-a); border: 1px solid rgba(110,155,255,0.25); }
+
+/* Footer */
+.footer { padding: 10px 4px; border-top: 1px solid var(--border); text-align: center; }
+.footer-text { font-family: 'Red Hat Mono', monospace; font-size: 11px; color: var(--text-muted); }
+.footer-text .teal { color: var(--tankos); font-weight: 700; }
+.footer-text a { color: var(--tankos); text-decoration: none; border-bottom: 1px dotted rgba(43,217,199,0.4); }
+.footer-text a:hover { border-bottom-color: var(--tankos); }
+
+/* Animations */
+@keyframes pulse-fa { 0%,100% { box-shadow: 0 0 12px rgba(110,155,255,0.18); } 50% { box-shadow: 0 0 24px rgba(110,155,255,0.35), 0 0 48px rgba(110,155,255,0.10); } }
+@keyframes pulse-fg { 0%,100% { box-shadow: 0 0 12px rgba(192,132,252,0.18); } 50% { box-shadow: 0 0 24px rgba(192,132,252,0.35), 0 0 48px rgba(192,132,252,0.10); } }
+@keyframes pulse-lq { 0%,100% { box-shadow: 0 0 12px rgba(74,222,128,0.18);  } 50% { box-shadow: 0 0 24px rgba(74,222,128,0.35),  0 0 48px rgba(74,222,128,0.10);  } }
+@keyframes pulse-lg { 0%,100% { box-shadow: 0 0 12px rgba(251,146,60,0.18);  } 50% { box-shadow: 0 0 24px rgba(251,146,60,0.35),  0 0 48px rgba(251,146,60,0.10);  } }
+@keyframes status-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.2); } }
+@keyframes deliverable-complete { 0% { transform: scale(1); background: rgba(43,217,199,0.20); } 50% { transform: scale(1.04); } 100% { transform: scale(1); background: rgba(43,217,199,0.06); } }
+@keyframes slide-in-flag { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <img class="logo-icon" src="jmhclaw.png" alt="BriefingClaw" onerror="this.style.display='none'">
+        <div class="logo-text">
+          <span class="logo-main"><span class="white">Briefing</span><span class="teal">Claw</span> <span style="color:var(--text-muted);">/</span> <span class="teal">TankOS</span></span>
+          <span class="logo-sub">Fedora bootc &middot; Rootless OpenClaw &middot; Anthropic + Gemini + Qwen + Gemma</span>
+        </div>
+      </div>
+      <span class="header-title">Live Demo Dashboard</span>
+    </div>
+    <div id="modeBadge" class="mode-badge simulated">SIMULATED</div>
+  </header>
+
+  <!-- Pipeline visualization -->
+  <section class="pipeline-section">
+    <canvas class="pipeline-canvas" id="pipelineCanvas"></canvas>
+    <div class="pipeline-overlay">
+
+      <div class="pipeline-row">
+        <div class="trigger-node" id="triggerNode" data-status="idle">
+          <div class="node-label">Briefing Request</div>
+          <div class="node-text">Awaiting input...</div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 0 &middot; Decomposition</span>
+      </div>
+
+      <div class="pipeline-row">
+        <div class="agent-node fa orchestrator" id="node-oprah-tor" data-agent="oprah-tor" data-status="idle">
+          <span class="model-badge">Anthropic</span>
+          <span class="agent-emoji">&#127919;</span>
+          <div class="agent-name">Oprah-tor</div>
+          <div class="agent-role">Orchestrator</div>
+          <div class="agent-model">claude-opus-4-7</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 1 &middot; Intelligence Gathering (parallel)</span>
+      </div>
+
+      <div class="pipeline-row">
+        <div class="agent-node fa" id="node-sherlock-ohms" data-agent="sherlock-ohms" data-status="idle">
+          <span class="model-badge">Anthropic</span>
+          <span class="agent-emoji">&#128269;</span>
+          <div class="agent-name">Sherlock Ohms</div>
+          <div class="agent-role">Executive Research</div>
+          <div class="agent-model">claude-sonnet-4-6</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node fg" id="node-bloom-borg" data-agent="bloom-borg" data-status="idle">
+          <span class="model-badge">Gemini</span>
+          <span class="agent-emoji">&#127970;</span>
+          <div class="agent-name">Bloom-borg</div>
+          <div class="agent-role">Account Intelligence</div>
+          <div class="agent-model">gemini-3.1-pro</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node lq" id="node-deja-view" data-agent="deja-view" data-status="idle">
+          <span class="model-badge">Qwen 3</span>
+          <span class="agent-emoji">&#128203;</span>
+          <div class="agent-name">D&eacute;j&agrave; View</div>
+          <div class="agent-role">SAB Historian</div>
+          <div class="agent-model">qwen3-30b-a3b</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 2 &middot; Assembly &amp; Protocol (parallel)</span>
+      </div>
+
+      <div class="pipeline-row">
+        <div class="agent-node lg" id="node-draft-punk" data-agent="draft-punk" data-status="idle">
+          <span class="model-badge">Gemma 4</span>
+          <span class="agent-emoji">&#128196;</span>
+          <div class="agent-name">Draft Punk</div>
+          <div class="agent-role">Briefing Architect</div>
+          <div class="agent-model">gemma-4-26b</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node lq" id="node-alfred-bitworth" data-agent="alfred-bitworth" data-status="idle">
+          <span class="model-badge">Qwen 3</span>
+          <span class="agent-emoji">&#11088;</span>
+          <div class="agent-name">Alfred Bitworth</div>
+          <div class="agent-role">VVIP Protocol</div>
+          <div class="agent-model">qwen3-30b-a3b</div>
+          <div class="progress-bar"></div>
+        </div>
+        <div class="agent-node lg" id="node-sponsor-coach" data-agent="sponsor-coach" data-status="idle">
+          <span class="model-badge">Gemma 4</span>
+          <span class="agent-emoji">&#129309;</span>
+          <div class="agent-name">Sponsor Coach</div>
+          <div class="agent-role">Readiness</div>
+          <div class="agent-model">gemma-4-26b</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row phase-label-row">
+        <span class="phase-label">Phase 3 &middot; Success Prediction</span>
+      </div>
+
+      <div class="pipeline-row">
+        <div class="agent-node lq" id="node-oddsfather" data-agent="oddsfather" data-status="idle">
+          <span class="model-badge">Qwen 3</span>
+          <span class="agent-emoji">&#127922;</span>
+          <div class="agent-name">The Oddsfather</div>
+          <div class="agent-role">Success Predictor</div>
+          <div class="agent-model">qwen3-30b-a3b</div>
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="pipeline-row">
+        <div class="output-node" id="outputNode" data-status="idle">
+          <div class="node-label">Briefing Package</div>
+          <div class="deliverable-count" id="deliverableCount">0 / 10</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Control bar -->
+  <div class="control-bar">
+    <select class="contact-select" id="contactSelect">
+      <option value="sarah-chen">Sarah Chen &mdash; CIO, Meridian Health Systems</option>
+      <option value="david-park">David Park &mdash; SVP Technology, Apex Financial Group</option>
+      <option value="rachel-morrison">Rachel Morrison &mdash; CTO, TerraScale Energy</option>
+    </select>
+    <button class="btn btn-primary" id="btnStart">Start Demo</button>
+    <button class="btn btn-secondary" id="btnReset">Reset</button>
+    <div class="elapsed-display" id="elapsedDisplay">00:00</div>
+  </div>
+
+  <!-- Panels -->
+  <div class="panels-section">
+
+    <!-- Infrastructure Status -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">TankOS Infrastructure</span>
+        <span class="panel-badge">System</span>
+      </div>
+      <div class="panel-content">
+        <div class="infra-row" data-infra="tankos">
+          <span class="status-dot static" id="dot-tankos"></span>
+          <span class="infra-name">TankOS bootc image</span>
+          <span class="infra-detail">quay.io/sallyom/tank-os</span>
+        </div>
+        <div class="infra-row" data-infra="local">
+          <span class="status-dot checking" id="dot-local"></span>
+          <span class="infra-name">Qwen 3 + Gemma 4 (Ramalama)</span>
+          <span class="infra-detail">:8001</span>
+        </div>
+        <div class="infra-row" data-infra="openclaw">
+          <span class="status-dot checking" id="dot-openclaw"></span>
+          <span class="infra-name">OpenClaw Gateway (Quadlet)</span>
+          <span class="infra-detail">:18789</span>
+        </div>
+        <div class="infra-row" data-infra="service-gator">
+          <span class="status-dot checking" id="dot-service-gator"></span>
+          <span class="infra-name">service-gator MCP</span>
+          <span class="infra-detail">:8080</span>
+        </div>
+        <div class="infra-row" data-infra="anthropic">
+          <span class="status-dot static" id="dot-anthropic"></span>
+          <span class="infra-name">Anthropic API (Podman secret)</span>
+          <span class="infra-detail">cloud</span>
+        </div>
+        <div class="infra-row" data-infra="gemini">
+          <span class="status-dot static" id="dot-gemini"></span>
+          <span class="infra-name">Gemini API (Podman secret)</span>
+          <span class="infra-detail">cloud</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Agent Activity</span>
+        <span class="panel-badge">Live Feed</span>
+      </div>
+      <div class="panel-content" id="activityFeed">
+        <div class="activity-feed" id="activityList"></div>
+      </div>
+    </div>
+
+    <!-- Deliverables -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Deliverables</span>
+        <span class="panel-badge deliverable-counter" id="delCounter">0 / 10</span>
+      </div>
+      <div class="panel-content">
+        <div class="deliverables-grid" id="delGrid">
+          <div class="deliverable-card" data-deliverable="exec-dossier">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128203;</div>
+            <div class="del-name">Executive Dossier</div>
+            <div class="del-agent">Draft Punk &middot; Gemma 4</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="backgrounder">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128209;</div>
+            <div class="del-name">Briefing Backgrounder</div>
+            <div class="del-agent">Draft Punk &middot; Gemma 4</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="talking-points">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128172;</div>
+            <div class="del-name">Sponsor Talking Points</div>
+            <div class="del-agent">Draft Punk &middot; Gemma 4</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="agenda">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128197;</div>
+            <div class="del-name">Recommended Agenda</div>
+            <div class="del-agent">Draft Punk &middot; Gemma 4</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="convo-starters">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128161;</div>
+            <div class="del-name">Conversation Starters</div>
+            <div class="del-agent">Draft Punk &middot; Gemma 4</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="vvip-checklist">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#9989;</div>
+            <div class="del-name">VVIP Protocol Checklist</div>
+            <div class="del-agent">Alfred &middot; Qwen 3</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="sponsor-alert">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128231;</div>
+            <div class="del-name">Sponsor Alert Email</div>
+            <div class="del-agent">Alfred &middot; Qwen 3</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="engagement-log">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#128221;</div>
+            <div class="del-name">Engagement Log Entry</div>
+            <div class="del-agent">Alfred &middot; Qwen 3</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="readiness-brief">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#129309;</div>
+            <div class="del-name">Sponsor Readiness Brief</div>
+            <div class="del-agent">Sponsor Coach &middot; Gemma 4</div>
+          </div>
+          <div class="deliverable-card" data-deliverable="oddsfather-verdict">
+            <span class="risk-dot"></span>
+            <div class="del-icon">&#127922;</div>
+            <div class="del-name">Success Probability Verdict</div>
+            <div class="del-agent">Oddsfather &middot; Qwen 3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Flags -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Critical Flags</span>
+        <span class="panel-badge" id="flagCounter">0 alerts</span>
+      </div>
+      <div class="panel-content" id="flagsPanel">
+        <div class="flags-list" id="flagsList">
+          <div class="flags-empty">No flags yet. Start the demo to see Déjà View's findings.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span class="footer-text">
+      <span class="teal">TankOS</span> bootc &middot; rootless OpenClaw &middot; Qwen 3 + Gemma 4 local &middot; Anthropic + Gemini frontier
+      &middot; <a href="https://github.com/LobsterTrap/tank-os" target="_blank">github.com/LobsterTrap/tank-os</a>
+      &middot; <a href="briefingclaw-tankos-architecture.html">Architecture</a>
+    </span>
+  </footer>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-agent" id="modalAgent"></div>
+      </div>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURATION  —  endpoints / agents / connections
+   URL params override defaults so the same HTML works against
+   a TankOS VM, a localhost dev stack, or pure simulation.
+   ═══════════════════════════════════════════════════════════ */
+const URL_PARAMS = new URLSearchParams(window.location.search);
+
+const CONFIG = {
+  endpoints: {
+    local:        URL_PARAMS.get('local_url')        || 'http://127.0.0.1:8001/v1/models',
+    openclaw:     URL_PARAMS.get('openclaw_url')     || 'http://127.0.0.1:18789/health',
+    serviceGator: URL_PARAMS.get('servicegator_url') || 'http://127.0.0.1:8080/health'
+  },
+  pollInterval: 5000,
+  speedFactor: 1.0,
+  /* type maps to a CSS class on the agent node and the activity feed text */
+  agents: {
+    'oprah-tor':       { name: 'Oprah-tor',     type: 'fa',   model: 'claude-opus-4-7' },
+    'sherlock-ohms':   { name: 'Sherlock Ohms', type: 'fa',   model: 'claude-sonnet-4-6' },
+    'bloom-borg':      { name: 'Bloom-borg',    type: 'fg',   model: 'gemini-3.1-pro' },
+    'deja-view':       { name: 'Déjà View',     type: 'lq',   model: 'qwen3-30b-a3b' },
+    'draft-punk':      { name: 'Draft Punk',    type: 'lg',   model: 'gemma-4-26b' },
+    'alfred-bitworth': { name: 'Alfred',        type: 'lq',   model: 'qwen3-30b-a3b' },
+    'sponsor-coach':   { name: 'Sponsor Coach', type: 'lg',   model: 'gemma-4-26b' },
+    'oddsfather':      { name: 'Oddsfather',    type: 'lq',   model: 'qwen3-30b-a3b' }
+  },
+  connections: [
+    { from: 'triggerNode',          to: 'node-oprah-tor' },
+    { from: 'node-oprah-tor',       to: 'node-sherlock-ohms' },
+    { from: 'node-oprah-tor',       to: 'node-bloom-borg' },
+    { from: 'node-oprah-tor',       to: 'node-deja-view' },
+    { from: 'node-sherlock-ohms',   to: 'node-draft-punk' },
+    { from: 'node-bloom-borg',      to: 'node-draft-punk' },
+    { from: 'node-deja-view',       to: 'node-draft-punk' },
+    { from: 'node-deja-view',       to: 'node-alfred-bitworth' },
+    { from: 'node-deja-view',       to: 'node-sponsor-coach' },
+    { from: 'node-draft-punk',      to: 'node-oddsfather' },
+    { from: 'node-alfred-bitworth', to: 'node-oddsfather' },
+    { from: 'node-sponsor-coach',   to: 'node-oddsfather' },
+    { from: 'node-oddsfather',      to: 'outputNode' }
+  ]
+};
+
+const DELIVERABLE_ORDER = ['exec-dossier','backgrounder','talking-points','agenda','convo-starters','vvip-checklist','sponsor-alert','engagement-log','readiness-brief','oddsfather-verdict'];
+
+/* ═══════════════════════════════════════════════════════════
+   SARAH CHEN — single-scenario demo timeline (~85 seconds)
+   The structure mirrors the redhat dashboard: events are
+   { t: ms_offset, action, data } and the player just dispatches.
+   Activity messages call out the model + secret/Quadlet flow so
+   the audience sees the TankOS routing in action.
+   ═══════════════════════════════════════════════════════════ */
+const TIMELINE = [
+  // Phase 0 — Decomposition (Oprah-tor / Anthropic)
+  { t: 0,    action: 'trigger' },
+  { t: 200,  action: 'log', data: { agent: 'oprah-tor', text: 'Briefing request received via OpenClaw gateway :18789' }},
+  { t: 200,  action: 'setAgent', data: { id: 'oprah-tor', status: 'working', progress: 15 }},
+  { t: 1200, action: 'log', data: { agent: 'oprah-tor', text: 'Resolving SecretRef → ANTHROPIC_API_KEY (Podman secret)' }},
+  { t: 2300, action: 'log', data: { agent: 'oprah-tor', text: 'Identified: Sarah Chen, CIO, Meridian Health Systems · SAB · Sponsor: Maria Torres' }},
+  { t: 2300, action: 'setAgent', data: { id: 'oprah-tor', progress: 45 }},
+  { t: 3800, action: 'log', data: { agent: 'oprah-tor', text: 'Decomposing → Sherlock (Anthropic), Bloom-borg (Gemini), Déjà View (local Qwen 3)' }},
+  { t: 4800, action: 'setAgent', data: { id: 'oprah-tor', progress: 80 }},
+  { t: 5500, action: 'setAgent', data: { id: 'oprah-tor', status: 'complete' }},
+
+  // Phase 1 — Intelligence Gathering (parallel)
+  { t: 6000, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'working', progress: 5 }},
+  { t: 6000, action: 'setAgent', data: { id: 'bloom-borg',    status: 'working', progress: 5 }},
+  { t: 6000, action: 'setAgent', data: { id: 'deja-view',     status: 'working', progress: 8 }},
+
+  { t: 6500, action: 'log', data: { agent: 'sherlock-ohms', text: 'POST api.anthropic.com claude-sonnet-4-6 · grounded web research' }},
+  { t: 7000, action: 'log', data: { agent: 'bloom-borg',    text: 'POST generativelanguage.googleapis.com gemini-3.1-pro · grounded search' }},
+  { t: 7400, action: 'log', data: { agent: 'deja-view',     text: 'Loading sab-meeting-notes.md from /workspace/briefingclaw (read-only mount)' }},
+
+  { t: 8200, action: 'setAgent', data: { id: 'deja-view', progress: 30 }},
+  { t: 8500, action: 'log', data: { agent: 'deja-view',     text: 'Found 2 SAB meetings (Q4-2025, Q1-2026); engagement score 92/100' }},
+  { t: 9100, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 35 }},
+  { t: 9100, action: 'log', data: { agent: 'sherlock-ohms', text: 'Career arc: developer → CIO 2021 · 4 recent talks · communication style: pragmatic' }},
+  { t: 9700, action: 'setAgent', data: { id: 'bloom-borg', progress: 40 }},
+  { t: 9700, action: 'log', data: { agent: 'bloom-borg',    text: 'Meridian Health $4.2B revenue · 28K employees · open opps $2.0M' }},
+
+  // Déjà View flags — the connective-tissue moment
+  { t: 11000, action: 'setAgent', data: { id: 'deja-view', progress: 60 }},
+  { t: 11000, action: 'log', data: { agent: 'deja-view', text: '🚨 Cross-program cross-check: AI governance arch promised at Feb SAB — overdue' }},
+  { t: 11500, action: 'addFlag', data: { type: 'danger', icon: '🔴', label: 'OVERDUE', text: 'AI governance reference architecture promised at Feb 2026 SAB — due March 1, still undelivered. Trust-critical.' }},
+  { t: 12500, action: 'log', data: { agent: 'deja-view', text: 'Healthcare reference for edge computing — open since Sept 2025' }},
+  { t: 13000, action: 'addFlag', data: { type: 'warning', icon: '🟡', label: 'OPEN', text: 'Healthcare customer reference for edge computing — promised Sept 2025, not yet delivered.' }},
+  { t: 14000, action: 'addFlag', data: { type: 'positive', icon: '🟢', label: 'POSITIVE', text: 'Engagement score 92/100 and improving — Sarah is becoming a champion.' }},
+  { t: 14800, action: 'addFlag', data: { type: 'opportunity', icon: '💡', label: 'OPPORTUNITY', text: 'Dr. Priya Kapoor (CMIO) not yet engaged — clinical AI use case expansion.' }},
+
+  { t: 15500, action: 'setAgent', data: { id: 'sherlock-ohms', progress: 80 }},
+  { t: 15500, action: 'setAgent', data: { id: 'bloom-borg',    progress: 80 }},
+  { t: 15500, action: 'setAgent', data: { id: 'deja-view',     progress: 95 }},
+
+  { t: 16500, action: 'setAgent', data: { id: 'sherlock-ohms', status: 'complete' }},
+  { t: 16800, action: 'setAgent', data: { id: 'bloom-borg',    status: 'complete' }},
+  { t: 17000, action: 'setAgent', data: { id: 'deja-view',     status: 'complete' }},
+
+  // Phase 2 — Assembly + Protocol + Readiness (parallel, all local)
+  { t: 17500, action: 'setAgent', data: { id: 'draft-punk',      status: 'working', progress: 8 }},
+  { t: 17500, action: 'setAgent', data: { id: 'alfred-bitworth', status: 'working', progress: 8 }},
+  { t: 17500, action: 'setAgent', data: { id: 'sponsor-coach',   status: 'working', progress: 8 }},
+
+  { t: 18000, action: 'log', data: { agent: 'draft-punk',      text: 'POST host.containers.internal:8001 → gemma-4-26b-a4b-it (on-device)' }},
+  { t: 18400, action: 'log', data: { agent: 'alfred-bitworth', text: 'POST host.containers.internal:8001 → qwen3-30b-a3b-instruct (on-device)' }},
+  { t: 18800, action: 'log', data: { agent: 'sponsor-coach',   text: 'POST host.containers.internal:8001 → gemma-4-26b-a4b-it (on-device)' }},
+
+  { t: 20500, action: 'setAgent', data: { id: 'draft-punk', progress: 35 }},
+  { t: 21000, action: 'log', data: { agent: 'draft-punk', text: 'Drafting Executive Dossier · 1-page summary' }},
+  { t: 22000, action: 'addDeliverable', data: { id: 'exec-dossier', risk: 'warning' }},
+
+  { t: 23000, action: 'setAgent', data: { id: 'alfred-bitworth', progress: 35 }},
+  { t: 23200, action: 'log', data: { agent: 'alfred-bitworth', text: 'VVIP roster lookup → Sarah Chen = GOLD tier' }},
+  { t: 23800, action: 'addDeliverable', data: { id: 'backgrounder', risk: 'warning' }},
+
+  { t: 24500, action: 'setAgent', data: { id: 'sponsor-coach', progress: 50 }},
+  { t: 24700, action: 'log', data: { agent: 'sponsor-coach', text: 'Maria Torres last touchpoint: 47 days · score: AMBER' }},
+  { t: 25000, action: 'addDeliverable', data: { id: 'talking-points', risk: 'warning' }},
+
+  { t: 26000, action: 'addDeliverable', data: { id: 'agenda', risk: 'positive' }},
+  { t: 26500, action: 'setAgent', data: { id: 'draft-punk', progress: 65 }},
+  { t: 27200, action: 'addDeliverable', data: { id: 'convo-starters', risk: 'positive' }},
+
+  { t: 28200, action: 'addDeliverable', data: { id: 'vvip-checklist', risk: 'positive' }},
+  { t: 28800, action: 'log', data: { agent: 'alfred-bitworth', text: 'Drafting sponsor alert email for Maria Torres' }},
+  { t: 29200, action: 'addDeliverable', data: { id: 'sponsor-alert', risk: 'warning' }},
+  { t: 30200, action: 'addDeliverable', data: { id: 'engagement-log', risk: 'positive' }},
+  { t: 30800, action: 'addDeliverable', data: { id: 'readiness-brief', risk: 'warning' }},
+
+  { t: 31500, action: 'setAgent', data: { id: 'draft-punk',      progress: 100, status: 'complete' }},
+  { t: 31700, action: 'setAgent', data: { id: 'alfred-bitworth', progress: 100, status: 'complete' }},
+  { t: 31900, action: 'setAgent', data: { id: 'sponsor-coach',   progress: 100, status: 'complete' }},
+
+  // Phase 3 — Oddsfather (Qwen 3, local)
+  { t: 32500, action: 'setAgent', data: { id: 'oddsfather', status: 'working', progress: 10 }},
+  { t: 33000, action: 'log', data: { agent: 'oddsfather', text: 'POST host.containers.internal:8001 → qwen3-30b-a3b-instruct (reasoning)' }},
+  { t: 34500, action: 'log', data: { agent: 'oddsfather', text: 'Scoring 5 dimensions: foundation · stakes · risk · readiness · alignment' }},
+  { t: 35500, action: 'setAgent', data: { id: 'oddsfather', progress: 60 }},
+  { t: 36500, action: 'log', data: { agent: 'oddsfather', text: 'Verdict: 68% — "Strong relationship, drag from the overdue deliverable."' }},
+  { t: 37000, action: 'addFlag', data: { type: 'warning', icon: '🎲', label: 'VERDICT', text: 'Oddsfather: 68% success probability. Top lever — deliver the AI governance reference architecture before the briefing.' }},
+  { t: 37500, action: 'addDeliverable', data: { id: 'oddsfather-verdict', risk: 'warning' }},
+  { t: 38000, action: 'setAgent', data: { id: 'oddsfather', progress: 100, status: 'complete' }},
+  { t: 38500, action: 'log', data: { agent: 'oprah-tor', text: '✅ Briefing package assembled · 10 deliverables · 4 flags · 38.5s total' }},
+  { t: 39000, action: 'finalize' }
+];
+
+/* ═══════════════════════════════════════════════════════════
+   DELIVERABLE CONTENT — short, embedded, modal-rendered.
+   Real production demo loads from demo-deliverables/<contact>/
+   but for the TankOS variant we keep one self-contained sample.
+   ═══════════════════════════════════════════════════════════ */
+const DELIVERABLE_CONTENT = {
+  'exec-dossier': {
+    title: 'Executive Dossier — Sarah Chen',
+    agent: 'Draft Punk · Gemma 4 (local)',
+    body: `
+      <h2>Sarah Chen</h2>
+      <p><strong>Title:</strong> Chief Information Officer<br>
+         <strong>Company:</strong> Meridian Health Systems ($4.2B revenue, 28K employees)<br>
+         <strong>SAB tenure:</strong> 14 months (Trusted, approaching Champion)<br>
+         <strong>VVIP tier:</strong> Gold · Sponsor: Maria Torres, VP Engineering</p>
+      <h3>Why this briefing matters</h3>
+      <p>Two open opportunities ($1.2M AI expansion, $800K edge computing) and one trust-critical overdue commitment from the Feb 2026 SAB.</p>
+      <p><span class="flag-badge danger">OVERDUE</span> AI governance reference architecture due March 1.</p>
+      <p><span class="flag-badge warning">OPEN</span> Healthcare customer reference for edge computing.</p>
+      <p><span class="flag-badge positive">POSITIVE</span> Engagement score 92/100, NPS 9.</p>
+    `
+  },
+  'backgrounder': {
+    title: 'Briefing Backgrounder — Sarah Chen',
+    agent: 'Draft Punk · Gemma 4 (local)',
+    body: `
+      <h2>Career arc</h2>
+      <p>Sarah began her career as a Java developer at a regional health-system integrator (2008–2014), led platform engineering at PayPath (2014–2019), then joined Meridian as VP Architecture (2019). Promoted to CIO in 2021 with a mandate to consolidate the post-merger tech stack.</p>
+      <h2>Recent activity (last 6 months)</h2>
+      <ul>
+        <li>HIMSS 2026 keynote: "Edge AI for clinical decision support without compromising HIPAA."</li>
+        <li>Co-authored a Modern Healthcare op-ed on responsible AI governance.</li>
+        <li>LinkedIn post threads pushing back on prescriptive AI vendor lock-in.</li>
+      </ul>
+      <h2>Communication style</h2>
+      <p>Pragmatic, data-driven, allergic to slideware. Prefers whiteboard architecture conversations over decks.</p>
+    `
+  },
+  'talking-points': {
+    title: 'Sponsor Talking Points — for Maria Torres',
+    agent: 'Draft Punk · Gemma 4 (local)',
+    body: `
+      <h2>Open with the apology</h2>
+      <p>"Sarah — before we dive in, I want to acknowledge the AI governance reference architecture is overdue. I have a draft I'd like to walk through with you today, and a firm date by end of next week for the polished version."</p>
+      <h2>Land the connection</h2>
+      <p>"I read your HIMSS keynote summary. The edge-AI-without-HIPAA-compromise framing is exactly the conversation I'd like to have today — we have two healthcare customers running that pattern in production now."</p>
+      <h2>Open the door for Priya</h2>
+      <p>"How is Dr. Kapoor thinking about clinical AI? We've been working with two CMIOs on a similar arc — would love to compare notes if useful."</p>
+    `
+  },
+  'agenda': {
+    title: 'Recommended Agenda — 90 minutes',
+    agent: 'Draft Punk · Gemma 4 (local)',
+    body: `
+      <table>
+        <tr><th>Time</th><th>Topic</th><th>Why</th></tr>
+        <tr><td>00:00–00:10</td><td>Welcome &amp; overdue acknowledgment</td><td>Reset trust before content</td></tr>
+        <tr><td>00:10–00:35</td><td>AI governance walkthrough</td><td>Pay down the open commitment</td></tr>
+        <tr><td>00:35–01:00</td><td>Edge AI + HIPAA whiteboard</td><td>Connect to her HIMSS framing</td></tr>
+        <tr><td>01:00–01:20</td><td>Customer reference intros</td><td>Address open Sept-2025 ask</td></tr>
+        <tr><td>01:20–01:30</td><td>Sponsor drop-in: Maria Torres</td><td>Re-establish executive presence</td></tr>
+      </table>
+    `
+  },
+  'convo-starters': {
+    title: 'Conversation Starters — 3 personalized openers',
+    agent: 'Draft Punk · Gemma 4 (local)',
+    body: `
+      <ul>
+        <li><strong>HIMSS keynote opener:</strong> "Your line about 'governance is what makes AI shippable in healthcare' is making the rounds inside our product team — the architecture I'm going to walk through is built around exactly that."</li>
+        <li><strong>Mutual connection:</strong> "Dr. Reyes from St. Lukes mentioned you connected at the CHIME forum — he had the same pushback on prescriptive vendor lock-in that you posted about last month."</li>
+        <li><strong>Forward-looking:</strong> "If we crack the edge-AI consent flow, what does the next 18-month roadmap for Meridian look like?"</li>
+      </ul>
+    `
+  },
+  'vvip-checklist': {
+    title: 'VVIP Protocol Checklist — Gold tier',
+    agent: 'Alfred Bitworth · Qwen 3 (local)',
+    body: `
+      <ul>
+        <li><strong>Arrival:</strong> Greeted by sponsor at security desk · car service confirmed.</li>
+        <li><strong>Room:</strong> Premier boardroom · whiteboard mandatory · dual screens. <span class="flag-badge positive">GOLD CONFIG</span></li>
+        <li><strong>Catering:</strong> Pacific Rim menu (per VVIP roster preference).</li>
+        <li><strong>Sponsor drop-in:</strong> Maria Torres, 10-minute window at 01:20.</li>
+        <li><strong>Follow-up:</strong> Hand-written note from sponsor within 48 hours.</li>
+        <li><strong>Compliance:</strong> NDAs current · disclosure log filed.</li>
+      </ul>
+    `
+  },
+  'sponsor-alert': {
+    title: 'Sponsor Alert Email — to Maria Torres',
+    agent: 'Alfred Bitworth · Qwen 3 (local)',
+    body: `
+      <h3>Subject: Sarah Chen briefing tomorrow — 3 things you need to know</h3>
+      <p>Maria,</p>
+      <p>Heads up before tomorrow's 9am with Sarah Chen (Meridian Health):</p>
+      <ol>
+        <li><strong>The AI governance ref-arch we promised in February is still open.</strong> Draft Punk built a draft to walk through; please review the dossier section before the meeting.</li>
+        <li><strong>Healthcare customer reference for edge computing is also open since Sept.</strong> Two candidates flagged in the dossier.</li>
+        <li><strong>Engagement score is 92/100 and rising</strong> — Sarah is on the cusp of full-champion status. The brief is yours to push it over the line.</li>
+      </ol>
+      <p>Sponsor Coach flagged your last touchpoint at 47 days — please review the talking points doc tonight.</p>
+      <p>— BriefingClaw</p>
+    `
+  },
+  'engagement-log': {
+    title: 'Engagement Log Entry',
+    agent: 'Alfred Bitworth · Qwen 3 (local)',
+    body: `
+      <table>
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Date</td><td>2026-04-30</td></tr>
+        <tr><td>Visitor</td><td>Sarah Chen — CIO, Meridian Health Systems</td></tr>
+        <tr><td>Sponsor</td><td>Maria Torres</td></tr>
+        <tr><td>Tier</td><td>Gold</td></tr>
+        <tr><td>Open commitments at briefing</td><td>2 (one overdue)</td></tr>
+        <tr><td>NPS at last touch</td><td>9</td></tr>
+        <tr><td>Predicted success</td><td>68% (Oddsfather)</td></tr>
+      </table>
+    `
+  },
+  'readiness-brief': {
+    title: 'Sponsor Readiness Brief',
+    agent: 'Sponsor Coach · Gemma 4 (local)',
+    body: `
+      <h2>Maria Torres readiness: <span class="flag-badge warning">AMBER</span></h2>
+      <p><strong>Last touchpoint with Sarah Chen:</strong> 47 days ago (target: ≤30).</p>
+      <p><strong>Familiarity with overdue commitment:</strong> partial — needs a 10-minute pre-read.</p>
+      <h3>One pre-briefing action</h3>
+      <p>Block 30 minutes tonight to read the AI governance ref-arch draft from the dossier and the talking points memo. If she doesn't, Oddsfather drops to 54%.</p>
+    `
+  },
+  'oddsfather-verdict': {
+    title: 'Success Probability Verdict — 68%',
+    agent: 'The Oddsfather · Qwen 3 (local)',
+    body: `
+      <h2>Verdict: 68% (Lean Win, fragile)</h2>
+      <h3>Score breakdown</h3>
+      <table>
+        <tr><th>Dimension</th><th>Score</th><th>Notes</th></tr>
+        <tr><td>Relationship foundation</td><td>9/10</td><td>Engagement 92, trusted-stage</td></tr>
+        <tr><td>Pipeline stakes</td><td>7/10</td><td>$2M open, two-quarter horizon</td></tr>
+        <tr><td>Risk signals</td><td>4/10</td><td>Overdue commitment is trust-critical</td></tr>
+        <tr><td>Briefing readiness</td><td>6/10</td><td>Sponsor amber, content green</td></tr>
+        <tr><td>Outcome alignment</td><td>8/10</td><td>HIMSS framing matches our roadmap</td></tr>
+      </table>
+      <h3>Top 3 levers (ranked)</h3>
+      <ol>
+        <li><strong>Deliver the AI governance ref-arch draft tomorrow.</strong> Moves verdict +14pts.</li>
+        <li><strong>Maria does the 30-min pre-read tonight.</strong> Moves verdict +6pts.</li>
+        <li><strong>Bring two named healthcare-edge references.</strong> Moves verdict +5pts.</li>
+      </ol>
+      <p><em>"I'm gonna make him a prediction he can't refuse."</em></p>
+    `
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PIPELINE CANVAS — connection lines + traveling particles.
+   Lines are computed from the DOM positions of agent nodes
+   so the layout adapts to viewport changes.
+   ═══════════════════════════════════════════════════════════ */
+class PipelineCanvas {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.activeConnections = new Set();
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    this.start();
+  }
+  resize() {
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width  = rect.width  * dpr;
+    this.canvas.height = rect.height * dpr;
+    this.canvas.style.width  = rect.width  + 'px';
+    this.canvas.style.height = rect.height + 'px';
+    this.ctx.scale(dpr, dpr);
+    this.W = rect.width; this.H = rect.height;
+  }
+  resolved() {
+    if (!this._resolved) {
+      this._resolved = CONFIG.connections.map(c => ({
+        from: document.getElementById(c.from),
+        to:   document.getElementById(c.to),
+        color: this.colorFor(c.to)
+      })).filter(c => c.from && c.to);
+    }
+    return this._resolved;
+  }
+  colorFor(toId) {
+    const agentId = toId.replace(/^node-/, '');
+    const a = CONFIG.agents[agentId];
+    if (!a) return 'rgba(43,217,199,';
+    return ({
+      fa: 'rgba(110,155,255,',
+      fg: 'rgba(192,132,252,',
+      lq: 'rgba(74,222,128,',
+      lg: 'rgba(251,146,60,'
+    })[a.type] || 'rgba(43,217,199,';
+  }
+  parentRect() { return this.canvas.parentElement.getBoundingClientRect(); }
+  centerOf(el) {
+    const r = el.getBoundingClientRect();
+    const p = this.parentRect();
+    return { x: r.left - p.left + r.width/2, y: r.top - p.top + r.height/2 };
+  }
+  activate(fromId, toId) {
+    this.activeConnections.add(`${fromId}->${toId}`);
+    setTimeout(() => this.activeConnections.delete(`${fromId}->${toId}`), 1500);
+  }
+  start() {
+    const tick = () => { this.draw(); requestAnimationFrame(tick); };
+    tick();
+  }
+  draw() {
+    this.ctx.clearRect(0, 0, this.W, this.H);
+    for (const c of this.resolved()) {
+      const a = this.centerOf(c.from), b = this.centerOf(c.to);
+      const isActive = this.activeConnections.has(`${c.from.id}->${c.to.id}`);
+      this.ctx.beginPath();
+      this.ctx.moveTo(a.x, a.y);
+      this.ctx.lineTo(b.x, b.y);
+      this.ctx.strokeStyle = c.color + (isActive ? '0.45)' : '0.16)');
+      this.ctx.lineWidth = isActive ? 1.6 : 1;
+      this.ctx.stroke();
+      if (isActive) {
+        const t = (Date.now() % 1500) / 1500;
+        const px = a.x + (b.x - a.x) * t, py = a.y + (b.y - a.y) * t;
+        this.ctx.beginPath();
+        this.ctx.arc(px, py, 3, 0, Math.PI * 2);
+        this.ctx.fillStyle = c.color + '0.95)';
+        this.ctx.fill();
+      }
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AGENT / DELIVERABLE / FLAG STATE
+   ═══════════════════════════════════════════════════════════ */
+function setAgent(id, opts) {
+  const node = document.getElementById('node-' + id);
+  if (!node) return;
+  if (opts.status) node.dataset.status = opts.status;
+  if (opts.progress != null) {
+    const bar = node.querySelector('.progress-bar');
+    if (bar) bar.style.width = opts.progress + '%';
+  }
+  // Light up incoming connection particles
+  for (const c of CONFIG.connections) {
+    if (c.to === 'node-' + id && opts.status === 'working') canvas.activate(c.from, c.to);
+  }
+}
+
+function activateTrigger() {
+  const t = document.getElementById('triggerNode');
+  t.dataset.status = 'active';
+  t.querySelector('.node-text').textContent = 'Sarah Chen — CIO, Meridian Health Systems';
+}
+
+function finalizePipeline() {
+  const out = document.getElementById('outputNode');
+  out.dataset.status = 'complete';
+}
+
+let elapsedTimer = null;
+function startElapsed() {
+  const start = Date.now();
+  document.getElementById('elapsedDisplay').classList.add('active');
+  elapsedTimer = setInterval(() => {
+    const s = Math.floor((Date.now() - start) / 1000);
+    const mm = String(Math.floor(s/60)).padStart(2,'0');
+    const ss = String(s%60).padStart(2,'0');
+    document.getElementById('elapsedDisplay').textContent = `${mm}:${ss}`;
+  }, 200);
+}
+function stopElapsed() { if (elapsedTimer) clearInterval(elapsedTimer); elapsedTimer = null; }
+
+function logActivity(agentId, text) {
+  const a = CONFIG.agents[agentId];
+  if (!a) return;
+  const list = document.getElementById('activityList');
+  const now = new Date();
+  const ts = `${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const cls = ({ fa:'fa-text', fg:'fg-text', lq:'lq-text', lg:'lg-text' })[a.type] || 'orch-text';
+  const row = document.createElement('div');
+  row.className = 'activity-entry';
+  row.innerHTML = `
+    <span class="activity-time">${ts}</span>
+    <span class="activity-agent ${cls}">${a.name}</span>
+    <span class="activity-message">${text}</span>
+  `;
+  list.appendChild(row);
+  list.parentElement.scrollTop = list.parentElement.scrollHeight;
+}
+
+let deliverableCount = 0;
+function addDeliverable(id, risk) {
+  const card = document.querySelector(`[data-deliverable="${id}"]`);
+  if (!card || card.classList.contains('completed')) return;
+  card.classList.add('completed');
+  if (risk) {
+    const dot = card.querySelector('.risk-dot');
+    dot.classList.add(risk);
+  }
+  deliverableCount++;
+  document.getElementById('delCounter').textContent = `${deliverableCount} / ${DELIVERABLE_ORDER.length}`;
+  document.getElementById('deliverableCount').textContent = `${deliverableCount} / ${DELIVERABLE_ORDER.length}`;
+}
+
+let flagCount = 0;
+function addFlag(type, icon, label, text) {
+  const list = document.getElementById('flagsList');
+  if (flagCount === 0) list.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'flag-entry ' + type;
+  row.innerHTML = `
+    <span class="flag-icon">${icon}</span>
+    <div>
+      <div class="flag-text">${text}</div>
+      <div class="flag-label">${label}</div>
+    </div>
+  `;
+  list.appendChild(row);
+  flagCount++;
+  document.getElementById('flagCounter').textContent = `${flagCount} alert${flagCount === 1 ? '' : 's'}`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TIMELINE PLAYER
+   ═══════════════════════════════════════════════════════════ */
+let timeoutHandles = [];
+function runTimeline() {
+  reset();
+  startElapsed();
+  for (const ev of TIMELINE) {
+    timeoutHandles.push(setTimeout(() => dispatch(ev), ev.t * CONFIG.speedFactor));
+  }
+}
+function dispatch(ev) {
+  switch (ev.action) {
+    case 'trigger':       activateTrigger(); break;
+    case 'log':           logActivity(ev.data.agent, ev.data.text); break;
+    case 'setAgent':      setAgent(ev.data.id, ev.data); break;
+    case 'addFlag':       addFlag(ev.data.type, ev.data.icon, ev.data.label, ev.data.text); break;
+    case 'addDeliverable':addDeliverable(ev.data.id, ev.data.risk); break;
+    case 'finalize':      finalizePipeline(); stopElapsed(); break;
+  }
+}
+
+function reset() {
+  timeoutHandles.forEach(h => clearTimeout(h));
+  timeoutHandles = [];
+  stopElapsed();
+  document.getElementById('elapsedDisplay').textContent = '00:00';
+  document.getElementById('elapsedDisplay').classList.remove('active');
+  document.getElementById('triggerNode').dataset.status = 'idle';
+  document.getElementById('triggerNode').querySelector('.node-text').textContent = 'Awaiting input...';
+  document.getElementById('outputNode').dataset.status = 'idle';
+
+  for (const id of Object.keys(CONFIG.agents)) {
+    const node = document.getElementById('node-' + id);
+    if (!node) continue;
+    node.dataset.status = 'idle';
+    const bar = node.querySelector('.progress-bar');
+    if (bar) bar.style.width = '0%';
+  }
+  document.querySelectorAll('.deliverable-card').forEach(c => {
+    c.classList.remove('completed');
+    c.querySelector('.risk-dot').className = 'risk-dot';
+  });
+  deliverableCount = 0;
+  document.getElementById('delCounter').textContent = `0 / ${DELIVERABLE_ORDER.length}`;
+  document.getElementById('deliverableCount').textContent = `0 / ${DELIVERABLE_ORDER.length}`;
+
+  document.getElementById('activityList').innerHTML = '';
+  document.getElementById('flagsList').innerHTML = '<div class="flags-empty">No flags yet. Start the demo to see Déjà View\'s findings.</div>';
+  flagCount = 0;
+  document.getElementById('flagCounter').textContent = '0 alerts';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INFRASTRUCTURE POLLING — flips SIMULATED → LIVE / PARTIAL
+   ═══════════════════════════════════════════════════════════ */
+async function checkEndpoint(url) {
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 1500);
+    const r = await fetch(url, { signal: ctrl.signal, mode: 'no-cors' });
+    clearTimeout(timer);
+    return true;
+  } catch { return false; }
+}
+async function pollInfrastructure() {
+  const [local, openclaw, gator] = await Promise.all([
+    checkEndpoint(CONFIG.endpoints.local),
+    checkEndpoint(CONFIG.endpoints.openclaw),
+    checkEndpoint(CONFIG.endpoints.serviceGator)
+  ]);
+  document.getElementById('dot-local').className         = 'status-dot ' + (local    ? 'connected' : 'disconnected');
+  document.getElementById('dot-openclaw').className      = 'status-dot ' + (openclaw ? 'connected' : 'disconnected');
+  document.getElementById('dot-service-gator').className = 'status-dot ' + (gator    ? 'connected' : 'disconnected');
+
+  const badge = document.getElementById('modeBadge');
+  if (local && openclaw) {
+    badge.textContent = 'LIVE'; badge.className = 'mode-badge live';
+  } else if (local || openclaw) {
+    badge.textContent = 'PARTIAL'; badge.className = 'mode-badge partial';
+  } else {
+    badge.textContent = 'SIMULATED'; badge.className = 'mode-badge simulated';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════════ */
+function openDeliverable(id) {
+  const d = DELIVERABLE_CONTENT[id];
+  if (!d) return;
+  document.getElementById('modalTitle').textContent = d.title;
+  document.getElementById('modalAgent').textContent = d.agent;
+  document.getElementById('modalBody').innerHTML = d.body;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+/* ═══════════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════════ */
+const canvas = new PipelineCanvas(document.getElementById('pipelineCanvas'));
+
+document.getElementById('btnStart').addEventListener('click', runTimeline);
+document.getElementById('btnReset').addEventListener('click', reset);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeModal(); reset(); }
+  if (e.key === ' ' || e.key === 'Enter') {
+    if (document.activeElement.tagName !== 'BUTTON') runTimeline();
+  }
+});
+for (const card of document.querySelectorAll('.deliverable-card')) {
+  card.addEventListener('click', () => {
+    if (card.classList.contains('completed')) openDeliverable(card.dataset.deliverable);
+  });
+}
+
+pollInfrastructure();
+setInterval(pollInfrastructure, CONFIG.pollInterval);
+
+if (URL_PARAMS.has('autostart')) setTimeout(runTimeline, 800);
+</script>
+
+</body>
+</html>

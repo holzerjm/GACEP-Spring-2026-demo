@@ -1,0 +1,40 @@
+[Unit]
+Description=BriefingClaw OpenClaw gateway (rootless Podman, TankOS appliance)
+After=network-online.target
+
+[Container]
+Image=ghcr.io/openclaw/openclaw:latest
+ContainerName=openclaw
+Pull=newer
+RunInit=true
+UserNS=keep-id
+User=%U:%G
+
+# Editable OpenClaw state (skills, agents, workspace, openclaw.json)
+Volume=%h/.openclaw:/home/node/.openclaw:Z
+
+# Read-only mount of BriefingClaw demo data and skill files
+Volume=%h/briefingclaw/agents:/home/node/.openclaw/skills/briefingclaw:ro,Z
+Volume=%h/briefingclaw/demo-data:/home/node/.openclaw/workspace/briefingclaw:ro,Z
+
+Environment=HOME=/home/node
+Environment=TERM=xterm-256color
+Environment=NPM_CONFIG_CACHE=/home/node/.openclaw/.npm
+Environment=OPENCLAW_NO_RESPAWN=1
+
+# Local model server (Podman AI Lab / Ramalama on the host).
+# Reaches the host network from a rootless container via the gateway address.
+Environment=LOCAL_MODEL_BASE_URL=http://host.containers.internal:8001/v1
+
+PublishPort=127.0.0.1:18789:18789
+PublishPort=127.0.0.1:18790:18790
+
+Exec=node dist/index.js gateway --allow-unconfigured --bind lan --port 18789
+
+[Service]
+ExecStartPre=/usr/libexec/tank-os/bootstrap-openclaw
+TimeoutStartSec=300
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

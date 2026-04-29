@@ -12,7 +12,9 @@ Built for the **GACEP Spring 2026 Conference** session: *"One Customer, Many Doo
 
 ## Getting Started
 
-Open `index.html` in a browser to navigate between all demo pages and resources. The navigation landing page links to both dashboards (original and Red Hat branded), the architecture diagram, the standalone persona gallery, the multi-contact briefing mode, the post-briefing feedback loop, the documentation set, and the enterprise deployment guide. It is the recommended entry point for first-time users and for orienting an audience at the start of a presentation.
+Open `index.html` in a browser to navigate between all demo pages and resources. The navigation landing page links to all three dashboards (original, Red Hat, and TankOS), the architecture diagrams (original and TankOS), the standalone persona gallery, the multi-contact briefing mode, the post-briefing feedback loop, the documentation set, and the enterprise deployment guide. It is the recommended entry point for first-time users and for orienting an audience at the start of a presentation.
+
+> **Two stacks, one demo.** The original stack runs on **Podman AI Lab + Granite 8B** with a single frontier provider. The new **TankOS variant** packages OpenClaw as a Fedora bootc appliance and routes per-agent across **Anthropic + Gemini** for frontier work and **Qwen 3 + Gemma 4** for on-device work — see [`docs/TANKOS-BUILD.md`](docs/TANKOS-BUILD.md) and `briefingclaw-tankos-dashboard.html`.
 
 ---
 
@@ -25,6 +27,7 @@ Open `index.html` in a browser to navigate between all demo pages and resources.
 - [Execution Flow](#execution-flow)
 - [Model Routing](#model-routing)
 - [Technology Stack](#technology-stack)
+- [TankOS Variant](#tankos-variant)
 - [Repository Structure](#repository-structure)
 - [Demo Scenario](#demo-scenario)
 - [Quick Start](#quick-start)
@@ -210,6 +213,74 @@ This split ensures that sensitive customer data (SAB records, CRM exports, VVIP 
 
 ---
 
+## TankOS Variant
+
+The TankOS variant repackages BriefingClaw as a Fedora bootc appliance running rootless OpenClaw. It demonstrates the same eight agents and the same Sarah Chen scenario, but answers a different audience question: *how does this ship?*
+
+| Layer | Original stack | TankOS variant |
+|---|---|---|
+| **Host** | macOS + Podman Desktop | Fedora bootc image (`quay.io/sallyom/tank-os:latest`) |
+| **Agent runtime** | OpenClaw via `podman-compose` | OpenClaw rootless Quadlet, owned by `openclaw` user |
+| **Scoped MCP tools** | none | `service-gator` (read-only GitHub / JIRA) |
+| **Local model** | Granite 8B (`:8001`) | Qwen 3 30B-A3B + Gemma 4 26B-A4B via Ramalama (`:8001`) |
+| **Frontier models** | one provider (Anthropic / OpenAI / Google) | Anthropic + Gemini, per-agent override |
+| **Secrets** | `.env` file | rootless Podman secrets + `tank-openclaw-secrets` SecretRef sync |
+| **Updates** | `git pull` | `bootc switch --apply` (transactional) |
+
+### Per-agent model routing
+
+| Agent | Model | Why |
+|---|---|---|
+| **Oprah-tor** | `claude-opus-4-7` | Frontier-class orchestration over mixed cross-agent output |
+| **Sherlock Ohms** | `claude-sonnet-4-6` | Iterative person-level web research with citations |
+| **Bloom-borg** | `gemini-3.1-pro-preview` | Grounded company search; also showcases multi-frontier portability |
+| **Déjà View** | `qwen3-30b-a3b-instruct` | Cross-program retrieval over **private** SAB / CRM / VVIP files |
+| **Draft Punk** | `gemma-4-26b-a4b-it` | Long-form structured generation, never leaves device |
+| **Alfred Bitworth** | `qwen3-30b-a3b-instruct` | VVIP roster reads + protocol drafting |
+| **Sponsor Coach** | `gemma-4-26b-a4b-it` | Short readiness scoring pass |
+| **The Oddsfather** | `qwen3-30b-a3b-instruct` | 5-dimension reasoning over the full bundle |
+
+### TankOS files in this repo
+
+```
+briefingclaw-tankos-architecture.html   Architecture diagram, four-provider colour coding
+briefingclaw-tankos-dashboard.html      Live demo dashboard, Sarah Chen 38-second timeline
+briefingclaw-tankos.sh                  Operational launcher (status, image, tunnel, secrets,
+                                        provision, models, dashboard, preview, upgrade, logs)
+docs/TANKOS-BUILD.md                    Full build / day-2 ops guide
+
+tankos/quadlets/openclaw.container         Rootless OpenClaw Quadlet
+tankos/quadlets/service-gator.container    Scoped MCP server Quadlet
+tankos/quadlets/local-models.container     Optional in-VM Ramalama Quadlet (Qwen + Gemma)
+tankos/quadlets/10-secrets.conf            Reference SecretRef drop-in
+tankos/config/openclaw.json                Provider catalog with per-agent overrides
+tankos/config/service-gator-scopes.json    Read-only GitHub scope file
+tankos/agents/AGENTS.md                    Per-agent model routing rationale
+tankos/scripts/bootstrap-secrets.sh        VM-side: create Podman secrets + run sync helper
+tankos/scripts/serve-local-models.sh       Host-side: serve Qwen 3 + Gemma 4 via Ramalama
+```
+
+### Quick start (TankOS)
+
+```bash
+./briefingclaw-tankos.sh image       # Pull quay.io/sallyom/tank-os:latest
+./briefingclaw-tankos.sh disk        # Walk through QCOW2 disk creation
+./briefingclaw-tankos.sh tunnel      # SSH tunnel for :18789 / :18790 / :8080
+./briefingclaw-tankos.sh secrets     # Create Podman secrets in the VM
+./briefingclaw-tankos.sh provision   # Push demo data + skill files
+./briefingclaw-tankos.sh models      # Serve Qwen 3 + Gemma 4 on the host
+./briefingclaw-tankos.sh dashboard   # Open dashboard wired to live endpoints
+
+# Or — pure simulation, no infrastructure required
+./briefingclaw-tankos.sh preview
+```
+
+Full setup, day-2 operations, and the rationale behind the four production patterns (bootable appliance, rootless services, secrets out of the image, per-agent model routing) are in [`docs/TANKOS-BUILD.md`](docs/TANKOS-BUILD.md).
+
+The TankOS work builds directly on the upstream [LobsterTrap/tank-os](https://github.com/LobsterTrap/tank-os) Fedora bootc appliance.
+
+---
+
 ## Repository Structure
 
 ```
@@ -217,9 +288,12 @@ gacep-demo/
 |
 +-- index.html                              Navigation landing page with persona gallery
 +-- briefingclaw.sh                         Interactive CLI for demo management
-+-- briefingclaw-dashboard.html            Live demo dashboard (original dark theme, improved readability)
-+-- briefingclaw-dashboard-redhat.html     Live demo dashboard (Red Hat branded, improved readability)
-+-- briefingclaw-architecture.html          Visual architecture diagram (HTML)
++-- briefingclaw-tankos.sh                  Operational launcher for the TankOS variant
++-- briefingclaw-dashboard.html             Live demo dashboard (original dark theme)
++-- briefingclaw-dashboard-redhat.html      Live demo dashboard (Red Hat branded)
++-- briefingclaw-tankos-dashboard.html      Live demo dashboard (TankOS edition)
++-- briefingclaw-architecture.html          Architecture diagram (Granite stack)
++-- briefingclaw-tankos-architecture.html   Architecture diagram (TankOS / Anthropic + Gemini + Qwen + Gemma)
 +-- briefingclaw-personas.html              Standalone filterable persona gallery (8 personas)
 +-- briefingclaw-multicontact.html          Multi-contact group briefing mode (pick 2-5 of 9 contacts)
 +-- briefingclaw-postbriefing.html          Post-briefing feedback loop with Oddsfather calibration
@@ -253,9 +327,21 @@ gacep-demo/
 |   +-- rachel-morrison/                   Dossier, agenda
 |   Note: Key deliverables for all 8 contacts are embedded in the dashboards
 |
++-- tankos/                                TankOS variant: Quadlets, openclaw.json, scripts
+|   +-- quadlets/openclaw.container        Rootless OpenClaw Quadlet
+|   +-- quadlets/service-gator.container   Scoped MCP server Quadlet
+|   +-- quadlets/local-models.container    Optional in-VM Ramalama Quadlet
+|   +-- quadlets/10-secrets.conf           Reference SecretRef drop-in
+|   +-- config/openclaw.json               Provider catalog (Anthropic / Gemini / Qwen / Gemma)
+|   +-- config/service-gator-scopes.json   Read-only GitHub scope file
+|   +-- agents/AGENTS.md                   Per-agent model routing rationale
+|   +-- scripts/bootstrap-secrets.sh       VM-side: create secrets + sync helper
+|   +-- scripts/serve-local-models.sh      Host-side: Qwen 3 + Gemma 4 via Ramalama
+|
 +-- docs/                                  Extended documentation
     +-- ARCHITECTURE.md                    System design document
-    +-- BUILD-GUIDE.md                     Step-by-step setup instructions
+    +-- BUILD-GUIDE.md                     Step-by-step setup instructions (Granite stack)
+    +-- TANKOS-BUILD.md                    Build / day-2 ops for the TankOS variant
     +-- DEMO-SCRIPT.md                     Beat-by-beat presentation script
     +-- ENTERPRISE-DEPLOYMENT.md           Scaling from laptop to OpenShift AI
 ```
@@ -271,6 +357,12 @@ gacep-demo/
 **`briefingclaw-dashboard-redhat.html`** — Red Hat branded edition with identical functionality. Reskinned with Red Hat Display/Text/Mono fonts, PatternFly dark theme surfaces (#151515/#1F1F1F/#292929), Red Hat Red (#EE0000) primary accent, PatternFly blue for frontier agents, PatternFly teal for local agents. Same readability improvements, risk badges, PDF export, LIVE/LOCAL ONLY/SIMULATED mode detection, telemetry logging (T key), GitHub footer link, all 8 contact scenarios, and embedded deliverables. Use this version for Red Hat-affiliated presentations.
 
 **`briefingclaw-architecture.html`** — Standalone HTML page with an interactive visualization of the multi-agent execution flow. Shows the four-phase pipeline (Phase 1 intelligence gathering; Phase 2 assembly; Phase 3 three-column assembly including Sponsor Coach; Phase 4 The Oddsfather synthesis), model routing decisions, and infrastructure stack. Useful as a visual aid during presentations.
+
+**`briefingclaw-tankos-architecture.html`** — TankOS variant of the architecture diagram. Same eight-agent / four-phase shape as the original, re-themed with four colour-coded providers (Anthropic blue, Gemini violet, Qwen 3 green, Gemma 4 orange) and a three-column infrastructure footer (TankOS Host / OpenClaw Gateway / Model Catalog). Use this when presenting the appliance-style deployment story.
+
+**`briefingclaw-tankos-dashboard.html`** — Live demo dashboard for the TankOS variant. Same pipeline-canvas + four-panel layout as the Red Hat dashboard, but with per-agent model badges (`Anthropic`, `Gemini`, `Qwen 3`, `Gemma 4`), Ramalama-aware infrastructure rows, and activity-feed messages that call out SecretRef resolution and rootless Quadlet behaviour. URL parameters `local_url`, `openclaw_url`, and `servicegator_url` swap endpoints; mode badge flips `SIMULATED → PARTIAL → LIVE` automatically. Keyboard: Space/Enter start, Escape reset.
+
+**`briefingclaw-tankos.sh`** — Operational launcher for the TankOS variant. Twelve subcommands: `image` (pull bootc image), `disk` (walk through QCOW2 build), `tunnel` (open SSH tunnel for `:18789`/`:18790`/`:8080`), `secrets` (create Podman secrets and run `tank-openclaw-secrets`), `provision` (push demo data + skill files into `~/.openclaw`), `models` (serve Qwen 3 + Gemma 4 via Ramalama), `dashboard` (open the live dashboard wired to live endpoints), `preview` (open the dashboard in pure simulation mode), `status` (health-check across all layers), `logs` (tail the OpenClaw journal over SSH), `upgrade` (`bootc switch --apply`), and `help`.
 
 **`briefingclaw-personas.html`** — Standalone persona gallery. Filterable card view of all 8 personas with tier and type filters, rich stat cards, color-coded drama callouts, top-3 priorities per persona, and action buttons (Run Demo to launch the dashboard for that persona, Open Dossier to jump straight to the deliverable view). Designed as a warm-up or reference page that attendees can browse before the main demo.
 
@@ -356,9 +448,11 @@ Alternatively, use the automated setup:
 | Document | Purpose |
 |----------|---------|
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Multi-agent system design, agent roster, execution flow, infrastructure stack |
-| [`docs/BUILD-GUIDE.md`](docs/BUILD-GUIDE.md) | Complete setup instructions from prerequisites through conference-day checklist |
+| [`docs/BUILD-GUIDE.md`](docs/BUILD-GUIDE.md) | Complete setup instructions from prerequisites through conference-day checklist (Granite stack) |
+| [`docs/TANKOS-BUILD.md`](docs/TANKOS-BUILD.md) | Build / day-2 ops for the TankOS variant (Anthropic + Gemini + Qwen + Gemma) |
 | [`docs/DEMO-SCRIPT.md`](docs/DEMO-SCRIPT.md) | Beat-by-beat presentation script with timing, narrative cues, and contingency plans |
 | [`docs/ENTERPRISE-DEPLOYMENT.md`](docs/ENTERPRISE-DEPLOYMENT.md) | Scaling from laptop prototype to Red Hat OpenShift AI production deployment |
+| [`tankos/agents/AGENTS.md`](tankos/agents/AGENTS.md) | Per-agent model routing rationale for the TankOS variant |
 | [`USER-GUIDE.md`](USER-GUIDE.md) | Practical guide for operating BriefingClaw: installation, configuration, running demos, troubleshooting |
 
 ---

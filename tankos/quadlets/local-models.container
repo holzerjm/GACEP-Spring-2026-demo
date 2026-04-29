@@ -1,0 +1,36 @@
+[Unit]
+Description=Local LLM server (Qwen 3 + Gemma 4) — OpenAI-compatible, on-device
+After=network-online.target
+
+[Container]
+# Ramalama image — bundles llama.cpp server + GGUF model loader.
+# On Apple Silicon use the arm64 image; on amd64 GPU hosts swap to a CUDA build.
+Image=quay.io/ramalama/ramalama:latest
+ContainerName=local-models
+Pull=newer
+RunInit=true
+UserNS=keep-id
+User=%U:%G
+
+# Persist downloaded GGUF weights
+Volume=%h/.local/share/ramalama:/var/lib/ramalama:Z
+
+Environment=RAMALAMA_HOST=0.0.0.0
+Environment=RAMALAMA_PORT=8001
+
+# Listen on the host loopback only — agents reach it via host.containers.internal
+PublishPort=127.0.0.1:8001:8001
+
+# Default model: qwen3 served on /v1; switch via `ramalama serve gemma4` from the
+# CLI for the Gemma path. Both are exposed as OpenAI-compatible endpoints under
+# distinct model_id values (qwen3-30b-a3b-instruct, gemma-4-26b-a4b-it).
+Exec=serve --host 0.0.0.0 --port 8001 \
+     hf://Qwen/Qwen3-30B-A3B-Instruct-2507-GGUF:Q4_K_M \
+     hf://google/gemma-4-26b-a4b-it-GGUF:Q4_K_M
+
+[Service]
+TimeoutStartSec=600
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

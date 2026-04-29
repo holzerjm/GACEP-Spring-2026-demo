@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BriefingClaw on TankOS — Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #06070A;
+    --bg-card: #0F1117;
+    --bg-card-hover: #161820;
+    --border: #1E2030;
+    --border-glow: #2A2E42;
+
+    /* Brand accent — keep BriefingClaw gold and add a TankOS teal that
+       matches the Fedora bootc / appliance flavor. */
+    --gold: #FFC600;
+    --gold-dim: #B8900A;
+    --gold-glow: rgba(255,198,0,0.15);
+
+    --tankos: #2BD9C7;
+    --tankos-dim: #11A597;
+    --tankos-glow: rgba(43,217,199,0.15);
+
+    /* Frontier providers — Anthropic blue, Gemini violet */
+    --frontier-a: #6E9BFF;
+    --frontier-a-bg: rgba(110,155,255,0.08);
+    --frontier-a-border: rgba(110,155,255,0.25);
+
+    --frontier-g: #C084FC;
+    --frontier-g-bg: rgba(192,132,252,0.08);
+    --frontier-g-border: rgba(192,132,252,0.25);
+
+    /* Local models — Qwen green, Gemma orange */
+    --local-q: #4ADE80;
+    --local-q-bg: rgba(74,222,128,0.08);
+    --local-q-border: rgba(74,222,128,0.25);
+
+    --local-g: #FB923C;
+    --local-g-bg: rgba(251,146,60,0.08);
+    --local-g-border: rgba(251,146,60,0.25);
+
+    --text: #E8E8EC;
+    --text-dim: #8B8FA3;
+    --text-muted: #5A5E72;
+    --red: #EE0000;
+  }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .canvas { max-width: 1240px; margin: 0 auto; padding: 48px 32px 64px; position: relative; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header .logo-line { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px; }
+  .header .logo-dot { width: 10px; height: 10px; background: var(--tankos); border-radius: 50%; box-shadow: 0 0 12px var(--tankos-glow); }
+  .header .logo-text {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--tankos);
+  }
+  .header h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 42px; letter-spacing: -0.5px; color: var(--text); margin-bottom: 12px; }
+  .header .subtitle { font-size: 16px; color: var(--text-dim); max-width: 760px; margin: 0 auto; line-height: 1.6; }
+  .header .stack-line {
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .header .stack-line .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 0 4px;
+    border: 1px solid var(--border-glow);
+  }
+  .pill.tankos { color: var(--tankos); border-color: var(--tankos-dim); }
+  .pill.openclaw { color: var(--gold); border-color: var(--gold-dim); }
+
+  /* Legend */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 0 auto 48px;
+    max-width: 920px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    font-size: 12px; color: var(--text-dim);
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .legend-dot.fa { background: var(--frontier-a); box-shadow: 0 0 8px rgba(110,155,255,0.4); }
+  .legend-dot.fg { background: var(--frontier-g); box-shadow: 0 0 8px rgba(192,132,252,0.4); }
+  .legend-dot.lq { background: var(--local-q); box-shadow: 0 0 8px rgba(74,222,128,0.4); }
+  .legend-dot.lg { background: var(--local-g); box-shadow: 0 0 8px rgba(251,146,60,0.4); }
+  .legend-item .name { color: var(--text); font-weight: 600; }
+
+  /* Flow sections */
+  .flow-section { position: relative; margin-bottom: 32px; }
+  .phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px; padding-left: 4px;
+  }
+
+  /* Trigger card */
+  .trigger-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #12141E 100%);
+    border: 1px solid var(--border-glow);
+    border-radius: 12px; padding: 20px 28px; text-align: center;
+  }
+  .trigger-card .icon { font-size: 20px; margin-bottom: 6px; }
+  .trigger-card .label { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); }
+  .trigger-card .text { font-size: 14px; color: var(--text-dim); margin-top: 4px; font-style: italic; }
+
+  /* Connector */
+  .connector { display: flex; justify-content: center; padding: 8px 0; }
+  .connector .arrow {
+    width: 2px; height: 28px;
+    background: linear-gradient(to bottom, var(--border-glow), var(--tankos-dim));
+    position: relative;
+  }
+  .connector .arrow::after {
+    content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 6px solid var(--tankos-dim);
+  }
+
+  /* Agent cards */
+  .agent-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative; overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .agent-card:hover { background: var(--bg-card-hover); border-color: var(--border-glow); transform: translateY(-2px); }
+
+  .agent-card.fa { border-color: var(--frontier-a-border); background: linear-gradient(180deg, var(--frontier-a-bg) 0%, var(--bg-card) 100%); }
+  .agent-card.fg { border-color: var(--frontier-g-border); background: linear-gradient(180deg, var(--frontier-g-bg) 0%, var(--bg-card) 100%); }
+  .agent-card.lq { border-color: var(--local-q-border);    background: linear-gradient(180deg, var(--local-q-bg) 0%, var(--bg-card) 100%); }
+  .agent-card.lg { border-color: var(--local-g-border);    background: linear-gradient(180deg, var(--local-g-bg) 0%, var(--bg-card) 100%); }
+
+  .agent-card.fa:hover { border-color: var(--frontier-a); }
+  .agent-card.fg:hover { border-color: var(--frontier-g); }
+  .agent-card.lq:hover { border-color: var(--local-q); }
+  .agent-card.lg:hover { border-color: var(--local-g); }
+
+  .agent-card .model-badge {
+    position: absolute; top: 12px; right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .agent-card.fa .model-badge { background: var(--frontier-a-bg); color: var(--frontier-a); border: 1px solid var(--frontier-a-border); }
+  .agent-card.fg .model-badge { background: var(--frontier-g-bg); color: var(--frontier-g); border: 1px solid var(--frontier-g-border); }
+  .agent-card.lq .model-badge { background: var(--local-q-bg);    color: var(--local-q);    border: 1px solid var(--local-q-border); }
+  .agent-card.lg .model-badge { background: var(--local-g-bg);    color: var(--local-g);    border: 1px solid var(--local-g-border); }
+
+  .agent-emoji { font-size: 24px; margin-bottom: 8px; }
+  .agent-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: var(--text); margin-bottom: 2px; }
+  .agent-role {
+    font-size: 12px; color: var(--text-muted); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
+  }
+  .agent-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .agent-framework {
+    margin-top: 12px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .agent-framework .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); }
+  .agent-card .model-line {
+    margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--text-dim);
+  }
+  .agent-card.fa .model-line { color: var(--frontier-a); }
+  .agent-card.fg .model-line { color: var(--frontier-g); }
+  .agent-card.lq .model-line { color: var(--local-q); }
+  .agent-card.lg .model-line { color: var(--local-g); }
+
+  /* Grid layouts */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr;     gap: 16px; max-width: 760px; margin: 0 auto 8px; }
+  .single-col{ max-width: 500px; margin: 0 auto; }
+
+  /* Output section */
+  .output-card {
+    background: linear-gradient(135deg, #102019 0%, var(--bg-card) 100%);
+    border: 1px solid var(--tankos-dim);
+    border-radius: 14px;
+    padding: 24px 28px; text-align: center;
+  }
+  .output-card .output-title {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: 16px; color: var(--tankos); margin-bottom: 12px;
+  }
+  .output-items { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .output-item {
+    font-size: 12px; color: var(--text-dim);
+    background: rgba(43,217,199,0.06);
+    border: 1px solid rgba(43,217,199,0.2);
+    padding: 5px 12px; border-radius: 6px; font-weight: 500;
+  }
+
+  /* Infrastructure footer — three columns: TankOS host / OpenClaw / Models */
+  .infra-footer {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .infra-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .infra-box .infra-title {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: 13px; color: var(--text);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .infra-box .infra-item {
+    font-size: 12px; color: var(--text-dim);
+    padding: 3px 0; display: flex; align-items: center; gap: 6px;
+  }
+  .infra-box .infra-item .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    padding: 2px 6px; border-radius: 3px; font-weight: 500;
+  }
+  .tag.tankos-tag   { background: var(--tankos-glow);     color: var(--tankos);     border: 1px solid var(--tankos-dim); }
+  .tag.openclaw-tag { background: var(--gold-glow);        color: var(--gold);       border: 1px solid var(--gold-dim); }
+  .tag.frontier-a-tag { background: var(--frontier-a-bg); color: var(--frontier-a); border: 1px solid var(--frontier-a-border); }
+  .tag.frontier-g-tag { background: var(--frontier-g-bg); color: var(--frontier-g); border: 1px solid var(--frontier-g-border); }
+  .tag.local-q-tag  { background: var(--local-q-bg);      color: var(--local-q);    border: 1px solid var(--local-q-border); }
+  .tag.local-g-tag  { background: var(--local-g-bg);      color: var(--local-g);    border: 1px solid var(--local-g-border); }
+
+  /* Watermark */
+  .watermark {
+    text-align: center; margin-top: 48px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+  }
+  .watermark span.red { color: var(--red); }
+  .watermark span.tankos { color: var(--tankos); }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-line">
+      <div class="logo-dot"></div>
+      <div class="logo-text">BriefingClaw on TankOS</div>
+      <div class="logo-dot"></div>
+    </div>
+    <h1>Multi-Agent Architecture</h1>
+    <p class="subtitle">Eight specialized agents orchestrate executive briefing prep across two frontier providers and two on-device models — packaged as a Fedora bootc appliance.</p>
+    <p class="stack-line">
+      Stack:
+      <span class="pill tankos">TankOS · Fedora bootc</span>
+      <span class="pill openclaw">OpenClaw · rootless Quadlet</span>
+      Frontier: Anthropic + Gemini · Local: Qwen 3 + Gemma 4
+    </p>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot fa"></div><span><span class="name">Anthropic</span> · Claude Opus / Sonnet 4.x</span></div>
+    <div class="legend-item"><div class="legend-dot fg"></div><span><span class="name">Google</span> · Gemini 3.1 Pro</span></div>
+    <div class="legend-item"><div class="legend-dot lq"></div><span><span class="name">Local · Qwen 3</span> 30B-A3B</span></div>
+    <div class="legend-item"><div class="legend-dot lg"></div><span><span class="name">Local · Gemma 4</span> 26B-A4B</span></div>
+  </div>
+
+  <!-- PHASE 0: Trigger -->
+  <div class="flow-section">
+    <div class="phase-label">Trigger</div>
+    <div class="trigger-card">
+      <div class="icon">&#128172;</div>
+      <div class="label">Briefing Request</div>
+      <div class="text">"Prepare a briefing package for [executive], [title] at [company]. SAB status, sponsor, and context."</div>
+      <div class="text" style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">8 demo personas: Sarah Chen · David Park · Rachel Morrison · Pepper Minton · Ziggy Stardust-Chen · Luna Wavelength · Max Bandwidth · Sage Cloudberry</div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 1: Orchestrator -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 1 &middot; Decomposition</div>
+    <div class="single-col">
+      <div class="agent-card fa">
+        <div class="model-badge">&#9729; Anthropic</div>
+        <div class="agent-emoji">&#127919;</div>
+        <div class="agent-name">Oprah-tor</div>
+        <div class="agent-role">Orchestrator</div>
+        <div class="agent-desc">Decomposes the request into parallel tasks. Dispatches to specialist agents. Validates results and synthesizes the final briefing package.</div>
+        <div class="model-line">claude-opus-4-7</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Gateway · TankOS Quadlet</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 2: Intelligence Gathering (parallel) -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 2 &middot; Intelligence Gathering (parallel)</div>
+    <div class="three-col">
+      <div class="agent-card fa">
+        <div class="model-badge">&#9729; Anthropic</div>
+        <div class="agent-emoji">&#128269;</div>
+        <div class="agent-name">Sherlock Ohms</div>
+        <div class="agent-role">Executive Research</div>
+        <div class="agent-desc">Person-level intelligence. Career arc, recent news, conference appearances, communication style, technology priorities.</div>
+        <div class="model-line">claude-sonnet-4-6 + Tavily</div>
+        <div class="agent-framework"><div class="dot"></div>ZeroClaw CLI · service-gator MCP</div>
+      </div>
+      <div class="agent-card fg">
+        <div class="model-badge">&#9729; Gemini</div>
+        <div class="agent-emoji">&#127970;</div>
+        <div class="agent-name">Bloom-borg</div>
+        <div class="agent-role">Account Intelligence</div>
+        <div class="agent-desc">Company-level analysis. Revenue, tech stack, competitive dynamics, job posting signals, strategic priorities.</div>
+        <div class="model-line">gemini-3.1-pro-preview + grounded search</div>
+        <div class="agent-framework"><div class="dot"></div>ZeroClaw CLI · Google grounded search</div>
+      </div>
+      <div class="agent-card lq">
+        <div class="model-badge">&#128187; Qwen 3</div>
+        <div class="agent-emoji">&#128203;</div>
+        <div class="agent-name">D&eacute;j&agrave; View</div>
+        <div class="agent-role">SAB Historian</div>
+        <div class="agent-desc">Cross-program memory. Reads SAB notes, CRM exports, VVIP roster, engagement history. Private data — never leaves the device.</div>
+        <div class="model-line">qwen3-30b-a3b-instruct (Ramalama)</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Quadlet</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 3: Assembly + Protocol + Readiness (parallel) -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 3 &middot; Assembly &amp; Protocol (parallel)</div>
+    <div class="three-col">
+      <div class="agent-card lg">
+        <div class="model-badge">&#128187; Gemma 4</div>
+        <div class="agent-emoji">&#128196;</div>
+        <div class="agent-name">Draft Punk</div>
+        <div class="agent-role">Briefing Architect</div>
+        <div class="agent-desc">Synthesizes all intelligence into polished deliverables: executive dossier, backgrounder, sponsor talking points, recommended agenda.</div>
+        <div class="model-line">gemma-4-26b-a4b-it (Ramalama)</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Quadlet</div>
+      </div>
+      <div class="agent-card lq">
+        <div class="model-badge">&#128187; Qwen 3</div>
+        <div class="agent-emoji">&#11088;</div>
+        <div class="agent-name">Alfred Bitworth</div>
+        <div class="agent-role">VVIP Protocol</div>
+        <div class="agent-desc">Checks VVIP tier, generates protocol checklist, drafts sponsor alert email, flags scheduling conflicts, logs the engagement.</div>
+        <div class="model-line">qwen3-30b-a3b-instruct (Ramalama)</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Quadlet</div>
+      </div>
+      <div class="agent-card lg">
+        <div class="model-badge">&#128187; Gemma 4</div>
+        <div class="agent-emoji">&#129309;</div>
+        <div class="agent-name">Sponsor Coach</div>
+        <div class="agent-role">Readiness Assessment</div>
+        <div class="agent-desc">Lightweight micro-agent. Checks whether the assigned sponsor is prepared (recent engagement, topic familiarity, expertise match). Returns GREEN/AMBER/RED plus one action.</div>
+        <div class="model-line">gemma-4-26b-a4b-it (Ramalama)</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Quadlet</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- PHASE 4: Success Prediction -->
+  <div class="flow-section">
+    <div class="phase-label">Phase 4 &middot; Success Prediction</div>
+    <div class="single-col">
+      <div class="agent-card lq">
+        <div class="model-badge">&#128187; Qwen 3</div>
+        <div class="agent-emoji">&#127922;</div>
+        <div class="agent-name">The Oddsfather</div>
+        <div class="agent-role">Briefing Success Predictor</div>
+        <div class="agent-desc">Takes the complete intelligence bundle and scores it across 5 dimensions: relationship foundation, pipeline stakes, risk signals, briefing readiness, outcome alignment. Outputs success probability plus the three actions that move the odds.</div>
+        <div class="model-line">qwen3-30b-a3b-instruct (Ramalama)</div>
+        <div class="agent-framework"><div class="dot"></div>OpenClaw Skill · Quadlet</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="arrow"></div></div>
+
+  <!-- Output -->
+  <div class="flow-section">
+    <div class="phase-label">Output &mdash; Complete Briefing Package</div>
+    <div class="output-card">
+      <div class="output-title">&#128230; Deliverables (assembled in ~90 seconds)</div>
+      <div class="output-items">
+        <div class="output-item">Executive Dossier</div>
+        <div class="output-item">Briefing Backgrounder</div>
+        <div class="output-item">Sponsor Talking Points</div>
+        <div class="output-item">Recommended Agenda</div>
+        <div class="output-item">Conversation Starters</div>
+        <div class="output-item">VVIP Protocol Checklist</div>
+        <div class="output-item">Sponsor Alert Email</div>
+        <div class="output-item">Engagement Log Entry</div>
+        <div class="output-item">Sponsor Readiness Brief</div>
+        <div class="output-item">Success Probability Verdict</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infrastructure -->
+  <div class="infra-footer">
+    <div class="infra-box">
+      <div class="infra-title">&#128666; TankOS Host</div>
+      <div class="infra-item"><span class="tag tankos-tag">bootc</span> Fedora bootc image — `quay.io/sallyom/tank-os:latest`</div>
+      <div class="infra-item"><span class="tag tankos-tag">Quadlet</span> rootless Podman, owned by `openclaw` user</div>
+      <div class="infra-item"><span class="tag tankos-tag">Secrets</span> Podman secrets, no key material in `openclaw.json`</div>
+      <div class="infra-item"><span class="tag tankos-tag">Updates</span> `bootc switch --apply` for transactional rollouts</div>
+    </div>
+    <div class="infra-box">
+      <div class="infra-title">&#129529; OpenClaw Gateway</div>
+      <div class="infra-item"><span class="tag openclaw-tag">:18789</span> control UI &amp; chat completions</div>
+      <div class="infra-item"><span class="tag openclaw-tag">:18790</span> bridge / agent IPC</div>
+      <div class="infra-item"><span class="tag openclaw-tag">:8080</span> service-gator MCP (scoped GitHub / JIRA)</div>
+      <div class="infra-item"><span class="tag openclaw-tag">CLI</span> `openclaw doctor`, `openclaw dashboard --no-open`</div>
+    </div>
+    <div class="infra-box">
+      <div class="infra-title">&#129504; Model Catalog</div>
+      <div class="infra-item"><span class="tag frontier-a-tag">Cloud</span> Anthropic — Oprah-tor, Sherlock Ohms</div>
+      <div class="infra-item"><span class="tag frontier-g-tag">Cloud</span> Gemini — Bloom-borg</div>
+      <div class="infra-item"><span class="tag local-q-tag">Local</span> Qwen 3 30B-A3B — D&eacute;j&agrave; View, Alfred, Oddsfather</div>
+      <div class="infra-item"><span class="tag local-g-tag">Local</span> Gemma 4 26B-A4B — Draft Punk, Sponsor Coach</div>
+      <div class="infra-item" style="margin-top:6px; font-style:italic; color:var(--text-muted);">Power where you need it. Privacy where it matters.</div>
+    </div>
+  </div>
+
+  <div class="watermark">
+    Built with open source &middot; Boots like an appliance &middot;
+    <span class="tankos">TankOS</span> + <span class="red">Red Hat</span> CTO Office &middot; GACEP Spring 2026
+  </div>
+
+</div>
+</body>
+</html>

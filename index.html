@@ -212,6 +212,10 @@ h1 {
 .card-tag.live { color: var(--gold); border-color: rgba(255,198,0,0.3); background: rgba(255,198,0,0.05); }
 .card-tag.new { color: var(--local); border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.05); }
 .card-tag.docs { color: var(--frontier); border-color: rgba(110,155,255,0.3); background: rgba(110,155,255,0.05); }
+.card-tag.tankos { color: #2BD9C7; border-color: rgba(43,217,199,0.3); background: rgba(43,217,199,0.05); }
+.nav-card.tankos { background: linear-gradient(180deg, rgba(43,217,199,0.10) 0%, var(--bg-card) 100%); border-color: rgba(43,217,199,0.25); }
+.nav-card.tankos:hover { border-color: rgba(43,217,199,0.55); box-shadow: 0 8px 32px rgba(43,217,199,0.10); }
+.nav-card.tankos .card-arrow { color: #2BD9C7; }
 
 .card-desc {
   font-family: 'DM Sans', sans-serif;
@@ -396,6 +400,30 @@ h1 {
         Same functionality, reskinned with official Red Hat design language: Red Hat Display fonts, PatternFly dark theme, Red Hat Red accent. Use this version for Red Hat-affiliated presentations.
       </div>
       <div class="card-arrow">Open Red Hat dashboard &rarr;</div>
+    </a>
+
+    <a href="briefingclaw-tankos-dashboard.html" class="nav-card tankos">
+      <div class="card-header">
+        <span class="card-icon">&#128666;</span>
+        <span class="card-title">Live Demo &mdash; TankOS Edition</span>
+        <span class="card-tag tankos">New</span>
+      </div>
+      <div class="card-desc">
+        Same eight-agent pipeline, repackaged for the TankOS Fedora bootc appliance. Per-agent model badges (Anthropic / Gemini / Qwen 3 / Gemma 4), Ramalama-aware infrastructure rows, and activity messages that call out SecretRef resolution and rootless Quadlet behaviour.
+      </div>
+      <div class="card-arrow">Open TankOS dashboard &rarr;</div>
+    </a>
+
+    <a href="briefingclaw-tankos-architecture.html" class="nav-card tankos">
+      <div class="card-header">
+        <span class="card-icon">&#128208;</span>
+        <span class="card-title">TankOS Architecture</span>
+        <span class="card-tag tankos">New</span>
+      </div>
+      <div class="card-desc">
+        Architecture diagram for the TankOS variant. Four colour-coded providers (Anthropic / Gemini / Qwen 3 / Gemma 4), three-column infrastructure footer (TankOS Host / OpenClaw Gateway / Model Catalog), and the privacy-boundary call-out.
+      </div>
+      <div class="card-arrow">View TankOS diagram &rarr;</div>
     </a>
 
     <a href="briefingclaw-multicontact.html" class="nav-card featured">
@@ -605,9 +633,21 @@ h1 {
         <span class="card-tag docs">Setup</span>
       </div>
       <div class="card-desc">
-        Step-by-step instructions from prerequisites through conference-day checklist.
+        Step-by-step instructions from prerequisites through conference-day checklist (original Granite stack).
       </div>
       <div class="card-arrow">Build it &rarr;</div>
+    </a>
+
+    <a href="briefingclaw-docs.html#tankos-build" class="nav-card tankos">
+      <div class="card-header">
+        <span class="card-icon">&#128666;</span>
+        <span class="card-title">TankOS Build Guide</span>
+        <span class="card-tag tankos">New</span>
+      </div>
+      <div class="card-desc">
+        Build / day-2 ops guide for the TankOS variant. bootc image, rootless Quadlets, Podman secrets, Ramalama for Qwen 3 + Gemma 4, and the SSH tunnel flow.
+      </div>
+      <div class="card-arrow">Build TankOS &rarr;</div>
     </a>
 
     <a href="briefingclaw-docs.html#demo-script" class="nav-card">

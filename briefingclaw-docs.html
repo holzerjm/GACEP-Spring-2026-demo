@@ -513,6 +513,7 @@ body::before {
     <div class="sidebar-section">Technical Docs</div>
     <a class="sidebar-link" data-doc="architecture" href="#architecture"><span class="icon">&#128295;</span>Architecture</a>
     <a class="sidebar-link" data-doc="build-guide" href="#build-guide"><span class="icon">&#128736;</span>Build Guide</a>
+    <a class="sidebar-link" data-doc="tankos-build" href="#tankos-build"><span class="icon">&#128666;</span>TankOS Build Guide</a>
     <a class="sidebar-link" data-doc="demo-script" href="#demo-script"><span class="icon">&#127908;</span>Demo Script</a>
     <a class="sidebar-link" data-doc="enterprise" href="#enterprise"><span class="icon">&#127970;</span>Enterprise Deployment</a>
 
@@ -2693,6 +2694,157 @@ open briefingclaw-postbriefing.html
           <tr><td>"Permission denied" errors</td><td>Check volume mount permissions. May need <code>:Z</code> flag for SELinux.</td></tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="doc" id="doc-tankos-build" data-md="docs/TANKOS-BUILD.md">
+      <h1>BriefingClaw on TankOS &mdash; Build Guide</h1>
+
+      <p>This is the build guide for the <strong>TankOS variant</strong> of the BriefingClaw demo: the same eight-agent system from <code>briefingclaw-architecture.html</code>, repackaged as a Fedora bootc appliance. The model lineup is <strong>Anthropic</strong> (Claude) and <strong>Google Gemini</strong> for frontier work, <strong>Qwen 3</strong> and <strong>Gemma 4</strong> for everything that touches private data.</p>
+
+      <p>If you want the original Granite-based stack, see the <a href="#build-guide">Build Guide</a>. Both stacks are wired to the same agent skills and demo data &mdash; only the runtime and the model catalog change.</p>
+
+      <h2>Anatomy</h2>
+
+      <pre><code>                     +------------------+
+                     |   Your laptop    |
+                     |   (macOS host)   |
+                     +---------+--------+
+                               |
+                +-------------+--------------+
+                |                            |
+        +-------v-------+         +----------v----------+
+        |  Ramalama     |         |   TankOS VM         |
+        |  Qwen 3 +     |         |   (Fedora bootc)    |
+        |  Gemma 4 :8001|         |                     |
+        +-------+-------+         |  +--------------+   |
+                |                 |  | openclaw     |   |
+                |  host.containers|  | container    |   |
+                |  .internal:8001 |  | (Quadlet)    |   |
+                +----------------&gt;+  |              |   |
+                                  |  +--------------+   |
+                                  |  +--------------+   |
+                                  |  | service-gator|   |
+                                  |  | (Quadlet)    |   |
+                                  |  +--------------+   |
+                                  |  Podman secrets:    |
+                                  |  anthropic_api_key  |
+                                  |  gemini_api_key     |
+                                  |  openrouter_api_key |
+                                  +---------+-----------+
+                                            |
+                                       SSH tunnel
+                                            |
+                                  Browser -&gt; :18789</code></pre>
+
+      <p>The VM speaks to the local model server via <code>host.containers.internal:8001</code>, the rootless Podman gateway address. Frontier traffic (Anthropic, Gemini) goes from inside the VM straight to the public APIs. The browser hits the OpenClaw control UI on <code>127.0.0.1:18789</code> only because of the SSH tunnel &mdash; the gateway never binds to a public interface.</p>
+
+      <h2>Per-Agent Model Routing</h2>
+
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Model</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Oprah-tor</strong></td><td><code>claude-opus-4-7</code></td><td>Frontier-class orchestration over mixed cross-agent output.</td></tr>
+          <tr><td><strong>Sherlock Ohms</strong></td><td><code>claude-sonnet-4-6</code></td><td>Iterative person-level web research with citations.</td></tr>
+          <tr><td><strong>Bloom-borg</strong></td><td><code>gemini-3.1-pro-preview</code></td><td>Grounded company search; also showcases multi-frontier portability.</td></tr>
+          <tr><td><strong>Déjà View</strong></td><td><code>qwen3-30b-a3b-instruct</code></td><td>Cross-program retrieval over <strong>private</strong> SAB / CRM / VVIP files.</td></tr>
+          <tr><td><strong>Draft Punk</strong></td><td><code>gemma-4-26b-a4b-it</code></td><td>Long-form structured generation; never leaves device.</td></tr>
+          <tr><td><strong>Alfred Bitworth</strong></td><td><code>qwen3-30b-a3b-instruct</code></td><td>VVIP roster reads + protocol drafting.</td></tr>
+          <tr><td><strong>Sponsor Coach</strong></td><td><code>gemma-4-26b-a4b-it</code></td><td>Short readiness scoring pass.</td></tr>
+          <tr><td><strong>The Oddsfather</strong></td><td><code>qwen3-30b-a3b-instruct</code></td><td>Five-dimension reasoning over the full bundle.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Prerequisites</h2>
+
+      <ul>
+        <li>macOS or Linux host with <strong>Podman Desktop</strong> + <strong>BootC extension</strong></li>
+        <li>32 GB RAM is comfortable for running Qwen 3 30B-A3B and Gemma 4 26B-A4B side-by-side at Q4_K_M; 16 GB works if you serve only one at a time</li>
+        <li>SSH key pair (<code>~/.ssh/id_ed25519</code>) &mdash; used for both VM login and the Podman Desktop bootc-image-builder user form</li>
+        <li>API keys: <strong>Anthropic</strong>, <strong>Gemini</strong> (Google AI Studio); optionally <strong>OpenRouter</strong> for cloud Gemma fallback and a <strong>GitHub</strong> token for service-gator</li>
+        <li>Optional: <code>ramalama</code> for the local model server (<code>brew install ramalama</code>)</li>
+      </ul>
+
+      <h2>One-Time Setup</h2>
+
+      <pre><code># 1. Pull the TankOS image
+./briefingclaw-tankos.sh image
+
+# 2. Build a QCOW2 disk and start the VM (Podman Desktop UI)
+./briefingclaw-tankos.sh disk
+
+# 3. Open the SSH tunnel in one terminal
+./briefingclaw-tankos.sh tunnel
+
+# 4. Bootstrap secrets (one-time, prompts for keys)
+./briefingclaw-tankos.sh secrets
+
+# 5. Push BriefingClaw skill files + demo data into ~/.openclaw on the VM
+./briefingclaw-tankos.sh provision
+
+# 6. Start the local model server on the host (third terminal, background)
+./briefingclaw-tankos.sh models</code></pre>
+
+      <p>After step 6 you should see status <code>LIVE</code> in the dashboard:</p>
+
+      <pre><code>./briefingclaw-tankos.sh dashboard</code></pre>
+
+      <h2>Day-Two Operations</h2>
+
+      <pre><code>./briefingclaw-tankos.sh status      # Health-check across all layers
+./briefingclaw-tankos.sh logs        # Tail OpenClaw journal over SSH
+./briefingclaw-tankos.sh upgrade     # bootc switch --apply latest tag</code></pre>
+
+      <p>To rotate API keys, re-run <code>secrets</code>. <code>tank-openclaw-secrets</code> regenerates the Quadlet drop-in and the SecretRef stanzas in <code>openclaw.json</code> from whatever Podman secrets are present, then restarts the gateway. No file under git ever sees the key material.</p>
+
+      <h2>Demo Mode (no infrastructure)</h2>
+
+      <p>You can present the dashboard without any infrastructure:</p>
+
+      <pre><code>./briefingclaw-tankos.sh preview</code></pre>
+
+      <p>The <code>?autostart=1</code> URL parameter triggers the simulated timeline as soon as the dashboard loads. The mode badge stays <code>SIMULATED</code>, the deliverable modals still open, and the Sarah Chen scenario plays in ~38 seconds.</p>
+
+      <h2>What Lives Where</h2>
+
+      <table>
+        <thead>
+          <tr><th>Path</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>briefingclaw-tankos-architecture.html</code></td><td>Static architecture diagram</td></tr>
+          <tr><td><code>briefingclaw-tankos-dashboard.html</code></td><td>Live demo dashboard with simulated timeline</td></tr>
+          <tr><td><code>briefingclaw-tankos.sh</code></td><td>All operational subcommands</td></tr>
+          <tr><td><code>tankos/quadlets/openclaw.container</code></td><td>Rootless OpenClaw Quadlet</td></tr>
+          <tr><td><code>tankos/quadlets/service-gator.container</code></td><td>Scoped MCP server Quadlet</td></tr>
+          <tr><td><code>tankos/quadlets/local-models.container</code></td><td>Optional in-VM Ramalama Quadlet</td></tr>
+          <tr><td><code>tankos/quadlets/10-secrets.conf</code></td><td>Reference SecretRef drop-in</td></tr>
+          <tr><td><code>tankos/config/openclaw.json</code></td><td>Provider catalog with per-agent overrides</td></tr>
+          <tr><td><code>tankos/config/service-gator-scopes.json</code></td><td>Read-only GitHub scope file</td></tr>
+          <tr><td><code>tankos/agents/AGENTS.md</code></td><td>Per-agent model routing rationale</td></tr>
+          <tr><td><code>tankos/scripts/bootstrap-secrets.sh</code></td><td>VM-side: create secrets and run sync helper</td></tr>
+          <tr><td><code>tankos/scripts/serve-local-models.sh</code></td><td>Host-side: serve Qwen 3 + Gemma 4 via Ramalama</td></tr>
+          <tr><td><code>docs/TANKOS-BUILD.md</code></td><td>Source for this guide</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Why This Variant</h2>
+
+      <p>The original BriefingClaw demo answers <em>"can a multi-agent system do executive briefing prep in 90 seconds?"</em> &mdash; yes, on a laptop, with one local model and one cloud model.</p>
+
+      <p>The TankOS variant answers a different audience question: <em>"how does this ship?"</em> It demonstrates four production patterns at once:</p>
+
+      <ol>
+        <li><strong>Bootable appliance</strong> &mdash; one OCI image is the entire OS + service. Demo VM and a fleet of identical lab machines come up the same way.</li>
+        <li><strong>Rootless services</strong> &mdash; OpenClaw and service-gator both run as the <code>openclaw</code> user. No daemonized container runtime, no host package drift.</li>
+        <li><strong>Secrets out of the image</strong> &mdash; every key is a Podman secret in the <code>openclaw</code> user's rootless store. <code>tank-openclaw-secrets</code> writes only references, never values.</li>
+        <li><strong>Per-agent model routing</strong> &mdash; the same gateway serves Claude, Gemini, Qwen, and Gemma to different agents. Frontier reasoning where it earns its cost; on-device inference for everything that touches private data.</li>
+      </ol>
+
+      <p>That last point is the one the audience usually didn't expect &mdash; show the dashboard with the four colour-coded model badges and the routing decision becomes legible without a slide.</p>
+
+      <p><em>Upstream TankOS bootc image: <a href="https://github.com/LobsterTrap/tank-os" target="_blank">github.com/LobsterTrap/tank-os</a>.</em></p>
     </div>
 
     <div class="doc" id="doc-demo-script" data-md="docs/DEMO-SCRIPT.md">

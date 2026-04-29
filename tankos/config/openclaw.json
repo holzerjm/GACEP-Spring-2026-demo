@@ -1,0 +1,102 @@
+{
+  "//": "BriefingClaw on TankOS — full OpenClaw config. The `secrets.providers.default` block tells OpenClaw to resolve SecretRefs from the container environment (which is populated by Podman secrets via the 10-secrets.conf drop-in). Run `tank-openclaw-secrets` after creating Podman secrets to (re)generate the drop-in and the SecretRef stanzas below.",
+
+  "gateway": {
+    "mode": "local",
+    "auth": { "mode": "token" },
+    "http": {
+      "endpoints": {
+        "chatCompletions": { "enabled": true },
+        "responses":       { "enabled": true }
+      }
+    },
+    "controlUi": {
+      "enabled": true,
+      "allowedOrigins": [
+        "http://127.0.0.1:18789",
+        "http://localhost:18789"
+      ]
+    }
+  },
+
+  "secrets": {
+    "providers": {
+      "default": { "source": "env" }
+    }
+  },
+
+  "models": {
+    "providers": {
+      "anthropic": {
+        "baseUrl": "https://api.anthropic.com",
+        "api": "anthropic-messages",
+        "apiKey": { "source": "env", "provider": "default", "id": "ANTHROPIC_API_KEY" },
+        "models": [
+          { "id": "claude-opus-4-7",   "name": "Claude Opus 4.7" },
+          { "id": "claude-sonnet-4-6", "name": "Claude Sonnet 4.6" },
+          { "id": "claude-haiku-4-5",  "name": "Claude Haiku 4.5" }
+        ]
+      },
+      "google": {
+        "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+        "api": "google-generative-ai",
+        "apiKey": { "source": "env", "provider": "default", "id": "GEMINI_API_KEY" },
+        "models": [
+          { "id": "gemini-3.1-pro-preview",   "name": "Gemini 3.1 Pro Preview" },
+          { "id": "gemini-3.1-flash-preview", "name": "Gemini 3.1 Flash" }
+        ]
+      },
+      "openrouter": {
+        "baseUrl": "https://openrouter.ai/api/v1",
+        "api": "openai-completions",
+        "apiKey": { "source": "env", "provider": "default", "id": "OPENROUTER_API_KEY" },
+        "models": [
+          { "id": "google/gemma-4-26b-a4b-it", "name": "Gemma 4 26B (cloud fallback via OpenRouter)" }
+        ]
+      },
+      "local": {
+        "//": "Ramalama / Podman AI Lab serves Qwen 3 and Gemma 4 from the host on :8001. `host.containers.internal` resolves to the rootless Podman host gateway from inside the OpenClaw container.",
+        "baseUrl": "http://host.containers.internal:8001/v1",
+        "api": "openai-completions",
+        "apiKey": { "source": "literal", "value": "not-needed" },
+        "models": [
+          { "id": "qwen3-30b-a3b-instruct", "name": "Qwen 3 30B-A3B Instruct (local, on-device)" },
+          { "id": "gemma-4-26b-a4b-it",     "name": "Gemma 4 26B-A4B Instruct (local, on-device)" }
+        ]
+      }
+    }
+  },
+
+  "agents": {
+    "defaults": {
+      "model": { "primary": "anthropic/claude-opus-4-7" },
+      "models": {
+        "anthropic/claude-opus-4-7":      {},
+        "anthropic/claude-sonnet-4-6":    {},
+        "google/gemini-3.1-pro-preview":  {},
+        "local/qwen3-30b-a3b-instruct":   {},
+        "local/gemma-4-26b-a4b-it":       {}
+      }
+    },
+    "overrides": {
+      "//": "Per-agent model routing — see tankos/agents/AGENTS.md for rationale.",
+      "oprah-tor":       { "model": { "primary": "anthropic/claude-opus-4-7" } },
+      "sherlock-ohms":   { "model": { "primary": "anthropic/claude-sonnet-4-6" } },
+      "bloom-borg":      { "model": { "primary": "google/gemini-3.1-pro-preview" } },
+      "deja-view":       { "model": { "primary": "local/qwen3-30b-a3b-instruct" } },
+      "draft-punk":      { "model": { "primary": "local/gemma-4-26b-a4b-it" } },
+      "alfred-bitworth": { "model": { "primary": "local/qwen3-30b-a3b-instruct" } },
+      "sponsor-coach":   { "model": { "primary": "local/gemma-4-26b-a4b-it" } },
+      "oddsfather":      { "model": { "primary": "local/qwen3-30b-a3b-instruct" } }
+    }
+  },
+
+  "mcp": {
+    "servers": {
+      "service-gator": {
+        "url": "http://127.0.0.1:8080/mcp",
+        "scopes": ["gh:repos.read", "jira:projects.read"]
+      }
+    }
+  }
+}

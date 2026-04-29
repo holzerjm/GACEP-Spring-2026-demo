@@ -1,0 +1,16 @@
+{
+  "//": "Drop into ~/.config/service-gator/scopes.json on the openclaw user.",
+  "scopes": {
+    "gh": {
+      "repos": {
+        "LobsterTrap/tank-os": { "read": true },
+        "holzerjm/GACEP-Spring-2026-demo": { "read": true }
+      }
+    },
+    "jira": {
+      "projects": {
+        "BRIEF": { "read": true }
+      }
+    }
+  }
+}
